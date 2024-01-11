@@ -1,0 +1,52 @@
+{
+	"name": "lt-frame",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint:create": "eslint --init",
+		"lint": "eslint \"{packages,play}/**/*.{js,vue,ts}\" --fix",
+		"prettier-format": "prettier --config .prettierrc.cjs \"{packages,play}/**/*.{vue,js,ts}\" --write",
+		"prepare": "husky install",
+		"lint:css": "stylelint **/*.{vue,css,sass,scss,less} --fix"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@commitlint/cli": "^18.4.4",
+		"@commitlint/config-conventional": "^18.4.4",
+		"@types/eslint": "^8.56.2",
+		"@types/node": "^20.11.0",
+		"@typescript-eslint/eslint-plugin": "^6.18.1",
+		"@typescript-eslint/parser": "^6.18.1",
+		"eslint": "^8.56.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-import-resolver-alias": "^1.1.2",
+		"eslint-plugin-import": "^2.29.1",
+		"eslint-plugin-prettier": "^5.1.3",
+		"eslint-plugin-vue": "^9.20.0",
+		"husky": "^8.0.3",
+		"less": "^4.2.0",
+		"lint-staged": "^15.2.0",
+		"prettier": "^3.1.1",
+		"stylelint": "^16.1.0",
+		"stylelint-config-recommended-less": "^3.0.1",
+		"stylelint-config-recommended-vue": "^1.5.0",
+		"stylelint-config-standard": "^36.0.0",
+		"stylelint-less": "^3.0.1",
+		"typescript": "^5.3.3",
+		"vue": "^3.4.7"
+	},
+	"lint-staged": {
+		"*.{js,jsx,vue,ts,tsx}": [
+			"pnpm run lint",
+			"pnpm run prettier-format"
+		],
+		"*.{vue,less,css,scss,sass}": [
+			"pnpm run lint:css"
+		]
+	}
+}
