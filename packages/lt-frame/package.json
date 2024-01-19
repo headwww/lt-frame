@@ -1,14 +1,17 @@
 {
 	"name": "lt-frame",
 	"version": "1.0.0",
-	"description": "上传npm 的配置",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
+	"description": "A Web Frame for Langtong",
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
+	"main": "lib/index.js",
+	"module": "es/index.mjs",
+	"types": "es/index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/headwww/lt-frame.git"
+	},
 	"dependencies": {
 		"lodash-es": "^4.17.21"
 	},
