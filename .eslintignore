@@ -6,6 +6,7 @@ node_modules
 .vscode
 .idea
 dist
+dist/
 /public
 /docs
 .husky
@@ -40,3 +41,4 @@ dist-ssr
 *.sw?
 
 components.d.ts
+typings

@@ -46,5 +46,10 @@ module.exports = {
 		'vue/multi-word-commponent-names': 0,
 		'vue/attribute-hyphenation': 0,
 		'vue/v-on-event-hyphenation': 0,
+		'import/no-unresolved': 0,
+		'import/extensions': 0,
+		"no-use-before-define":0,
+		"no-lonely-if":0,
+		"import/prefer-default-export":0,
 	},
 }

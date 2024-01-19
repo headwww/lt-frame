@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ES2021",
+    "module": "ESNext",
+    "baseUrl": ".",
+    "sourceMap": false,
+    "moduleResolution": "Node",
+    "allowJs": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    "rootDir": ".",
+    "noImplicitAny": false,
+    "types": [],
+    "paths": {
+      "@lt-frame/*": ["packages/*"]
+    }
+  }
+}

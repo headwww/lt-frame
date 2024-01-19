@@ -1,0 +1,26 @@
+{
+	"name": "build",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.ts",
+	"scripts": {
+		"start": "gulp -f gulpfile.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@vitejs/plugin-vue": "^5.0.3",
+		"@vitejs/plugin-vue-jsx": "^3.1.0",
+		"fs-extra": "^11.2.0",
+		"rollup": "^4.9.5",
+		"rollup-plugin-esbuild": "^6.1.0",
+		"ts-morph": "^21.0.1",
+		"unplugin-vue-macros": "^2.7.9"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^25.0.7",
+		"@rollup/plugin-node-resolve": "^15.2.3",
+		"fast-glob": "^3.3.2"
+	}
+}
