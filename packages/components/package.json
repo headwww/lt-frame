@@ -3,8 +3,11 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.ts",
+	"module": "index.ts",
+	"types": "index.d.ts",
 	"type": "module",
 	"keywords": [],
 	"author": "",
+	"sideEffects": false,
 	"license": "ISC"
 }

@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { rangeArr } from '../aa';
+import { rangeArr } from '@lt-frame/components/aa';
 
 rangeArr(1);
 ref(0);

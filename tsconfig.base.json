@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "target": "ES2021",
+    "target": "ES2018",
     "module": "ESNext",
     "baseUrl": ".",
     "sourceMap": false,

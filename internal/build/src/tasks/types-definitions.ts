@@ -16,22 +16,14 @@ export const generateTypesDefinitions = async () => {
 	consola.success(projRoot);
 	const project = new Project({
 		compilerOptions: {
-			// 仅生成声明文件（.d.ts 文件）
 			emitDeclarationOnly: true,
-			// 指定生成的文件输出目录
 			outDir,
-			// 指定了解析非相对模块名的基本目录，通常用于解析 import 语句中的模块路径。
 			baseUrl: projRoot,
-			// 保留符号链接的信息。
 			preserveSymlinks: false,
-			// 跳过对声明文件的类型检查。
 			skipLibCheck: true,
-			// 允许隐式的 any 类型。
 			noImplicitAny: false,
 		},
-		// 指定了 TypeScript 配置文件的路径。
 		tsConfigFilePath: TSCONFIG_PATH,
-		// 表示不从 tsconfig.json 文件中添加文件到项目中。这个选项通常在手动配置项目时使用，而不是从 tsconfig.json 中读取项目配置。
 		skipAddingFilesFromTsConfig: true,
 	});
 
@@ -44,10 +36,8 @@ export const generateTypesDefinitions = async () => {
 	});
 
 	const tasks = sourceFiles.map(async (sourceFile) => {
-		// 获取源文件相对路径
 		const relativePath = path.relative(pkgRoot, sourceFile.getFilePath());
 		consola.success(relativePath);
-		// 使用 sourceFile.getEmitOutput() 获取源文件的 EmitOutput，包含编译后的输出内容。
 		const emitOutput = sourceFile.getEmitOutput();
 		const emitFiles = emitOutput.getOutputFiles();
 		if (emitFiles.length === 0) {

@@ -51,7 +51,7 @@
 		"stylelint-less": "^3.0.1",
 		"sucrase": "^3.35.0",
 		"typescript": "^5.3.3",
-		"unplugin-vue-macros": "^2.7.9",
+		"unplugin-vue-macros": "^2.7.10",
 		"vue": "^3.4.14"
 	},
 	"lint-staged": {
@@ -62,5 +62,8 @@
 		"*.{vue,less,css,scss,sass}": [
 			"pnpm run lint:css"
 		]
+	},
+	"dependencies": {
+		"@lt-frame/components": "workspace:^"
 	}
 }
