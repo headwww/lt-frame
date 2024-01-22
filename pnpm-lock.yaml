@@ -11,6 +11,9 @@ importers:
       '@lt-frame/components':
         specifier: workspace:^
         version: link:packages/components
+      '@lt-frame/utils':
+        specifier: workspace:^
+        version: link:packages/utils
     devDependencies:
       '@commitlint/cli':
         specifier: ^18.4.4

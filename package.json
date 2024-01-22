@@ -3,6 +3,10 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"workspaces": [
+		"packages/*",
+		"play"
+	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint:create": "eslint --init",
@@ -64,6 +68,7 @@
 		]
 	},
 	"dependencies": {
-		"@lt-frame/components": "workspace:^"
+		"@lt-frame/components": "workspace:^",
+		"@lt-frame/utils": "workspace:^"
 	}
 }

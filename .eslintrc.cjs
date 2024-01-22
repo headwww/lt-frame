@@ -51,5 +51,6 @@ module.exports = {
 		"no-use-before-define":0,
 		"no-lonely-if":0,
 		"import/prefer-default-export":0,
+		"import/export":0,
 	},
 }
