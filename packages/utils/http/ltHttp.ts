@@ -1,6 +1,6 @@
 import { clone } from 'lodash-es';
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { useMessage } from '@lt-frame/hooks/use-message';
+import { useMessage } from '@lt-frame/hooks';
 import LTAxios from './Axios';
 import { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { ContentTypeEnum, RequestEnum } from './httpEnum';

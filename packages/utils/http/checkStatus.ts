@@ -1,4 +1,4 @@
-import { useMessage } from '@lt-frame/hooks/use-message';
+import { useMessage } from '@lt-frame/hooks';
 import { ErrorMessageMode } from './types';
 
 const { createMessage, createErrorModal } = useMessage();
