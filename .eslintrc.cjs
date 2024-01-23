@@ -52,5 +52,10 @@ module.exports = {
 		"no-lonely-if":0,
 		"import/prefer-default-export":0,
 		"import/export":0,
+		"no-unused-expressions":0,
+		"array-callback-return" :0,
+		'no-param-reassign': 0,
+		"@typescript-eslint/no-unused-vars":[2],
+
 	},
 }

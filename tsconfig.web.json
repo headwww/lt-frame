@@ -4,7 +4,7 @@
     "composite": true,
     "jsx": "preserve",
     "lib": ["ES2018","ES2021", "DOM", "DOM.Iterable","ES2021.String"],
-    "types": ["unplugin-vue-macros/macros-global"],
+    "types": ["unplugin-vue-macros/macros-global","node"],
     "skipLibCheck": true
   },
   "include": ["packages"],
