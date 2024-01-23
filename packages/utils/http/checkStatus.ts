@@ -1,5 +1,3 @@
-// import { useMessage } from '@/hooks/web/useMessage'
-
 import { useMessage } from '@lt-frame/hooks/use-message';
 import { ErrorMessageMode } from './types';
 
