@@ -5,3 +5,4 @@ export * from './units';
 export * from './vues';
 export * from './windows';
 export * from './clipboard';
+export * from './http';

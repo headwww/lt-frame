@@ -56,6 +56,9 @@ module.exports = {
 		"array-callback-return" :0,
 		'no-param-reassign': 0,
 		"@typescript-eslint/no-unused-vars":[2],
-
+		"no-shadow": 0,
+        "class-methods-use-this":0,
+		"import/named":0,
+		"no-redeclare":0,
 	},
 }

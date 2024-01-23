@@ -1,6 +1,6 @@
 {
 	"name": "lt-frame",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A Web Frame for Langtong",
 	"keywords": [],
 	"author": "",
@@ -13,14 +13,17 @@
 		"url": "git+https://github.com/headwww/lt-frame.git"
 	},
 	"dependencies": {
-		"lodash-es": "^4.17.21"
+		"@ant-design/icons-vue": "^7.0.1",
+		"@types/node": "^20.11.0",
+		"@types/qs": "^6.9.11",
+		"ant-design-vue": "^4.1.1",
+		"axios": "^1.6.5",
+		"lodash-es": "^4.17.21",
+		"qs": "^6.11.2",
+		"vue-router": "^4.2.5"
 	},
 	"devDependencies": {
-		"@ant-design/icons-vue": "^7.0.1",
-		"@types/node": "^20.11.5",
-		"ant-design-vue": "^4.1.1",
-		"vue": "^3.4.14",
-		"vue-router": "^4.2.5"
+		"vue": "^3.4.14"
 	},
 	"peerDependencies": {
 		"vue": "^3.4.14"
