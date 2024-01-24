@@ -60,5 +60,8 @@ module.exports = {
         "class-methods-use-this":0,
 		"import/named":0,
 		"no-redeclare":0,
+		"no-continue":0,
+		"no-plusplus":0,
+		"no-undef":0,
 	},
 }

@@ -6,3 +6,4 @@ export * from './vues';
 export * from './windows';
 export * from './clipboard';
 export * from './http';
+export * from './mitt';
