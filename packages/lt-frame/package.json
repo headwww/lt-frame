@@ -27,9 +27,9 @@
 		"vue-router": "^4.2.5"
 	},
 	"devDependencies": {
-		"vue": "^3.4.14"
+		"vue": "^3.4.15"
 	},
 	"peerDependencies": {
-		"vue": "^3.4.14"
+		"vue": "^3.4.15"
 	}
 }

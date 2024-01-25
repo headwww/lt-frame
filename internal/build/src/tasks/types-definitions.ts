@@ -108,6 +108,8 @@ async function addSourceFiles(project: Project) {
 						`${path.relative(process.cwd(), file)}.${lang}`,
 						content
 					);
+					consola.success(content);
+
 					sourceFiles.push(sourceFile);
 				}
 			} else {

@@ -65,7 +65,7 @@
 		"sucrase": "^3.35.0",
 		"typescript": "^5.3.3",
 		"unplugin-vue-macros": "^2.7.10",
-		"vue": "^3.4.14",
+		"vue": "^3.4.15",
 		"vue-router": "^4.2.5"
 	},
 	"lint-staged": {
