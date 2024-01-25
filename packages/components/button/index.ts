@@ -1,3 +1,6 @@
+import { withInstall } from '@lt-frame/utils';
 import Button from './lt-button.vue';
 
-export default Button;
+export const LTButton = withInstall(Button);
+
+export default LTButton;

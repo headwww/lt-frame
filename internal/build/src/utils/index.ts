@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import type { TaskFunction } from 'gulp';
 import { projRoot, buildRoot } from './paths';
+
 // 自定义每个task的name
 export const withTaskName = <T extends TaskFunction>(name: string, fn: T) =>
 	Object.assign(fn, { displayName: name });

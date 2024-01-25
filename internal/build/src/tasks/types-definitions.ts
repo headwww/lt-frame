@@ -13,13 +13,12 @@ const outDir = path.resolve(buildOutput, 'types');
 const TSCONFIG_PATH = path.resolve(projRoot, 'tsconfig.web.json');
 
 export const generateTypesDefinitions = async () => {
-	consola.success(projRoot);
 	const project = new Project({
 		compilerOptions: {
 			emitDeclarationOnly: true,
 			outDir,
 			baseUrl: projRoot,
-			preserveSymlinks: false,
+			preserveSymlinks: true,
 			skipLibCheck: true,
 			noImplicitAny: false,
 		},
@@ -29,20 +28,25 @@ export const generateTypesDefinitions = async () => {
 
 	const sourceFiles = await addSourceFiles(project);
 	consola.success('Added source files');
+
 	typeCheck(project);
 	consola.success('Type check passed!');
+
 	await project.emit({
 		emitOnlyDtsFiles: true,
 	});
 
 	const tasks = sourceFiles.map(async (sourceFile) => {
 		const relativePath = path.relative(pkgRoot, sourceFile.getFilePath());
-		consola.success(relativePath);
+		consola.trace(relativePath);
+
 		const emitOutput = sourceFile.getEmitOutput();
 		const emitFiles = emitOutput.getOutputFiles();
+
 		if (emitFiles.length === 0) {
 			throw new Error(`Emit no file: ${relativePath}`);
 		}
+
 		const subTasks = emitFiles.map(async (outputFile) => {
 			const filepath = outputFile.getFilePath();
 			await mkdir(path.dirname(filepath), {
@@ -102,7 +106,7 @@ async function addSourceFiles(project: Project) {
 					const lang = scriptSetup?.lang || script?.lang || 'js';
 					const sourceFile = project.createSourceFile(
 						`${path.relative(process.cwd(), file)}.${lang}`,
-						`${content}`
+						content
 					);
 					sourceFiles.push(sourceFile);
 				}

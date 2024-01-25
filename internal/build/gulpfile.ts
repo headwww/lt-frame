@@ -37,6 +37,6 @@ export default series(
 	withTaskName('createOutput', () => mkdir(epOutput, { recursive: true })),
 	parallel(runTask('buildModules'), runTask('generateTypesDefinitions')),
 	parallel(copyTypesDefinitions, copyFiles)
-);
+) as any;
 
 export * from './src';

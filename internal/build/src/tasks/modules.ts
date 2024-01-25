@@ -1,15 +1,17 @@
-import glob from 'fast-glob';
-import { OutputOptions, rollup } from 'rollup';
-import esbuild from 'rollup-plugin-esbuild';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import VueMacros from 'unplugin-vue-macros/rollup';
+import { rollup } from 'rollup';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { epRoot, pkgRoot } from '../utils/paths';
-import { excludeFiles } from '../utils/pkg';
+import VueMacros from 'unplugin-vue-macros/rollup';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import esbuild from 'rollup-plugin-esbuild';
+import glob from 'fast-glob';
+import type { OutputOptions } from 'rollup';
 import { generateExternal, writeBundles } from '../utils/rollup';
 import { buildConfigEntries, target } from '../build-info';
+
+import { excludeFiles } from '../utils/pkg';
+import { epRoot, pkgRoot } from '../utils/paths';
 
 export const buildModules = async () => {
 	const input = excludeFiles(
@@ -19,7 +21,6 @@ export const buildModules = async () => {
 			onlyFiles: true,
 		})
 	);
-
 	const bundle = await rollup({
 		input,
 		plugins: [
