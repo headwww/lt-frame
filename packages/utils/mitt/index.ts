@@ -1,6 +1,6 @@
 import type { RouteLocationNormalized } from 'vue-router';
 import mitt from 'mitt';
-import { getRawRoute } from '../vues';
+import { getRawRoute } from '../vue';
 
 /**
  *  使用mitt库提供的事件处理机制（订阅和发布事件）实现路由变化的订阅和发布。

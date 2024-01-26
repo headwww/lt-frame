@@ -23,12 +23,12 @@
 		"crypto-js": "^4.2.0",
 		"lodash-es": "^4.17.21",
 		"mitt": "^3.0.1",
-		"qs": "^6.11.2"
+		"qs": "^6.11.2",
+		"vue-router": "^4.2.5"
 	},
 	"devDependencies": {
 		"@types/node": "^20.11.0",
-		"vue": "^3.4.15",
-		"vue-router": "^4.2.5"
+		"vue": "^3.4.15"
 	},
 	"peerDependencies": {
 		"vue": "^3.4.15"
