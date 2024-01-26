@@ -1,27 +1,38 @@
-import { Project } from 'ts-morph';
-import path from 'path';
-import glob from 'fast-glob';
-import type { SourceFile } from 'ts-morph';
-import { readFile, mkdir, writeFile } from 'fs/promises';
-import * as vueCompiler from 'vue/compiler-sfc';
-import consola from 'consola';
 import process from 'process';
-import { buildOutput, epRoot, pkgRoot, projRoot } from '../utils/paths';
-import { excludeFiles, pathRewriter } from '../utils/pkg';
+import path from 'path';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import consola from 'consola';
+import * as vueCompiler from 'vue/compiler-sfc';
+import glob from 'fast-glob';
+import chalk from 'chalk';
+import { Project } from 'ts-morph';
+import {
+	buildOutput,
+	epRoot,
+	excludeFiles,
+	pkgRoot,
+	projRoot,
+} from '@lt-frame/build-utils';
+import type { CompilerOptions, SourceFile } from 'ts-morph';
+import { pathRewriter } from '../utils';
 
-const outDir = path.resolve(buildOutput, 'types');
 const TSCONFIG_PATH = path.resolve(projRoot, 'tsconfig.web.json');
+const outDir = path.resolve(buildOutput, 'types');
 
+/**
+ * fork = require( https://github.com/egoist/vue-dts-gen/blob/main/src/index.ts
+ */
 export const generateTypesDefinitions = async () => {
+	const compilerOptions: CompilerOptions = {
+		emitDeclarationOnly: true,
+		outDir,
+		baseUrl: projRoot,
+		preserveSymlinks: true,
+		skipLibCheck: true,
+		noImplicitAny: false,
+	};
 	const project = new Project({
-		compilerOptions: {
-			emitDeclarationOnly: true,
-			outDir,
-			baseUrl: projRoot,
-			preserveSymlinks: true,
-			skipLibCheck: true,
-			noImplicitAny: false,
-		},
+		compilerOptions,
 		tsConfigFilePath: TSCONFIG_PATH,
 		skipAddingFilesFromTsConfig: true,
 	});
@@ -38,13 +49,16 @@ export const generateTypesDefinitions = async () => {
 
 	const tasks = sourceFiles.map(async (sourceFile) => {
 		const relativePath = path.relative(pkgRoot, sourceFile.getFilePath());
-		consola.trace(relativePath);
+		consola.trace(
+			chalk.yellow(
+				`Generating definition for file: ${chalk.bold(relativePath)}`
+			)
+		);
 
 		const emitOutput = sourceFile.getEmitOutput();
 		const emitFiles = emitOutput.getOutputFiles();
-
 		if (emitFiles.length === 0) {
-			throw new Error(`Emit no file: ${relativePath}`);
+			throw new Error(`Emit no file: ${chalk.bold(relativePath)}`);
 		}
 
 		const subTasks = emitFiles.map(async (outputFile) => {
@@ -52,13 +66,20 @@ export const generateTypesDefinitions = async () => {
 			await mkdir(path.dirname(filepath), {
 				recursive: true,
 			});
+
 			await writeFile(
 				filepath,
 				pathRewriter('esm')(outputFile.getText()),
 				'utf8'
 			);
-			consola.success(`Definition for file: ${relativePath} generated`);
+
+			consola.success(
+				chalk.green(
+					`Definition for file: ${chalk.bold(relativePath)} generated`
+				)
+			);
 		});
+
 		await Promise.all(subTasks);
 	});
 
@@ -74,7 +95,6 @@ async function addSourceFiles(project: Project) {
 			onlyFiles: true,
 		})
 	);
-
 	const epPaths = excludeFiles(
 		await glob(globSourceFile, {
 			cwd: epRoot,
@@ -92,7 +112,6 @@ async function addSourceFiles(project: Project) {
 				const sfc = vueCompiler.parse(content);
 				const { script, scriptSetup } = sfc.descriptor;
 				if (script || scriptSetup) {
-					// eslint-disable-next-line no-shadow
 					let content =
 						(hasTsNoCheck ? '// @ts-nocheck\n' : '') + (script?.content ?? '');
 
@@ -108,8 +127,6 @@ async function addSourceFiles(project: Project) {
 						`${path.relative(process.cwd(), file)}.${lang}`,
 						content
 					);
-					consola.success(content);
-
 					sourceFiles.push(sourceFile);
 				}
 			} else {
@@ -124,6 +141,7 @@ async function addSourceFiles(project: Project) {
 			);
 		}),
 	]);
+
 	return sourceFiles;
 }
 

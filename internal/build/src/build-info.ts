@@ -1,7 +1,7 @@
 import path from 'path';
 
 import type { ModuleFormat } from 'rollup';
-import { epOutput } from './utils/paths';
+import { epOutput } from '@lt-frame/build-utils';
 
 export const modules = ['esm', 'cjs'] as const;
 export type Module = (typeof modules)[number];

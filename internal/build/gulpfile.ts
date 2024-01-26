@@ -3,8 +3,13 @@ import { series, parallel, TaskFunction } from 'gulp';
 import { mkdir, copyFile } from 'fs/promises';
 import { copy } from 'fs-extra';
 import path from 'path';
+import {
+	buildOutput,
+	epOutput,
+	epPackage,
+	projRoot,
+} from '@lt-frame/build-utils';
 import { withTaskName, run, runTask } from './src/utils';
-import { buildOutput, epOutput, epPackage, projRoot } from './src/utils/paths';
 import { Module, buildConfig } from './src/build-info';
 
 export const copyFiles = () =>
@@ -31,9 +36,7 @@ export const copyTypesDefinitions: TaskFunction = (done) => {
 };
 
 export default series(
-	// 删除dist目录
 	withTaskName('clean', async () => run('pnpm run clean')),
-	// 创建dist/lt-frame目录
 	withTaskName('createOutput', () => mkdir(epOutput, { recursive: true })),
 	parallel(runTask('buildModules'), runTask('generateTypesDefinitions')),
 	parallel(copyTypesDefinitions, copyFiles)

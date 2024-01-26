@@ -6,12 +6,10 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import esbuild from 'rollup-plugin-esbuild';
 import glob from 'fast-glob';
+import { epRoot, excludeFiles, pkgRoot } from '@lt-frame/build-utils';
 import type { OutputOptions } from 'rollup';
-import { generateExternal, writeBundles } from '../utils/rollup';
+import { generateExternal, writeBundles } from '../utils';
 import { buildConfigEntries, target } from '../build-info';
-
-import { excludeFiles } from '../utils/pkg';
-import { epRoot, pkgRoot } from '../utils/paths';
 
 export const buildModules = async () => {
 	const input = excludeFiles(

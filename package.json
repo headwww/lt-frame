@@ -3,6 +3,8 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"type":"module",
+
 	"workspaces": [
 		"packages/*",
 		"play"
@@ -16,7 +18,10 @@
 		"lint:css": "stylelint **/*.{vue,css,sass,scss,less} --fix",
 		"build": "pnpm run -C  internal/build start",
 		"clean": "pnpm run clean:dist",
-		"clean:dist": "rimraf dist"
+		"clean:dist": "rimraf dist",
+		"postinstall": "pnpm stub",
+		"stub": "pnpm run -r --parallel stub"
+
 	},
 	"keywords": [],
 	"author": "",
@@ -25,6 +30,10 @@
 		"@ant-design/icons-vue": "^7.0.1",
 		"@commitlint/cli": "^18.4.4",
 		"@commitlint/config-conventional": "^18.4.4",
+		"@esbuild-kit/cjs-loader": "^2.4.4",
+		"@lt-frame/build-utils": "workspace:^",
+		"@pnpm/find-workspace-packages": "^4.0.16",
+		"@pnpm/logger": "^4.0.0",
 		"@pnpm/types": "^9.4.2",
 		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^8.56.2",
