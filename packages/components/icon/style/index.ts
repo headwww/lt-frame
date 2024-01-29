@@ -1,1 +1,1 @@
-import '@lt-frame/theme-chalk/src/svg-icon.less';
+import '@lt-frame/theme-chalk/src/icon.less';

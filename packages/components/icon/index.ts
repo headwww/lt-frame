@@ -1,6 +1,8 @@
 import { withInstall } from '@lt-frame/utils';
-import SvgIconVue from './src/svg-icon.vue';
+import IconVue from './src/icon.vue';
 
-export const SvgIcon = withInstall(SvgIconVue);
-export * from './src/svg-icon';
-export default SvgIcon;
+export const Icon = withInstall(IconVue);
+
+export * from './src/icon';
+
+export default Icon;

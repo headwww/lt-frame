@@ -29,6 +29,7 @@
 		"@commitlint/cli": "^18.4.4",
 		"@commitlint/config-conventional": "^18.4.4",
 		"@esbuild-kit/cjs-loader": "^2.4.4",
+		"@iconify/iconify": "^3.1.1",
 		"@lt-frame/build-utils": "workspace:^",
 		"@pnpm/find-workspace-packages": "^4.0.16",
 		"@pnpm/logger": "^4.0.0",

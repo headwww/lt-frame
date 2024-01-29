@@ -7,7 +7,6 @@ node_modules
 .idea
 dist
 dist/
-packages/lt-frame/dist
 /public
 /docs
 .husky
