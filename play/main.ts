@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
-import { isArray } from 'lt-frame';
 import App from './App.vue';
+import '@lt-frame/theme-chalk/src/index.less';
+import 'virtual:svg-icons-register';
 
-isArray([]);
 const app = createApp(App);
 
 app.mount('#app');

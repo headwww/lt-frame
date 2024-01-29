@@ -1,20 +1,6 @@
 <template>
-	<div>
-		<button
-			@click="
-				notification.info({
-					message: '成功',
-					description: `欢迎`,
-					duration: 2,
-				})
-			"
-		>
-			info
-		</button>
-	</div>
+	<SvgIcon name="file" color="#e72727" size="32" />
 </template>
 <script setup lang="ts">
-import { useMessage } from 'lt-frame';
-
-const { notification } = useMessage();
+import { SvgIcon } from '@lt-frame/components';
 </script>
