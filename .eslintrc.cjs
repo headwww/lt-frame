@@ -63,5 +63,8 @@ module.exports = {
 		"no-continue":0,
 		"no-plusplus":0,
 		"no-undef":0,
+		"vue/multi-word-component-names":0,
+		"no-underscore-dangle":0,
+		"no-restricted-syntax":0,
 	},
 }

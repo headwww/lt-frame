@@ -1,6 +1,6 @@
 <template>
 	<svg
-		:class="['el-svg-icon', $attrs.class, spin && 'svg-icon-spin']"
+		:class="[ns.b(), $attrs.class, spin && ns.b('spin')]"
 		aria-hidden="true"
 		:style="getStyle"
 	>
@@ -11,9 +11,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
+import { useNamespace } from '@lt-frame/hooks';
 import { svgIconProps } from './svg-icon';
 
 const props = defineProps(svgIconProps);
+
+const ns = useNamespace('svg-icon');
 
 const symbolId = computed(() => `#${props.prefix}-${props.name}`);
 

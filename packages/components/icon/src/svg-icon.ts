@@ -1,3 +1,6 @@
+import { ExtractPropTypes } from 'vue';
+import SvgIcon from './svg-icon.vue';
+
 export const svgIconProps = {
 	prefix: {
 		type: String,
@@ -20,3 +23,7 @@ export const svgIconProps = {
 		default: false,
 	},
 };
+
+export type SvgIconProps = ExtractPropTypes<typeof svgIconProps>;
+
+export type SvgIconInstance = InstanceType<typeof SvgIcon>;

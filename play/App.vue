@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<Test></Test>
 		<button
 			@click="
 				notification.info({
@@ -12,9 +13,11 @@
 			info
 		</button>
 	</div>
+	<SvgIcon></SvgIcon>
 </template>
 <script setup lang="ts">
 import { useMessage } from 'lt-frame';
+import { SvgIcon } from '@lt-frame/components';
 
 const { notification } = useMessage();
 </script>

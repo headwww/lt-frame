@@ -38,7 +38,15 @@ export const copyTypesDefinitions: TaskFunction = (done) => {
 export default series(
 	withTaskName('clean', async () => run('pnpm run clean')),
 	withTaskName('createOutput', () => mkdir(epOutput, { recursive: true })),
-	parallel(runTask('buildModules'), runTask('generateTypesDefinitions')),
+	parallel(
+		runTask('buildModules'),
+		runTask('generateTypesDefinitions'),
+		series(
+			withTaskName('buildThemeChalk', () => {
+				run('pnpm run -C packages/theme-chalk build');
+			})
+		)
+	),
 	parallel(copyTypesDefinitions, copyFiles)
 ) as any;
 
