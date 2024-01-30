@@ -16,4 +16,5 @@ export default defineConfig({
 			svgoOptions: true,
 		}),
 	],
+	server: { port: 9091 },
 });

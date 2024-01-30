@@ -9,6 +9,7 @@
 	"main": "lib/index.js",
 	"module": "es/index.mjs",
 	"types": "es/index.d.ts",
+	"style": "dist/index.css",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/headwww/lt-frame.git"

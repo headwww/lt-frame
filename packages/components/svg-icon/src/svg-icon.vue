@@ -14,6 +14,9 @@ import type { CSSProperties } from 'vue';
 import { useNamespace } from '@lt-frame/hooks';
 import { svgIconProps } from './svg-icon';
 
+defineOptions({
+	name: 'LTSvgIcon',
+});
 const props = defineProps(svgIconProps);
 
 const ns = useNamespace('svg-icon');

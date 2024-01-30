@@ -27,16 +27,15 @@ import {
 	watch,
 } from 'vue';
 import Iconify from '@iconify/iconify/dist/iconify.js';
-import SvgIcon from '@lt-frame/components/icon';
 import { useNamespace } from '@lt-frame/hooks';
+import SvgIcon from '../../svg-icon';
 import { iconProps } from './icon';
 
+defineOptions({
+	name: 'LTIcon',
+});
 const props = defineProps(iconProps);
 const ns = useNamespace('icon');
-console.log('====');
-console.log(ns.b(), ns.b('spin'));
-console.log(ns.bm('spin'));
-
 const isLocal = computed(() => props.icon.startsWith('svg-icon:'));
 const getLocalIcon = computed(() => props.icon.replace('svg-icon:', ''));
 const getIconRef = computed(() => `${props.icon}`);
