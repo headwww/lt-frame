@@ -42,3 +42,6 @@ dist-ssr
 
 components.d.ts
 typings
+
+packages/theme-chalk/dist/*
+packages/theme-chalk/dist/
