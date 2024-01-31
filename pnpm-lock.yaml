@@ -338,8 +338,8 @@ importers:
   play:
     dependencies:
       lt-frame:
-        specifier: workspace:^
-        version: link:..
+        specifier: ^1.0.7
+        version: 1.0.7(vue@3.4.15)
       postcss:
         specifier: ^8.0.0
         version: 5.2.18
@@ -8350,6 +8350,29 @@ packages:
   /lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
+
+  /lt-frame@1.0.7(vue@3.4.15):
+    resolution: {integrity: sha512-Ibl+VJMrIfyrxRBjwOZ9dNutJ7YjMSGgIZizvw8zaPoiB5/ChyGwtNVycPdN1nGbF+nkzh1K+WTYIx+6uq6+KA==}
+    peerDependencies:
+      vue: ^3.4.15
+    dependencies:
+      '@ant-design/icons-vue': 7.0.1(vue@3.4.15)
+      '@iconify/iconify': 3.1.1
+      '@types/crypto-js': 4.2.2
+      '@types/qs': 6.9.11
+      '@vueuse/core': 10.7.2(vue@3.4.15)
+      ant-design-vue: 4.1.1(vue@3.4.15)
+      axios: 1.6.5
+      crypto-js: 4.2.0
+      lodash-es: 4.17.21
+      mitt: 3.0.1
+      qs: 6.11.2
+      vue: 3.4.15(typescript@5.3.3)
+      vue-router: 4.2.5(vue@3.4.15)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - debug
+    dev: false
 
   /magic-string-ast@0.3.0:
     resolution: {integrity: sha512-0shqecEPgdFpnI3AP90epXyxZy9g6CRZ+SZ7BcqFwYmtFEnZ1jpevcV5HoyVnlDS9gCnc1UIg3Rsvp3Ci7r8OA==}

@@ -19,6 +19,6 @@
 		"vite-plugin-svg-icons": "^2.0.1"
 	},
 	"dependencies": {
-		"lt-frame": "workspace:^"
+		"lt-frame": "^1.0.7"
 	}
 }
