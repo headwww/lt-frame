@@ -41,7 +41,7 @@ importers:
         version: link:internal/build-utils
       '@pnpm/find-workspace-packages':
         specifier: ^4.0.16
-        version: 4.0.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+        version: 4.0.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/logger':
         specifier: ^4.0.0
         version: 4.0.0
@@ -234,7 +234,7 @@ importers:
     dependencies:
       '@pnpm/find-workspace-packages':
         specifier: ^4.0.16
-        version: 4.0.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+        version: 4.0.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/logger':
         specifier: ^4.0.0
         version: 4.0.0
@@ -338,8 +338,8 @@ importers:
   play:
     dependencies:
       lt-frame:
-        specifier: ^1.0.7
-        version: 1.0.7(vue@3.4.15)
+        specifier: ^1.0.9
+        version: 1.0.9(vue@3.4.15)
       postcss:
         specifier: ^8.0.0
         version: 5.2.18
@@ -1506,15 +1506,15 @@ packages:
       '@pnpm/types': 8.7.0
       load-json-file: 6.2.0
 
-  /@pnpm/cli-utils@0.7.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0):
+  /@pnpm/cli-utils@0.7.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0):
     resolution: {integrity: sha512-xawa2YteWQT6KS3tlU2t7SzHIS7hi6LYRQNwxFfNl4da89pTu3szZvVcYMTuEYjXsue5+L0OkJbWZL64lNME5A==}
     engines: {node: '>=14.6'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
       '@pnpm/cli-meta': 3.0.8
-      '@pnpm/config': 15.10.12(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
-      '@pnpm/default-reporter': 10.1.1(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+      '@pnpm/config': 15.10.12(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
+      '@pnpm/default-reporter': 10.1.1(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/error': 3.1.0
       '@pnpm/logger': 4.0.0
       '@pnpm/manifest-utils': 3.1.6(@pnpm/logger@4.0.0)
@@ -1530,7 +1530,7 @@ packages:
       - supports-color
       - typanion
 
-  /@pnpm/config@15.10.12(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0):
+  /@pnpm/config@15.10.12(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0):
     resolution: {integrity: sha512-yCxgplRZOkQ9Y8V5MNjOIAL9cncbplTNlr+FWIvueRrCiU6zARZhsj7BIOXh+N8SKgtKyIb3UKOtgIslh1KYxQ==}
     engines: {node: '>=14.6'}
     dependencies:
@@ -1539,7 +1539,7 @@ packages:
       '@pnpm/git-utils': 0.1.0
       '@pnpm/matcher': 3.2.0
       '@pnpm/npm-conf': 2.0.0
-      '@pnpm/pnpmfile': 3.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+      '@pnpm/pnpmfile': 3.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/read-project-manifest': 3.0.13
       '@pnpm/types': 8.7.0
       camelcase: 6.3.0
@@ -1577,7 +1577,7 @@ packages:
       '@pnpm/logger': 4.0.0
       '@pnpm/types': 8.7.0
 
-  /@pnpm/core@6.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0):
+  /@pnpm/core@6.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0):
     resolution: {integrity: sha512-fTmsXqX/zPNGn46OQqnmhI94jigXarCNo/E3LlB4Sr5WEQrZ/x6UIqXNY6NNBacXkzwBnFECe+quIi9lZOao/w==}
     engines: {node: '>=14.6'}
     peerDependencies:
@@ -1594,7 +1594,7 @@ packages:
       '@pnpm/graph-sequencer': 1.0.0
       '@pnpm/headless': 18.7.6(@pnpm/logger@4.0.0)(typanion@3.14.0)
       '@pnpm/hoist': 6.2.14(@pnpm/logger@4.0.0)
-      '@pnpm/hooks.read-package-hook': 1.0.2(@yarnpkg/core@4.0.2)
+      '@pnpm/hooks.read-package-hook': 1.0.2(@yarnpkg/core@4.0.3)
       '@pnpm/lifecycle': 13.1.12(@pnpm/logger@4.0.0)(typanion@3.14.0)
       '@pnpm/link-bins': 7.2.10(@pnpm/logger@4.0.0)
       '@pnpm/lockfile-file': 5.3.8(@pnpm/logger@4.0.0)
@@ -1647,13 +1647,13 @@ packages:
     dependencies:
       rfc4648: 1.5.3
 
-  /@pnpm/default-reporter@10.1.1(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0):
+  /@pnpm/default-reporter@10.1.1(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0):
     resolution: {integrity: sha512-HLLuntUHLYiONcuQmpOTpZgRnncb6aVQTXhCKQDqeXDQrG8Hl0uAoG7qQ7Qj9JNBO1Y3BlEwe4VIw8ELed9XJw==}
     engines: {node: '>=14.6'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
-      '@pnpm/config': 15.10.12(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+      '@pnpm/config': 15.10.12(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/core-loggers': 7.1.0(@pnpm/logger@4.0.0)
       '@pnpm/error': 3.1.0
       '@pnpm/logger': 4.0.0
@@ -1735,11 +1735,11 @@ packages:
       dependency-path: 9.2.6
       ramda: /@pnpm/ramda@0.28.1
 
-  /@pnpm/find-workspace-packages@4.0.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0):
+  /@pnpm/find-workspace-packages@4.0.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0):
     resolution: {integrity: sha512-2bkesfy8IfOnii6xhr0+HeDXjM95faZOX1nvbNJ1bvXYZCVc13QiDmukKP0ovzbhQ2mcVM5K16PsekeFHDrq7g==}
     engines: {node: '>=14.6'}
     dependencies:
-      '@pnpm/cli-utils': 0.7.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+      '@pnpm/cli-utils': 0.7.43(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/constants': 6.1.0
       '@pnpm/types': 8.7.0
       find-packages: 9.0.13
@@ -1845,7 +1845,7 @@ packages:
       dependency-path: 9.2.6
       ramda: /@pnpm/ramda@0.28.1
 
-  /@pnpm/hooks.read-package-hook@1.0.2(@yarnpkg/core@4.0.2):
+  /@pnpm/hooks.read-package-hook@1.0.2(@yarnpkg/core@4.0.3):
     resolution: {integrity: sha512-zet25UoINhER3hZKgE+6wPlpuXOprD+VlKemgpt7c8r5+l44S4qytfDpuPnkBT3/oxIUbkTmajFDPfL5F8hRIA==}
     engines: {node: '>=14.6'}
     dependencies:
@@ -1853,7 +1853,7 @@ packages:
       '@pnpm/parse-overrides': 2.0.4
       '@pnpm/parse-wanted-dependency': 3.0.2
       '@pnpm/types': 8.7.0
-      '@yarnpkg/extensions': 2.0.0-rc.6(@yarnpkg/core@4.0.2)
+      '@yarnpkg/extensions': 2.0.0-rc.6(@yarnpkg/core@4.0.3)
       normalize-path: 3.0.0
       ramda: /@pnpm/ramda@0.28.1
       semver: 7.5.4
@@ -2183,13 +2183,13 @@ packages:
     dependencies:
       '@pnpm/types': 8.7.0
 
-  /@pnpm/pnpmfile@3.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0):
+  /@pnpm/pnpmfile@3.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0):
     resolution: {integrity: sha512-QCxTHgsFe3ff58l1ps1v5Bzg4tu4o3h1v8JfojL4I3NX86JSQZHyF434ikVWGAp7nHl3UAbV9dvtimw/iZyshg==}
     engines: {node: '>=14.6'}
     peerDependencies:
       '@pnpm/logger': ^4.0.0
     dependencies:
-      '@pnpm/core': 6.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.2)(typanion@3.14.0)
+      '@pnpm/core': 6.0.3(@pnpm/logger@4.0.0)(@yarnpkg/core@4.0.3)(typanion@3.14.0)
       '@pnpm/core-loggers': 7.1.0(@pnpm/logger@4.0.0)
       '@pnpm/error': 3.1.0
       '@pnpm/lockfile-types': 4.3.3
@@ -2991,8 +2991,8 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/node@20.11.10:
-    resolution: {integrity: sha512-rZEfe/hJSGYmdfX9tvcPMYeYPW2sNl50nsw4jZmRcaG0HIAb0WYEpsB05GOb53vjqpyE9GUhlDQ4jLSoB5q9kg==}
+  /@types/node@20.11.13:
+    resolution: {integrity: sha512-5G4zQwdiQBSWYTDAH1ctw2eidqdhMJaNsiIDKHFr55ihz5Trl2qqR8fdrT732yPBho5gkNxXm67OxWFBqX9aPg==}
     dependencies:
       undici-types: 5.26.5
 
@@ -4204,13 +4204,46 @@ packages:
     transitivePeerDependencies:
       - typanion
 
-  /@yarnpkg/extensions@2.0.0-rc.6(@yarnpkg/core@4.0.2):
+  /@yarnpkg/core@4.0.3(typanion@3.14.0):
+    resolution: {integrity: sha512-O+WGCjB9aIBxdRMBxXdsIy08MW4RbxfCS2AfywWb8DPS9H0LICahUJgNAaE0fwCsW7/gNzQbLYlh9DQQwzONrA==}
+    engines: {node: '>=18.12.0'}
+    dependencies:
+      '@arcanis/slice-ansi': 1.1.1
+      '@types/semver': 7.5.6
+      '@types/treeify': 1.0.3
+      '@yarnpkg/fslib': 3.0.2
+      '@yarnpkg/libzip': 3.0.1(@yarnpkg/fslib@3.0.2)
+      '@yarnpkg/parsers': 3.0.0
+      '@yarnpkg/shell': 4.0.0(typanion@3.14.0)
+      camelcase: 5.3.1
+      chalk: 3.0.0
+      ci-info: 3.9.0
+      clipanion: 4.0.0-rc.3(typanion@3.14.0)
+      cross-spawn: 7.0.3
+      diff: 5.1.0
+      dotenv: 16.4.1
+      fast-glob: 3.3.2
+      got: 11.8.6
+      lodash: 4.17.21
+      micromatch: 4.0.5
+      p-limit: 2.3.0
+      semver: 7.5.4
+      strip-ansi: 6.0.1
+      tar: 6.2.0
+      tinylogic: 2.0.0
+      treeify: 1.1.0
+      tslib: 2.6.2
+      tunnel: 0.0.6
+    transitivePeerDependencies:
+      - typanion
+
+  /@yarnpkg/extensions@2.0.0-rc.6(@yarnpkg/core@4.0.3):
     resolution: {integrity: sha512-hqp7U6bJTTe3mLIt5c7+U1TD2y9kRUzCjvzLpkAwNR5uoo6Tww5/XxdmhXeDiPbb3J3kLHTFNxEg3FhcGQ03UQ==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
       '@yarnpkg/core': ^4.0.0-rc.24
     dependencies:
-      '@yarnpkg/core': 4.0.2(typanion@3.14.0)
+      '@yarnpkg/core': 4.0.3(typanion@3.14.0)
 
   /@yarnpkg/fslib@2.10.3:
     resolution: {integrity: sha512-41H+Ga78xT9sHvWLlFOZLIhtU6mTGZ20pZ29EiZa97vnxdohJD2AF42rCoAoWfqUz486xY6fhjMH+DYEM9r14A==}
@@ -4221,6 +4254,12 @@ packages:
 
   /@yarnpkg/fslib@3.0.1:
     resolution: {integrity: sha512-TtodA4zcpKfMRI8iEBEGIRdwJ7uhj/ic2bDCBSdt6KU8WoLv9b91oqi6t37ttY7+c8B9z750W0PZHmQR3lpLNA==}
+    engines: {node: '>=18.12.0'}
+    dependencies:
+      tslib: 2.6.2
+
+  /@yarnpkg/fslib@3.0.2:
+    resolution: {integrity: sha512-dqSpZCj9ZeqMZzITHvpi5qKS9MCLWZYCl6NHCSl3a+BqiyLApehWAy60zjv9F1fxKZ6RKDgHLhBWhx8RwPm6Dw==}
     engines: {node: '>=18.12.0'}
     dependencies:
       tslib: 2.6.2
@@ -4240,6 +4279,16 @@ packages:
     dependencies:
       '@types/emscripten': 1.39.10
       '@yarnpkg/fslib': 3.0.1
+      tslib: 2.6.2
+
+  /@yarnpkg/libzip@3.0.1(@yarnpkg/fslib@3.0.2):
+    resolution: {integrity: sha512-fiqRLk2fyd2r34/Qc7HlP8fKIo1CK5CZpLNObJwnbFmZQN2hVanovFlG++3oH3qYJymEmjPl5EGsygcEJZl4Pg==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      '@yarnpkg/fslib': ^3.0.2
+    dependencies:
+      '@types/emscripten': 1.39.10
+      '@yarnpkg/fslib': 3.0.2
       tslib: 2.6.2
 
   /@yarnpkg/lockfile@1.1.0:
@@ -4930,7 +4979,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001581
-      electron-to-chromium: 1.4.650
+      electron-to-chromium: 1.4.651
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.3)
 
@@ -5905,8 +5954,8 @@ packages:
   /electron-to-chromium@1.4.632:
     resolution: {integrity: sha512-JGmudTwg7yxMYvR/gWbalqqQiyu7WTFv2Xu3vw4cJHXPFxNgAk0oy8UHaer8nLF4lZJa+rNoj6GsrKIVJTV6Tw==}
 
-  /electron-to-chromium@1.4.650:
-    resolution: {integrity: sha512-sYSQhJCJa4aGA1wYol5cMQgekDBlbVfTRavlGZVr3WZpDdOPcp6a6xUnFfrt8TqZhsBYYbDxJZCjGfHuGupCRQ==}
+  /electron-to-chromium@1.4.651:
+    resolution: {integrity: sha512-jjks7Xx+4I7dslwsbaFocSwqBbGHQmuXBJUK9QBZTIrzPq3pzn6Uf2szFSP728FtLYE3ldiccmlkOM/zhGKCpA==}
 
   /emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==, tarball: https://registry.npmmirror.com/emoji-regex/-/emoji-regex-10.3.0.tgz}
@@ -7966,7 +8015,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.11.10
+      '@types/node': 20.11.13
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -8351,8 +8400,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  /lt-frame@1.0.7(vue@3.4.15):
-    resolution: {integrity: sha512-Ibl+VJMrIfyrxRBjwOZ9dNutJ7YjMSGgIZizvw8zaPoiB5/ChyGwtNVycPdN1nGbF+nkzh1K+WTYIx+6uq6+KA==}
+  /lt-frame@1.0.9(vue@3.4.15):
+    resolution: {integrity: sha512-BgqL6Vd87wYwJssUUjBWLY898BknJvwmVPIEU/9JEG0PACAe88kA6nsa2q9d6NDZ33yiB62PF9FNL+eVDDq8Kw==}
     peerDependencies:
       vue: ^3.4.15
     dependencies:

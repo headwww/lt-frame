@@ -5,5 +5,5 @@
 	<LTButton color="success"> 成功 </LTButton>
 </template>
 <script setup lang="ts">
-import { LTSvgIcon, LTIcon, LTButton } from '@lt-frame/components';
+import { LTSvgIcon, LTIcon, LTButton } from 'lt-frame';
 </script>
