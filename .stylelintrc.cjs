@@ -1,10 +1,15 @@
 module.exports = {
-	extends: ['stylelint-config-standard',"stylelint-config-recommended-less","stylelint-config-recommended-vue"],
+	extends: ['stylelint-config-standard', 'stylelint-config-recommended-vue'],
 	overrides: [
+		// 若项目中存在scss文件，添加以下配置
 		{
-			files: ['*.less', '**/*.less'],
-			customSyntax: 'postcss-less',
-			extends: ['stylelint-config-recommended-less'],
+			files: ['*.scss', '**/*.scss'],
+			customSyntax: 'postcss-scss',
+			extends: ['stylelint-config-recommended-scss'],
+			rules: {
+				// 添加或更新你的 SCSS 规则
+				'scss/no-global-function-names': null,
+			  },
 		},
 	],
 };

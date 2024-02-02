@@ -580,7 +580,7 @@ stylelint CSS代码检查器(linter)
 	],
 }
 3. 安装项目需要的校验库，（常见的规则包）
-pnpm add stylelint stylelint-config-standard -D -w
+pnpm install stylelint stylelint-config-standard -D
 
 4. 根目录下建立 .stylelintrc.cjs
 module.exports = {
@@ -595,28 +595,34 @@ module.exports = {
 
 6. 增加vue里面的样式支持（附带less和scss的支持）
 对less的支持
-pnpm add stylelint-less stylelint-config-recommended-less stylelint-config-recommended-vue -D -w
+pnpm install stylelint-less stylelint-config-recommended-less -D
+
+对scss的支持
+pnpm install stylelint-scss stylelint-config-recommended-scss postcss -D
+
+
+pnpm install postcss-html stylelint-config-standard-scss stylelint-config-recommended-vue postcss -D （对vue里面样式的支持，vue的样式需要依赖前面这个库）
 
 Vite也同时提供了对 .scss .sass .less .styl .stylus 文件的内置支持，不需要再安装特定插件和预处理器
-.stylelintrc.cjs配置
-module.exports = {
-	extends: ['stylelint-config-standard',"stylelint-config-recommended-less","stylelint-config-recommended-vue"],
-	overrides: [
-		{
-			files: ['*.less', '**/*.less'],
-			customSyntax: 'postcss-less',
-			extends: ['stylelint-config-recommended-less'],
-		},
-	],
-};
 
+extends: [
+	"stylelint-config-standard",
+	"stylelint-config-recommended-less",
+	"stylelint-config-recommended-scss",
+	"stylelint-config-recommended-vue"
+]
 
+scss的extends
+extends:[
+	"stylelint-config-standard-scss",
+	"stylelint-config-recommended-vue/scss"
+]
 
 7. package.json文件添加
 "lint:css": "stylelint **/*.{vue,css,sass,scss} --fix"
 
 8. 给vite添加插件
-pnpm add vite-plugin-stylelint -D
+pnpm install vite-plugin-stylelint -D
 
 修改vite.config.js文件
 import stylelitPlugin from 'vite-plugin-stylelint';

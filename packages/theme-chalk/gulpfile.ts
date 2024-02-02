@@ -1,22 +1,23 @@
 import { epOutput } from '@lt-frame/build-utils';
 import { series, dest, src, parallel } from 'gulp';
-import autoPrefixer from 'gulp-autoprefixer';
-import gulpLess from 'gulp-less';
+import autoprefixer from 'gulp-autoprefixer';
+import gulpSass from 'gulp-sass';
 import path from 'path';
 import cleanCSS from 'gulp-clean-css';
 import consola from 'consola';
 import rename from 'gulp-rename';
-import dartLess from 'less';
+import dartSass from 'sass';
 import chalk from 'chalk';
 
-const distBundle = path.resolve(epOutput, 'theme-chalk');
 const distFolder = path.resolve(__dirname, 'dist');
+const distBundle = path.resolve(epOutput, 'theme-chalk');
 
 async function buildThemeChalk() {
+	const sass = gulpSass(dartSass);
 	const noElPrefixFile = /(index|base|display)/;
-	return src(path.resolve(__dirname, 'src/*.less'))
-		.pipe(gulpLess(dartLess))
-		.pipe(autoPrefixer({ cascade: false }))
+	return src(path.resolve(__dirname, 'src/*.scss'))
+		.pipe(sass.sync())
+		.pipe(autoprefixer({ cascade: false }))
 		.pipe(
 			cleanCSS({}, (details) => {
 				consola.success(

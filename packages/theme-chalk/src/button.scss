@@ -1,0 +1,37 @@
+.ant-btn {
+    &-link:hover,
+    &-link:focus,
+    &-link:active {
+      border-color: transparent !important;
+    }
+  
+    &-primary {
+      background-color: #409eff;
+      color: #FFF;
+  
+      &:hover,
+      &:focus {
+        background-color: lighten(#409eff,5%);
+        color: #FFF;
+      }
+    }
+
+    &-primary:not(&-background-ghost, [disabled]) {
+      color: #FFF;
+    }
+
+  &-default {
+    border-color:#cececd;
+    background-color:#FFF;
+    color: #606266;
+
+    &:hover,
+    &:focus {
+      border-color:#409eff;
+      background-color:#FFF;
+      color:#409eff;
+    }
+  }
+
+  }
+  
