@@ -664,7 +664,111 @@ module.exports = {
 };
 ```
 
-## 
+## 打包方案
+
+## 组件
+
+
+
+## hook
+
+### useAttrs
+
+提供一个方便的工具函数，用于获取和过滤当前Vue组件实例的属性，以便在组件中更灵活地处理和使用这些属性。
+
+#### Usage
+
+```typescript
+import { useAttrs } from 'lt-frame';
+
+const atts = useAttrs({
+	excludeDefaultKeys: false,
+	excludeKeys: ['onClick'],
+	excludeListeners: true,
+});
+```
+
+#### Type Declarations 
+
+```typescript
+export interface UseAttrsOptions {
+	/**
+	 * 是否排除监听器属性
+	 */
+	excludeListeners?: boolean;
+	/**
+	 * 需要排除的属性名称数组
+	 */
+	excludeKeys?: string[];
+	/**
+	 * 用于控制是否排除默认的属性名称数组（如'class'和'style'）
+	 */
+	excludeDefaultKeys?: boolean;
+}
+```
+
+### useBreakpoint
+
+响应式地获取和监听屏幕尺寸
+
+#### Usage
+
+搭配LTApplication组件使用，组件已内置。只需要在App.vue中使用即可。
+
+App.vue使用示例`<LTApplication> <RouterView /> </LTApplication>`
+
+然后只需要在需要使用的地方按照如下方式调用即可
+
+```typescript
+import { useBreakpoint } from 'lt-frame';
+/**
+ * screenRef: 返回当前屏幕尺寸的引用。
+ * widthRef: 返回当前屏幕尺寸对应的宽度值。
+ * realWidthRef: 返回窗口实际的宽度值。
+ * screenEnum: 屏幕尺寸的枚举类型，包含了 XS、SM、MD、LG、XL、XXL。
+ * realWidthRef: 返回全局窗口的实际宽度。
+*/
+const {screenRef,widthRef,screenEnum,realWidthRef} = useBreakpoint();
+```
+
+#### Type Declarations 
+
+```typescript
+export interface CreateCallbackParams {
+	/**
+	 * 当前屏幕尺寸的引用
+	 */
+	screen: ComputedRef<sizeEnum | undefined>;
+	/**
+	 * 当前屏幕尺寸对应的宽度值
+	 */
+	width: ComputedRef<number>;
+	/**
+	 * 窗口的实际宽度
+	 */
+	realWidth: ComputedRef<number>;
+	/**
+	 * 枚举类型，包含了屏幕尺寸的常量值（XS、SM、MD、LG、XL、XXL）
+	 */
+	screenEnum: typeof screenEnum;
+	/**
+	 * 屏幕尺寸枚举值映射到相应的宽度值
+	 */
+	screenMap: Map<sizeEnum, number>;
+	/**
+	 * 包含了屏幕尺寸的常量值
+	 */
+	sizeEnum: typeof sizeEnum;
+}
+```
+
+
+
+## utils
+
+
+
+
 
 
 

@@ -1,12 +1,18 @@
 import { entries } from 'lodash-es';
 import { getCurrentInstance, reactive, shallowRef, watchEffect } from 'vue';
 
-interface UseAttrsOptions {
-	// 是否排除监听器属性
+export interface UseAttrsOptions {
+	/**
+	 * 是否排除监听器属性
+	 */
 	excludeListeners?: boolean;
-	// 需要排除的其他属性键名数组
+	/**
+	 * 需要排除的属性名称数组
+	 */
 	excludeKeys?: string[];
-	// 是否排除默认的属性键名数组
+	/**
+	 * 用于控制是否排除默认的属性名称数组（如'class'和'style'）
+	 */
 	excludeDefaultKeys?: boolean;
 }
 
@@ -23,15 +29,11 @@ function useAttrs(options: UseAttrsOptions = {}): Record<string, any> {
 		excludeKeys = [],
 		excludeDefaultKeys = true,
 	} = options;
-
 	const attrs = shallowRef({});
-
 	const allExcludeKeys = excludeKeys.concat(
 		excludeDefaultKeys ? DEFAULT_EXCLUDE_KEYS : []
 	);
-
 	instance.attrs = reactive(instance.attrs);
-
 	watchEffect(() => {
 		const res = entries(instance.attrs).reduce(
 			(acm, [key, val]) => {
@@ -48,8 +50,7 @@ function useAttrs(options: UseAttrsOptions = {}): Record<string, any> {
 		);
 		attrs.value = res;
 	});
-
 	return attrs;
 }
 
-export { useAttrs, type UseAttrsOptions };
+export { useAttrs };

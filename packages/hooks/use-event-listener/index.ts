@@ -5,6 +5,9 @@ import { useThrottleFn, useDebounceFn } from '@vueuse/core';
 export type RemoveEventFn = () => void;
 
 export interface UseEventParams {
+	/**
+	 * 元素/引用/窗口等
+	 */
 	el?: Element | Ref<Element | undefined> | Window | any;
 	name: string;
 	listener: EventListener;

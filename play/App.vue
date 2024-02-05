@@ -71,6 +71,7 @@
 				<a-button ghost type="primary" loading> loading </a-button>
 			</div>
 		</div>
+		<Hook style="left: auto" @click="() => {}"></Hook>
 	</LTApplication>
 </template>
 <script setup lang="ts">
@@ -80,4 +81,5 @@ import {
 	LTButton as AButton,
 	LTApplication,
 } from '@lt-frame/components';
+import Hook from './Hook.vue';
 </script>

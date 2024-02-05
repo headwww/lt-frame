@@ -35,11 +35,29 @@ let globalWidthRef: ComputedRef<number>;
 let globalRealWidthRef: ComputedRef<number>;
 
 export interface CreateCallbackParams {
+	/**
+	 * 当前屏幕尺寸的引用
+	 */
 	screen: ComputedRef<sizeEnum | undefined>;
+	/**
+	 * 当前屏幕尺寸对应的宽度值
+	 */
 	width: ComputedRef<number>;
+	/**
+	 * 窗口的实际宽度
+	 */
 	realWidth: ComputedRef<number>;
+	/**
+	 * 枚举类型，包含了屏幕尺寸的常量值（XS、SM、MD、LG、XL、XXL）
+	 */
 	screenEnum: typeof screenEnum;
+	/**
+	 * 屏幕尺寸枚举值映射到相应的宽度值
+	 */
 	screenMap: Map<sizeEnum, number>;
+	/**
+	 * 包含了屏幕尺寸的常量值
+	 */
 	sizeEnum: typeof sizeEnum;
 }
 
