@@ -71,8 +71,14 @@
 				<a-button ghost type="primary" loading> loading </a-button>
 			</div>
 		</div>
-		<Hook style="left: auto" @click="() => {}"></Hook>
+		<Hook style="left: auto" @click="() => {}">
+			<template>aaa</template>
+			<template #title>aaa</template>
+		</Hook>
 		<LTArrow @click="handleArrow" :expand="!isAdvanced" up></LTArrow>
+		<LTPopConfirmButton color="success" title="Are you sure delete this task?"
+			>确定</LTPopConfirmButton
+		>
 	</LTApplication>
 </template>
 <script setup lang="ts">
@@ -82,6 +88,7 @@ import {
 	LTButton as AButton,
 	LTApplication,
 	LTArrow,
+	LTPopConfirmButton,
 } from '@lt-frame/components';
 import { ref } from 'vue';
 import Hook from './Hook.vue';

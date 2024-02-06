@@ -7,3 +7,4 @@ export * from './browser';
 export * from './clipboard';
 export * from './http';
 export * from './mitt';
+export * from './helper';

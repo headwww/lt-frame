@@ -709,7 +709,18 @@ export interface UseAttrsOptions {
 
 ### useBreakpoint
 
-响应式地获取和监听屏幕尺寸
+响应式地获取和监听屏幕尺寸，将屏幕尺寸分割为XS、SM、MD、LG、XL、XXL。
+
+屏幕宽度：`const width = document.body.clientWidth;`
+
+| 尺寸 | 范围             |
+| ---- | ---------------- |
+| XS   | width<480        |
+| SM   | 480<= width<576  |
+| MD   | 576<= width<768  |
+| LG   | 768<= width<992  |
+| XL   | 992<= width<1200 |
+| XXL  | 1200<= width     |
 
 #### Usage
 
@@ -761,6 +772,137 @@ export interface CreateCallbackParams {
 	sizeEnum: typeof sizeEnum;
 }
 ```
+
+### useEventListener
+
+此函数用于在元素、引用或窗口上添加事件监听器，并提供自动移除功能。它可以选择使用防抖或节流功能。
+
+#### Usage
+
+该函数接受一个参数对象，包括：
+
+- `el`：元素、引用或窗口对象，默认为 `window`。
+- `name`：事件名称。
+- `listener`：事件监听器函数。
+- `options`：事件监听器的选项。
+- `autoRemove`：是否自动移除事件监听器，默认为 `true`。
+- `isDebounce`：是否使用防抖功能，默认为 `true`。
+- `wait`：防抖或节流的等待时间，默认为 `80` 毫秒。
+
+返回一个包含 `removeEvent` 函数的对象，用于手动移除事件监听器。
+
+```typescript
+import { useEventListener } from 'path/to/useEventListener';
+
+const { removeEvent } = useEventListener({
+  el: window,
+  name: 'scroll',
+  listener: (event) => {
+    console.log('Scroll event:', event);
+  },
+  options: true,
+});
+```
+
+#### Type Declarations
+
+```typescript
+/**
+ * 用于手动移除事件监听器的函数类型
+ */
+export type RemoveEventFn = () => void;
+
+/**
+ * useEventListener 函数的参数类型定义
+ */
+export interface UseEventParams {
+	/**
+	 * 要添加事件监听器的元素、引用或窗口对象，默认为 `window`
+	 */
+	el?: Element | Ref<Element | undefined> | Window | any;
+	
+	/**
+	 * 事件名称
+	 */
+	name: string;
+	
+	/**
+	 * 事件监听器函数
+	 */
+	listener: EventListener;
+	
+	/**
+	 * 事件监听器的选项
+	 */
+	options?: boolean | AddEventListenerOptions;
+	
+	/**
+	 * 是否在组件卸载时自动移除事件监听器，默认为 `true`
+	 */
+	autoRemove?: boolean;
+	
+	/**
+	 * 是否使用防抖功能，默认为 `true`
+	 */
+	isDebounce?: boolean;
+	
+	/**
+	 * 防抖或节流的等待时间，默认为 `80` 毫秒
+	 */
+	wait?: number;
+}
+
+/**
+ * 添加事件监听器的自定义 hook 函数
+ */
+export function useEventListener({
+	el = window,
+	name,
+	listener,
+	options,
+	autoRemove = true,
+	isDebounce = true,
+	wait = 80,
+}: UseEventParams): { removeEvent: RemoveEventFn };
+```
+
+### useNamespace
+
+此函数用于生成命名空间相关的 CSS 类名和 CSS 变量名称，BEM方式生成。
+
+#### Useage
+
+```typescript
+import { useNamespace } from 'path/to/useNamespace';
+
+const { namespace, b, e, m, be, em, bm, bem, is, cssVar, cssVarName, cssVarBlock, cssVarBlockName } = useNamespace('block');
+```
+
+#### 返回值
+
+- `namespace`: 当前命名空间的引用。
+- `b`: 生成块级元素的 CSS 类名。
+- `e`: 生成元素级别的 CSS 类名。
+- `m`: 生成修饰符的 CSS 类名。
+- `be`: 生成块级元素和修饰符的组合 CSS 类名。
+- `em`: 生成元素级别和修饰符的组合 CSS 类名。
+- `bm`: 生成块级元素和修饰符的组合 CSS 类名。
+- `bem`: 生成块级元素、元素级别和修饰符的组合 CSS 类名。
+- `is`: 生成状态相关的 CSS 类名。
+- `cssVar`: 生成全局 CSS 变量名称。
+- `cssVarName`: 生成命名空间相关的 CSS 变量名称。
+- `cssVarBlock`: 生成块级元素相关的 CSS 变量名称。
+- `cssVarBlockName`: 生成命名空间和块级元素相关的 CSS 变量名称
+
+#### Type Declarations
+
+#### 类型定义
+
+```typescript
+export type UseNamespaceReturn = ReturnType<typeof useNamespace>;
+```
+
+### useMessage⚠️
 
 
 
