@@ -72,6 +72,7 @@
 			</div>
 		</div>
 		<Hook style="left: auto" @click="() => {}"></Hook>
+		<LTArrow @click="handleArrow" :expand="!isAdvanced" up></LTArrow>
 	</LTApplication>
 </template>
 <script setup lang="ts">
@@ -80,6 +81,14 @@ import {
 	LTIcon,
 	LTButton as AButton,
 	LTApplication,
+	LTArrow,
 } from '@lt-frame/components';
+import { ref } from 'vue';
 import Hook from './Hook.vue';
+
+const isAdvanced = ref(false);
+
+function handleArrow() {
+	isAdvanced.value = !isAdvanced.value;
+}
 </script>

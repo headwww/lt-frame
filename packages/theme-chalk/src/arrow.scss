@@ -1,0 +1,33 @@
+.lt-arrow {
+	display: inline-block;
+	transform: rotate(0deg);
+	transform-origin: center center;
+	transition: all 0.3s ease 0.1s;
+	cursor: pointer;
+
+	&__active {
+		transform: rotate(90deg);
+	}
+
+	&.inset {
+		line-height: 0px;
+	}
+
+	&.up {
+		transform: rotate(-90deg);
+	}
+
+	&.down {
+		transform: rotate(90deg);
+	}
+
+	/* stylelint-disable-next-line selector-class-pattern */
+	&.up.lt-arrow__active {
+		transform: rotate(90deg);
+	}
+
+	/* stylelint-disable-next-line selector-class-pattern */
+	&.down.lt-arrow__active {
+		transform: rotate(-90deg);
+	}
+}
