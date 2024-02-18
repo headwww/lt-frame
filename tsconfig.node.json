@@ -9,6 +9,9 @@
   "include": [
     "internal/**/*",
     "internal/**/*.json",
+    "internal/**/*",
+    "internal/**/*.json",
+    "packages/lt-frame/package.json"
   ],
   "exclude": ["**/__tests__/**", "**/tests/**", "**/dist"]
 }

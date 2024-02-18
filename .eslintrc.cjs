@@ -67,5 +67,7 @@ module.exports = {
 		"no-underscore-dangle":0,
 		"no-restricted-syntax":0,
 		"consistent-return":0,
+		'camelcase': 0,
+
 	},
 }
