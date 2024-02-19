@@ -1,5 +1,8 @@
 <template>
 	<LTApplication>
+		<LTDropdown :dropMenuList="dropMenuList">test</LTDropdown>
+
+		<div></div>
 		<LTSvgIcon name="file" color="#DEDEDE" size="32" />
 		<LTIcon icon="ion:layers-outline" :size="30" />
 		<div>
@@ -107,6 +110,8 @@ import {
 	LTPopConfirmButton,
 	LTDescription,
 	DescItem,
+	LTDropdown,
+	DropMenu,
 } from '@lt-frame/components';
 import { ref, reactive } from 'vue';
 import { useDescription } from '@lt-frame/hooks';
@@ -155,10 +160,20 @@ const schema: DescItem[] = [
 		},
 	},
 ];
-
 const [register] = useDescription({
 	title: 'useDescription',
 	data,
 	schema,
 });
+
+const dropMenuList: DropMenu[] = [
+	{
+		text: 'text1',
+		event: 'e1',
+	},
+	{
+		text: 'text2',
+		event: 'e2',
+	},
+];
 </script>
