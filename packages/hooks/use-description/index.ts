@@ -18,7 +18,7 @@ export function useDescription(
 	const loaded = ref(false);
 
 	function register(instance: DescInstance) {
-		if (unref(loaded)) {
+		if (unref(loaded) && process.env.NODE_ENV === 'production') {
 			return;
 		}
 		desc.value = instance;

@@ -21,12 +21,12 @@
 							</template>
 							<div>
 								<Icon :icon="item.icon" v-if="item.icon" />
-								<span class="ml-1">{{ item.text }}</span>
+								<span style="margin-left: 1px">{{ item.text }}</span>
 							</div>
 						</a-popconfirm>
 						<template v-else>
 							<Icon :icon="item.icon" v-if="item.icon" />
-							<span class="ml-1">{{ item.text }}</span>
+							<span style="margin-left: 1px">{{ item.text }}</span>
 						</template>
 					</a-menu-item>
 					<a-menu-divider v-if="item.divider" :key="`d-${item.event}`" />

@@ -1,4 +1,10 @@
 declare global {
+	const process: {
+		env: {
+			NODE_ENV: string;
+		};
+	};
+
 	namespace JSX {
 		type Element = VNode;
 		type ElementClass = ComponentRenderProxy;

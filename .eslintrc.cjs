@@ -68,6 +68,7 @@ module.exports = {
 		"no-restricted-syntax":0,
 		"consistent-return":0,
 		'camelcase': 0,
-
+		"no-bitwise":0,
+		"default-param-last":0
 	},
 }

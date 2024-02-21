@@ -1,0 +1,19 @@
+.lt-drawer-header {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	cursor: pointer;
+
+	&-back {
+		padding: 0 12px;
+		cursor: pointer;
+	}
+
+	&-twrap {
+		flex: 1;
+	}
+
+	&-toolbar {
+		padding-right: 50px;
+	}
+}

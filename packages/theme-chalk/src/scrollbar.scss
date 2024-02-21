@@ -1,0 +1,77 @@
+.lt-scrollbar {
+	overflow: hidden;
+	position: relative;
+	height: 100%;
+
+	&__wrap {
+		overflow: auto;
+		height: 100%;
+
+		&--hidden-default {
+			stroke-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+				width: 0;
+				height: 0;
+				opacity: 0;
+			}
+		}
+	}
+
+	&__thumb {
+		position: relative;
+		display: block;
+		width: 0;
+		height: 0;
+		cursor: pointer;
+		border-radius: inherit;
+		background-color: #909399;
+		transition: 0.3s background-color;
+		opacity: 0.3;
+
+		&:hover {
+			background-color: #909399;
+			opacity: 0.5;
+		}
+	}
+
+	&__bar {
+		position: absolute;
+		right: 2px;
+		bottom: 2px;
+		z-index: 1;
+		border-radius: 4px;
+
+		&.is-vertical {
+			top: 2px;
+			width: 6px;
+
+			& > div {
+				width: 100%;
+			}
+		}
+
+		&.is-horizontal {
+			left: 2px;
+			height: 6px;
+
+			& > div {
+				height: 100%;
+			}
+		}
+	}
+
+	&-fade-enter-active {
+		transition: opacity 0.34s ease-out;
+	}
+
+	&-fade-leave-active {
+		transition: opacity 0.12s ease-out;
+	}
+
+	&-fade-enter-from,
+	&-fade-leave-active {
+		opacity: 0;
+	}
+}

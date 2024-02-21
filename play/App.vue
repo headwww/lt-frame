@@ -1,5 +1,6 @@
 <template>
 	<LTApplication>
+		<Drawer></Drawer>
 		<LTDropdown :dropMenuList="dropMenuList">test</LTDropdown>
 
 		<div></div>
@@ -98,6 +99,7 @@
 			layout="vertical"
 		></LTDescription>
 		<LTDescription style="margin-top: 20px" @register="register" />
+		<Scorll></Scorll>
 	</LTApplication>
 </template>
 <script setup lang="ts">
@@ -116,6 +118,8 @@ import {
 import { ref, reactive } from 'vue';
 import { useDescription } from '@lt-frame/hooks';
 import Hook from './Hook.vue';
+import Scorll from './Scorll.vue';
+import Drawer from './drawer/index.vue';
 
 const isAdvanced = ref(false);
 
