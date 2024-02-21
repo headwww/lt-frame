@@ -92,6 +92,7 @@
 	},
 	"dependencies": {
 		"@lt-frame/components": "workspace:^",
+		"@lt-frame/directives": "workspace:^",
 		"@lt-frame/hooks": "workspace:^",
 		"@lt-frame/theme-chalk": "workspace:^",
 		"@lt-frame/utils": "workspace:^"

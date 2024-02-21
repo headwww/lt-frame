@@ -39,6 +39,7 @@
 
 <script lang="ts" setup>
 import { Drawer } from 'ant-design-vue';
+import { Loading as vLoading } from '@lt-frame/directives';
 import {
 	getCurrentInstance,
 	computed,

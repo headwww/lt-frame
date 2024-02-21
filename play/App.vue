@@ -1,5 +1,6 @@
 <template>
 	<LTApplication>
+		<Loading></Loading>
 		<Drawer></Drawer>
 		<LTDropdown :dropMenuList="dropMenuList">test</LTDropdown>
 
@@ -120,6 +121,7 @@ import { useDescription } from '@lt-frame/hooks';
 import Hook from './Hook.vue';
 import Scorll from './Scorll.vue';
 import Drawer from './drawer/index.vue';
+import Loading from './loading/index.vue';
 
 const isAdvanced = ref(false);
 
