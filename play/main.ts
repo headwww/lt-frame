@@ -5,9 +5,9 @@ import App from './App.vue';
 import '@lt-frame/theme-chalk/src/index.scss';
 import 'virtual:svg-icons-register';
 
-const ns = useNamespace('drawer-header');
+const ns = useNamespace('page-layout');
 
-console.log(ns.b('twarp'), process.env.NODE_ENV);
+console.log(ns.m('dense'), process.env.NODE_ENV);
 
 const app = createApp(App);
 

@@ -8,3 +8,4 @@ export * from './dropdown';
 export * from './scrollbar';
 export * from './drawer';
 export * from './loading';
+export * from './page';

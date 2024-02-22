@@ -1,106 +1,122 @@
 <template>
 	<LTApplication>
-		<Loading></Loading>
-		<Drawer></Drawer>
-		<LTDropdown :dropMenuList="dropMenuList">test</LTDropdown>
-
-		<div></div>
-		<LTSvgIcon name="file" color="#DEDEDE" size="32" />
-		<LTIcon icon="ion:layers-outline" :size="30" />
-		<div>
-			<a-button color="success"> 成功 </a-button>
-			<a-button color="success" disabled> 禁用 </a-button>
-			<a-button color="success" loading> loading </a-button>
-			<a-button color="success" type="link"> link </a-button>
-			<a-button color="success" type="link" loading> loading link </a-button>
-			<a-button color="success" type="link" disabled> disabled link </a-button>
-		</div>
-		<div>
-			<a-button color="warning"> 警告 </a-button>
-			<a-button color="warning" disabled> 禁用 </a-button>
-			<a-button color="warning" loading> loading </a-button>
-			<a-button color="warning" type="link"> link </a-button>
-			<a-button color="warning" type="link" loading> loading link </a-button>
-			<a-button color="warning" type="link" disabled> disabled link </a-button>
-		</div>
-		<div>
-			<a-button color="error"> 错误 </a-button>
-			<a-button color="error" disabled> 禁用 </a-button>
-			<a-button color="error" loading> loading </a-button>
-			<a-button color="error" type="link"> link </a-button>
-			<a-button color="error" type="link" loading> loading link </a-button>
-			<a-button color="error" type="link" disabled> disabled link </a-button>
-		</div>
-		<div>
-			<a-button ghost color="success"> 幽灵成功 </a-button>
-			<a-button ghost color="warning"> 幽灵警告 </a-button>
-			<a-button ghost color="error"> 幽灵错误 </a-button>
-			<a-button ghost type="dashed" color="warning"> 幽灵警告dashed </a-button>
-			<a-button ghost danger> 幽灵危险 </a-button>
-		</div>
-		<div>
-			<a-button type="primary" preIcon="mdi:page-next-outline">
-				主按钮
-			</a-button>
-			<a-button type="primary" disabled> 禁用 </a-button>
-			<a-button type="primary" danger preIcon="mdi:page-next-outline">
-				危险
-			</a-button>
-			<a-button type="primary" loading> loading </a-button>
-			<a-button type="link"> link </a-button>
-			<a-button type="link" loading> loading link </a-button>
-			<a-button type="link" disabled> disabled link </a-button>
-		</div>
-		<div>
-			<a-button type="default"> 默认 </a-button>
-			<a-button type="default" disabled> 禁用 </a-button>
-			<a-button type="default" danger> 危险 </a-button>
-			<a-button type="default" loading> loading </a-button>
-			<a-button type="link"> link </a-button>
-			<a-button type="link" loading> loading link </a-button>
-			<a-button type="link" disabled> disabled link </a-button>
-		</div>
-		<div>
-			<a-button type="dashed"> dashed </a-button>
-			<a-button type="dashed" disabled> 禁用 </a-button>
-			<a-button type="dashed" danger> 危险 </a-button>
-			<a-button type="dashed" loading> loading </a-button>
-		</div>
-
-		<div>
-			<div style="background-color: #8b8b8be6; padding: 10px">
-				<a-button ghost type="primary"> 幽灵主要 </a-button>
-				<a-button ghost type="default"> 幽灵默认 </a-button>
-				<a-button ghost type="dashed"> 幽灵dashed </a-button>
-				<a-button ghost type="primary" disabled> 禁用 </a-button>
-				<a-button ghost type="primary" loading> loading </a-button>
-			</div>
-		</div>
-		<Hook style="left: auto" @click="() => {}">
-			<template>aaa</template>
-			<template #title>aaa</template>
-		</Hook>
-		<LTArrow @click="handleArrow" :expand="!isAdvanced" up></LTArrow>
-		<LTPopConfirmButton color="success" title="Are you sure delete this task?"
-			>确定</LTPopConfirmButton
+		<LTPageLayout
+			title="Page组件"
+			content="content属性"
+			subTitle="二级标题"
+			:tags="['tag1', 'tag1', 'tag1']"
+			contentFullHeight
+			fixedHeight
+			dense
 		>
+			<Loading></Loading>
+			<Drawer></Drawer>
+			<LTDropdown :dropMenuList="dropMenuList">test</LTDropdown>
 
-		<LTDescription title="基础实例" :schema="schema" :data="data">
-			<template #extra>
+			<div></div>
+			<LTSvgIcon name="file" color="#DEDEDE" size="32" />
+			<LTIcon icon="ion:layers-outline" :size="30" />
+			<div>
+				<a-button color="success"> 成功 </a-button>
+				<a-button color="success" disabled> 禁用 </a-button>
+				<a-button color="success" loading> loading </a-button>
+				<a-button color="success" type="link"> link </a-button>
+				<a-button color="success" type="link" loading> loading link </a-button>
+				<a-button color="success" type="link" disabled>
+					disabled link
+				</a-button>
+			</div>
+			<div>
+				<a-button color="warning"> 警告 </a-button>
+				<a-button color="warning" disabled> 禁用 </a-button>
+				<a-button color="warning" loading> loading </a-button>
+				<a-button color="warning" type="link"> link </a-button>
+				<a-button color="warning" type="link" loading> loading link </a-button>
+				<a-button color="warning" type="link" disabled>
+					disabled link
+				</a-button>
+			</div>
+			<div>
 				<a-button color="error"> 错误 </a-button>
-			</template>
-		</LTDescription>
-		<LTDescription
-			style="margin-top: 20px"
-			:column="3"
-			bordered
-			title="带边框垂直的表格"
-			:schema="schema"
-			:data="data"
-			layout="vertical"
-		></LTDescription>
-		<LTDescription style="margin-top: 20px" @register="register" />
-		<Scorll></Scorll>
+				<a-button color="error" disabled> 禁用 </a-button>
+				<a-button color="error" loading> loading </a-button>
+				<a-button color="error" type="link"> link </a-button>
+				<a-button color="error" type="link" loading> loading link </a-button>
+				<a-button color="error" type="link" disabled> disabled link </a-button>
+			</div>
+			<div>
+				<a-button ghost color="success"> 幽灵成功 </a-button>
+				<a-button ghost color="warning"> 幽灵警告 </a-button>
+				<a-button ghost color="error"> 幽灵错误 </a-button>
+				<a-button ghost type="dashed" color="warning">
+					幽灵警告dashed
+				</a-button>
+				<a-button ghost danger> 幽灵危险 </a-button>
+			</div>
+			<div>
+				<a-button type="primary" preIcon="mdi:page-next-outline">
+					主按钮
+				</a-button>
+				<a-button type="primary" disabled> 禁用 </a-button>
+				<a-button type="primary" danger preIcon="mdi:page-next-outline">
+					危险
+				</a-button>
+				<a-button type="primary" loading> loading </a-button>
+				<a-button type="link"> link </a-button>
+				<a-button type="link" loading> loading link </a-button>
+				<a-button type="link" disabled> disabled link </a-button>
+			</div>
+			<div>
+				<a-button type="default"> 默认 </a-button>
+				<a-button type="default" disabled> 禁用 </a-button>
+				<a-button type="default" danger> 危险 </a-button>
+				<a-button type="default" loading> loading </a-button>
+				<a-button type="link"> link </a-button>
+				<a-button type="link" loading> loading link </a-button>
+				<a-button type="link" disabled> disabled link </a-button>
+			</div>
+			<div>
+				<a-button type="dashed"> dashed </a-button>
+				<a-button type="dashed" disabled> 禁用 </a-button>
+				<a-button type="dashed" danger> 危险 </a-button>
+				<a-button type="dashed" loading> loading </a-button>
+			</div>
+
+			<div>
+				<div style="background-color: #8b8b8be6; padding: 10px">
+					<a-button ghost type="primary"> 幽灵主要 </a-button>
+					<a-button ghost type="default"> 幽灵默认 </a-button>
+					<a-button ghost type="dashed"> 幽灵dashed </a-button>
+					<a-button ghost type="primary" disabled> 禁用 </a-button>
+					<a-button ghost type="primary" loading> loading </a-button>
+				</div>
+			</div>
+			<Hook style="left: auto" @click="() => {}">
+				<template>aaa</template>
+				<template #title>aaa</template>
+			</Hook>
+			<LTArrow @click="handleArrow" :expand="!isAdvanced" up></LTArrow>
+			<LTPopConfirmButton color="success" title="Are you sure delete this task?"
+				>确定</LTPopConfirmButton
+			>
+
+			<LTDescription title="基础实例" :schema="schema" :data="data">
+				<template #extra>
+					<a-button color="error"> 错误 </a-button>
+				</template>
+			</LTDescription>
+			<LTDescription
+				style="margin-top: 20px"
+				:column="3"
+				bordered
+				title="带边框垂直的表格"
+				:schema="schema"
+				:data="data"
+				layout="vertical"
+			></LTDescription>
+			<LTDescription style="margin-top: 20px" @register="register" />
+			<Scorll></Scorll>
+		</LTPageLayout>
 	</LTApplication>
 </template>
 <script setup lang="ts">
@@ -115,6 +131,7 @@ import {
 	DescItem,
 	LTDropdown,
 	DropMenu,
+	LTPageLayout,
 } from '@lt-frame/components';
 import { ref, reactive } from 'vue';
 import { useDescription } from '@lt-frame/hooks';
