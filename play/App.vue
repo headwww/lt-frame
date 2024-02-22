@@ -5,7 +5,6 @@
 			content="content属性"
 			subTitle="二级标题"
 			:tags="['tag1', 'tag1', 'tag1']"
-			contentFullHeight
 			fixedHeight
 			dense
 		>
@@ -116,6 +115,7 @@
 			></LTDescription>
 			<LTDescription style="margin-top: 20px" @register="register" />
 			<Scorll></Scorll>
+			<List></List>
 		</LTPageLayout>
 	</LTApplication>
 </template>
@@ -139,6 +139,7 @@ import Hook from './Hook.vue';
 import Scorll from './Scorll.vue';
 import Drawer from './drawer/index.vue';
 import Loading from './loading/index.vue';
+import List from './virtual/index.vue';
 
 const isAdvanced = ref(false);
 

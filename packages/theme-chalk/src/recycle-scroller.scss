@@ -1,0 +1,46 @@
+.lt-recycle-scroller {
+	position: relative;
+
+	&.direction-horizontal {
+		display: flex;
+		overflow-x: auto;
+	}
+
+	&.direction-vertical {
+		overflow-y: auto;
+	}
+
+	&__slot {
+		flex: auto 0 0;
+	}
+
+	&__item-wrapper {
+		flex: 1;
+		box-sizing: border-box;
+		overflow: hidden;
+		position: relative;
+	}
+
+	&.ready &__item-view {
+		position: absolute;
+		top: 0;
+		left: 0;
+		will-change: transform;
+	}
+
+	&.direction-vertical &__item-wrapper {
+		width: 100%;
+	}
+
+	&.direction-horizontal &__item-wrapper {
+		height: 100%;
+	}
+
+	&.ready.direction-vertical &__item-wrapper {
+		width: 100%;
+	}
+
+	&.ready.direction-horizontal &__item-wrapper {
+		height: 100%;
+	}
+}

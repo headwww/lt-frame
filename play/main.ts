@@ -5,9 +5,9 @@ import App from './App.vue';
 import '@lt-frame/theme-chalk/src/index.scss';
 import 'virtual:svg-icons-register';
 
-const ns = useNamespace('page-layout');
+const ns = useNamespace('recycle-scroller');
 
-console.log(ns.m('dense'), process.env.NODE_ENV);
+console.log(ns.e('__slot'), process.env.NODE_ENV);
 
 const app = createApp(App);
 

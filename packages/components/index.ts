@@ -9,3 +9,4 @@ export * from './scrollbar';
 export * from './drawer';
 export * from './loading';
 export * from './page';
+export * from './virlual-scroller';

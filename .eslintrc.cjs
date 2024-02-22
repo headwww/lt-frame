@@ -69,6 +69,8 @@ module.exports = {
 		"consistent-return":0,
 		'camelcase': 0,
 		"no-bitwise":0,
-		"default-param-last":0
+		"default-param-last":0,
+		"vue/no-template-shadow":0,
+
 	},
 }
