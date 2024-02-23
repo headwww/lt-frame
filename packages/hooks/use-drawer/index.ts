@@ -13,7 +13,7 @@ import { isEqual, isFunction } from 'lodash-es';
 import {
 	DrawerInstance,
 	DrawerProps,
-	ReturnMethods,
+	DrawerReturnMethods,
 	UseDrawerInnerReturnType,
 	UseDrawerReturnType,
 } from '@lt-frame/components';
@@ -60,7 +60,7 @@ export function useDrawer(): UseDrawerReturnType {
 		}
 		return instance;
 	};
-	const methods: ReturnMethods = {
+	const methods: DrawerReturnMethods = {
 		setDrawerProps: (props: Partial<DrawerProps>): void => {
 			getInstance()?.setDrawerProps(props);
 		},

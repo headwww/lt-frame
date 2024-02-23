@@ -1,0 +1,18 @@
+.lt-modal-title {
+	width: 100%;
+	cursor: pointer;
+
+	&-main {
+		color: #1f2329;
+		font-size: 16px;
+		font-weight: 600;
+		padding-right: 18px;
+	}
+
+	&-sub {
+		font-size: 14px;
+		font-weight: 400;
+		color: #4c4c4c;
+		margin-top: 5px;
+	}
+}

@@ -10,3 +10,4 @@ export * from './drawer';
 export * from './loading';
 export * from './page';
 export * from './virlual-scroller';
+export * from './modal';

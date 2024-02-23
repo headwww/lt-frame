@@ -143,9 +143,9 @@ const totalSize = ref(0);
 // 当前页面显示得视图池，存储当前页面要渲染得数据，即pool是tempalte中渲染真实使用到的。
 const pool = ref<Array<any>>([]);
 // 排序定时器
-let sortTimer;
+let sortTimer: any;
 let $_prerender = false;
-let $_computedMinItemSize;
+let $_computedMinItemSize: any;
 
 // 我们需要悬停项的键来防止ItemView被回收以保持悬停状态。
 const hoverKey = ref();
@@ -170,7 +170,7 @@ if (props.gridItems && !props.itemSize) {
 // 此操作目的是为了后续根据索引即可拿到size之和，而不必每次都重新计算。
 const sizes = computed(() => {
 	if (props.itemSize === null) {
-		const sizes = {
+		const sizes: any = {
 			'-1': { accumulator: 0 },
 		};
 
@@ -532,7 +532,7 @@ function createView(index: Number, item: any, key: any, type: any) {
 	return view;
 }
 
-function getRecycledPool(type) {
+function getRecycledPool(type: any) {
 	const recycledPools = $_recycledPools;
 	let recycledPool = recycledPools.get(type);
 	if (!recycledPool) {
@@ -542,7 +542,7 @@ function getRecycledPool(type) {
 	return recycledPool;
 }
 
-function getRecycledView(type) {
+function getRecycledView(type: any) {
 	const recycledPool = getRecycledPool(type);
 	if (recycledPool && recycledPool.length) {
 		const view = recycledPool.pop();
@@ -552,7 +552,10 @@ function getRecycledView(type) {
 	return null;
 }
 
-function removeAndRecycleView(view) {
+function removeAndRecycleView(view: {
+	nr: { used?: any; key?: any; type?: any };
+	position: number;
+}) {
 	const { type } = view.nr;
 	const recycledPool = getRecycledPool(type);
 	recycledPool.push(view);
@@ -590,8 +593,8 @@ function getScroll() {
 
 // 标记是否正在滚动，用于滚动节流
 let $_scrollDirty = false;
-let $_updateTimeout;
-let $_refreshTimout;
+let $_updateTimeout: number;
+let $_refreshTimout: number | undefined;
 function handleScroll() {
 	if (!$_scrollDirty) {
 		$_scrollDirty = true;
@@ -647,7 +650,7 @@ function scrollToPosition(position: number) {
 			? { scroll: 'scrollTop', start: 'top' }
 			: { scroll: 'scrollLeft', start: 'left' };
 
-	const viewport = unref(recycleRef);
+	const viewport: any = unref(recycleRef);
 	const scrollDirection = direction.scroll;
 	const scrollDistance = position;
 

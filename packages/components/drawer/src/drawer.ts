@@ -27,24 +27,30 @@ export interface DrawerInstance {
 	emitOpen?: (open: boolean, uid: number) => void;
 }
 
-export interface ReturnMethods extends DrawerInstance {
+export interface DrawerReturnMethods extends DrawerInstance {
 	openDrawer: <T = any>(open?: boolean, data?: T, openOnSet?: boolean) => void;
 	closeDrawer: () => void;
 	getOpen?: ComputedRef<boolean>;
 }
 
-export type RegisterFn = (drawerInstance: DrawerInstance, uuid: number) => void;
+export type DrawerRegisterFn = (
+	drawerInstance: DrawerInstance,
+	uuid: number
+) => void;
 
-export interface ReturnInnerMethods extends DrawerInstance {
+export interface DrawerReturnInnerMethods extends DrawerInstance {
 	closeDrawer: () => void;
 	changeLoading: (loading: boolean) => void;
 	changeOkLoading: (loading: boolean) => void;
 	getOpen?: ComputedRef<boolean>;
 }
 
-export type UseDrawerReturnType = [RegisterFn, ReturnMethods];
+export type UseDrawerReturnType = [DrawerRegisterFn, DrawerReturnMethods];
 
-export type UseDrawerInnerReturnType = [RegisterFn, ReturnInnerMethods];
+export type UseDrawerInnerReturnType = [
+	DrawerRegisterFn,
+	DrawerReturnInnerMethods,
+];
 
 export interface DrawerFooterProps {
 	showOkBtn: boolean;

@@ -8,6 +8,7 @@
 			fixedHeight
 			dense
 		>
+			<Modal></Modal>
 			<Loading></Loading>
 			<Drawer></Drawer>
 			<LTDropdown :dropMenuList="dropMenuList">test</LTDropdown>
@@ -140,6 +141,7 @@ import Scorll from './Scorll.vue';
 import Drawer from './drawer/index.vue';
 import Loading from './loading/index.vue';
 import List from './virtual/index.vue';
+import Modal from './modal/index.vue';
 
 const isAdvanced = ref(false);
 

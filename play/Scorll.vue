@@ -51,7 +51,6 @@
 				{{ item }}
 			</p>
 		</LTScrollbar>
-		<div style="height: 300px"></div>
 	</div>
 </template>
 
