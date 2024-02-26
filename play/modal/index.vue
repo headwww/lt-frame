@@ -10,7 +10,7 @@
 			<a-button
 				@click="
 					() => {
-						openModal3;
+						openModal3();
 					}
 				"
 				type="primary"

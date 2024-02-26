@@ -16,7 +16,7 @@
 		<LTButton
 			:type="okType"
 			@click="
-				(e: any) => {
+				(e) => {
 					emit('ok', e);
 				}
 			"
