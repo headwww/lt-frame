@@ -3,6 +3,7 @@
 		Drawer Info.
 	</LTDrawer>
 </template>
-<script lang="ts" setup>
-import { LTDrawer } from '@lt-frame/components';
+
+<script setup lang="ts">
+import { LTDrawer } from 'lt-frame';
 </script>

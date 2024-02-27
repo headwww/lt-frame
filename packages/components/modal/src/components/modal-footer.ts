@@ -17,9 +17,9 @@ export const modalFooterProps = {
 	// 显示确认按钮
 	showOkBtn: { type: Boolean, default: true },
 	// 确定按钮样式
-	okButtonProps: Object as PropType<ButtonProps>,
+	okButtonProps: Object as PropType<Partial<ButtonProps>>,
 	// 取消按钮样式
-	cancelButtonProps: Object as PropType<ButtonProps>,
+	cancelButtonProps: Object as PropType<Partial<ButtonProps>>,
 	// 增加底部的高度
 	wrapperFooterOffset: { type: Number, default: 0 },
 	// 自定义底部
