@@ -2,7 +2,7 @@
 	<LTPageLayout title="详情组件">
 		<LTDescription title="基础实例" :schema="schema" :data="data">
 			<template #extra>
-				<a-button color="error"> 错误 </a-button>
+				<LTButton color="error"> 错误 </LTButton>
 			</template>
 		</LTDescription>
 		<LTDescription
@@ -25,6 +25,7 @@ import {
 	LTDescription,
 	DescItem,
 	useDescription,
+	LTButton,
 } from 'lt-frame';
 import { reactive } from 'vue';
 

@@ -7,6 +7,9 @@
 		<Dropdown></Dropdown>
 		<Icon></Icon>
 		<Modal></Modal>
+		<Page></Page>
+		<Scroll></Scroll>
+		<Virtual></Virtual>
 	</LTApplication>
 </template>
 
@@ -19,4 +22,7 @@ import Drawer from './demo/drawer/index.vue';
 import Dropdown from './demo/dropdown/index.vue';
 import Icon from './demo/icon/index.vue';
 import Modal from './demo/modal/index.vue';
+import Page from './demo/page/index.vue';
+import Scroll from './demo/scroll/index.vue';
+import Virtual from './demo/virtual/index.vue';
 </script>

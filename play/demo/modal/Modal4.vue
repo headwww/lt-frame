@@ -1,0 +1,53 @@
+<template>
+	<LTModal
+		v-bind="$attrs"
+		@register="register"
+		title="Modal Title"
+		@visible-change="handleVisibleChange"
+	>
+		<LTDescription @register="registerD"> </LTDescription>
+	</LTModal>
+</template>
+<script lang="ts" setup>
+import { nextTick, ref } from 'vue';
+import {
+	LTModal,
+	useModalInner,
+	LTDescription,
+	useDescription,
+	DescItem,
+} from 'lt-frame';
+
+const props = defineProps({
+	userData: { type: Object },
+});
+const modelRef = ref({});
+
+const schema: DescItem[] = [
+	{
+		field: 'data',
+		label: 'data',
+	},
+	{
+		field: 'info',
+		label: 'info',
+	},
+];
+const [registerD, { setDescProps }] = useDescription({
+	title: 'useDescription',
+});
+
+const [register] = useModalInner((data) => {
+	data && onDataReceive(data);
+});
+
+function onDataReceive(data) {
+	console.log('Data Received', data);
+	setDescProps({ schema, data });
+
+	modelRef.value = { field2: data.data, field1: data.info };
+}
+function handleVisibleChange(v) {
+	v && props.userData && nextTick(() => onDataReceive(props.userData));
+}
+</script>

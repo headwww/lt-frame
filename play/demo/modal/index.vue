@@ -13,20 +13,63 @@
 		<a-button type="primary" class="my-4" @click="openModal2">
 			打开弹窗
 		</a-button>
+		<Alert message="自适应高度" show-icon />
+		<a-button type="primary" class="my-4" @click="openModal3">
+			打开弹窗
+		</a-button>
+
+		<Alert message="内外数据交互" show-icon />
+		<a-button type="primary" class="my-4" @click="send">
+			打开弹窗并传递数据
+		</a-button>
+
+		<Alert message="使用动态组件的方式在页面内使用多个弹窗" show-icon />
+		<a-space>
+			<a-button type="primary" class="my-4" @click="openTargetModal(1)">
+				打开弹窗1
+			</a-button>
+			<a-button type="primary" class="my-4" @click="openTargetModal(2)">
+				打开弹窗2
+			</a-button>
+			<a-button type="primary" class="my-4" @click="openTargetModal(3)">
+				打开弹窗3
+			</a-button>
+			<a-button type="primary" class="my-4" @click="openTargetModal(4)">
+				打开弹窗4
+			</a-button>
+		</a-space>
+
+		<component
+			:is="currentModal"
+			v-model:open="modalOpen"
+			:userData="userData"
+		/>
 
 		<Modal1 @register="register1" :minHeight="100" />
 		<Modal2 @register="register2" />
+		<Modal3 @register="register3" />
+		<Modal4 @register="register4" />
 	</LTPageLayout>
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout, LTButton as AButton, useModal } from 'lt-frame';
-import { Alert } from 'ant-design-vue';
-import { unref, watch } from 'vue';
+import {
+	LTPageLayout,
+	LTButton as AButton,
+	useModal,
+	Nullable,
+} from 'lt-frame';
+import { Alert, Space as ASpace } from 'ant-design-vue';
+import { ComponentOptions, nextTick, ref, shallowRef, unref, watch } from 'vue';
 import Modal1 from './Modal1.vue';
+import Modal2 from './Modal2.vue';
+import Modal3 from './Modal3.vue';
+import Modal4 from './Modal4.vue';
 
 const [register1, { openModal: openModal1, getOpen: getOpen1 }] = useModal();
 const [register2, { openModal: openModal2 }] = useModal();
+const [register3, { openModal: openModal3 }] = useModal();
+const [register4, { openModal: openModal4 }] = useModal();
 
 function openModalLoading() {
 	openModal1(true);
@@ -38,4 +81,38 @@ watch(
 		console.log(getOpen1?.value);
 	}
 );
+
+function send() {
+	openModal4(true, {
+		data: 'content',
+		info: 'Info',
+	});
+}
+
+const currentModal = shallowRef<Nullable<ComponentOptions>>(null);
+const modalOpen = ref<Boolean>(false);
+const userData = ref<any>(null);
+function openTargetModal(index: number) {
+	switch (index) {
+		case 1:
+			currentModal.value = Modal1 as ComponentOptions;
+			break;
+		case 2:
+			currentModal.value = Modal2 as ComponentOptions;
+			break;
+		case 3:
+			currentModal.value = Modal3 as ComponentOptions;
+			break;
+		default:
+			currentModal.value = Modal4 as ComponentOptions;
+			break;
+	}
+	nextTick(() => {
+		// `useModal` not working with dynamic component
+		// passing data through `userData` prop
+		userData.value = { data: Math.random(), info: 'Info222' };
+		// open the target modal
+		modalOpen.value = true;
+	});
+}
 </script>
