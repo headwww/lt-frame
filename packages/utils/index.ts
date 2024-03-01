@@ -10,3 +10,4 @@ export * from './mitt';
 export * from './helper';
 export * from './error';
 export * from './dom';
+export * from './cache';
