@@ -1,0 +1,27 @@
+.lt-login-form {
+	padding: 35px 35px 15px;
+
+	&__header {
+		display: flex;
+		justify-content: space-between;
+
+		&-left {
+			&-logo {
+				width: 85px;
+				height: 40px;
+				display: none;
+				margin-bottom: 15px;
+
+				@media (width <= 568px) {
+					display: block;
+				}
+			}
+
+			&-title {
+				font-size: 30px;
+				font-weight: 600;
+				margin-bottom: 15px;
+			}
+		}
+	}
+}

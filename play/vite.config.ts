@@ -18,5 +18,15 @@ export default defineConfig({
 			svgoOptions: true,
 		}),
 	],
-	server: { port: 9091 },
+	server: {
+		host: '0.0.0.0',
+		port: 9091,
+		proxy: {
+			'/ltApi': {
+				target: 'http://ltscm.3322.org:8081/',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/ltApi/, ''),
+			},
+		},
+	},
 });

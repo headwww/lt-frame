@@ -95,6 +95,8 @@
 		"@lt-frame/directives": "workspace:^",
 		"@lt-frame/hooks": "workspace:^",
 		"@lt-frame/theme-chalk": "workspace:^",
-		"@lt-frame/utils": "workspace:^"
+		"@lt-frame/utils": "workspace:^",
+		"@lt-frame/version-1": "workspace:^",
+		"pinia": "^2.1.7"
 	}
 }

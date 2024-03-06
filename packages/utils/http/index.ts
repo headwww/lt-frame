@@ -4,5 +4,5 @@ export * from './axiosRetry';
 export * from './axiosTransform';
 export * from './checkStatus';
 export * from './httpEnum';
-export * from './ltHttp';
+export * from './http';
 export * from './types';

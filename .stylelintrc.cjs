@@ -14,5 +14,7 @@ module.exports = {
 	],
 	rules: {
 		'selector-not-notation': null,
+		'selector-class-pattern':null,
+		'no-descending-specificity':null,
 	},
 };

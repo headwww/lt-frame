@@ -21,12 +21,10 @@
 		transform: rotate(90deg);
 	}
 
-	/* stylelint-disable-next-line selector-class-pattern */
 	&.up.lt-arrow__active {
 		transform: rotate(90deg);
 	}
 
-	/* stylelint-disable-next-line selector-class-pattern */
 	&.down.lt-arrow__active {
 		transform: rotate(-90deg);
 	}

@@ -79,8 +79,10 @@ const transform: AxiosTransform = {
 	},
 };
 
-function createAxios(opt?: Partial<CreateAxiosOptions>) {
-	return new LTAxios(
+let ltHttp: LTAxios;
+
+export function defineHttp(opt?: Partial<CreateAxiosOptions>) {
+	ltHttp = new LTAxios(
 		deepMerge(
 			{
 				// 基础请求地址
@@ -116,6 +118,9 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
 			opt || {}
 		)
 	);
+	return ltHttp;
 }
 
-export const LTHttp = createAxios();
+export function getLTHttp() {
+	return ltHttp;
+}
