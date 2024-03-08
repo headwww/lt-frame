@@ -5,13 +5,14 @@ import {
 	createRouter,
 	createWebHashHistory,
 } from 'vue-router';
-import { deepMerge } from '@lt-frame/utils';
+import { deepMerge, defineCache, defineHttp } from '@lt-frame/utils';
+import { createPinia } from 'pinia';
 import { AppConfigV1 } from './types';
 import { LTRouteRecordRaw } from '../router/types';
 import { LAYOUT } from '../router';
 
 let config: AppConfigV1 = {
-	routerOptions: {
+	routerConfig: {
 		history: createWebHashHistory(),
 		strict: true,
 		scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -86,9 +87,18 @@ let mBasicRoutes: LTRouteRecordRaw[] = [];
 
 const mWhitePathList: string[] = [];
 
+const pinia = createPinia();
+
 export function defineConfig_v1(options: AppConfigV1) {
 	config = deepMerge(config, options);
-	const { routerOptions, basicRoutes, addRoutes, whitePathList } = config;
+	const {
+		routerConfig,
+		basicRoutes,
+		addRoutes,
+		whitePathList,
+		httpConfig,
+		cacheConfig,
+	} = config;
 
 	// 创建路由相关的信息
 	// 合并路由白名单
@@ -110,18 +120,22 @@ export function defineConfig_v1(options: AppConfigV1) {
 	}
 
 	const opt: RouterOptions = {
-		history: routerOptions.history!!,
+		history: routerConfig.history!!,
 		routes: mBasicRoutes as unknown as RouteRecordRaw[],
-		scrollBehavior: routerOptions.scrollBehavior,
-		parseQuery: routerOptions.parseQuery,
-		stringifyQuery: routerOptions.stringifyQuery,
-		linkActiveClass: routerOptions.linkActiveClass,
-		linkExactActiveClass: routerOptions.linkExactActiveClass,
+		scrollBehavior: routerConfig.scrollBehavior,
+		parseQuery: routerConfig.parseQuery,
+		stringifyQuery: routerConfig.stringifyQuery,
+		linkActiveClass: routerConfig.linkActiveClass,
+		linkExactActiveClass: routerConfig.linkExactActiveClass,
 	};
 
 	router = createRouter(opt);
 
-	return { config, router };
+	const LTHttp = defineHttp(httpConfig);
+
+	defineCache(cacheConfig);
+
+	return { config, router, pinia, LTHttp };
 }
 
 /**

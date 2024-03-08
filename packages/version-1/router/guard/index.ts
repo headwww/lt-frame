@@ -1,5 +1,4 @@
 import { RouteLocationNormalized, RouteRecordRaw, Router } from 'vue-router';
-import { getAppConfig } from '@lt-frame/version-1/configs';
 import {
 	AxiosCanceler,
 	removeTabChangeListener,
@@ -7,6 +6,7 @@ import {
 	throwError,
 } from '@lt-frame/utils';
 import { Modal, notification } from 'ant-design-vue';
+import { getAppConfig, getWhitePathList } from '../../configs';
 import { useAppStore, usePermissionStore, useUserStore } from '../../stores';
 
 export function setupRouterGuard(router: Router) {
@@ -127,8 +127,7 @@ export function createPermissionGuard(router: Router) {
 
 	router.beforeEach(async (to, from, next) => {
 		const userInfo = userStore.getUserInfo;
-		const { dynamicRoutes, basicRoutes, whitePathList } = getAppConfig();
-
+		const { dynamicRoutes, basicRoutes } = getAppConfig();
 		let loginPath = '';
 		if (basicRoutes) {
 			const { LOGIN_ROUTE } = basicRoutes;
@@ -138,7 +137,7 @@ export function createPermissionGuard(router: Router) {
 		}
 
 		// 处理白名单路径
-		if (whitePathList?.includes(to.path)) {
+		if (getWhitePathList().includes(to.path)) {
 			// 如果用户已登录并且目标路径是登录页,则跳过登录页面直接进入（to.query?.redirect）或根路径('/')
 			if (to.path === loginPath && userInfo) {
 				try {

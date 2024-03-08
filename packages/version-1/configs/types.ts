@@ -1,9 +1,10 @@
 import { RouterOptions } from 'vue-router';
+import { CacheConfig, CreateAxiosOptions } from '@lt-frame/utils';
 import { LTRouteRecordRaw } from '../router/types';
 
 export interface AppConfigV1 {
 	// 创建路由器的行为和功能
-	routerOptions: Partial<RouterOptions>;
+	routerConfig: Partial<RouterOptions>;
 	// 首页
 	homePage?: string;
 	// 动态路由
@@ -22,6 +23,10 @@ export interface AppConfigV1 {
 	addRoutes?: LTRouteRecordRaw[];
 	// 切换路由时是否取消已发送但未响应的http请求。
 	removeAllHttpPending?: boolean;
-	//	// 切换接口时是否关闭未关闭的消息和通知弹窗
+	// 切换接口时是否关闭未关闭的消息和通知弹窗
 	closeMessageOnSwitch?: boolean;
+	// 自定义HTTP请求的实例
+	httpConfig?: CreateAxiosOptions;
+	// 缓存配置
+	cacheConfig?: Partial<CacheConfig>;
 }

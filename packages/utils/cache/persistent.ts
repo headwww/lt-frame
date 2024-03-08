@@ -52,7 +52,7 @@ export function defineCache({
 	sessionCache && sessionMemory.resetCache(sessionCache);
 }
 
-defineCache();
+// defineCache();
 
 export class Persistent {
 	static getLocal<T>(key: any) {
