@@ -74,8 +74,8 @@ const userStore = useUserStore();
 const isLoading = ref(false);
 
 const formState = reactive({
-	username: 'system',
-	password: '123456',
+	username: '',
+	password: '',
 });
 
 const disabled = computed(() => !(formState.username && formState.password));

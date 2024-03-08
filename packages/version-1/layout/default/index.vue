@@ -1,10 +1,10 @@
 <template>
-	<Layout class="main-layout">
+	<Layout :class="ns.b()">
 		<LayoutHeader />
 		<Layout>
 			<LayoutSider />
-			<Layout class="main-layout-content">
-				<Tabs class="main-layout-content-tab" />
+			<Layout :class="ns.e('content')">
+				<Tabs :class="ns.e('content-tab')" />
 				<LayoutContent />
 			</Layout>
 		</Layout>
@@ -13,8 +13,11 @@
 
 <script lang="ts" setup>
 import { Layout } from 'ant-design-vue';
-import LayoutHeader from './header/indev.vue';
-import Tabs from './tabs/indev.vue';
-import LayoutSider from './sider/indev.vue';
-import LayoutContent from './conent/indev.vue';
+import { useNamespace } from '@lt-frame/hooks';
+import LayoutHeader from './header/index.vue';
+import Tabs from './tabs/index.vue';
+import LayoutSider from './sider/index.vue';
+import LayoutContent from './conent/index.vue';
+
+const ns = useNamespace('layout');
 </script>

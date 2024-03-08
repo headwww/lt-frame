@@ -15,3 +15,6 @@ export function resetRouter(addWhiteRouter: string[]) {
 			}
 		});
 }
+export * from './types';
+export * from './constant';
+export * from './guard';

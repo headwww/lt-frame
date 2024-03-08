@@ -1,4 +1,8 @@
 $white: #fff;
+$primary-color: #1890ff;
+$success-color: #52c41a;
+$warning-color: #faad1a;
+$error-color: #ff4d4f;
 
 .ant-btn {
 	&-link:hover,
@@ -8,13 +12,13 @@ $white: #fff;
 	}
 
 	&-primary {
-		background-color: #1890ff;
+		background-color: $primary-color;
 		color: $white;
 
-		&:hover,
-		&:focus {
-			background-color: lighten(#1890ff, 5%);
+		&:hover:not([disabled]),
+		&:active:not([disabled]) {
 			color: $white;
+			background-color: lighten($primary-color, 5%);
 		}
 	}
 
@@ -27,11 +31,11 @@ $white: #fff;
 		background-color: $white;
 		color: #606266;
 
-		&:hover,
-		&:focus {
-			border-color: #1890ff;
+		&:hover:not([disabled]),
+		&:active:not([disabled]) {
+			border-color: $primary-color;
 			background-color: $white;
-			color: #1890ff;
+			color: $primary-color;
 		}
 	}
 
@@ -53,17 +57,17 @@ $white: #fff;
 		cursor: not-allowed !important;
 	}
 
-	&-success.ant-btn-link:not([disabled='disabled']) {
-		color: #52c41a;
+	&-success.ant-btn-link:not([disabled]) {
+		color: $success-color;
 
 		&:hover,
 		&:focus {
 			border-color: transparent;
-			color: lighten(#52c41a, 5%);
+			color: lighten($success-color, 5%);
 		}
 
 		&:active {
-			color: darken(#52c41a, 5%);
+			color: darken($success-color, 5%);
 		}
 	}
 
@@ -78,86 +82,85 @@ $white: #fff;
 	}
 
 	&-success:not(.ant-btn-link, .is-disabled) {
-		border-color: #52c41a;
-		background-color: #52c41a;
+		border-color: $success-color;
+		background-color: $success-color;
 		color: $white;
-		//border-width: 0;
 
 		&:hover,
-		&:focus {
-			border-color: lighten(#52c41a, 5%);
-			background-color: lighten(#52c41a, 5%);
+		&:active {
+			border-color: lighten($success-color, 5%);
+			background-color: lighten($success-color, 5%);
 			color: $white;
 		}
 
 		&:active {
-			border-color: darken(#52c41a, 5%);
-			background-color: darken(#52c41a, 5%);
+			border-color: darken($success-color, 5%);
+			background-color: darken($success-color, 5%);
 		}
 	}
 
-	&-warning.ant-btn-link:not([disabled='disabled']) {
-		color: #faad1a;
+	&-warning.ant-btn-link:not([disabled]) {
+		color: $warning-color;
 
 		&:hover,
 		&:focus {
 			border-color: transparent;
-			color: lighten(#faad1a, 5%);
+			color: lighten($warning-color, 5%);
 		}
 
 		&:active {
-			color: darken(#faad1a, 5%);
+			color: darken($warning-color, 5%);
 		}
 	}
 
 	&-warning:not(.ant-btn-link, .is-disabled) {
-		border-color: #faad1a;
-		background-color: #faad1a;
+		border-color: $warning-color;
+		background-color: $warning-color;
 		color: $white;
 
 		&:hover,
-		&:focus {
-			border-color: lighten(#faad1a, 5%);
-			background-color: lighten(#faad1a, 5%);
+		&:active {
+			border-color: lighten($warning-color, 5%);
+			background-color: lighten($warning-color, 5%);
 			color: $white;
 		}
 
 		&:active {
-			border-color: darken(#faad1a, 5%);
-			background-color: darken(#faad1a, 5%);
+			border-color: darken($warning-color, 5%);
+			background-color: darken($warning-color, 5%);
 		}
 	}
 
-	&-error.ant-btn-link:not([disabled='disabled']) {
-		color: #ff4d4f;
+	&-error.ant-btn-link:not([disabled]) {
+		color: $error-color;
 
 		&:hover,
 		&:focus {
 			border-color: transparent;
-			color: lighten(#ff4d4f, 5%);
+			color: lighten($error-color, 5%);
 		}
 
 		&:active {
-			color: darken(#ff4d4f, 5%);
+			color: darken($error-color, 5%);
 		}
 	}
 
 	&-error:not(.ant-btn-link, .is-disabled) {
-		border-color: #ff4d4f;
-		background-color: #ff4d4f;
+		border-color: $error-color;
+		background-color: $error-color;
 		color: $white;
 		//border-width: 0;
 
 		&:hover,
-		&:focus {
-			border-color: lighten(#ff4d4f, 5%);
-			background-color: lighten(#ff4d4f, 5%);
+		&:active {
+			border-color: lighten($error-color, 5%);
+			background-color: lighten($error-color, 5%);
 			color: $white;
 		}
 
 		&:active {
-			border-color: darken(#ff4d4f, 5%);
-			background-color: darken(#ff4d4f, 5%);
+			border-color: darken($error-color, 5%);
+			background-color: darken($error-color, 5%);
 		}
 	}
 
@@ -199,59 +202,59 @@ $white: #fff;
 
 .ant-btn-background-ghost.ant-btn-success:not(.ant-btn-link) {
 	border-width: 1px;
-	border-color: #52c41a;
+	border-color: $success-color;
 	background-color: transparent;
-	color: #52c41a;
+	color: $success-color;
 
 	&:hover,
 	&:focus {
-		border-color: lighten(#52c41a, 5%);
-		color: lighten(#52c41a, 5%) !important;
+		border-color: lighten($success-color, 5%);
+		color: lighten($success-color, 5%) !important;
 	}
 
 	&:active {
-		border-color: darken(#52c41a, 5%);
-		color: darken(#52c41a, 5%);
+		border-color: darken($success-color, 5%);
+		color: darken($success-color, 5%);
 	}
 }
 
 .ant-btn-background-ghost.ant-btn-warning:not(.ant-btn-link) {
 	border-width: 1px;
-	border-color: #faad14;
+	border-color: $warning-color;
 	background-color: transparent;
-	color: #faad14;
+	color: $warning-color;
 
 	&:hover,
 	&:focus {
-		border-color: lighten(#faad14, 5%);
-		color: lighten(#faad14, 5%) !important;
+		border-color: lighten($warning-color, 5%);
+		color: lighten($warning-color, 5%) !important;
 	}
 
 	&:active {
-		border-color: darken(#faad14, 5%);
-		color: darken(#faad14, 5%);
+		border-color: darken($warning-color, 5%);
+		color: darken($warning-color, 5%);
 	}
 }
 
 .ant-btn-background-ghost.ant-btn-error:not(.ant-btn-link) {
 	border-width: 1px;
-	border-color: #ff4d4f;
+	border-color: $error-color;
 	background-color: transparent;
-	color: #ff4d4f;
+	color: $error-color;
 
 	&:hover,
 	&:focus {
-		border-color: lighten(#ff4d4f, 5%);
-		color: lighten(#ff4d4f, 5%) !important;
+		border-color: lighten($error-color, 5%);
+		color: lighten($error-color, 5%) !important;
 	}
 
 	&:active {
-		border-color: darken(#ff4d4f, 5%);
-		color: darken(#ff4d4f, 5%);
+		border-color: darken($error-color, 5%);
+		color: darken($error-color, 5%);
 	}
 }
 
-.ant-btn-ghost.ant-btn-link:not([disabled='disabled']) {
+.ant-btn-ghost.ant-btn-link:not([disabled]) {
 	color: $white;
 
 	&:hover,

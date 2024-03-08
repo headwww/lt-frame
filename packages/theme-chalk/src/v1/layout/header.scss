@@ -1,0 +1,25 @@
+.lt-layout-header {
+	align-items: center;
+	background-color: #fff;
+	box-sizing: border-box;
+	display: flex;
+	flex: 0 0 56px;
+	flex-direction: row;
+	height: 56px;
+	justify-content: space-between;
+	min-width: 1024px;
+	padding-left: 10px;
+	padding-right: 0;
+	position: relative;
+	z-index: 100;
+
+	&__left {
+		align-items: center;
+		display: flex;
+	}
+
+	&__right {
+		display: flex;
+		align-items: center;
+	}
+}

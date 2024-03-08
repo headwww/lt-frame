@@ -1,15 +1,17 @@
 import { Persistent, getLTHttp } from '@lt-frame/utils';
 import { defineStore } from 'pinia';
-import { getGlobalRouter } from '../configs';
+import { RouteRecordRaw } from 'vue-router';
+import { getAppConfig, getGlobalRouter } from '../configs';
+import { usePermissionStore } from './permission';
 
 export const useUserStore = defineStore({
-	id: 'app-user',
+	id: 'lt-user',
 	state: () => ({
-		// 用户信息
 		userInfo: null,
 	}),
 	getters: {
 		getUserInfo(state): any {
+			state.userInfo = Persistent.getLocal('USER_INFO');
 			return state.userInfo;
 		},
 	},
@@ -26,15 +28,26 @@ export const useUserStore = defineStore({
 				);
 				this.setUserInfo(data);
 				this.afterLoginAction();
-
 				return data;
 			} catch (error) {
 				return Promise.reject(error);
 			}
 		},
 		async afterLoginAction() {
-			//
-			await getGlobalRouter().replace('home-page');
+			// 动态添加路由
+			const permissionStore = usePermissionStore();
+			if (!permissionStore.isDynamicAddedRoute) {
+				const { dynamicRoutes, basicRoutes } = getAppConfig();
+				const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
+				routes.forEach((route) => {
+					getGlobalRouter().addRoute(route as unknown as RouteRecordRaw);
+				});
+				getGlobalRouter().addRoute(
+					basicRoutes?.PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw
+				);
+				permissionStore.setDynamicAddedRoute(true);
+			}
+			await getGlobalRouter().replace(getAppConfig().homePage!!);
 		},
 		async logout() {
 			//
