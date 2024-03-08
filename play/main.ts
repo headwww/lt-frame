@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 
 import '@lt-frame/theme-chalk/src/index.scss';
+// import 'lt-frame/theme-chalk/index.css';
 
 import 'virtual:svg-icons-register';
 

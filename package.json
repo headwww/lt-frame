@@ -65,6 +65,7 @@
 		"lint-staged": "^15.2.0",
 		"lodash-es": "^4.17.21",
 		"mitt": "^3.0.1",
+		"pinia": "^2.1.7",
 		"postcss-html": "^1.6.0",
 		"prettier": "^3.1.1",
 		"qs": "^6.11.2",
@@ -96,7 +97,6 @@
 		"@lt-frame/hooks": "workspace:^",
 		"@lt-frame/theme-chalk": "workspace:^",
 		"@lt-frame/utils": "workspace:^",
-		"@lt-frame/version-1": "workspace:^",
-		"pinia": "^2.1.7"
+		"@lt-frame/version-1": "workspace:^"
 	}
 }
