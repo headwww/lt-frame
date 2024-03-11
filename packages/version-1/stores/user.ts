@@ -1,6 +1,8 @@
 import { Persistent, getLTHttp } from '@lt-frame/utils';
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
+import { useMessage } from '@lt-frame/hooks';
+import { h } from 'vue';
 import { getAppConfig, getGlobalRouter } from '../configs';
 import { usePermissionStore } from './permission';
 
@@ -50,10 +52,28 @@ export const useUserStore = defineStore({
 			await getGlobalRouter().replace(getAppConfig().homePage!!);
 		},
 		async logout() {
-			//
+			this.setUserInfo(null);
+			const { basicRoutes } = getAppConfig();
+			let loginPath = '';
+			if (basicRoutes) {
+				const { LOGIN_ROUTE } = basicRoutes;
+				if (LOGIN_ROUTE) {
+					loginPath = LOGIN_ROUTE.path;
+				}
+			}
+			getGlobalRouter().push(loginPath);
 		},
 		confirmLoginOut() {
-			///
+			const { createConfirm } = useMessage();
+			createConfirm({
+				iconType: 'warning',
+				title: () => h('span', '确认退出当前账户吗？'),
+				content: () => h('span', '退出登录后，您将无法收到该账号的通知'),
+				okText: '退出',
+				onOk: async () => {
+					await this.logout();
+				},
+			});
 		},
 		resetState() {
 			this.userInfo = null;

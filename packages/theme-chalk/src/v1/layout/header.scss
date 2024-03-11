@@ -13,13 +13,17 @@
 	position: relative;
 	z-index: 100;
 
-	&__left {
+	&__logo {
 		align-items: center;
 		display: flex;
 	}
 
 	&__right {
-		display: flex;
 		align-items: center;
+		display: flex;
+		justify-content: space-around;
+		justify-content: flex-end;
+		margin-right: 8px;
+		width: fit-content;
 	}
 }

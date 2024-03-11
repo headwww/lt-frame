@@ -1,0 +1,73 @@
+.lt-user-info {
+	border-radius: 4px;
+	height: 44px;
+	padding: 0 8px;
+	-webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+	align-items: center;
+	box-sizing: border-box;
+	cursor: pointer;
+	display: inline-flex;
+	position: relative;
+
+	&:active {
+		background-color: rgb(31 35 41 / 12%);
+	}
+
+	&:hover {
+		background-color: rgb(31 35 41 / 12%);
+	}
+
+	&__avatar {
+		border-radius: 50%;
+		height: 32px;
+		position: relative;
+		width: 32px;
+		background-color: #f56a00;
+	}
+
+	&__content {
+		margin-left: 12px;
+		margin-right: 0;
+		width: 120px;
+		max-width: 120px;
+		text-align: left;
+
+		&-name {
+			color: #1f2329;
+			font-size: 14px;
+			font-weight: 500;
+			line-height: 20px;
+			max-width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		&-tag {
+			align-items: center;
+			display: flex;
+
+			&-content {
+				background-color: rgb(51 112 225 / 20%);
+				color: #245bdb;
+				font-size: 10px;
+				height: 16px;
+				padding: 0 4px;
+				align-items: center;
+				border-radius: 4px;
+				cursor: text;
+				display: inline-flex;
+				margin: 0;
+				max-width: 100%;
+				overflow-wrap: break-word;
+				white-space: nowrap;
+
+				&-text {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					word-break: break-all;
+				}
+			}
+		}
+	}
+}

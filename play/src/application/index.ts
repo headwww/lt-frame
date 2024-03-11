@@ -1,14 +1,7 @@
+// import { defineConfig_v1, setupRouterGuard } from 'lt-frame';
 import { defineConfig_v1, setupRouterGuard } from '@lt-frame/version-1';
 import { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
-
-// import {
-// 	defineHttp,
-// 	defineConfig_v1,
-// 	defineCache,
-// 	setupRouterGuard,
-// } from 'lt-frame';
-import { setupLoadingDirective } from 'lt-frame/es/directives/loading';
 import { asyncRoutes } from '../router';
 
 export const { router, pinia, LTHttp } = defineConfig_v1({
@@ -20,16 +13,12 @@ export const { router, pinia, LTHttp } = defineConfig_v1({
 	},
 	cacheConfig: {
 		appLocalCacheKey: 'LT-Demo',
-		hasEncrypt: import.meta.env.DEV,
+		hasEncrypt: !import.meta.env.DEV,
 	},
 });
 
 export function onCreate(app: App) {
 	app.use(pinia);
-
 	app.use(router);
-
 	setupRouterGuard(router);
-
-	setupLoadingDirective(app as any);
 }
