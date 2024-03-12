@@ -5,7 +5,7 @@ import { resetRouter } from '../router';
 
 let timeId: ReturnType<typeof setTimeout>;
 
-interface AppState {
+export interface AppState {
 	projectConfig: ProjectConfig | null;
 	pageLoading: boolean;
 }

@@ -7,7 +7,7 @@ import { getAppConfig } from '../configs';
 import { Menu } from '../types';
 import { transformRouteToMenu } from '../router/helper/menuHelper';
 
-interface PermissionState {
+export interface PermissionState {
 	// 路由是否动态添加
 	isDynamicAddedRoute: boolean;
 	// 菜单列表

@@ -3,7 +3,7 @@
 		<LayoutHeader />
 		<Layout :class="ns.e('sider-content')">
 			<LayoutSider />
-			<Layout>
+			<Layout :class="ns.e('content')">
 				<Tabs />
 				<LayoutContent />
 			</Layout>

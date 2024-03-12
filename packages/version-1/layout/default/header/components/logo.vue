@@ -1,8 +1,9 @@
 <template>
 	<div :class="ns.b()">
-		<div :style="getWidth" :class="ns.e('svg')" @click="go()">
+		<div :style="getWidth" :class="ns.e('svg')">
 			<div style="width: 132px; height: 40px">
 				<LTSvgIcon
+					@click="go()"
 					style="cursor: pointer; height: 40px"
 					name="logo-with-text"
 					size="132"
