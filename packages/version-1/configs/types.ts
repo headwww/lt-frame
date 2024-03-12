@@ -19,6 +19,8 @@ export interface AppConfigV1 {
 		REDIRECT_ROUTE?: LTRouteRecordRaw;
 		PAGE_NOT_FOUND_ROUTE?: LTRouteRecordRaw;
 	};
+	// 定义重定向路由的name，默认为Redirect和basicRoutes.REDIRECT_ROUTE配置的一样，如果重新定义了basicRoutes.REDIRECT_ROUTE那么redirectName需要同步更改
+	redirectName?: string;
 	// 新增静态路由
 	addRoutes?: LTRouteRecordRaw[];
 	// 切换路由时是否取消已发送但未响应的http请求。

@@ -1,7 +1,7 @@
 .lt-sider {
 	padding-left: 8px;
 
-	&__menu {
+	&__children {
 		background-color: #f2f3f5;
 		display: flex;
 		flex: none;
@@ -12,17 +12,50 @@
 		overscroll-behavior: contain;
 		padding-bottom: 70px;
 		position: relative;
-		transition: all 0.3s cubic-bezier(0.25, 0.1, 0.05, 1) 70ms;
+	}
 
-		&-internal {
+	&__menu {
+		overflow: hidden auto;
+		scroll-behavior: smooth;
+
+		&-list {
 			padding-bottom: 56px;
-			width: 236px;
 			position: relative;
 			top: 12px;
 			transition:
 				all 0.4s,
 				top 0.4s ease 0.1s;
 			user-select: none;
+			background-color: transparent;
+			border-inline-end: 0 !important;
+
+			.ant-menu-item {
+				&:active {
+					background-color: rgb(0 0 0 / 6%) !important;
+				}
+
+				&:hover {
+					background-color: rgb(0 0 0 / 6%) !important;
+				}
+			}
+
+			.ant-menu-submenu-title {
+				&:active {
+					background-color: rgb(0 0 0 / 6%) !important;
+				}
+
+				&:hover {
+					background-color: rgb(0 0 0 / 6%) !important;
+				}
+			}
+
+			.ant-menu-item-selected {
+				background: transparent !important;
+			}
+
+			.ant-menu.ant-menu-sub.ant-menu-inline {
+				background: transparent;
+			}
 		}
 	}
 }

@@ -11,3 +11,14 @@ export interface Menu {
 	meta?: Partial<RouteMeta>; // 菜单项元信息
 	hideMenu?: boolean; // 是否隐藏菜单
 }
+
+export interface MenuSetting {
+	// 菜单收起状态
+	collapsed: boolean;
+	// 当前展开的 SubMenu 菜单项 key 数组
+	openKeys: Array<string>;
+}
+
+export interface ProjectConfig {
+	menuSetting: MenuSetting;
+}

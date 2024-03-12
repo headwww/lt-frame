@@ -1,4 +1,5 @@
 import { toRaw } from 'vue';
+import { pick, omit } from 'lodash-es';
 import { Memory } from './memory';
 import { createStorage, CreateStorageParams } from './storageCache';
 
@@ -102,6 +103,20 @@ export class Persistent {
 		}
 	}
 }
+
+window.addEventListener('beforeunload', () => {
+	// TOKEN_KEY 在登录或注销时已经写入到storage了，此处为了解决同时打开多个窗口时token不同步的问题
+	// LOCK_KEY 在锁屏和解锁时写入，此处也不应修改
+	ls.set(cacheKey.appLocalCacheKey, {
+		...omit(localMemory.getCache, 'LOCK_KEY'),
+		...pick(ls.get(cacheKey.appLocalCacheKey), ['USER_INFO', 'LOCK_KEY']),
+	});
+
+	ss.set(cacheKey.appSessionCacheKey, {
+		...omit(sessionMemory.getCache, 'LOCK_KEY'),
+		...pick(ss.get(cacheKey.appSessionCacheKey), ['USER_INFO', 'LOCK_KEY']),
+	});
+});
 
 /**
  * 监听窗口即将关闭事件，用于同步缓存数据

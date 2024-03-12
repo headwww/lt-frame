@@ -217,8 +217,14 @@ export function createStateGuard(router: Router) {
 				loginPath = LOGIN_ROUTE.path;
 			}
 		}
-
 		if (to.path === loginPath) {
+			const userStore = useUserStore();
+			const appStore = useAppStore();
+			const permissionStore = usePermissionStore();
+			appStore.resetAllState();
+			permissionStore.resetState();
+			userStore.resetState();
+
 			removeTabChangeListener();
 		}
 	});

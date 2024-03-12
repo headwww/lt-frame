@@ -20,6 +20,7 @@ let config: AppConfigV1 = {
 	homePage: '/home-page',
 	whitePathList: [''],
 	removeAllHttpPending: false,
+	redirectName: 'Redirect',
 	basicRoutes: {
 		ROOT_ROUTE: {
 			path: '/',
@@ -53,6 +54,25 @@ let config: AppConfigV1 = {
 					meta: {
 						title: 'ErrorPage',
 						hideMenu: true,
+					},
+				},
+			],
+		},
+		REDIRECT_ROUTE: {
+			path: '/redirect',
+			component: LAYOUT,
+			name: 'RedirectTo',
+			meta: {
+				title: 'Redirect',
+				hideMenu: true,
+			},
+			children: [
+				{
+					path: '/redirect/:path(.*)/:_redirect_type(.*)/:_origin_params(.*)?',
+					name: 'Redirect',
+					component: () => import('../view/redirect/index.vue'),
+					meta: {
+						title: 'Redirect',
 					},
 				},
 			],
@@ -103,7 +123,8 @@ export function defineConfig_v1(options: AppConfigV1) {
 	// 创建路由相关的信息
 	// 合并路由白名单
 	if (basicRoutes) {
-		const { LOGIN_ROUTE, ROOT_ROUTE, PAGE_NOT_FOUND_ROUTE } = basicRoutes;
+		const { LOGIN_ROUTE, ROOT_ROUTE, PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } =
+			basicRoutes;
 		if (LOGIN_ROUTE) {
 			mBasicRoutes.push(LOGIN_ROUTE);
 			// 默认将登录添加路由白名单
@@ -112,6 +133,7 @@ export function defineConfig_v1(options: AppConfigV1) {
 		// 将外部的路由白名单合并到一起
 		if (whitePathList) mWhitePathList.concat(whitePathList);
 		if (ROOT_ROUTE) mBasicRoutes.push(ROOT_ROUTE);
+		if (REDIRECT_ROUTE) mBasicRoutes.push(REDIRECT_ROUTE);
 		if (PAGE_NOT_FOUND_ROUTE) mBasicRoutes.push(PAGE_NOT_FOUND_ROUTE);
 	}
 

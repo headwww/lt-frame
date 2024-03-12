@@ -31,3 +31,7 @@ export type IntervalHandle = ReturnType<typeof setInterval>;
 export interface Fn<T = any, R = T> {
 	(...arg: T[]): R;
 }
+
+export type DeepPartial<T> = {
+	[P in keyof T]?: DeepPartial<T[P]>;
+};

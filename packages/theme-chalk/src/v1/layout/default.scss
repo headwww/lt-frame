@@ -6,4 +6,16 @@
 	min-height: 0;
 	position: relative;
 	width: 100%;
+
+	&__sider-content {
+		display: flex;
+		flex: 1;
+		min-width: 1024px;
+		background-color: #f2f3f5;
+		overflow: hidden;
+
+		.ant-layout-sider {
+			background: transparent;
+		}
+	}
 }
