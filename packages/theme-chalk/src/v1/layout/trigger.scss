@@ -1,0 +1,33 @@
+.lt-sider-trigger {
+	font-size: 14px;
+	align-items: center;
+	bottom: 0;
+	color: #2b2f36;
+	cursor: pointer;
+	display: flex;
+	height: 44px;
+	left: 0;
+	margin: 8px 0;
+	padding: 0 8px;
+	position: absolute;
+	right: 0;
+	white-space: nowrap;
+
+	&::before {
+		background: rgb(31 35 41 / 15%);
+		content: '';
+		height: 0;
+		height: 1px;
+		left: 8px;
+		pointer-events: none;
+		position: absolute;
+		right: 8px;
+		top: 0;
+		transform: translateY(-8px);
+	}
+
+	&:hover {
+		background-color: rgb(31 35 41 / 8%);
+		border-radius: 6px;
+	}
+}

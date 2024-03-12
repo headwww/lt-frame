@@ -71,6 +71,7 @@ module.exports = {
 		"no-bitwise":0,
 		"default-param-last":0,
 		"vue/no-template-shadow":0,
+		"import/no-self-import":0,
 
 	},
 }

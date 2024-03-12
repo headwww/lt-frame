@@ -1,7 +1,11 @@
 <template>
 	<div :class="ns.b()">
-		<div style="width: 130px; cursor: pointer">
-			<LTSvgIcon name="logo-with-text" size="132"></LTSvgIcon>
+		<div :class="ns.e('svg')">
+			<LTSvgIcon
+				style="cursor: pointer; height: 40px"
+				name="logo-with-text"
+				size="132"
+			></LTSvgIcon>
 		</div>
 	</div>
 </template>

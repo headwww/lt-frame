@@ -1,18 +1,17 @@
 <template>
-	<div :class="ns.b()">
-		<div :class="ns.e('logo')">
-			<Logo></Logo>
-		</div>
+	<LayoutHeader :class="ns.b()">
+		<Logo></Logo>
 		<div :class="ns.e('right')">
 			<UserInfo></UserInfo>
 		</div>
-	</div>
+	</LayoutHeader>
 </template>
 
 <script lang="ts" setup>
+import { LayoutHeader } from 'ant-design-vue';
 import { useNamespace } from '@lt-frame/hooks';
 import Logo from './components/logo.vue';
 import UserInfo from './components/user-info.vue';
 
-const ns = useNamespace('layout-header');
+const ns = useNamespace('header');
 </script>

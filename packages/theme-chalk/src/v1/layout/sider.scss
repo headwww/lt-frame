@@ -1,3 +1,28 @@
-.lt-layout-sider {
-	// background-color: #f0f1f3 !important;
+.lt-sider {
+	padding-left: 8px;
+
+	&__menu {
+		background-color: #f2f3f5;
+		display: flex;
+		flex: none;
+		flex-direction: column;
+		height: 100%;
+		min-width: 0;
+		overflow: hidden auto;
+		overscroll-behavior: contain;
+		padding-bottom: 70px;
+		position: relative;
+		transition: all 0.3s cubic-bezier(0.25, 0.1, 0.05, 1) 70ms;
+
+		&-internal {
+			padding-bottom: 56px;
+			width: 236px;
+			position: relative;
+			top: 12px;
+			transition:
+				all 0.4s,
+				top 0.4s ease 0.1s;
+			user-select: none;
+		}
+	}
 }

@@ -1,7 +1,7 @@
 <template>
 	<LTDropdown
-		@openChange="handleOpenChange"
 		:trigger="['click']"
+		@openChange="handleOpenChange"
 		:drop-menu-list="getDropMenuList"
 		@menu-event="handleMenuEvent"
 	>
