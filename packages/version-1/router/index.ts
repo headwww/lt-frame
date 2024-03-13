@@ -17,7 +17,7 @@ export function resetRouter() {
 		.getRoutes()
 		.forEach((route) => {
 			const { name } = route;
-			if (name && WHITE_NAME_LIST.includes(name as string)) {
+			if (name && !WHITE_NAME_LIST.includes(name as string)) {
 				getGlobalRouter().hasRoute(name) && getGlobalRouter().removeRoute(name);
 			}
 		});
