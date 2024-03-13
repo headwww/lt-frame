@@ -22,7 +22,7 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'page',
 			name: 'pageDemo',
-			component: () => import('../../demo/icon/index.vue'),
+			component: () => import('../../demo/page/index.vue'),
 			meta: {
 				title: 'page',
 			},
@@ -46,7 +46,7 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'modal',
 			name: 'Modal',
-			component: () => import('../../demo/icon/index.vue'),
+			component: () => import('../../demo/modal/index.vue'),
 			meta: {
 				title: 'Modal',
 			},
@@ -54,7 +54,7 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'drawer',
 			name: 'Drawer',
-			component: () => import('../../demo/icon/index.vue'),
+			component: () => import('../../demo/drawer/index.vue'),
 			meta: {
 				title: 'Drawer',
 			},
@@ -70,7 +70,7 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'descriptions',
 			name: 'Descriptions',
-			component: () => import('../../demo/icon/index.vue'),
+			component: () => import('../../demo/description/index.vue'),
 			meta: {
 				title: 'Descriptions',
 			},
@@ -86,7 +86,7 @@ const comps: LTRouteRecordRaw = {
 				{
 					path: 'scrollBar',
 					name: 'ScrollBar',
-					component: () => import('../../demo/icon/index.vue'),
+					component: () => import('../../demo/scroll/index.vue'),
 					meta: {
 						title: 'LTscrollBar',
 					},
@@ -94,7 +94,7 @@ const comps: LTRouteRecordRaw = {
 				{
 					path: 'virtualScroller',
 					name: 'VirtualScroller',
-					component: () => import('../../demo/icon/index.vue'),
+					component: () => import('../../demo/virtual/index.vue'),
 					meta: {
 						title: '虚拟滚动',
 					},
