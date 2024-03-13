@@ -7,7 +7,12 @@ import {
 } from '@lt-frame/utils';
 import { Modal, notification } from 'ant-design-vue';
 import { getAppConfig, getWhitePathList } from '../../configs';
-import { useAppStore, usePermissionStore, useUserStore } from '../../stores';
+import {
+	useAppStore,
+	usePermissionStore,
+	useUserStore,
+	useTabStore,
+} from '../../stores';
 
 export function setupRouterGuard(router: Router) {
 	createPageGuard(router);
@@ -218,11 +223,13 @@ export function createStateGuard(router: Router) {
 			}
 		}
 		if (to.path === loginPath) {
+			const tabStore = useTabStore();
 			const userStore = useUserStore();
 			const appStore = useAppStore();
 			const permissionStore = usePermissionStore();
 			appStore.resetAllState();
 			permissionStore.resetState();
+			tabStore.resetState();
 			userStore.resetState();
 
 			removeTabChangeListener();

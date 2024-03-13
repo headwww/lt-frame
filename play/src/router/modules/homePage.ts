@@ -17,6 +17,7 @@ const homePage: LTRouteRecordRaw = {
 			name: 'HomePageChildren',
 			component: () => import('../../demo/button/index.vue'),
 			meta: {
+				affix: true,
 				title: '首页',
 				hideMenu: true,
 			},
