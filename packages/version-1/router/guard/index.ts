@@ -16,10 +16,12 @@ import {
 
 export function setupRouterGuard(router: Router) {
 	createPageGuard(router);
-	createPermissionGuard(router);
 	createPageLoadingGuard(router);
 	createHttpGuard(router);
 	createScrollGuard(router);
+	createMessageGuard(router);
+	createPermissionGuard(router);
+	createStateGuard(router);
 }
 
 /**
@@ -188,6 +190,7 @@ export function createPermissionGuard(router: Router) {
 			next();
 			return;
 		}
+
 		// 添加动态路由
 		const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
 		routes.forEach((route) => {
@@ -222,6 +225,7 @@ export function createStateGuard(router: Router) {
 				loginPath = LOGIN_ROUTE.path;
 			}
 		}
+
 		if (to.path === loginPath) {
 			const tabStore = useTabStore();
 			const userStore = useUserStore();
@@ -231,7 +235,6 @@ export function createStateGuard(router: Router) {
 			permissionStore.resetState();
 			tabStore.resetState();
 			userStore.resetState();
-
 			removeTabChangeListener();
 		}
 	});

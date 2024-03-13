@@ -1,4 +1,3 @@
-// import { defineConfig_v1, setupRouterGuard } from 'lt-frame';
 import {
 	ProjectConfig,
 	defineConfig_v1,
@@ -10,8 +9,7 @@ import { createWebHashHistory } from 'vue-router';
 import { Persistent, deepMerge } from '@lt-frame/utils';
 import { asyncRoutes } from '../router';
 
-export const { router, pinia, LTHttp } = defineConfig_v1({
-	dynamicRoutes: asyncRoutes,
+export const { config, router, pinia, LTHttp } = defineConfig_v1({
 	routerConfig: {
 		history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
 		strict: true,
@@ -21,6 +19,7 @@ export const { router, pinia, LTHttp } = defineConfig_v1({
 		appLocalCacheKey: 'LT-DEMO',
 		hasEncrypt: !import.meta.env.DEV,
 	},
+	dynamicRoutes: asyncRoutes,
 });
 
 export function initProjectConfig() {
@@ -43,8 +42,9 @@ export function initProjectConfig() {
 
 export function onCreate(app: App) {
 	app.use(pinia);
+	initProjectConfig();
+
 	app.use(router);
 
-	initProjectConfig();
 	setupRouterGuard(router);
 }

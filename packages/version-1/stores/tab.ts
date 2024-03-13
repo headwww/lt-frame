@@ -11,6 +11,20 @@ export interface TabState {
 	lastDragEndIndex: number;
 }
 
+function handleGotoPage(router: Router) {
+	const go = useGo(router);
+	go(unref(router.currentRoute).fullPath, true);
+}
+
+const getToTarget = (tabItem: RouteLocationNormalized) => {
+	const { params, path, query } = tabItem;
+	return {
+		params: params || {},
+		path,
+		query: query || {},
+	};
+};
+
 export const useTabStore = defineStore({
 	id: 'lt-tab',
 	state: (): TabState => ({
@@ -121,12 +135,12 @@ export const useTabStore = defineStore({
 				} else {
 					//  跳转到右侧选项卡
 					const page = this.tabList[index + 1];
-					toTarget = this.getToTarget(page);
+					toTarget = getToTarget(page);
 				}
 			} else {
 				// 关闭当前选项卡
 				const page = this.tabList[index - 1];
-				toTarget = this.getToTarget(page);
+				toTarget = getToTarget(page);
 			}
 			close(currentRoute.value);
 			await replace(toTarget);
@@ -155,7 +169,7 @@ export const useTabStore = defineStore({
 					}
 					if (pageIndex >= 0) {
 						const page = this.tabList[index - 1];
-						const toTarget = this.getToTarget(page);
+						const toTarget = getToTarget(page);
 						await replace(toTarget);
 					}
 				}
@@ -221,7 +235,7 @@ export const useTabStore = defineStore({
 			}
 			this.updateCacheTab();
 			Persistent.setLocal('TABS_KEY', this.tabList, true);
-			this.handleGotoPage(router);
+			handleGotoPage(router);
 		},
 		/**
 		 * 关闭右侧
@@ -244,7 +258,7 @@ export const useTabStore = defineStore({
 			}
 			this.updateCacheTab();
 			Persistent.setLocal('TABS_KEY', this.tabList, true);
-			this.handleGotoPage(router);
+			handleGotoPage(router);
 		},
 		/**
 		 * 关闭其他
@@ -268,7 +282,7 @@ export const useTabStore = defineStore({
 			this.bulkCloseTabs(pathList);
 			this.updateCacheTab();
 			Persistent.setLocal('TABS_KEY', this.tabList, true);
-			this.handleGotoPage(router);
+			handleGotoPage(router);
 		},
 
 		/**
@@ -290,19 +304,6 @@ export const useTabStore = defineStore({
 			);
 		},
 
-		handleGotoPage(router: Router) {
-			const go = useGo(router);
-			go(unref(router.currentRoute).fullPath, true);
-		},
-
-		getToTarget(tabItem: RouteLocationNormalized) {
-			const { params, path, query } = tabItem;
-			return {
-				params: params || {},
-				path,
-				query: query || {},
-			};
-		},
 		/**
 		 * 重制状态
 		 */

@@ -125,6 +125,7 @@ export function defineConfig_v1(options: AppConfigV1) {
 	if (basicRoutes) {
 		const { LOGIN_ROUTE, ROOT_ROUTE, PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } =
 			basicRoutes;
+
 		if (LOGIN_ROUTE) {
 			mBasicRoutes.push(LOGIN_ROUTE);
 			// 默认将登录添加路由白名单

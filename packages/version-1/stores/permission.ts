@@ -48,6 +48,7 @@ export const usePermissionStore = defineStore({
 				return !ignoreRoute;
 			};
 			let routes: LTRouteRecordRaw[] = cloneDeep(asyncRoutes);
+
 			// 将路由转换成菜单
 			const menuList = transformRouteToMenu(routes);
 			// 移除掉 ignoreRoute: true 的路由 非一级路由
