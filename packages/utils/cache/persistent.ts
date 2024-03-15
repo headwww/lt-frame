@@ -53,12 +53,8 @@ export function defineCache({
 	sessionCache && sessionMemory.resetCache(sessionCache);
 }
 
-// defineCache();
-
 export class Persistent {
 	static getLocal<T>(key: any) {
-		console.log(localMemory);
-
 		return localMemory.get(key)?.value as T | null;
 	}
 
