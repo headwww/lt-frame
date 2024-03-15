@@ -19,6 +19,8 @@ export interface TableProps extends VxeTableProps {
 // };
 
 export const tableProps = {
+	// 是否开启工具栏
+	enableToolbar: { type: Boolean, default: true },
 	// 序号的可见性
 	seqVisibility: { type: Boolean, default: true },
 	// checkbox的可见性

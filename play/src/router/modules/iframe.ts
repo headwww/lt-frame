@@ -37,6 +37,16 @@ const about: LTRouteRecordRaw = {
 				title: '外链外部地址',
 			},
 		},
+		{
+			path: 'http://192.168.1.145:8016/WebReport/ReportServer;jsessionid=node0-187ce6ngilzdufknqo2aylcs26.node0?reportlet=tfcw/WorkShopUtilizationRate.cpt',
+			name: 'baobiao',
+			component: IFRAME,
+			meta: {
+				// frameSrc:
+				// 'http://192.168.1.145:8016/WebReport/ReportServer;jsessionid=node0-187ce6ngilzdufknqo2aylcs26.node0?reportlet=tfcw/WorkShopUtilizationRate.cpt',
+				title: '报表',
+			},
+		},
 	],
 };
 

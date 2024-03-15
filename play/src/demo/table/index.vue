@@ -2,9 +2,12 @@
 	<LTPageLayout dense contentFullHeight fixedHeight>
 		<LTTable
 			:loading="loading"
-			@save-row-event="saveRowEvent"
+			@insert="insertRowEvent"
+			@refresh="findRoles"
+			@update="updateRowEvent"
 			:colConfigs="colConfigs"
 			:data="tableData"
+			@remove="removeRowsEvent"
 		></LTTable>
 	</LTPageLayout>
 </template>
@@ -15,15 +18,30 @@ import { parseRef } from '@lt-frame/utils';
 import { onMounted, ref } from 'vue';
 import { VxeColumnPropTypes } from 'vxe-table';
 import XEUtils from 'xe-utils';
+import { difference } from 'lodash-es';
 import { LTHttp } from '../../application';
 
 const tableData = ref([]);
 
-const loading = ref(true);
+const loading = ref(false);
 
-function saveRowEvent(row: any, saveResult: any) {
+function removeRowsEvent(rows: any, removeResult: any) {
 	setTimeout(() => {
-		saveResult(true, '错误的数据请检查数据的来源哈哈哈哈');
+		tableData.value = difference(tableData.value, rows);
+		removeResult(true);
+	}, 2000);
+}
+
+function updateRowEvent(row: never, saveResult: any) {
+	setTimeout(() => {
+		saveResult(true);
+	}, 2000);
+}
+
+function insertRowEvent(row: never, saveResult: any) {
+	setTimeout(() => {
+		tableData.value.unshift(row);
+		saveResult(true);
 	}, 2000);
 }
 
@@ -37,6 +55,7 @@ const colConfigs = [
 	{
 		field: 'corp.name',
 		title: 'entity',
+		sortable: true,
 		editRender: {
 			name: 'LT-Table',
 			props: {
@@ -66,9 +85,26 @@ const colConfigs = [
 							field: 'code',
 							title: '编码',
 						},
+						{
+							field: 'code',
+							title: '编码',
+						},
+						{
+							field: 'code',
+							title: '编码',
+							width: 200,
+						},
+						{
+							field: 'code',
+							title: '编码',
+						},
+						{
+							field: 'code',
+							title: '编码',
+						},
 					],
 					// 直接配置静态数据
-					data: tableData,
+					// data: tableData,
 				},
 			},
 		},
@@ -151,7 +187,14 @@ function formatEnum(enumObj: any) {
 		enumObj[cellValue];
 	return setDate;
 }
+
 onMounted(async () => {
+	findRoles();
+});
+
+const findRoles = () => {
+	loading.value = true;
+
 	LTHttp.post({
 		url: 'api/securityModelManager/findRoles',
 		data: [
@@ -174,5 +217,5 @@ onMounted(async () => {
 			loading.value = false;
 			// tableData.value = [];
 		});
-});
+};
 </script>

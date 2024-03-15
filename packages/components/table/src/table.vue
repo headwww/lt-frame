@@ -6,14 +6,17 @@
 		export
 		custom
 		print
+		:refresh="{ query: refresh }"
+		v-if="enableToolbar"
 	>
 		<template #buttons>
 			<LTButton @click="insert" type="primary" preIcon="fluent:add-12-filled">
 				新增
 			</LTButton>
 			<LTButton
+				@click="removeRowsEvent"
 				style="margin-left: 8px"
-				type="error"
+				color="error"
 				preIcon="fluent:delete-12-regular"
 			>
 				删除
@@ -29,6 +32,7 @@
 		:import-config="{}"
 		ref="vxeTableRef"
 		size="small"
+		:scroll-y="{ enabled: true }"
 		:loading="loading"
 		show-overflow
 		keep-source
@@ -79,7 +83,7 @@
 						:icon="h(StopOutlined)"
 					/>
 					<a-button
-						@click="saveRowEvent(row)"
+						@click="save(row)"
 						style="font-size: 12px; color: #6a6a6a"
 						type="text"
 						size="small"
@@ -115,6 +119,7 @@ import {
 import { Button as AButton } from 'ant-design-vue';
 import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
 import { useMessage } from '@lt-frame/hooks';
+import { omit } from 'lodash-es';
 import { tableProps } from './table';
 import { LTButton } from '../../button';
 
@@ -134,7 +139,8 @@ nextTick(() => {
 		$table.connect($toolbar);
 	}
 });
-const emit = defineEmits(['cancelRowEvent', 'editRowEvent', 'saveRowEvent']);
+
+const emit = defineEmits(['insert', 'remove', 'update', 'refresh']);
 
 const attrs = useAttrs();
 
@@ -159,7 +165,6 @@ const editRowEvent = async (row: any) => {
 	const $table = vxeTableRef.value;
 	if ($table) {
 		$table.setEditRow(row);
-		emit('editRowEvent', row);
 	}
 };
 
@@ -169,13 +174,32 @@ async function cancelRowEvent(row: any) {
 	if ($table) {
 		await $table.clearEdit();
 		await $table.revertData(row);
-		emit('cancelRowEvent', row);
+	}
+}
+/** 插入一条数据 */
+function insert() {
+	const $table = vxeTableRef.value;
+	if ($table) {
+		$table.insert({
+			_X_ROW_INSERT: true,
+		});
 	}
 }
 
-/** 保存 */
+function save(row: any) {
+	if (row._X_ROW_INSERT) {
+		const newRow = omit(row, '_X_ROW_INSERT');
+		updateOrInsertRowEvent('insert', newRow);
+	} else {
+		updateOrInsertRowEvent('update', row);
+	}
+}
+
 const { createMessage, notification } = useMessage();
-const saveRowEvent = async (row: any) => {
+/**
+ * 新增还是修改
+ */
+const updateOrInsertRowEvent = async (type: 'insert' | 'update', row: any) => {
 	const $table = vxeTableRef.value;
 	if ($table) {
 		loading.value = true;
@@ -184,7 +208,10 @@ const saveRowEvent = async (row: any) => {
 			if (isSave) {
 				createMessage.success('保存成功');
 				clearEdit();
-				reloadRow(row, {});
+				// 修改的话需要执行这步操作
+				if (type === 'update') {
+					reloadRow(row, {});
+				}
 			} else {
 				notification.error({
 					message: '保存失败',
@@ -194,14 +221,40 @@ const saveRowEvent = async (row: any) => {
 			}
 			loading.value = false;
 		};
-		emit('saveRowEvent', row, saveResult);
+		emit(type, row, saveResult);
 	}
 };
 
-function insert() {
+/**
+ * 删除
+ */
+function removeRowsEvent() {
 	const $table = vxeTableRef.value;
 	if ($table) {
-		$table.insert({});
+		if ($table.getCheckboxRecords().length === 0) {
+			return;
+		}
+		loading.value = true;
+		const removeResult = (isSave: boolean, description: any) => {
+			if (isSave) {
+				createMessage.success('删除成功');
+			} else {
+				notification.error({
+					message: '删除失败',
+					description,
+					duration: 4,
+				});
+			}
+			loading.value = false;
+		};
+		emit('remove', $table.getCheckboxRecords(), removeResult);
 	}
 }
+
+/**
+ * 更新表单
+ */
+const refresh = (): any => {
+	emit('refresh');
+};
 </script>

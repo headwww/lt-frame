@@ -12,6 +12,14 @@ const comps: LTRouteRecordRaw = {
 	},
 	children: [
 		{
+			path: 'test',
+			name: 'Test',
+			component: () => import('../../demo/test/index.vue'),
+			meta: {
+				title: '测试',
+			},
+		},
+		{
 			path: 'icon',
 			name: 'IconCopm',
 			component: () => import('../../demo/icon/index.vue'),

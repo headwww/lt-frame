@@ -16,6 +16,8 @@
 		</template>
 		<template #dropdown>
 			<Table
+				:enable-toolbar="false"
+				style="width: 430px; height: 300px"
 				:data="tableData"
 				:loading="loading"
 				v-bind="getTableAttrs"
