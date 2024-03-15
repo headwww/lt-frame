@@ -1,5 +1,5 @@
 import { withInstall } from '@lt-frame/utils';
-import loading from './src/loading.vue';
+import loading from './src/lt-loading.vue';
 
 export const LTLoading = withInstall(loading);
 

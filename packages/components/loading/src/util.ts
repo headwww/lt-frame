@@ -1,6 +1,6 @@
 import { VNode, defineComponent, createVNode, render, reactive, h } from 'vue';
 
-import loading from './loading.vue';
+import loading from './lt-loading.vue';
 import { LoadingProps } from './loading';
 
 export function createLoading(
