@@ -22,5 +22,5 @@
 </template>
 
 <script lang="ts" setup>
-import { LTPageLayout } from 'lt-frame';
+import { LTPageLayout } from '@lt-frame/components';
 </script>

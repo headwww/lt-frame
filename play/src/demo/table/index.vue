@@ -13,11 +13,12 @@
 </template>
 
 <script lang="ts" setup>
-import { LTPageLayout, LTTable, parseRef } from 'lt-frame';
+import { LTPageLayout, LTTable } from '@lt-frame/components';
 import { onMounted, ref } from 'vue';
 import { VxeColumnPropTypes } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import { difference } from 'lodash-es';
+import { parseRef } from '@lt-frame/utils';
 import { LTHttp } from '../../application';
 
 const tableData = ref([]);

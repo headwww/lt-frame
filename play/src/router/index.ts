@@ -1,4 +1,4 @@
-import { LTRouteRecordRaw } from 'lt-frame';
+import { LTRouteRecordRaw } from '@lt-frame/version-1';
 
 const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
 const routeModuleList: LTRouteRecordRaw[] = [];

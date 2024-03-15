@@ -1,4 +1,4 @@
-import { LAYOUT, LTRouteRecordRaw } from 'lt-frame';
+import { LAYOUT, LTRouteRecordRaw } from '@lt-frame/version-1';
 
 const homePage: LTRouteRecordRaw = {
 	path: '/home-page',

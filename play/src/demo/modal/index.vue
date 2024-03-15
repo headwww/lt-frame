@@ -57,10 +57,10 @@ import {
 	LTPageLayout,
 	LTButton as AButton,
 	useModal,
-	Nullable,
-} from 'lt-frame';
+} from '@lt-frame/components';
 import { Alert, Space as ASpace } from 'ant-design-vue';
 import { ComponentOptions, nextTick, ref, shallowRef, unref, watch } from 'vue';
+import { Nullable } from '@lt-frame/utils';
 import Modal1 from './Modal1.vue';
 import Modal2 from './Modal2.vue';
 import Modal3 from './Modal3.vue';

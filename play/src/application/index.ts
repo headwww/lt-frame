@@ -3,14 +3,13 @@ import {
 	defineConfig_v1,
 	setupRouterGuard,
 	useAppStore,
-	Persistent,
-	deepMerge,
-} from 'lt-frame';
+} from '@lt-frame/version-1';
 import { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
 import VXETable from 'vxe-table';
 import VXETablePluginAntd from 'vxe-table-plugin-antd';
 
+import { Persistent, deepMerge } from '@lt-frame/utils';
 import { asyncRoutes } from '../router';
 
 VXETable.use(VXETablePluginAntd);

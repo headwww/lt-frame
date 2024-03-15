@@ -9,13 +9,8 @@
 	</LTDrawer>
 </template>
 <script lang="ts" setup>
-import {
-	LTDrawer,
-	LTDescription,
-	DescItem,
-	useDescription,
-	useDrawerInner,
-} from 'lt-frame';
+import { LTDrawer, LTDescription, DescItem } from '@lt-frame/components';
+import { useDescription, useDrawerInner } from '@lt-frame/hooks';
 
 const schema: DescItem[] = [
 	{

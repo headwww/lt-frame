@@ -23,7 +23,11 @@
 	</LTModal>
 </template>
 <script lang="ts" setup>
-import { LTModal, LTButton as AButton, useModalInner } from 'lt-frame';
+import {
+	LTModal,
+	LTButton as AButton,
+	useModalInner,
+} from '@lt-frame/components';
 import { ref, watch } from 'vue';
 
 const loading = ref(true);

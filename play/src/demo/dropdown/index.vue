@@ -28,8 +28,8 @@ import {
 	LTPageLayout,
 	LTDropdown,
 	DropMenu,
-	useMessage,
-} from 'lt-frame';
+} from '@lt-frame/components';
+import { useMessage } from '@lt-frame/hooks';
 
 const dropMenuList: DropMenu[] = [
 	{

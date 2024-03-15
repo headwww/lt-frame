@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { ConfigProvider as AConfigProvider } from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
-import { LTApplication } from 'lt-frame';
+import { LTApplication } from '@lt-frame/components';
 
 const locale = ref(zhCN);
 </script>
