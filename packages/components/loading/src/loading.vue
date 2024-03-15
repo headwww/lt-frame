@@ -4,29 +4,39 @@
 		:style="[background ? `background-color: ${background}` : '']"
 		v-show="loading"
 	>
-		<!-- :indicator="indicator" -->
-		<Spin v-bind="$attrs" :tip="tip" :size="size" :spinning="loading" />
+		<Spin
+			:indicator="indicator"
+			v-bind="$attrs"
+			:tip="tip"
+			:size="size"
+			:spinning="loading"
+		/>
 	</section>
 </template>
-<script lang="ts" setup>
-// import { h } from 'vue';
+<script lang="ts">
+import { defineComponent, h } from 'vue';
 import { Spin } from 'ant-design-vue';
-// import { LoadingOutlined } from '@ant-design/icons-vue';
+import { LoadingOutlined } from '@ant-design/icons-vue';
 import { useNamespace } from '@lt-frame/hooks';
 import { loadingProps } from './loading';
 
-defineOptions({
+export default defineComponent({
 	name: 'LTLoading',
+	props: loadingProps,
+	components: { Spin },
+	setup() {
+		const ns = useNamespace('loading');
+
+		const indicator = h(LoadingOutlined, {
+			style: {
+				fontSize: '24px',
+			},
+			spin: true,
+		});
+		return {
+			ns,
+			indicator,
+		};
+	},
 });
-
-const ns = useNamespace('loading');
-
-defineProps(loadingProps);
-
-// const indicator = h(LoadingOutlined, {
-// 	style: {
-// 		fontSize: '24px',
-// 	},
-// 	spin: true,
-// });
 </script>
