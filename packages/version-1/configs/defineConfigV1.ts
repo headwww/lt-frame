@@ -120,6 +120,8 @@ export function defineConfig_v1(options: AppConfigV1) {
 		cacheConfig,
 	} = config;
 
+	defineCache(cacheConfig);
+
 	// 创建路由相关的信息
 	// 合并路由白名单
 	if (basicRoutes) {
@@ -155,8 +157,6 @@ export function defineConfig_v1(options: AppConfigV1) {
 	router = createRouter(opt);
 
 	const LTHttp = defineHttp(httpConfig);
-
-	defineCache(cacheConfig);
 
 	return { config, router, pinia, LTHttp };
 }
