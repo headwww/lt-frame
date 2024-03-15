@@ -17,7 +17,16 @@ const about: LTRouteRecordRaw = {
 			component: IFRAME,
 			meta: {
 				frameSrc: 'https://next.antdv.com/components/overview',
-				title: '内嵌外部地址',
+				title: 'antv',
+			},
+		},
+		{
+			path: 'vxetable',
+			name: 'VXE',
+			component: IFRAME,
+			meta: {
+				frameSrc: 'https://vxetable.cn/#/table/start/install',
+				title: 'vxe-table',
 			},
 		},
 		{

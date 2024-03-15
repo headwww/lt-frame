@@ -112,6 +112,6 @@
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout, LTButton } from 'lt-frame';
+import { LTPageLayout, LTButton } from '@lt-frame/components';
 import { Card, Row, Col } from 'ant-design-vue';
 </script>

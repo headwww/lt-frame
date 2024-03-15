@@ -24,7 +24,7 @@
 	</LTDrawer>
 </template>
 <script lang="ts" setup>
-import { LTDrawer, LTButton } from 'lt-frame';
+import { LTDrawer, LTButton } from '@lt-frame/components';
 
 const handleOk = () => {
 	console.log('ok');

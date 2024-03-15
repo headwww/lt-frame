@@ -14,9 +14,9 @@ import {
 	LTModal,
 	useModalInner,
 	LTDescription,
-	useDescription,
 	DescItem,
-} from 'lt-frame';
+} from '@lt-frame/components';
+import { useDescription } from '@lt-frame/hooks';
 
 const props = defineProps({
 	userData: { type: Object },
@@ -41,13 +41,13 @@ const [register] = useModalInner((data) => {
 	data && onDataReceive(data);
 });
 
-function onDataReceive(data) {
+function onDataReceive(data: any) {
 	console.log('Data Received', data);
 	setDescProps({ schema, data });
 
 	modelRef.value = { field2: data.data, field1: data.info };
 }
-function handleVisibleChange(v) {
+function handleVisibleChange(v: any) {
 	v && props.userData && nextTick(() => onDataReceive(props.userData));
 }
 </script>

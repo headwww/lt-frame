@@ -11,3 +11,4 @@ export * from './loading';
 export * from './page';
 export * from './virlual-scroller';
 export * from './modal';
+export * from './table';

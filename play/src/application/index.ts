@@ -7,7 +7,12 @@ import {
 import { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
 import { Persistent, deepMerge } from '@lt-frame/utils';
+import VXETable from 'vxe-table';
+import VXETablePluginAntd from 'vxe-table-plugin-antd';
+
 import { asyncRoutes } from '../router';
+
+VXETable.use(VXETablePluginAntd);
 
 export const { config, router, pinia, LTHttp } = defineConfig_v1({
 	routerConfig: {
@@ -43,8 +48,8 @@ export function initProjectConfig() {
 export function onCreate(app: App) {
 	app.use(pinia);
 	initProjectConfig();
-
 	app.use(router);
+	app.use(VXETable);
 
 	setupRouterGuard(router);
 }

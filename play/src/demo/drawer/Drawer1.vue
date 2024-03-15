@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import { LTDrawer } from 'lt-frame';
+import { LTDrawer } from '@lt-frame/components';
 </script>

@@ -11,7 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import { LTDrawer, useDrawerInner, LTButton } from 'lt-frame';
+import { LTDrawer, LTButton } from '@lt-frame/components';
+import { useDrawerInner } from '@lt-frame/hooks';
 
 const [register, { closeDrawer }] = useDrawerInner();
 </script>

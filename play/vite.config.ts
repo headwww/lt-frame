@@ -20,7 +20,7 @@ export default defineConfig({
 	],
 	server: {
 		host: '0.0.0.0',
-		port: 9091,
+		port: 9092,
 		proxy: {
 			'/ltApi': {
 				target: 'http://ltscm.3322.org:8081/',

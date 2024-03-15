@@ -38,7 +38,7 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'table',
 			name: 'Table',
-			component: () => import('../../demo/icon/index.vue'),
+			component: () => import('../../demo/table/index.vue'),
 			meta: {
 				title: 'Table',
 			},
