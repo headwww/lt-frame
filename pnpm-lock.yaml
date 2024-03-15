@@ -409,8 +409,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0(vite@5.0.11)(vue@3.4.21)
       lt-frame:
-        specifier: ^1.0.19
-        version: 1.0.19(typescript@5.3.3)(vue@3.4.21)
+        specifier: ^1.0.20
+        version: 1.0.20(typescript@5.3.3)(vue@3.4.21)
       postcss:
         specifier: ^8.0.0
         version: 5.2.18
@@ -8562,8 +8562,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  /lt-frame@1.0.19(typescript@5.3.3)(vue@3.4.21):
-    resolution: {integrity: sha512-TwXz/ALAubBMFJHSpTlqlAQFUp5x+UO/ExDamd5oGXpnzIq/Oixd20Kgl52R0U3UnmYMIgg0xM5RzEkdAl+AMA==}
+  /lt-frame@1.0.20(typescript@5.3.3)(vue@3.4.21):
+    resolution: {integrity: sha512-jpF4DAvmUHEalKdnE1f/DDInyDeE4BFckorUOWeWlPxFsHiRXALJ5JJh9bmVTzyTTIlAwIujeCvYHwjPl2pRBg==}
     peerDependencies:
       vue: ^3.4.15
     dependencies:

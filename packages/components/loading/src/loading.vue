@@ -21,6 +21,7 @@ import { useNamespace } from '@lt-frame/hooks';
 import { loadingProps } from './loading';
 
 export default defineComponent({
+	__name: 'loading',
 	name: 'LTLoading',
 	props: loadingProps,
 	components: { Spin },
