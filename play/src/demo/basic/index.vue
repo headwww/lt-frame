@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout, LTArrow } from '@lt-frame/components';
+import { LTPageLayout, LTArrow } from 'lt-frame';
 import { ref } from 'vue';
 
 const expand = ref(false);

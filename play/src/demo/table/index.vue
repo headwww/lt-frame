@@ -13,8 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { LTPageLayout, LTTable } from '@lt-frame/components';
-import { parseRef } from '@lt-frame/utils';
+import { LTPageLayout, LTTable, parseRef } from 'lt-frame';
 import { onMounted, ref } from 'vue';
 import { VxeColumnPropTypes } from 'vxe-table';
 import XEUtils from 'xe-utils';

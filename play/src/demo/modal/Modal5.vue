@@ -8,5 +8,5 @@
 <script lang="ts" setup>
 import { Textarea as ATextarea } from 'ant-design-vue';
 
-import { LTModal } from '@lt-frame/components';
+import { LTModal } from 'lt-frame';
 </script>

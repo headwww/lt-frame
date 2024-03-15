@@ -3,7 +3,7 @@ import {
 	defineConfig_v1,
 	setupRouterGuard,
 	useAppStore,
-} from '@lt-frame/version-1';
+} from 'lt-frame';
 import { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
 import { Persistent, deepMerge } from '@lt-frame/utils';

@@ -15,8 +15,8 @@ import {
 	useModalInner,
 	LTDescription,
 	DescItem,
-} from '@lt-frame/components';
-import { useDescription } from '@lt-frame/hooks';
+	useDescription,
+} from 'lt-frame';
 
 const props = defineProps({
 	userData: { type: Object },

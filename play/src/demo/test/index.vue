@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout } from '@lt-frame/components';
+import { LTPageLayout } from 'lt-frame';
 </script>

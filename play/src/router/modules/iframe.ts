@@ -1,4 +1,4 @@
-import { IFRAME, LAYOUT, LTRouteRecordRaw } from '@lt-frame/version-1';
+import { IFRAME, LAYOUT, LTRouteRecordRaw } from 'lt-frame';
 
 const about: LTRouteRecordRaw = {
 	path: '/frame',

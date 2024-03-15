@@ -1,4 +1,4 @@
-import { LAYOUT, LTRouteRecordRaw } from '@lt-frame/version-1';
+import { LAYOUT, LTRouteRecordRaw } from 'lt-frame';
 
 const comps: LTRouteRecordRaw = {
 	path: '/component',

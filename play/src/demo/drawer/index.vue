@@ -31,9 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout, LTButton } from '@lt-frame/components';
+import { LTPageLayout, LTButton, useDrawer } from 'lt-frame';
 import { Alert } from 'ant-design-vue';
-import { useDrawer } from '@lt-frame/hooks';
 import Drawer1 from './Drawer1.vue';
 import Drawer2 from './Drawer2.vue';
 import Drawer3 from './Drawer3.vue';

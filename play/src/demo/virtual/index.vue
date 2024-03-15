@@ -44,11 +44,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Alert as AAlert } from 'ant-design-vue';
-import {
-	LTPageLayout,
-	LTButton as AButton,
-	LTRecycleScroller,
-} from '@lt-frame/components';
+import { LTPageLayout, LTButton as AButton, LTRecycleScroller } from 'lt-frame';
 
 const items: any = ref([]);
 const recycleScroller = ref();

@@ -26,7 +26,7 @@ import {
 	LTButton as AButton,
 	useModalInner,
 	ButtonProps,
-} from '@lt-frame/components';
+} from 'lt-frame';
 
 const [register, { closeModal, setModalProps }] = useModalInner();
 </script>

@@ -62,11 +62,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Alert as AAlert } from 'ant-design-vue';
-import {
-	LTPageLayout,
-	LTScrollbar,
-	LTButton as AButton,
-} from '@lt-frame/components';
+import { LTPageLayout, LTScrollbar, LTButton as AButton } from 'lt-frame';
 
 const count = ref(3);
 

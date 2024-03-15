@@ -9,5 +9,5 @@
 	</LTModal>
 </template>
 <script lang="ts" setup>
-import { LTModal } from '@lt-frame/components';
+import { LTModal } from 'lt-frame';
 </script>

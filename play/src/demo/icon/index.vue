@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout, LTSvgIcon, LTIcon } from '@lt-frame/components';
+import { LTPageLayout, LTSvgIcon, LTIcon } from 'lt-frame';
 import { Alert as AAlert } from 'ant-design-vue';
 
 import {
