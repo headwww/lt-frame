@@ -107,6 +107,7 @@ const getContentStyle = computed((): CSSProperties => {
 	const height = `${unref(contentHeight)}px`;
 
 	return {
+		background: '#FFF',
 		...contentStyle,
 		minHeight: height,
 		...(fixedHeight ? { height } : {}),

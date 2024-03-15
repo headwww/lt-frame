@@ -1,5 +1,6 @@
 <template>
-	<LTPageLayout title="测试"> </LTPageLayout>
+	<LTPageLayout title="测试" dense contentFullHeight fixedHeight>
+	</LTPageLayout>
 </template>
 
 <script setup lang="ts">

@@ -26,6 +26,7 @@ export const pageLayoutProps = {
 		type: Boolean,
 		default: false,
 	},
+	// 固定高度使内部设置的子元素设置height为100%有效
 	fixedHeight: {
 		type: Boolean,
 		default: false,
