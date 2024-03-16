@@ -12,6 +12,7 @@
 				@update:value="handle"
 				@focus="focusEvent"
 				@blur="handleBlur"
+				:status="getStatus"
 			></Input>
 		</template>
 		<template #dropdown>
@@ -44,6 +45,7 @@ import {
 } from 'lodash-es';
 import Fuse from 'Fuse.js';
 import Table from '../../src/table.vue';
+import { useEdit } from './use-edit';
 
 const props = defineProps({
 	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
@@ -52,6 +54,7 @@ const props = defineProps({
 const tableData: Ref<Array<any>> = ref([]);
 const searchData: Ref<Array<any>> = ref([]);
 
+const { getStatus } = useEdit(props.params);
 const inputValue = computed(() =>
 	isNull(get(props.params?.row, `${props.params?.column.field!!}proxy`)) ||
 	isUndefined(get(props.params?.row, `${props.params?.column.field!!}proxy`))

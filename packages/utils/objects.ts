@@ -1,5 +1,12 @@
 import { unref } from 'vue';
-import { isEqual, mergeWith, unionWith, intersectionWith } from 'lodash-es';
+import {
+	isEqual,
+	mergeWith,
+	unionWith,
+	intersectionWith,
+	some,
+	get,
+} from 'lodash-es';
 import { Recordable } from './types';
 import { isArray, isObject } from './is';
 /**
@@ -86,4 +93,20 @@ export function wrapDataInPromise(data: any | any[]) {
 				reject(error);
 			}
 		});
+}
+
+/**
+ *  检查是否至少有一个对象的指定字段为空
+ */
+export function hasAtLeastOneEmptyField(
+	objects: Array<any>,
+	requiredFields: Array<any>
+): boolean {
+	return some(objects, (obj) =>
+		some(requiredFields, (field) => {
+			const value = get(obj, field);
+			// 检查值是否为空（null、undefined 或空字符串）
+			return value == null || value === '';
+		})
+	);
 }

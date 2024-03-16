@@ -2,8 +2,9 @@
 	<a-select
 		@change="change"
 		style="width: 100%"
-		v-bind="getSelectAttrs"
+		v-bind="getAttrs"
 		:value="getValue"
+		:status="getStatus"
 	>
 	</a-select>
 </template>
@@ -13,12 +14,13 @@ import type { VxeGlobalRendererHandles } from 'vxe-table';
 import { get, set } from 'lodash-es';
 import { type PropType, computed } from 'vue';
 import { Select as ASelect } from 'ant-design-vue';
+import { useEdit } from './use-edit';
 
 const props = defineProps({
 	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
 });
 
-const getSelectAttrs = computed(() => props.params?.column.editRender.attrs);
+const { getAttrs, getStatus } = useEdit(props.params);
 
 const change = (value: any) => {
 	const { params } = props;

@@ -3,8 +3,9 @@
 		<LTTable
 			:loading="loading"
 			@refresh="findRoles"
-			@remove="remove"
-			@save="save"
+			@insert="insertRowEvent"
+			@update="updateRowEvent"
+			@remove="removeRowsEvent"
 			:colConfigs="colConfigs"
 			:data="tableData"
 		></LTTable>
@@ -14,8 +15,9 @@
 <script lang="ts" setup>
 import { LTPageLayout, LTTable } from '@lt-frame/components';
 import { onMounted, ref } from 'vue';
-import { VxeColumnPropTypes, VxeColumnProps } from 'vxe-table';
+import { VxeColumnPropTypes } from 'vxe-table';
 import XEUtils from 'xe-utils';
+import { difference } from 'lodash-es';
 import { parseRef } from '@lt-frame/utils';
 import { LTHttp } from '../../application';
 
@@ -23,21 +25,24 @@ const tableData = ref([]);
 
 const loading = ref(false);
 
-function save(data: any, recordset: any) {
-	loading.value = true;
+function removeRowsEvent(rows: any, removeResult: any) {
 	setTimeout(() => {
-		loading.value = false;
-		console.log(data, recordset);
+		tableData.value = difference(tableData.value, rows);
+		removeResult(true);
+	}, 2000);
+}
+
+function updateRowEvent(params: any, saveResult: any) {
+	setTimeout(() => {
+		saveResult(true);
 		findRoles();
 	}, 2000);
 }
 
-function remove(data: any) {
-	console.log(data);
-	loading.value = true;
+function insertRowEvent(row: never, saveResult: any) {
 	setTimeout(() => {
-		loading.value = false;
-		findRoles();
+		tableData.value.unshift(row);
+		saveResult(true);
 	}, 2000);
 }
 
@@ -47,15 +52,11 @@ enum CorpType {
 	FACTORY = '工厂',
 }
 
-const colConfigs: VxeColumnProps[] = [
+const colConfigs = [
 	{
 		field: 'corp.name',
 		title: 'entity',
 		sortable: true,
-		params: {
-			// 是否是必填字段
-			notNull: true,
-		},
 		editRender: {
 			name: 'LT-Table',
 			props: {
@@ -112,14 +113,10 @@ const colConfigs: VxeColumnProps[] = [
 	{
 		field: 'name',
 		title: 'string',
-		params: {
-			// 是否是必填字段
-			notNull: true,
-		},
 		editRender: {
 			name: 'LT-Input',
 			attrs: {
-				placeholder: '必填',
+				placeholder: 'Basic usage',
 			},
 		},
 	},
@@ -134,10 +131,6 @@ const colConfigs: VxeColumnProps[] = [
 		field: 'updated',
 		title: 'date',
 		formatter: formatDate('yyyy年MM月dd日 HH时mm分ss秒'),
-		params: {
-			// 是否是必填字段
-			notNull: true,
-		},
 		editRender: {
 			name: 'LT-Time',
 			attrs: {
@@ -160,13 +153,10 @@ const colConfigs: VxeColumnProps[] = [
 		field: 'corp.type',
 		title: '公司类型',
 		formatter: formatEnum(CorpType),
-		params: {
-			// 是否是必填字段
-			notNull: true,
-		},
 		editRender: {
 			name: 'LT-Select',
 			attrs: {
+				allowClear: true,
 				options: [
 					{
 						label: '公司',

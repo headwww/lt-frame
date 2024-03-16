@@ -14,10 +14,31 @@
 				新增
 			</LTButton>
 			<LTButton
-				@click="removeRowsEvent"
-				style="margin-left: 8px"
-				color="error"
-				preIcon="fluent:delete-12-regular"
+				@click="save"
+				style="margin-left: 8px; color: #7d8592"
+				type="text"
+				preIcon="svg-icon:frame-save"
+			>
+				保存
+			</LTButton>
+			<div
+				style="background: #979797; width: 1px; height: 14px; margin: 0 6px"
+			></div>
+			<LTButton
+				style="color: #7d8592"
+				type="text"
+				preIcon="svg-icon:frame-advanced-query"
+			>
+				高级查询
+			</LTButton>
+			<div
+				style="background: #979797; width: 1px; height: 14px; margin: 0 6px"
+			></div>
+			<LTButton
+				@click="remove"
+				style="color: #7d8592"
+				type="text"
+				preIcon="svg-icon:frame-delete"
 			>
 				删除
 			</LTButton>
@@ -27,7 +48,6 @@
 	<vxe-table
 		v-bind="$attrs"
 		stripe
-		round
 		:export-config="{}"
 		:import-config="{}"
 		ref="vxeTableRef"
@@ -67,33 +87,25 @@
 			v-if="isEditable"
 			align="center"
 			min-width="50"
-			width="70"
+			width="55"
 			title="操作"
 			fixed="left"
 			field="operate-edit"
 		>
-			<template #default="{ row }">
-				<template v-if="isActiveStatus(row)">
+			<template #default="params">
+				<template v-if="isActiveStatus(params.row)">
 					<a-button
-						@click="cancelRowEvent(row)"
-						style="font-size: 12px; color: #6a6a6a"
+						@click="cancelRowEvent(params.row)"
+						style="color: #6a6a6a"
 						type="text"
 						shape="circle"
 						size="small"
 						:icon="h(StopOutlined)"
 					/>
-					<a-button
-						@click="save(row)"
-						style="font-size: 12px; color: #6a6a6a"
-						type="text"
-						size="small"
-						shape="circle"
-						:icon="h(SaveOutlined)"
-					/>
 				</template>
 				<template v-else>
 					<a-button
-						@click="editRowEvent(row)"
+						@click="editRowEvent(params.row)"
 						style="color: #6a6a6a"
 						type="text"
 						shape="circle"
@@ -104,22 +116,19 @@
 		</vxe-column>
 
 		<template v-for="column in colConfigs" :key="column.field">
-			<vxe-column v-bind="column"> </vxe-column>
+			<vxe-column width="200" v-bind="column"> </vxe-column>
 		</template>
 	</vxe-table>
 </template>
 
 <script lang="ts" setup>
 import { h, nextTick, ref, unref, useAttrs, watch } from 'vue';
-import {
-	StopOutlined,
-	SaveOutlined,
-	EditOutlined,
-} from '@ant-design/icons-vue';
+import { StopOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button as AButton } from 'ant-design-vue';
 import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
+import { filter, map } from 'lodash-es';
+import { hasAtLeastOneEmptyField } from '@lt-frame/utils';
 import { useMessage } from '@lt-frame/hooks';
-import { omit } from 'lodash-es';
 import { tableProps } from './table';
 import { LTButton } from '../../button';
 
@@ -128,7 +137,14 @@ defineOptions({
 	inheritAttrs: false,
 });
 
+const props = defineProps(tableProps);
+
+const emit = defineEmits(['remove', 'save', 'refresh']);
+
+const attrs = useAttrs();
+
 const vxeTableRef = ref({} as VxeTableInstance);
+
 const toolbarRef = ref<VxeToolbarInstance>();
 
 nextTick(() => {
@@ -140,14 +156,9 @@ nextTick(() => {
 	}
 });
 
-const emit = defineEmits(['insert', 'remove', 'update', 'refresh']);
-
-const attrs = useAttrs();
-
-defineProps(tableProps);
-
 /** 以下设置让loading内外部都可以设置 */
 const loading = ref<boolean>(unref(attrs).loading as boolean);
+
 watch(
 	() => unref(attrs).loading,
 	() => {
@@ -180,74 +191,45 @@ async function cancelRowEvent(row: any) {
 function insert() {
 	const $table = vxeTableRef.value;
 	if ($table) {
-		$table.insert({
-			_X_ROW_INSERT: true,
-		});
+		// 给数据添加一条插入的标签
+		$table.insert({});
 	}
 }
 
-function save(row: any) {
-	if (row._X_ROW_INSERT) {
-		const newRow = omit(row, '_X_ROW_INSERT');
-		updateOrInsertRowEvent('insert', newRow);
-	} else {
-		updateOrInsertRowEvent('update', row);
-	}
-}
-
-const { createMessage, notification } = useMessage();
-/**
- * 新增还是修改
- */
-const updateOrInsertRowEvent = async (type: 'insert' | 'update', row: any) => {
+const { createMessage } = useMessage();
+const save = () => {
 	const $table = vxeTableRef.value;
-	if ($table) {
-		loading.value = true;
-		const saveResult = (isSave: boolean, description: any) => {
-			const { clearEdit, reloadRow } = $table;
-			if (isSave) {
-				createMessage.success('保存成功');
-				clearEdit();
-				// 修改的话需要执行这步操作
-				if (type === 'update') {
-					reloadRow(row, {});
-				}
-			} else {
-				notification.error({
-					message: '保存失败',
-					description,
-					duration: 4,
-				});
-			}
-			loading.value = false;
-		};
-		emit(type, row, saveResult);
+	const recordset = $table.getRecordset();
+
+	const fieldsWithNotNullParams = filter(props.colConfigs, {
+		params: { notNull: true },
+	});
+	const fieldArray = map(fieldsWithNotNullParams, 'field');
+
+	const data = [...recordset.insertRecords, ...recordset.updateRecords];
+
+	console.log(data);
+
+	console.log(hasAtLeastOneEmptyField(data, fieldArray));
+
+	if (hasAtLeastOneEmptyField(data, fieldArray)) {
+		createMessage.warning('有必填字段没有填写！');
+		return;
 	}
+	if (data.length > 0) emit('save', data, $table.getRecordset());
 };
 
 /**
  * 删除
  */
-function removeRowsEvent() {
+function remove() {
 	const $table = vxeTableRef.value;
 	if ($table) {
 		if ($table.getCheckboxRecords().length === 0) {
 			return;
 		}
 		loading.value = true;
-		const removeResult = (isSave: boolean, description: any) => {
-			if (isSave) {
-				createMessage.success('删除成功');
-			} else {
-				notification.error({
-					message: '删除失败',
-					description,
-					duration: 4,
-				});
-			}
-			loading.value = false;
-		};
-		emit('remove', $table.getCheckboxRecords(), removeResult);
+		emit('remove', $table.getCheckboxRecords());
 	}
 }
 
