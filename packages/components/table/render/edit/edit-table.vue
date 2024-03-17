@@ -75,9 +75,9 @@ const focusEvent = () => {
 		tableData.value = props.params?.column.editRender.attrs!!.tableAttrs.data;
 		searchData.value = props.params?.column.editRender.attrs!!.tableAttrs.data;
 	}
-	const data = props.params?.column.editRender.props?.data;
+	const data = props.params?.column.editRender.events?.data;
 	if (data && isFunction(data)) {
-		data()
+		data(props.params)
 			.then((data: any) => {
 				tableData.value = parseRef(data);
 				searchData.value = parseRef(data);

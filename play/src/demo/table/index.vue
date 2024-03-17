@@ -70,6 +70,18 @@ const colConfigs: VxeColumnProps[] = [
 						],
 					}),
 			},
+			events: {
+				data: () =>
+					LTHttp.post({
+						url: 'api/corpService/findCorps',
+						data: [
+							{
+								targetClass: 'com.ltscm.laf.application.model.Corp',
+								queryPath: [],
+							},
+						],
+					}),
+			},
 			attrs: {
 				// 配置下拉框的属性参考vxe-table文档
 				// vxePulldownAttrs: {},
@@ -134,10 +146,6 @@ const colConfigs: VxeColumnProps[] = [
 		field: 'updated',
 		title: 'date',
 		formatter: formatDate('yyyy年MM月dd日 HH时mm分ss秒'),
-		params: {
-			// 是否是必填字段
-			notNull: true,
-		},
 		editRender: {
 			name: 'LT-Time',
 			attrs: {

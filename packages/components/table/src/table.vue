@@ -126,9 +126,9 @@ import { h, nextTick, ref, unref, useAttrs, watch } from 'vue';
 import { StopOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button as AButton } from 'ant-design-vue';
 import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
-import { filter, map } from 'lodash-es';
-import { hasAtLeastOneEmptyField } from '@lt-frame/utils';
+import { filter, get, map, some } from 'lodash-es';
 import { useMessage } from '@lt-frame/hooks';
+import { isNullOrUnDef } from '@lt-frame/utils';
 import { tableProps } from './table';
 import { LTButton } from '../../button';
 
@@ -209,13 +209,28 @@ const save = () => {
 	const data = [...recordset.insertRecords, ...recordset.updateRecords];
 
 	console.log(data);
+	console.log(fieldArray);
 
-	console.log(hasAtLeastOneEmptyField(data, fieldArray));
+	// 取出所有必填字段的值
+	const mandatory: any[] = [];
+	fieldArray.forEach((field) => {
+		data.forEach((item) => {
+			mandatory.push(get(item, field!!));
+		});
+	});
+	console.log(mandatory);
 
-	if (hasAtLeastOneEmptyField(data, fieldArray)) {
+	const containsNullUndefinedOrEmptyString = some(
+		mandatory,
+		(value) => isNullOrUnDef(some) || value === ''
+	);
+	console.log(containsNullUndefinedOrEmptyString);
+
+	if (containsNullUndefinedOrEmptyString) {
 		createMessage.warning('有必填字段没有填写！');
 		return;
 	}
+
 	if (data.length > 0) emit('save', data, $table.getRecordset());
 };
 
