@@ -12,7 +12,14 @@
 </template>
 
 <script lang="ts" setup>
-import { LTPageLayout, LTTable } from '@lt-frame/components';
+import {
+	DeepFilterConfig,
+	FilterMode,
+	LTPageLayout,
+	LTTable,
+	LogicalOperators,
+	QueryConditions,
+} from '@lt-frame/components';
 import { onMounted, ref } from 'vue';
 import { VxeColumnPropTypes, VxeColumnProps } from 'vxe-table';
 import XEUtils from 'xe-utils';
@@ -57,7 +64,7 @@ const colConfigs: VxeColumnProps[] = [
 			notNull: true,
 		},
 		editRender: {
-			name: 'LT-Table',
+			name: 'Edit-Table',
 			props: {
 				data: () =>
 					LTHttp.post({
@@ -129,17 +136,69 @@ const colConfigs: VxeColumnProps[] = [
 			notNull: true,
 		},
 		editRender: {
-			name: 'LT-Input',
+			name: 'Edit-Input',
 			attrs: {
 				placeholder: '必填',
 			},
+		},
+		filters: [
+			{
+				data: {
+					// 设置开启的筛选方式
+					filterModes: [FilterMode.TEXT, FilterMode.CONTENT],
+					// 选中的筛选方式
+					currentFilterMode: FilterMode.TEXT,
+					// 文本筛选配置
+					textFilterConfig: {
+						// 两个条件之间的逻辑操作
+						logicalOperators: LogicalOperators.AND,
+						// 第一个查询条件
+						firstQueryCondition: QueryConditions.INCLUDE,
+						// 第一个查询文本
+						firstQueryText: '',
+						// 第二个查询条件
+						secondQueryCondition: QueryConditions.EMPTY,
+						// 第二个查询文本
+						secondQueryText: '',
+					},
+				} as DeepFilterConfig,
+			},
+		],
+		filterRender: {
+			name: 'Filter-Deep',
 		},
 	},
 	{
 		field: 'corp.version',
 		title: 'number',
 		editRender: {
-			name: 'LT-InputNumber',
+			name: 'Edit-InputNumber',
+		},
+		filters: [
+			{
+				data: {
+					// 设置开启的筛选方式
+					filterModes: [FilterMode.NUMBER, FilterMode.CONTENT],
+					// 选中的筛选方式
+					currentFilterMode: FilterMode.NUMBER,
+					// 数字筛选配置
+					numberFilterConfig: {
+						// 两个条件之间的逻辑操作
+						logicalOperators: LogicalOperators.AND,
+						// 第一个查询条件
+						firstQueryCondition: QueryConditions.INCLUDE,
+						// 第一个查询文本
+						firstQueryText: '',
+						// 第二个查询条件
+						secondQueryCondition: QueryConditions.EMPTY,
+						// 第二个查询文本
+						secondQueryText: '',
+					},
+				} as DeepFilterConfig,
+			},
+		],
+		filterRender: {
+			name: 'Filter-Deep',
 		},
 	},
 	{
@@ -147,7 +206,7 @@ const colConfigs: VxeColumnProps[] = [
 		title: 'date',
 		formatter: formatDate('yyyy年MM月dd日 HH时mm分ss秒'),
 		editRender: {
-			name: 'LT-Time',
+			name: 'Edit-Time',
 			attrs: {
 				format: 'HH时mm分ss秒',
 			},
@@ -158,7 +217,7 @@ const colConfigs: VxeColumnProps[] = [
 		title: 'date',
 		formatter: formatDate('yyyy年MM月dd日 HH时mm分ss秒'),
 		editRender: {
-			name: 'LT-Date',
+			name: 'Edit-Date',
 			attrs: {
 				showTime: true,
 			},
@@ -173,7 +232,7 @@ const colConfigs: VxeColumnProps[] = [
 			notNull: true,
 		},
 		editRender: {
-			name: 'LT-Select',
+			name: 'Edit-Select',
 			attrs: {
 				options: [
 					{

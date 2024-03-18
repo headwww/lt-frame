@@ -95,7 +95,7 @@
 			<template #default="params">
 				<template v-if="isActiveStatus(params.row)">
 					<a-button
-						@click="cancelRowEvent(params.row)"
+						@click="cancelRowEvent(params)"
 						style="color: #6a6a6a"
 						type="text"
 						shape="circle"
@@ -126,7 +126,7 @@ import { h, nextTick, ref, unref, useAttrs, watch } from 'vue';
 import { StopOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Button as AButton } from 'ant-design-vue';
 import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
-import { filter, get, map, some } from 'lodash-es';
+import { filter, get, map } from 'lodash-es';
 import { useMessage } from '@lt-frame/hooks';
 import { isNullOrUnDef } from '@lt-frame/utils';
 import { tableProps } from './table';
@@ -180,11 +180,15 @@ const editRowEvent = async (row: any) => {
 };
 
 /** 取消编辑并还原数据 */
-async function cancelRowEvent(row: any) {
+async function cancelRowEvent(params: any) {
 	const $table = vxeTableRef.value;
 	if ($table) {
 		await $table.clearEdit();
-		await $table.revertData(row);
+		if (params.row._X_ROW_INSERT) {
+			$table.remove(params.row);
+		} else {
+			await $table.revertData(params.row);
+		}
 	}
 }
 /** 插入一条数据 */
@@ -192,7 +196,7 @@ function insert() {
 	const $table = vxeTableRef.value;
 	if ($table) {
 		// 给数据添加一条插入的标签
-		$table.insert({});
+		$table.insert({ _X_ROW_INSERT: true });
 	}
 }
 
@@ -208,9 +212,6 @@ const save = () => {
 
 	const data = [...recordset.insertRecords, ...recordset.updateRecords];
 
-	console.log(data);
-	console.log(fieldArray);
-
 	// 取出所有必填字段的值
 	const mandatory: any[] = [];
 	fieldArray.forEach((field) => {
@@ -218,13 +219,14 @@ const save = () => {
 			mandatory.push(get(item, field!!));
 		});
 	});
-	console.log(mandatory);
 
-	const containsNullUndefinedOrEmptyString = some(
-		mandatory,
-		(value) => isNullOrUnDef(some) || value === ''
-	);
-	console.log(containsNullUndefinedOrEmptyString);
+	let containsNullUndefinedOrEmptyString = false;
+	for (let i = 0; i < mandatory.length; i += 1) {
+		if (isNullOrUnDef(mandatory[i]) || mandatory[i] === '') {
+			containsNullUndefinedOrEmptyString = true;
+			break;
+		}
+	}
 
 	if (containsNullUndefinedOrEmptyString) {
 		createMessage.warning('有必填字段没有填写！');

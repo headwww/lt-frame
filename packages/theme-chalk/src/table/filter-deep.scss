@@ -1,0 +1,19 @@
+.lt-filter-deep {
+	width: 400px;
+	height: 340px;
+	display: flex;
+	flex-direction: column;
+
+	&__header {
+		margin: 8px 8px 4px;
+	}
+
+	&__content {
+		flex: 1;
+	}
+
+	&__fotter {
+		text-align: right;
+		padding: 10px 10px 10px 0;
+	}
+}
