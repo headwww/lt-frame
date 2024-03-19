@@ -86,6 +86,9 @@ const colConfigs: VxeColumnProps[] = [
 		],
 		filterRender: {
 			name: 'Filter-Deep',
+			props: {
+				compareFields: ['name'],
+			},
 			events: {
 				data: () =>
 					LTHttp.post({
@@ -113,6 +116,7 @@ const colConfigs: VxeColumnProps[] = [
 								width: 200,
 							},
 						],
+						data: [],
 					},
 				},
 			} as DeepFilterAttrs,

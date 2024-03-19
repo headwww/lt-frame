@@ -96,8 +96,6 @@ export interface FilterContentInstance {
 export interface EntityFilterConfig {
 	// 选中的列
 	currentRow: any;
-	// 用来作为筛选的字段
-	compareFields: string[];
 }
 
 export interface FilterEntityInstance {
