@@ -7,6 +7,7 @@
 			@save="save"
 			:colConfigs="colConfigs"
 			:data="tableData"
+			@current-change="currentChangeEvent"
 		></LTTable>
 	</LTPageLayout>
 </template>
@@ -18,18 +19,24 @@ import {
 	LTPageLayout,
 	LTTable,
 	LogicalOperators,
-	QueryConditions,
+	ComparisonOperator,
+	TemporalOperator,
+	DeepFilterAttrs,
 } from '@lt-frame/components';
 import { onMounted, ref } from 'vue';
 import { VxeColumnPropTypes, VxeColumnProps } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import { parseRef } from '@lt-frame/utils';
+import dayjs from 'dayjs';
 import { LTHttp } from '../../application';
 
 const tableData = ref([]);
 
 const loading = ref(false);
 
+function currentChangeEvent(item: any) {
+	console.log(item);
+}
 function save(data: any, recordset: any) {
 	loading.value = true;
 	setTimeout(() => {
@@ -63,9 +70,23 @@ const colConfigs: VxeColumnProps[] = [
 			// 是否是必填字段
 			notNull: true,
 		},
-		editRender: {
-			name: 'Edit-Table',
-			props: {
+		filters: [
+			{
+				data: {
+					// 设置开启的筛选方式
+					filterModes: [FilterMode.ENTITY],
+					// 选中的筛选方式
+					currentFilterMode: FilterMode.ENTITY,
+					entityFilterConfig: {
+						currentRow: '',
+						compareFields: ['name'],
+					},
+				} as DeepFilterConfig,
+			},
+		],
+		filterRender: {
+			name: 'Filter-Deep',
+			events: {
 				data: () =>
 					LTHttp.post({
 						url: 'api/corpService/findCorps',
@@ -77,6 +98,27 @@ const colConfigs: VxeColumnProps[] = [
 						],
 					}),
 			},
+			attrs: {
+				entityAttrs: {
+					tableAttrs: {
+						colConfigs: [
+							{
+								field: 'name',
+								title: '名称',
+								width: 300,
+							},
+							{
+								field: 'code',
+								title: '编码',
+								width: 200,
+							},
+						],
+					},
+				},
+			} as DeepFilterAttrs,
+		},
+		editRender: {
+			name: 'Edit-Table',
 			events: {
 				data: () =>
 					LTHttp.post({
@@ -99,27 +141,12 @@ const colConfigs: VxeColumnProps[] = [
 						{
 							field: 'name',
 							title: '名称',
-						},
-						{
-							field: 'code',
-							title: '编码',
-						},
-						{
-							field: 'code',
-							title: '编码',
+							width: 300,
 						},
 						{
 							field: 'code',
 							title: '编码',
 							width: 200,
-						},
-						{
-							field: 'code',
-							title: '编码',
-						},
-						{
-							field: 'code',
-							title: '编码',
 						},
 					],
 					// 直接配置静态数据
@@ -153,13 +180,18 @@ const colConfigs: VxeColumnProps[] = [
 						// 两个条件之间的逻辑操作
 						logicalOperators: LogicalOperators.AND,
 						// 第一个查询条件
-						firstQueryCondition: QueryConditions.INCLUDE,
+						firstQueryCondition: ComparisonOperator.INCLUDE,
 						// 第一个查询文本
 						firstQueryText: '',
 						// 第二个查询条件
-						secondQueryCondition: QueryConditions.EMPTY,
+						secondQueryCondition: ComparisonOperator.EMPTY,
 						// 第二个查询文本
 						secondQueryText: '',
+					},
+					// 内容筛选
+					contentFilterConfig: {
+						treeData: [],
+						checkedKeys: ['$_SELECT_ALL'],
 					},
 				} as DeepFilterConfig,
 			},
@@ -171,6 +203,7 @@ const colConfigs: VxeColumnProps[] = [
 	{
 		field: 'corp.version',
 		title: 'number',
+		sortable: true,
 		editRender: {
 			name: 'Edit-InputNumber',
 		},
@@ -178,7 +211,7 @@ const colConfigs: VxeColumnProps[] = [
 			{
 				data: {
 					// 设置开启的筛选方式
-					filterModes: [FilterMode.NUMBER, FilterMode.CONTENT],
+					filterModes: [FilterMode.NUMBER],
 					// 选中的筛选方式
 					currentFilterMode: FilterMode.NUMBER,
 					// 数字筛选配置
@@ -186,11 +219,11 @@ const colConfigs: VxeColumnProps[] = [
 						// 两个条件之间的逻辑操作
 						logicalOperators: LogicalOperators.AND,
 						// 第一个查询条件
-						firstQueryCondition: QueryConditions.INCLUDE,
+						firstQueryCondition: ComparisonOperator.INCLUDE,
 						// 第一个查询文本
 						firstQueryText: '',
 						// 第二个查询条件
-						secondQueryCondition: QueryConditions.EMPTY,
+						secondQueryCondition: ComparisonOperator.EMPTY,
 						// 第二个查询文本
 						secondQueryText: '',
 					},
@@ -202,17 +235,6 @@ const colConfigs: VxeColumnProps[] = [
 		},
 	},
 	{
-		field: 'updated',
-		title: 'date',
-		formatter: formatDate('yyyy年MM月dd日 HH时mm分ss秒'),
-		editRender: {
-			name: 'Edit-Time',
-			attrs: {
-				format: 'HH时mm分ss秒',
-			},
-		},
-	},
-	{
 		field: 'created',
 		title: 'date',
 		formatter: formatDate('yyyy年MM月dd日 HH时mm分ss秒'),
@@ -221,6 +243,30 @@ const colConfigs: VxeColumnProps[] = [
 			attrs: {
 				showTime: true,
 			},
+		},
+		filters: [
+			{
+				data: {
+					filterModes: [FilterMode.DATE],
+					currentFilterMode: FilterMode.DATE,
+					dateFilterConfig: {
+						logicalOperators: LogicalOperators.AND,
+						firstQueryCondition: TemporalOperator.EQUALS,
+						firstQueryText: dayjs('2021-12-21 13:12:30'),
+						secondQueryCondition: TemporalOperator.EMPTY,
+						secondQueryText: '',
+					},
+				} as DeepFilterConfig,
+			},
+		],
+		filterRender: {
+			name: 'Filter-Deep',
+			attrs: {
+				dateAttrs: {
+					showTime: true,
+					format: 'YYYY年MM月DD日 HH时mm分ss秒',
+				},
+			} as DeepFilterAttrs,
 		},
 	},
 	{

@@ -8,13 +8,14 @@
 		<a-input-group style="margin-top: 12px" compact>
 			<a-select v-model:value="config.firstQueryCondition" style="width: 30%">
 				<a-select-option
-					v-for="item in QueryConditions"
+					v-for="item in ComparisonOperator"
 					:key="item"
 					:value="item"
-					>{{ item == QueryConditions.EMPTY ? '' : item }}</a-select-option
+					>{{ item == ComparisonOperator.EMPTY ? '' : item }}</a-select-option
 				>
 			</a-select>
 			<a-input-number
+				v-bind:="props.attrs?.numberAttrs"
 				:type="'number'"
 				placeholder="请输入条件一"
 				v-model:value="config.firstQueryText"
@@ -29,13 +30,14 @@
 		<a-input-group style="margin-top: 12px" compact>
 			<a-select v-model:value="config.secondQueryCondition" style="width: 30%">
 				<a-select-option
-					v-for="item in QueryConditions"
+					v-for="item in ComparisonOperator"
 					:key="item"
 					:value="item"
-					>{{ item == QueryConditions.EMPTY ? '' : item }}</a-select-option
+					>{{ item == ComparisonOperator.EMPTY ? '' : item }}</a-select-option
 				>
 			</a-select>
 			<a-input-number
+				v-bind:="props.attrs?.numberAttrs"
 				placeholder="请输入条件二"
 				v-model:value="config.secondQueryText"
 				style="width: 70%"
@@ -55,22 +57,25 @@ import {
 	InputNumber as AInputNumber,
 } from 'ant-design-vue';
 import {
-	FilterNumberInstance,
 	LogicalOperators,
 	FilterConfig,
-	QueryConditions,
+	ComparisonOperator,
+	DeepFilterAttrs,
 } from '../types';
 
 const plainOptions = [LogicalOperators.AND, LogicalOperators.OR];
 
 const props = defineProps({
+	attrs: {
+		type: Object as PropType<DeepFilterAttrs>,
+	},
 	config: {
 		type: Object as PropType<FilterConfig>,
 		default: () => ({
 			logicalOperators: LogicalOperators.AND,
-			firstQueryCondition: QueryConditions.INCLUDE,
+			firstQueryCondition: ComparisonOperator.INCLUDE,
 			firstQueryText: '',
-			secondQueryCondition: QueryConditions.EMPTY,
+			secondQueryCondition: ComparisonOperator.EMPTY,
 			secondQueryText: '',
 		}),
 	},
@@ -84,9 +89,9 @@ const config = reactive<FilterConfig>({
 	secondQueryText: props.config.secondQueryText,
 });
 
-function getNumberFilterConfig() {
+function getConfig() {
 	return config;
 }
 
-defineExpose<FilterNumberInstance>({ getNumberFilterConfig });
+defineExpose({ getConfig });
 </script>

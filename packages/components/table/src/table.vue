@@ -35,6 +35,17 @@
 				style="background: #979797; width: 1px; height: 14px; margin: 0 6px"
 			></div>
 			<LTButton
+				style="color: #7d8592"
+				type="text"
+				@click="cleanFilter"
+				preIcon="svg-icon:frame-clean"
+			>
+				清除筛选
+			</LTButton>
+			<div
+				style="background: #979797; width: 1px; height: 14px; margin: 0 6px"
+			></div>
+			<LTButton
 				@click="remove"
 				style="color: #7d8592"
 				type="text"
@@ -255,5 +266,13 @@ function remove() {
  */
 const refresh = (): any => {
 	emit('refresh');
+};
+
+/** 清除筛条件 */
+const cleanFilter = () => {
+	const $table = vxeTableRef.value;
+	if ($table) {
+		$table.clearFilter();
+	}
 };
 </script>
