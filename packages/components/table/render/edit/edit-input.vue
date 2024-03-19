@@ -1,6 +1,6 @@
 <template>
 	<Input
-		v-bind="getAttrs"
+		v-bind="$attrs"
 		:value="get(params?.row, params?.column.field!!)"
 		@update:value="handle"
 		:status="getStatus"
@@ -11,14 +11,15 @@
 import { Input } from 'ant-design-vue';
 import type { VxeGlobalRendererHandles } from 'vxe-table';
 import { get, set } from 'lodash-es';
-import { type PropType } from 'vue';
+import { useAttrs, type PropType } from 'vue';
 import { useEdit } from './use-edit';
 
 const props = defineProps({
 	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
 });
+console.log(useAttrs());
 
-const { getAttrs, getStatus } = useEdit(props.params);
+const { getStatus } = useEdit(props.params);
 
 const handle = (value: any) => {
 	const { params } = props;

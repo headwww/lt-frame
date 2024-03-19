@@ -7,8 +7,10 @@ import EditSelect from './edit-select.vue';
 import EditTable from './edit-table.vue';
 
 VXETable.renderer.add('Edit-Input', {
-	renderEdit(_renderOpts, params) {
-		return <EditInput params={params}></EditInput>;
+	renderEdit(renderOpts, params) {
+		console.log(renderOpts.attrs);
+
+		return <EditInput {...renderOpts.attrs} params={params}></EditInput>;
 	},
 });
 

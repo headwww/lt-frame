@@ -16,6 +16,8 @@ export const tableProps = {
 	checkboxVisibility: { type: Boolean, default: true },
 	// 是否可编辑
 	isEditable: { type: Boolean, default: true },
+	// 是否开启滚动条
+	thumb: { type: Boolean, default: true },
 	// 主子表组件内部的column的类型
 	colConfigs: { type: Array<VxeColumnProps>, default: [] },
 };

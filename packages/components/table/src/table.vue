@@ -63,6 +63,7 @@
 		:import-config="{}"
 		ref="vxeTableRef"
 		size="small"
+		:class="thumb ? 'lt-table-scrollbar' : ''"
 		:scroll-y="{ enabled: true }"
 		:loading="loading"
 		show-overflow
