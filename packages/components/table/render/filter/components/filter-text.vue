@@ -15,7 +15,7 @@
 				>
 			</a-select>
 			<a-input
-				v-bind:="props.attrs?.textAttrs"
+				v-bind="attrs"
 				placeholder="请输入条件一"
 				v-model:value="config.firstQueryText"
 				style="width: 70%"
@@ -36,7 +36,7 @@
 				>
 			</a-select>
 			<a-input
-				v-bind:="props.attrs?.textAttrs"
+				v-bind="attrs"
 				placeholder="请输入条件二"
 				v-model:value="config.secondQueryText"
 				style="width: 70%"
@@ -54,19 +54,15 @@ import {
 	SelectOption as ASelectOption,
 	RadioGroup as ARadioGroup,
 	Input as AInput,
+	InputProps,
 } from 'ant-design-vue';
-import {
-	LogicalOperators,
-	FilterConfig,
-	ComparisonOperator,
-	DeepFilterAttrs,
-} from '../types';
+import { LogicalOperators, FilterConfig, ComparisonOperator } from '../types';
 
 const plainOptions = [LogicalOperators.AND, LogicalOperators.OR];
 
 const props = defineProps({
 	attrs: {
-		type: Object as PropType<DeepFilterAttrs>,
+		type: Object as PropType<InputProps>,
 	},
 	config: {
 		type: Object as PropType<FilterConfig>,

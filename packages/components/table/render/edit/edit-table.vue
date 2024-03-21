@@ -12,16 +12,16 @@
 				@update:value="handle"
 				@focus="focusEvent"
 				@blur="handleBlur"
-				:status="getStatus"
 			></Input>
 		</template>
 		<template #dropdown>
 			<Table
 				:enable-toolbar="false"
 				style="width: 430px; height: 300px"
-				:data="tableData"
+				:data="data"
 				:loading="loading"
 				v-bind="getTableAttrs"
+				:col-configs="colConfigs"
 				@current-change="(item: any) => currentChangeEvent(item.row)"
 			></Table>
 		</template>
@@ -29,9 +29,9 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, Ref, computed, ref, unref } from 'vue';
+import { Ref, computed, ref, unref } from 'vue';
 import { Input } from 'ant-design-vue';
-import { VxeGlobalRendererHandles, VxePulldownInstance } from 'vxe-table';
+import { VxePulldownInstance } from 'vxe-table';
 import { isArray, isFunction, isNull, parseRef } from '@lt-frame/utils';
 import {
 	dropRight,
@@ -44,22 +44,26 @@ import {
 	unset,
 } from 'lodash-es';
 import Fuse from 'Fuse.js';
+import { useAttrs } from '@lt-frame/hooks';
 import Table from '../../src/table.vue';
-import { useEdit } from './use-edit';
+import { editTableProps } from './edit-table';
 
-const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
+defineOptions({
+	name: 'LTEditTable',
+	inheritAttrs: false,
 });
 
-const tableData: Ref<Array<any>> = ref([]);
+const props = defineProps(editTableProps);
+const attrs = useAttrs();
+
+const data: Ref<Array<any>> = ref([]);
 const searchData: Ref<Array<any>> = ref([]);
 
-const { getStatus } = useEdit(props.params);
 const inputValue = computed(() =>
-	isNull(get(props.params?.row, `${props.params?.column.field!!}proxy`)) ||
-	isUndefined(get(props.params?.row, `${props.params?.column.field!!}proxy`))
+	isNull(get(props.params?.row, `$proxy_${props.params?.column.field!!}`)) ||
+	isUndefined(get(props.params?.row, `$proxy_${props.params?.column.field!!}`))
 		? get(props.params?.row, props.params?.column.field!!)
-		: get(props.params?.row, `${props.params?.column.field!!}proxy`)
+		: get(props.params?.row, `$proxy_${props.params?.column.field!!}`)
 );
 
 const pulldownRef = ref<VxePulldownInstance>();
@@ -68,19 +72,21 @@ const loading = ref(false);
 
 const focusEvent = () => {
 	loading.value = true;
-	tableData.value = [];
+	data.value = [];
 	searchData.value = [];
 
-	if (isArray(props.params?.column.editRender.attrs!!.tableAttrs.data)) {
-		tableData.value = props.params?.column.editRender.attrs!!.tableAttrs.data;
-		searchData.value = props.params?.column.editRender.attrs!!.tableAttrs.data;
+	const { tableDate, tableDatePromise } = props;
+
+	if (tableDate && isArray(tableDate)) {
+		data.value = tableDate;
+		searchData.value = tableDate;
 	}
-	const data = props.params?.column.editRender.events?.data;
-	if (data && isFunction(data)) {
-		data(props.params)
-			.then((data: any) => {
-				tableData.value = parseRef(data);
-				searchData.value = parseRef(data);
+
+	if (tableDatePromise && isFunction(tableDatePromise)) {
+		tableDatePromise()
+			.then((resp: any) => {
+				data.value = parseRef(resp);
+				searchData.value = parseRef(resp);
 			})
 			.finally(() => {
 				loading.value = false;
@@ -93,46 +99,35 @@ const focusEvent = () => {
 	$pulldown?.showPanel();
 };
 
-const getVxePulldownAttrs = computed(
-	() => props.params?.column.editRender.attrs!!.vxePulldownAttrs
-);
+const getVxePulldownAttrs = computed(() => attrs.value.vxePulldownAttrs);
 
-const getInputAttrs = computed(
-	() => props.params?.column.editRender.attrs!!.inputAttrs
-);
+const getInputAttrs = computed(() => attrs.value.inputAttrs);
 
 const getTableAttrs = computed(() => {
-	const obj = omit(
-		{
-			...props.params?.column.editRender.attrs!!.tableAttrs,
-			editConfig: { showIcon: false },
-			checkboxVisibility: false,
-			isEditable: false,
-		},
-		'data'
-	);
-	return obj;
+	const { tableAttrs } = attrs.value;
+	if (tableAttrs) {
+		return omit(tableAttrs, 'data', 'colConfigs');
+	}
+	return {};
 });
 
 const handle = (value: any) => {
 	if (value === '') {
-		tableData.value = searchData.value;
+		data.value = searchData.value;
 	} else {
-		tableData.value = unref(fuse)
+		data.value = unref(fuse)
 			.search(value)
 			.map((match: any) => match.item);
 	}
 	const { params } = props;
 	if (params) {
-		set(params.row, `${params.column.field}proxy`, value);
+		set(params.row, `$proxy_${params.column.field}`, value);
 	}
 };
 
 const fuse = computed(() => {
 	// 模糊查询的查找字段
-	const keys = props.params?.column.editRender.attrs?.tableAttrs.colConfigs.map(
-		(item: any) => item.field
-	);
+	const keys = props.colConfigs.map((item: any) => item.field);
 	return new Fuse(searchData.value, {
 		keys: keys as any,
 		threshold: 0.3,
@@ -148,7 +143,7 @@ const fuse = computed(() => {
 function handleBlur() {
 	const { params } = props;
 	if (params) {
-		unset(params.row, `${params.column.field}proxy`);
+		unset(params.row, `$proxy_${params.column.field}`);
 	}
 }
 
@@ -171,3 +166,4 @@ function currentChangeEvent(row: any) {
 	$pulldown?.hidePanel();
 }
 </script>
+./edit-table

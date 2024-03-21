@@ -2,9 +2,8 @@
 	<a-time-picker
 		@change="handle"
 		:value="getValue"
-		v-bind="getAttrs"
+		v-bind="attrs"
 		style="width: 100%"
-		:status="getStatus"
 	>
 	</a-time-picker>
 </template>
@@ -16,13 +15,18 @@ import { TimePicker as ATimePicker } from 'ant-design-vue';
 import { get, set } from 'lodash-es';
 import dayjs from 'dayjs';
 import { isNull, isNullOrUnDef } from '@lt-frame/utils';
-import { useEdit } from './use-edit';
+import { useAttrs } from '@lt-frame/hooks';
+
+defineOptions({
+	name: 'LTEditTime',
+	inheritAttrs: false,
+});
 
 const props = defineProps({
 	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
 });
 
-const { getAttrs, getStatus } = useEdit(props.params);
+const attrs = useAttrs({ excludeKeys: ['onChange'] });
 
 const getValue = computed(() => {
 	const data = get(props.params?.row, props.params?.column.field!!);

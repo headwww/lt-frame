@@ -1,25 +1,30 @@
 <template>
 	<InputNumber
-		v-bind="getAttrs"
-		:value="get(params?.row, params?.column.field!!)"
+		v-bind="$attrs"
+		:value="getValue"
 		@update:value="handle"
 		style="width: 100%"
-		:status="getStatus"
 	></InputNumber>
 </template>
 
 <script lang="ts" setup>
 import type { VxeGlobalRendererHandles } from 'vxe-table';
 import { get, set } from 'lodash-es';
-import { type PropType } from 'vue';
+import { computed, type PropType } from 'vue';
 import { InputNumber } from 'ant-design-vue';
-import { useEdit } from './use-edit';
 
 const props = defineProps({
 	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
 });
 
-const { getAttrs, getStatus } = useEdit(props.params);
+const getValue = computed(() => {
+	const { params } = props;
+	if (params) {
+		const { row, column } = params;
+		return get(row, column.field);
+	}
+	return '';
+});
 
 const handle = (value: any) => {
 	const { params } = props;

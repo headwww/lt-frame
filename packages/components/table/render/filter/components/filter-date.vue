@@ -15,7 +15,7 @@
 				>
 			</a-select>
 			<a-date-picker
-				v-bind:="props.attrs?.dateAttrs"
+				v-bind="attrs"
 				v-model:value="config.firstQueryText"
 				style="width: 62%"
 				type="date"
@@ -36,7 +36,7 @@
 				>
 			</a-select>
 			<a-date-picker
-				v-bind:="props.attrs?.dateAttrs"
+				v-bind="attrs"
 				v-model:value="config.secondQueryText"
 				style="width: 62%"
 				type="date"
@@ -55,18 +55,13 @@ import {
 	RadioGroup as ARadioGroup,
 	DatePicker as ADatePicker,
 } from 'ant-design-vue';
-import {
-	LogicalOperators,
-	FilterConfig,
-	TemporalOperator,
-	DeepFilterAttrs,
-} from '../types';
+import { LogicalOperators, FilterConfig, TemporalOperator } from '../types';
 
 const plainOptions = [LogicalOperators.AND, LogicalOperators.OR];
 
 const props = defineProps({
 	attrs: {
-		type: Object as PropType<DeepFilterAttrs>,
+		type: Object as PropType<any>,
 	},
 	config: {
 		type: Object as PropType<FilterConfig>,

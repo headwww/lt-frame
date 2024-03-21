@@ -1,5 +1,3 @@
-import { TreeProps } from 'ant-design-vue';
-
 /**
  * 筛选模式
  */
@@ -79,8 +77,6 @@ export interface FilterComponentInstance {
  * 内容筛选配置
  */
 export interface ContentFilterConfig {
-	// 树形控件可选项
-	treeData: TreeProps['treeData'];
 	// 选中的项 默认全选项是选中的
 	checkedKeys: Array<any>;
 }
@@ -88,6 +84,11 @@ export interface ContentFilterConfig {
 export interface FilterContentInstance {
 	// 返回数字筛选内设置的内容
 	getConfig(): ContentFilterConfig;
+}
+
+export interface FilterEntityInstance {
+	// 返回实体筛选内设置的内容
+	getConfig(): EntityFilterConfig;
 }
 
 /**
@@ -101,19 +102,6 @@ export interface EntityFilterConfig {
 export interface FilterEntityInstance {
 	// 返回实体筛选内设置的内容
 	getConfig(): EntityFilterConfig;
-}
-
-/**
- * 自定义的筛选器
- */
-export interface DeepFilterConfig {
-	filterModes: Array<FilterMode>;
-	currentFilterMode: FilterMode;
-	textFilterConfig?: FilterConfig;
-	numberFilterConfig?: FilterConfig;
-	contentFilterConfig?: ContentFilterConfig;
-	dateFilterConfig?: FilterConfig;
-	entityFilterConfig?: EntityFilterConfig;
 }
 
 /** 设置每个筛选模式的attrs */

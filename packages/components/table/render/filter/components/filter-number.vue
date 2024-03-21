@@ -15,7 +15,7 @@
 				>
 			</a-select>
 			<a-input-number
-				v-bind:="props.attrs?.numberAttrs"
+				v-bind="attrs"
 				:type="'number'"
 				placeholder="请输入条件一"
 				v-model:value="config.firstQueryText"
@@ -37,7 +37,7 @@
 				>
 			</a-select>
 			<a-input-number
-				v-bind:="props.attrs?.numberAttrs"
+				v-bind="attrs"
 				placeholder="请输入条件二"
 				v-model:value="config.secondQueryText"
 				style="width: 70%"
@@ -55,19 +55,15 @@ import {
 	SelectOption as ASelectOption,
 	RadioGroup as ARadioGroup,
 	InputNumber as AInputNumber,
+	InputNumberProps,
 } from 'ant-design-vue';
-import {
-	LogicalOperators,
-	FilterConfig,
-	ComparisonOperator,
-	DeepFilterAttrs,
-} from '../types';
+import { LogicalOperators, FilterConfig, ComparisonOperator } from '../types';
 
 const plainOptions = [LogicalOperators.AND, LogicalOperators.OR];
 
 const props = defineProps({
 	attrs: {
-		type: Object as PropType<DeepFilterAttrs>,
+		type: Object as PropType<InputNumberProps>,
 	},
 	config: {
 		type: Object as PropType<FilterConfig>,

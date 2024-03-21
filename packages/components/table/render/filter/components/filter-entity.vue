@@ -9,10 +9,10 @@
 			:loading="loading"
 			v-bind="getTableAttrs"
 			height="190"
-			:enable-toolbar="false"
-			:is-editable="false"
-			:data="tableData"
-			:checkbox-visibility="false"
+			:col-configs="getColConfigs"
+			:data="data"
+			:empty-render="{ name: 'LT-Empty' }"
+			@current-change="(item: any) => currentChangeEvent(item.row)"
 		></Table>
 	</div>
 </template>
@@ -22,15 +22,17 @@ import { Input as AInput } from 'ant-design-vue';
 import { PropType, Ref, computed, onMounted, ref, unref } from 'vue';
 import { isArray, isFunction, parseRef } from '@lt-frame/utils';
 import Fuse from 'Fuse.js';
+import { omit } from 'lodash-es';
 import Table from '../../../src/table.vue';
-import { DeepFilterAttrs, EntityFilterConfig } from '../types';
+import { EntityFilterConfig } from '../types';
+import { EntityConfig } from '../filter-deep';
 
 const props = defineProps({
-	event: {
-		type: Object as PropType<{ [key: string]: (...args: any[]) => any }>,
+	entityConfig: {
+		type: Object as PropType<EntityConfig>,
 	},
 	attrs: {
-		type: Object as PropType<DeepFilterAttrs>,
+		type: Object as PropType<any>,
 	},
 	config: {
 		type: Object as PropType<EntityFilterConfig>,
@@ -40,32 +42,36 @@ const props = defineProps({
 
 const loading = ref(false);
 
-const tableData: Ref<Array<any>> = ref([]);
+const data: Ref<Array<any>> = ref([]);
 
 const searchData: Ref<Array<any>> = ref([]);
 
+const rowEntity = ref();
+
 const getInputAttrs = computed(() => {
-	const { entityAttrs } = props.attrs as DeepFilterAttrs;
-	if (entityAttrs) {
-		const { inputAttrs } = entityAttrs;
+	const { inputAttrs } = props.attrs;
+	if (inputAttrs) {
 		return inputAttrs;
 	}
 	return {};
 });
 
 const getTableAttrs = computed(() => {
-	const { entityAttrs } = props.attrs as DeepFilterAttrs;
+	const { entityAttrs } = props.attrs;
 	if (entityAttrs) {
 		const { tableAttrs } = entityAttrs;
-		return tableAttrs;
+		return omit(tableAttrs, 'data', 'colConfigs');
 	}
 	return {};
 });
 
 const getColConfigs = computed(() => {
-	const colConfigs = props.attrs?.entityAttrs?.tableAttrs.colConfigs;
-	if (colConfigs) {
-		return colConfigs;
+	const { entityConfig } = props;
+	if (entityConfig) {
+		const { colConfigs } = entityConfig;
+		if (colConfigs) {
+			return colConfigs;
+		}
 	}
 	return [];
 });
@@ -81,9 +87,9 @@ const fuse = computed(() => {
 
 const handle = (value: any) => {
 	if (value === '') {
-		tableData.value = searchData.value;
+		data.value = searchData.value;
 	} else {
-		tableData.value = unref(fuse)
+		data.value = unref(fuse)
 			.search(value)
 			.map((match: any) => match.item);
 	}
@@ -91,32 +97,46 @@ const handle = (value: any) => {
 
 // 加载数据
 const loadData = () => {
-	loading.value = true;
-	tableData.value = [];
+	data.value = [];
 	searchData.value = [];
 
-	// attrs中配置的静态的数据
-	const attrsData = props.attrs?.entityAttrs?.tableAttrs.data;
-	if (isArray(attrsData)) {
-		tableData.value = attrsData;
-		searchData.value = attrsData;
-	}
+	const { entityConfig } = props;
+	if (entityConfig) {
+		loading.value = true;
+		const { tableDate, tableDatePromise } = entityConfig;
+		// attrs中配置的静态的数据
+		if (tableDate && isArray(tableDate)) {
+			data.value = tableDate;
+			searchData.value = tableDate;
+		}
 
-	// 事件中定义的请求来的数据
-	const eventData = props.event?.data;
-	if (eventData && isFunction(eventData)) {
-		eventData()
-			.then((data: any) => {
-				tableData.value = parseRef(data);
-				searchData.value = parseRef(data);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
-	} else {
-		loading.value = false;
+		// 事件中定义的请求来的数据
+		if (tableDatePromise && isFunction(tableDatePromise)) {
+			tableDatePromise()
+				.then((resp: any) => {
+					data.value = parseRef(resp);
+					searchData.value = parseRef(resp);
+				})
+				.finally(() => {
+					loading.value = false;
+				});
+		} else {
+			loading.value = false;
+		}
 	}
 };
+
+function currentChangeEvent(row: any) {
+	rowEntity.value = row;
+}
+
+function getConfig() {
+	return {
+		currentRow: rowEntity.value,
+	};
+}
+
+defineExpose({ getConfig });
 
 onMounted(() => {
 	loadData();

@@ -31,12 +31,18 @@ export function useResetFilter() {
 
 	function resetContentFilter() {
 		return {
-			treeData: [],
 			checkedKeys: ['$_SELECT_ALL'],
 		};
 	}
 
+	function resetEntityFilter() {
+		return {
+			currentRow: '',
+		};
+	}
+
 	return {
+		resetEntityFilter,
 		resetTextFilter,
 		resetDateFilter,
 		resetNumberFilter,

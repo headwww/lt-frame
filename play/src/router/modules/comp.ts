@@ -46,10 +46,28 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'table',
 			name: 'Table',
-			component: () => import('../../demo/table/index.vue'),
+			redirect: '/component/table/table-edit',
 			meta: {
 				title: 'Table',
 			},
+			children: [
+				{
+					path: 'table-edit',
+					name: 'TableEdit',
+					component: () => import('../../demo/table/index.vue'),
+					meta: {
+						title: '编辑表单',
+					},
+				},
+				{
+					path: 'table-filter',
+					name: 'TableFilter',
+					component: () => import('../../demo/table/index-filter.vue'),
+					meta: {
+						title: '筛选表单',
+					},
+				},
+			],
 		},
 		{
 			path: 'modal',

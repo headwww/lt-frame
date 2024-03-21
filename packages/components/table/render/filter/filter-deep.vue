@@ -7,49 +7,49 @@
 			:block="true"
 		/>
 		<div :class="ns.e('content')">
-			<FilterText
-				:attrs="params?.column.filterRender.attrs"
-				v-if="filterModes.includes(FilterMode.TEXT)"
-				v-show="currentFilterMode == FilterMode.TEXT"
-				:config="params?.column.filters[0].data.textFilterConfig"
-				ref="refFilterText"
-			></FilterText>
-			<FilterNumber
-				:attrs="params?.column.filterRender.attrs"
-				v-if="filterModes.includes(FilterMode.NUMBER)"
-				v-show="currentFilterMode == FilterMode.NUMBER"
-				:config="params?.column.filters[0].data.numberFilterConfig"
-				ref="refFilterNumber"
-			></FilterNumber>
-			<FilterDate
-				:attrs="params?.column.filterRender.attrs"
-				v-if="filterModes.includes(FilterMode.DATE)"
-				v-show="currentFilterMode == FilterMode.DATE"
-				:config="params?.column.filters[0].data.dateFilterConfig"
-				ref="refFilterDate"
-			/>
-			<FilterContent
-				:attrs="params?.column.filterRender.attrs"
-				v-if="filterModes.includes(FilterMode.CONTENT)"
-				v-show="currentFilterMode == FilterMode.CONTENT"
-				:treeData="
-					params?.column.filters[0].data.contentFilterConfig.treeData.length ===
-					0
-						? getTreeData
-						: params?.column.filters[0].data.contentFilterConfig.treeData
-				"
-				:checked-keys="
-					params?.column.filters[0].data.contentFilterConfig.checkedKeys
-				"
-				ref="refFilterContent"
-			/>
-			<FilterEntity
-				:event="params?.column.filterRender.events"
-				:attrs="params?.column.filterRender.attrs"
-				:config="params?.column.filters[0].data.entityFilterConfig"
-				v-if="filterModes.includes(FilterMode.ENTITY)"
-				v-show="currentFilterMode == FilterMode.ENTITY"
-			/>
+			<template v-if="getFilterModes.includes(FilterMode.TEXT)">
+				<FilterText
+					v-show="currentFilterMode == FilterMode.TEXT"
+					:attrs="attrs.textAttrs"
+					:config="getTextFilterConfig"
+					ref="refFilterText"
+				></FilterText>
+			</template>
+
+			<template v-if="getFilterModes.includes(FilterMode.NUMBER)">
+				<FilterNumber
+					v-show="currentFilterMode == FilterMode.NUMBER"
+					:config="getNumberFilterConfig"
+					:attrs="attrs.numberAttrs"
+					ref="refFilterNumber"
+				></FilterNumber>
+			</template>
+
+			<template v-if="getFilterModes.includes(FilterMode.DATE)">
+				<FilterDate
+					v-show="currentFilterMode == FilterMode.DATE"
+					:config="getDateFilterConfig"
+					:attrs="attrs.dateAttrs"
+					ref="refFilterDate"
+				/>
+			</template>
+			<template v-if="getFilterModes.includes(FilterMode.CONTENT)">
+				<FilterContent
+					v-show="currentFilterMode == FilterMode.CONTENT"
+					:attrs="attrs.contentAttrs"
+					:config="getContentFilterConfig"
+					:tree-data="getCheckedKeys"
+					ref="refFilterContent"
+				/>
+			</template>
+			<template v-if="getFilterModes.includes(FilterMode.ENTITY)">
+				<FilterEntity
+					:attrs="attrs"
+					:entity-config="entityConfig"
+					v-show="currentFilterMode == FilterMode.ENTITY"
+					ref="refFilterEntity"
+				/>
+			</template>
 		</div>
 		<div :class="ns.e('fotter')">
 			<a-button style="margin-right: 8px" @click="resetFilterEvent"
@@ -66,12 +66,10 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, computed, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Segmented as ASegmented, Button as AButton } from 'ant-design-vue';
-import { VxeGlobalRendererHandles } from 'vxe-table';
-import { isFunction, isUnDef } from '@lt-frame/utils';
-import { useNamespace } from '@lt-frame/hooks';
-import { cloneDeep, get, set, uniqBy } from 'lodash-es';
+import { useAttrs, useNamespace } from '@lt-frame/hooks';
+import { isUndefined } from 'lodash-es';
 import FilterText from './components/filter-text.vue';
 import FilterNumber from './components/filter-number.vue';
 import FilterContent from './components/filter-content.vue';
@@ -81,78 +79,57 @@ import {
 	ComparisonOperator,
 	FilterComponentInstance,
 	FilterContentInstance,
+	FilterEntityInstance,
 	FilterMode,
 	TemporalOperator,
 } from './types';
+import { filterDeepProps } from './filter-deep';
+import { useConfigFilter } from './use-config-filter';
 import { useResetFilter } from './use-reset-filter';
+
+defineOptions({
+	name: 'LTDeepFilter',
+	inheritAttrs: false,
+});
+
+const attrs = useAttrs();
 
 const ns = useNamespace('filter-deep');
 
-const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderFilterParams>,
-});
+const props = defineProps(filterDeepProps);
 
 const refFilterText = ref<FilterComponentInstance>();
 const refFilterNumber = ref<FilterComponentInstance>();
 const refFilterDate = ref<FilterComponentInstance>();
 const refFilterContent = ref<FilterContentInstance>();
+const refFilterEntity = ref<FilterEntityInstance>();
+
+const {
+	currentFilterMode,
+	getCheckedKeys,
+	getTextFilterConfig,
+	getContentFilterConfig,
+	getNumberFilterConfig,
+	getDateFilterConfig,
+} = useConfigFilter(props.params!!);
 
 /** 加载筛选方式，如果没有设置值则默认开启['文本筛选', '分类筛选'] */
-const filterModes = computed(() => {
-	const { params } = props;
-	if (params && params.column.filters[0].data.filterModes) {
-		return params.column.filters[0].data.filterModes;
+const getFilterModes = computed(() => {
+	const { filterModes } = props;
+	if (filterModes) {
+		return filterModes;
 	}
 	return [FilterMode.TEXT, FilterMode.CONTENT];
 });
 
-/** 设置筛选模式，默认是文本筛选 */
-const currentFilterMode = ref(
-	props.params &&
-		!isUnDef(props.params.column.filters[0].data.currentFilterMode)
-		? props.params.column.filters[0].data.currentFilterMode
-		: FilterMode.TEXT
-);
-
-/** 构建一下treeData的数据 */
-const getTreeData = computed(() => {
-	const arr: Array<any> = [];
+/** 重置 */
+const resetFilterEvent = () => {
 	const { params } = props;
 	if (params) {
-		const { data } = params.column.filters[0];
-		// 外部设置了treeData则使用外部设置的
-		if (data.contentFilterConfig.treeData.length !== 0) {
-			return data.contentFilterConfig.treeData;
-		}
-		const { $table, column } = params;
-		// 整个table的数据fullData，列表中展示的数据visibleData,已经加载的数据tableData
-		const { visibleData } = $table.getTableData();
-		// 当前筛选的列的field和格式器
-		const { field, formatter } = column;
-		// 格式化后的表格数据
-		const visibleDataFormatter = cloneDeep(visibleData);
-		visibleDataFormatter.forEach((item) => {
-			if (isFunction(formatter)) {
-				set(
-					item,
-					field,
-					formatter({ cellValue: get(item, field), row: item, column })
-				);
-			}
-		});
-		// 去重格式化后的数据
-		const uniqByArr = uniqBy(visibleDataFormatter, field);
-		uniqByArr.forEach((item) => {
-			arr.push({
-				title: get(item, params.column.field),
-				key: get(item, params?.column.field),
-			});
-		});
+		const { $panel } = params;
+		$panel.resetFilter();
 	}
-	const arr1 = arr.filter((item) => item.title !== undefined);
-	const arr2 = arr1.filter((item) => item.title !== '');
-	return arr2;
-});
+};
 
 /** 控制筛选按钮状态 */
 const getDisabled = computed(() => {
@@ -177,31 +154,25 @@ const getDisabled = computed(() => {
 	if (currentFilterMode.value === FilterMode.CONTENT) {
 		return refFilterContent.value?.getConfig().checkedKeys.length === 0;
 	}
+	if (currentFilterMode.value === FilterMode.ENTITY) {
+		return isUndefined(refFilterEntity.value?.getConfig());
+	}
 	return true;
 });
 
-/** 重置 */
-const resetFilterEvent = () => {
-	const { params } = props;
-	if (params) {
-		const { $panel } = params;
-		$panel.resetFilter();
-	}
-};
-
 const {
-	resetTextFilter,
-	resetNumberFilter,
-	resetDateFilter,
 	resetContentFilter,
+	resetDateFilter,
+	resetNumberFilter,
+	resetTextFilter,
+	resetEntityFilter,
 } = useResetFilter();
 
-/** 筛选 */
+/** 筛选事件 */
 const confirmFilterEvent = () => {
 	const { params } = props;
 	if (params) {
 		const { data } = params.column.filters[0];
-
 		data.currentFilterMode = currentFilterMode.value;
 
 		data.textFilterConfig =
@@ -223,6 +194,11 @@ const confirmFilterEvent = () => {
 			data.currentFilterMode === FilterMode.CONTENT
 				? refFilterContent.value?.getConfig()
 				: resetContentFilter();
+
+		data.entityFilterConfig =
+			data.currentFilterMode === FilterMode.ENTITY
+				? refFilterEntity.value?.getConfig()
+				: resetEntityFilter();
 		const { $panel } = params;
 		$panel.changeOption(null, true, params.column.filters[0]);
 		$panel.confirmFilter();
