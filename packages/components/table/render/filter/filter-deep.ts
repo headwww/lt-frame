@@ -40,7 +40,10 @@ export interface FilterDeepAttrs {
 	numberAttrs?: InputNumberProps;
 	dateAttrs?: DatePickerProps;
 	contentAttrs?: TreeProps;
-	entityAttrs?: Omit<LTTableProps, 'colConfigs' | 'data'>;
+	entityAttrs?: {
+		tableAttrs: Omit<LTTableProps, 'colConfigs' | 'data'>;
+		inputAttrs: InputProps;
+	};
 }
 
 /**

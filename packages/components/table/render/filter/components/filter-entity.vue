@@ -49,9 +49,12 @@ const searchData: Ref<Array<any>> = ref([]);
 const rowEntity = ref();
 
 const getInputAttrs = computed(() => {
-	const { inputAttrs } = props.attrs;
-	if (inputAttrs) {
-		return inputAttrs;
+	const { entityAttrs } = props.attrs;
+	if (entityAttrs) {
+		const { inputAttrs } = entityAttrs;
+		if (inputAttrs) {
+			return inputAttrs;
+		}
 	}
 	return {};
 });
@@ -60,7 +63,9 @@ const getTableAttrs = computed(() => {
 	const { entityAttrs } = props.attrs;
 	if (entityAttrs) {
 		const { tableAttrs } = entityAttrs;
-		return omit(tableAttrs, 'data', 'colConfigs');
+		if (tableAttrs) {
+			return omit(tableAttrs, 'data', 'colConfigs');
+		}
 	}
 	return {};
 });

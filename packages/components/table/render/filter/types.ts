@@ -90,7 +90,6 @@ export interface FilterEntityInstance {
 	// 返回实体筛选内设置的内容
 	getConfig(): EntityFilterConfig;
 }
-
 /**
  * 实体筛选配置
  */
@@ -98,25 +97,7 @@ export interface EntityFilterConfig {
 	// 选中的列
 	currentRow: any;
 }
-
 export interface FilterEntityInstance {
 	// 返回实体筛选内设置的内容
 	getConfig(): EntityFilterConfig;
-}
-
-/** 设置每个筛选模式的attrs */
-export interface DeepFilterAttrs {
-	// 参考antv input的文档配置
-	textAttrs?: { [key: string]: any };
-	// 参考antv inputNumber的文档配置
-	numberAttrs?: { [key: string]: any };
-	// 参考antv tree的文档配置
-	contentAttrs?: { [key: string]: any };
-	// 参考antv datePicker文档配置
-	dateAttrs?: { [key: string]: any };
-	// 实体筛选的配置
-	entityAttrs?: {
-		inputAttrs?: { [key: string]: any };
-		tableAttrs: { [key: string]: any };
-	};
 }
