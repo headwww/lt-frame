@@ -1,29 +1,22 @@
-// TODO: 和后端沟通处理好数据再给我
-import { isNaN } from 'lodash-es';
-
-// @ts-ignore: type unless
-function isObject(value): boolean {
-	return value != null && typeof value === 'object';
-}
+import { isNaN, isObject } from 'lodash-es';
+import { Recordable } from '../types';
 
 export function parseRef(root: any): any {
 	if (!isObject(root)) {
 		return root;
 	}
-	// @ts-ignore: type unless
+
 	process(null, null, null, root);
 	function process(
-		parent: object,
-		current: object,
-		fieldName: string | number,
-		object: object
+		parent: Recordable | null,
+		current: Recordable | null,
+		fieldName: string | number | null,
+		object: Recordable
 	) {
-		// eslint-disable-next-line no-restricted-syntax
 		for (const key in object) {
-			// eslint-disable-next-line no-prototype-builtins
-			if (object.hasOwnProperty(key)) {
-				// @ts-ignore: type unless
+			if (Object.hasOwnProperty.call(object, key)) {
 				const value = object[key];
+
 				if (isObject(value)) {
 					process(current, object, key, value);
 				} else if (key === '$ref') {
@@ -39,8 +32,7 @@ export function parseRef(root: any): any {
 					} else {
 						refValue = resolveRef(value);
 					}
-					// @ts-ignore: type unless
-					current[fieldName] = refValue;
+					current!![fieldName!!] = refValue;
 				}
 			}
 		}
@@ -49,18 +41,16 @@ export function parseRef(root: any): any {
 	function resolveRef(ref: string): object {
 		let value = root;
 		const parts = ref.split(/[.[\]]+/);
-		// eslint-disable-next-line no-plusplus
+
 		for (let i = 1; i < parts.length; i++) {
 			// 从索引1开始，0是$
 			const key = parts[i];
-			// eslint-disable-next-line no-continue
 			if (!key) continue;
-			if (isNaN(key as any)) {
+			if (!isNaN(key)) {
 				// 非数字
 				value = value[key];
 			} else {
-				// eslint-disable-next-line radix
-				value = value[parseInt(key)];
+				value = value[parseInt(key, 10)];
 			}
 		}
 		return value;

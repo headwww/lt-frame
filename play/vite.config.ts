@@ -23,7 +23,8 @@ export default defineConfig({
 		port: 9092,
 		proxy: {
 			'/ltApi': {
-				target: 'http://ltscm.3322.org:8081/',
+				// target: 'http://ltscm.3322.org:8081/',
+				target: 'http://192.168.1.150:8080/',
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/ltApi/, ''),
 			},

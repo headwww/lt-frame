@@ -201,6 +201,7 @@ const findRoles = () => {
 	})
 		.then((data) => {
 			tableData.value = parseRef(data);
+			console.log(tableData.value);
 		})
 		.finally(() => {
 			loading.value = false;
