@@ -1,9 +1,9 @@
 <template>
 	<RouterView>
 		<template #default="{ Component, route }">
-			<KeepAlive :include="getCaches">
+			<keep-alive :include="getCaches">
 				<component :is="Component" :key="route.fullPath" />
-			</KeepAlive>
+			</keep-alive>
 		</template>
 	</RouterView>
 	<FrameLayout />

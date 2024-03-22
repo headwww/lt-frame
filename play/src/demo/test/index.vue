@@ -16,6 +16,9 @@ import { LTHttp } from '../../application';
 const tableData = ref([]);
 const loading = ref(false);
 
+defineOptions({
+	name: 'Test',
+});
 const colConfigs: VxeColumnProps[] = [
 	{
 		field: 'username',
