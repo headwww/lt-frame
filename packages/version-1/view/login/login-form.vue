@@ -68,7 +68,7 @@ import { LTSvgIcon } from '@lt-frame/components';
 import { useUserStore } from '../../stores/user';
 
 const ns = useNamespace('login-form');
-const { notification, createErrorModal } = useMessage();
+const { notification } = useMessage();
 
 const userStore = useUserStore();
 const isLoading = ref(false);
@@ -93,12 +93,6 @@ const onFinish = async (values: any) => {
 			});
 		}
 	} catch (error) {
-		createErrorModal({
-			title: '错误提示',
-			content:
-				(error as unknown as Error).message ||
-				'网络异常，请检查您的网络连接情况',
-		});
 		isLoading.value = false;
 	}
 };

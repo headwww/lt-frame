@@ -26,9 +26,9 @@ export const useUserStore = defineStore({
 			try {
 				const data = await getLTHttp().post(
 					{ url: 'api/login', data: [username, password] },
-					{ errorMessageMode: 'none' }
+					{ errorMessageMode: 'modal' }
 				);
-				this.setUserInfo(data);
+				this.setUserInfo({ ...data, password });
 				this.afterLoginAction();
 				return data;
 			} catch (error) {

@@ -13,6 +13,7 @@ import {
 	useUserStore,
 	useTabStore,
 } from '../../stores';
+import { createKeepLogin } from './keepLogin';
 
 export function setupRouterGuard(router: Router) {
 	createPageGuard(router);
@@ -20,6 +21,7 @@ export function setupRouterGuard(router: Router) {
 	createHttpGuard(router);
 	createScrollGuard(router);
 	createMessageGuard(router);
+	createKeepLogin(router);
 	createPermissionGuard(router);
 	createStateGuard(router);
 }
@@ -118,7 +120,6 @@ export function createMessageGuard(router: Router) {
 				notification.destroy();
 			}
 		} catch (error) {
-			//
 			throwError('createMessageGuard', `message guard error:${error}`);
 		}
 		return true;

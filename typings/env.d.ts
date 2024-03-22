@@ -1,4 +1,8 @@
 declare global {
+	interface Window {
+		LT_KEEP_LOGIN: boolean;
+	}
+
 	const process: {
 		env: {
 			NODE_ENV: string;

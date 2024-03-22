@@ -14,6 +14,7 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'test',
 			name: 'Test',
+
 			component: () => import('../../demo/test/index.vue'),
 			meta: {
 				title: '测试',

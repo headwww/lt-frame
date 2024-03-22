@@ -1,4 +1,5 @@
 <template>
+	<input type="text" />
 	<LTPageLayout title="测试" dense contentFullHeight fixedHeight>
 		<LTTable :loading="loading" :data="tableData" :colConfigs="colConfigs">
 		</LTTable>
@@ -51,7 +52,6 @@ const findRoles = () => {
 	})
 		.then((data) => {
 			tableData.value = parseRef(data);
-			console.log(tableData.value);
 		})
 		.finally(() => {
 			loading.value = false;

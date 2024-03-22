@@ -257,7 +257,6 @@ function remove() {
 		if ($table.getCheckboxRecords().length === 0) {
 			return;
 		}
-		loading.value = true;
 		emit('remove', $table.getCheckboxRecords());
 	}
 }
