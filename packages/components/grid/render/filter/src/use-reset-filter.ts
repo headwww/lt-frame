@@ -3,7 +3,7 @@ import {
 	FilterConfig,
 	LogicalOperators,
 	TemporalOperator,
-} from './types';
+} from './advanced-filter';
 
 export function useResetFilter() {
 	function resetTextFilter(): FilterConfig {
@@ -37,7 +37,7 @@ export function useResetFilter() {
 
 	function resetEntityFilter() {
 		return {
-			currentRow: '',
+			records: [],
 		};
 	}
 

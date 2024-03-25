@@ -3,5 +3,4 @@ import table from './src/table.vue';
 
 export const LTTable = withInstall(table);
 
-export * from './render';
 export * from './src/table';

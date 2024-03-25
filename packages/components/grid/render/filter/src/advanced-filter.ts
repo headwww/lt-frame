@@ -1,3 +1,8 @@
+import { LTGridProps } from '@lt-frame/components/grid/src/grid';
+import { DatePickerProps } from 'ant-design-vue';
+import { ExtractPropTypes, PropType } from 'vue';
+import { VxeGlobalRendererHandles } from 'vxe-table';
+
 /**
  * 筛选模式
  */
@@ -6,7 +11,6 @@ export enum FilterMode {
 	TEXT = '文本筛选',
 	ENTITY = '实体筛选',
 	DATE = '日期筛选',
-	// TIME = '时间筛选',
 	CONTENT = '内容筛选',
 }
 
@@ -67,13 +71,6 @@ export interface FilterConfig {
 }
 
 /**
- * 返回文本/数字/时间/日期筛选内设置的内容
- */
-export interface FilterComponentInstance {
-	getConfig(): FilterConfig;
-}
-
-/**
  * 内容筛选配置
  */
 export interface ContentFilterConfig {
@@ -81,23 +78,35 @@ export interface ContentFilterConfig {
 	checkedKeys: Array<any>;
 }
 
-export interface FilterContentInstance {
-	// 返回数字筛选内设置的内容
-	getConfig(): ContentFilterConfig;
-}
-
-export interface FilterEntityInstance {
-	// 返回实体筛选内设置的内容
-	getConfig(): EntityFilterConfig;
-}
 /**
  * 实体筛选配置
  */
 export interface EntityFilterConfig {
-	// 选中的列
-	currentRow: any;
+	// 选中的row
+	records: any[];
 }
-export interface FilterEntityInstance {
-	// 返回实体筛选内设置的内容
-	getConfig(): EntityFilterConfig;
+
+/**
+ *  高级筛选配置筛选条件
+ */
+export interface AdvanceFilterData {
+	// 默认使用的筛选器
+	currentFilterMode: FilterMode;
+	textFilterConfig?: FilterConfig;
+	numberFilterConfig?: FilterConfig;
+	contentFilterConfig?: ContentFilterConfig;
+	dateFilterConfig?: FilterConfig;
+	entityFilterConfig?: EntityFilterConfig;
 }
+
+export const advanceFilterProps = {
+	params: Object as PropType<VxeGlobalRendererHandles.RenderFilterParams>,
+	// 开启的筛选的模式
+	filterModes: Array<FilterMode>,
+	// 实体筛选需要提供的配置
+	gridConfigs: Object as PropType<LTGridProps>,
+	// 日期筛选是否开启时间
+	datePickerProps: Object as PropType<DatePickerProps>,
+};
+
+export type AdvanceFilterProps = ExtractPropTypes<typeof advanceFilterProps>;

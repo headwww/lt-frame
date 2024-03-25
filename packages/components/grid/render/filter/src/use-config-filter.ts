@@ -1,7 +1,7 @@
 import { VxeGlobalRendererHandles } from 'vxe-table';
 import { computed, ref } from 'vue';
 import { cloneDeep, get, set, uniqBy } from 'lodash-es';
-import { ComparisonOperator, LogicalOperators } from './types';
+import { ComparisonOperator, LogicalOperators } from './advanced-filter';
 
 export function useConfigFilter(
 	params: VxeGlobalRendererHandles.RenderFilterParams
@@ -100,12 +100,12 @@ export function useConfigFilter(
 		const arr: Array<any> = [];
 		const { $table, column } = params;
 		// 整个table的数据fullData，列表中展示的数据visibleData,已经加载的数据tableData
-		const { visibleData } = $table.getTableData();
+		const { fullData } = $table.getTableData();
 		// 当前筛选的列的field和格式器
 		const { field, formatter } = column;
 		// 格式化后的表格数据
-		const visibleDataFormatter = cloneDeep(visibleData);
-		visibleDataFormatter.forEach((item) => {
+		const fullDataFormatter = cloneDeep(fullData);
+		fullDataFormatter.forEach((item) => {
 			if (typeof formatter === 'function') {
 				set(
 					item,
@@ -114,7 +114,7 @@ export function useConfigFilter(
 				);
 			}
 		});
-		const uniqByArr = uniqBy(visibleDataFormatter, field);
+		const uniqByArr = uniqBy(fullDataFormatter, field);
 		uniqByArr.forEach((item) => {
 			arr.push({
 				title: get(item, params.column.field),

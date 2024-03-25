@@ -12,3 +12,4 @@ export * from './error';
 export * from './dom';
 export * from './cache';
 export * from './json';
+export * from './Condition';

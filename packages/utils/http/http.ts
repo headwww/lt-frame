@@ -94,7 +94,7 @@ export function defineHttp(opt?: Partial<CreateAxiosOptions>) {
 					Accept: 'application/json',
 				},
 				// 请求超时时常
-				timeout: 6 * 1000,
+				timeout: 60 * 1000,
 				// 数据转换
 				transform: clone(transform),
 				requestOptions: {

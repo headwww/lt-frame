@@ -9,12 +9,16 @@ export function copyText(
 	text: string,
 	prompt: string | null = '已成功复制到剪切板!'
 ) {
-	navigator.clipboard.writeText(text).then(
-		() => {
-			prompt && message.success(prompt);
-		},
-		(error: Error) => {
-			message.error(`复制失败!${error.message}`);
-		}
-	);
+	if (navigator.clipboard) {
+		navigator.clipboard.writeText(text).then(
+			() => {
+				prompt && message.success(prompt);
+			},
+			(error: Error) => {
+				message.error(`复制失败!${error.message}`);
+			}
+		);
+	} else {
+		message.error('你的浏览器不支持剪贴板操作');
+	}
 }

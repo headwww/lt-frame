@@ -13,12 +13,14 @@ import {
 	AdvanceFilterData,
 	LogicalOperators,
 	ComparisonOperator,
+	TemporalOperator,
 } from '@lt-frame/components';
 import { reactive } from 'vue';
 import { parseRef } from '@lt-frame/utils';
 import XEUtils from 'xe-utils';
 import { VxeColumnPropTypes } from 'vxe-table';
 import { FilterMode } from '@lt-frame/components/grid';
+import dayjs from 'dayjs';
 import { LTHttp } from '../../application';
 
 enum CorpType {
@@ -90,6 +92,9 @@ const gridOptions = reactive<LTGridProps>({
 					gridConfigs: {
 						enableSeq: true,
 						enableCheckbox: true,
+						checkboxConfig: {
+							trigger: 'row',
+						},
 						columns: [
 							{
 								field: 'name',
@@ -98,6 +103,12 @@ const gridOptions = reactive<LTGridProps>({
 							{
 								field: 'code',
 								title: '编码',
+							},
+							{
+								field: 'created',
+								title: '日期',
+								formatter: ({ cellValue }) =>
+									XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss'),
 							},
 						],
 						proxyConfig: {
@@ -149,7 +160,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$editDatePicker',
+				name: '$advancedFilter',
 				props: {
 					filterModes: [FilterMode.NUMBER],
 				},
@@ -171,7 +182,13 @@ const gridOptions = reactive<LTGridProps>({
 				{
 					data: {
 						currentFilterMode: FilterMode.DATE,
-						dateFilterConfig: {},
+						dateFilterConfig: {
+							logicalOperators: LogicalOperators.AND,
+							firstQueryCondition: TemporalOperator.EQUALS,
+							firstQueryText: dayjs('2021-12-21 13:12:30'),
+							secondQueryCondition: TemporalOperator.EMPTY,
+							secondQueryText: '',
+						},
 					} as AdvanceFilterData,
 				},
 			],

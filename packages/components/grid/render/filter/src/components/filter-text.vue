@@ -6,19 +6,18 @@
 			banner
 		/>
 		<a-input-group style="margin-top: 12px" compact>
-			<a-select v-model:value="config.firstQueryCondition" style="width: 38%">
+			<a-select v-model:value="config.firstQueryCondition" style="width: 30%">
 				<a-select-option
-					v-for="item in TemporalOperator"
+					v-for="item in ComparisonOperator"
 					:key="item"
 					:value="item"
-					>{{ item == TemporalOperator.EMPTY ? '' : item }}</a-select-option
+					>{{ item == ComparisonOperator.EMPTY ? '' : item }}</a-select-option
 				>
 			</a-select>
-			<a-date-picker
-				v-bind="attrs"
+			<a-input
+				placeholder="请输入条件一"
 				v-model:value="config.firstQueryText"
-				style="width: 62%"
-				type="date"
+				style="width: 70%"
 			/>
 		</a-input-group>
 		<a-radio-group
@@ -27,19 +26,18 @@
 			:options="plainOptions"
 		/>
 		<a-input-group style="margin-top: 12px" compact>
-			<a-select v-model:value="config.secondQueryCondition" style="width: 38%">
+			<a-select v-model:value="config.secondQueryCondition" style="width: 30%">
 				<a-select-option
-					v-for="item in TemporalOperator"
+					v-for="item in ComparisonOperator"
 					:key="item"
 					:value="item"
-					>{{ item == TemporalOperator.EMPTY ? '' : item }}</a-select-option
+					>{{ item == ComparisonOperator.EMPTY ? '' : item }}</a-select-option
 				>
 			</a-select>
-			<a-date-picker
-				v-bind="attrs"
+			<a-input
+				placeholder="请输入条件二"
 				v-model:value="config.secondQueryText"
-				style="width: 62%"
-				type="date"
+				style="width: 70%"
 			/>
 		</a-input-group>
 	</div>
@@ -53,23 +51,24 @@ import {
 	Select as ASelect,
 	SelectOption as ASelectOption,
 	RadioGroup as ARadioGroup,
-	DatePicker as ADatePicker,
+	Input as AInput,
 } from 'ant-design-vue';
-import { LogicalOperators, FilterConfig, TemporalOperator } from '../types';
+import {
+	LogicalOperators,
+	FilterConfig,
+	ComparisonOperator,
+} from '../advanced-filter';
 
 const plainOptions = [LogicalOperators.AND, LogicalOperators.OR];
 
 const props = defineProps({
-	attrs: {
-		type: Object as PropType<any>,
-	},
 	config: {
 		type: Object as PropType<FilterConfig>,
 		default: () => ({
 			logicalOperators: LogicalOperators.AND,
-			firstQueryCondition: TemporalOperator.EQUALS,
+			firstQueryCondition: ComparisonOperator.INCLUDE,
 			firstQueryText: '',
-			secondQueryCondition: TemporalOperator.EMPTY,
+			secondQueryCondition: ComparisonOperator.EMPTY,
 			secondQueryText: '',
 		}),
 	},

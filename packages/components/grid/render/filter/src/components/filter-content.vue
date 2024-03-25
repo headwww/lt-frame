@@ -8,7 +8,6 @@
 		"
 	>
 		<a-tree
-			v-bind="attrs"
 			v-model:checkedKeys="config.checkedKeys"
 			checkable
 			:selectable="false"
@@ -23,12 +22,9 @@
 <script lang="ts" setup>
 import { PropType, reactive } from 'vue';
 import { type TreeProps, Tree as ATree } from 'ant-design-vue';
-import { ContentFilterConfig } from '../types';
+import { ContentFilterConfig } from '../advanced-filter';
 
 const props = defineProps({
-	attrs: {
-		type: Object as PropType<TreeProps>,
-	},
 	config: {
 		type: Object as PropType<ContentFilterConfig>,
 		default: () => ({

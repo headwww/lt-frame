@@ -6,7 +6,7 @@ import {
 	FilterMode,
 	LogicalOperators,
 	TemporalOperator,
-} from './types';
+} from './advanced-filter';
 
 /**
  * 比较操作符的运算逻辑

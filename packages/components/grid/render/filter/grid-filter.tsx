@@ -1,22 +1,22 @@
 import { VXETable } from 'vxe-table';
 import { isFunction, isNullOrUnDef } from '@lt-frame/utils';
-import { get } from 'lodash-es';
-import FilterDeep from './filter-deep.vue';
-import { FilterMode } from './types';
-import { compareFilter } from './util';
-import { useResetFilter } from './use-reset-filter';
+import { get, join, split } from 'lodash-es';
+import AdvancedFilter from './src/advanced-filter.vue';
+import { useResetFilter } from './src/use-reset-filter';
+import { FilterMode } from './src/advanced-filter';
+import { compareFilter } from './src/util';
 
-VXETable.renderer.add('Filter-Deep', {
+VXETable.renderer.add('$advancedFilter', {
 	showFilterFooter: false,
-	renderFilter(renderOpts, params) {
+	renderFilter({ props = {}, attrs = {}, events = {} }, params) {
 		return (
-			<FilterDeep
+			<AdvancedFilter
 				key={params.column.field}
-				filterModes={renderOpts.props?.filterModes}
-				entityConfig={renderOpts.props?.entityConfig}
-				{...renderOpts.attrs}
+				{...props}
+				{...attrs}
+				{...events}
 				params={params}
-			></FilterDeep>
+			></AdvancedFilter>
 		);
 	},
 	filterResetMethod(params) {
@@ -82,17 +82,17 @@ VXETable.renderer.add('Filter-Deep', {
 		}
 
 		if (data.currentFilterMode === FilterMode.ENTITY) {
-			const { props } = params.column.filterRender;
-			if (props) {
-				const { entityConfig } = props;
-				if (entityConfig) {
-					const { compareField } = entityConfig;
-					if (compareField) {
-						return (
-							rawValue === get(data.entityFilterConfig.currentRow, compareField)
-						);
-					}
+			const splitList = split(params.column.field, '.');
+			if (splitList.length > 1) {
+				splitList.shift();
+				const otherKey = join(splitList, '.');
+				const arr: string[] = [];
+				if (data.entityFilterConfig.records.length > 0) {
+					data.entityFilterConfig.records.forEach((item: any) => {
+						arr.push(get(item, otherKey));
+					});
 				}
+				return arr.includes(rawValue);
 			}
 		}
 		return false;

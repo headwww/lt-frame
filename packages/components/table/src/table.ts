@@ -1,12 +1,7 @@
 import type { VxeColumnProps } from 'vxe-table';
 import { ExtractPropTypes } from 'vue';
 
-// export interface TableProps extends VxeTableProps {
-// 	seqVisibility: boolean;
-// 	checkboxVisibility: boolean;
-// 	isEditable: boolean;
-// 	colConfigs: Array<VxeColumnProps>;
-// }
+export interface ToolbarConfig {}
 
 export const tableProps = {
 	// 是否开启工具栏

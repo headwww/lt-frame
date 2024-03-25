@@ -1,42 +1,40 @@
 <template>
-	<div :class="ns.b()">
+	<div
+		style="width: 400px; height: 340px; display: flex; flex-direction: column"
+	>
 		<a-segmented
 			v-model:value="currentFilterMode"
 			:options="filterModes"
-			:class="ns.e('header')"
+			style="margin: 8px 8px 4px"
 			:block="true"
 		/>
-		<div :class="ns.e('content')">
+
+		<div style="flex: 1">
 			<template v-if="getFilterModes.includes(FilterMode.TEXT)">
 				<FilterText
 					v-show="currentFilterMode == FilterMode.TEXT"
-					:attrs="attrs.textAttrs"
 					:config="getTextFilterConfig"
 					ref="refFilterText"
 				></FilterText>
 			</template>
-
 			<template v-if="getFilterModes.includes(FilterMode.NUMBER)">
 				<FilterNumber
 					v-show="currentFilterMode == FilterMode.NUMBER"
 					:config="getNumberFilterConfig"
-					:attrs="attrs.numberAttrs"
 					ref="refFilterNumber"
 				></FilterNumber>
 			</template>
-
 			<template v-if="getFilterModes.includes(FilterMode.DATE)">
 				<FilterDate
 					v-show="currentFilterMode == FilterMode.DATE"
+					:date-picker="datePickerProps"
 					:config="getDateFilterConfig"
-					:attrs="attrs.dateAttrs"
 					ref="refFilterDate"
 				/>
 			</template>
 			<template v-if="getFilterModes.includes(FilterMode.CONTENT)">
 				<FilterContent
 					v-show="currentFilterMode == FilterMode.CONTENT"
-					:attrs="attrs.contentAttrs"
 					:config="getContentFilterConfig"
 					:tree-data="getCheckedKeys"
 					ref="refFilterContent"
@@ -44,14 +42,14 @@
 			</template>
 			<template v-if="getFilterModes.includes(FilterMode.ENTITY)">
 				<FilterEntity
-					:attrs="attrs"
-					:entity-config="entityConfig"
 					v-show="currentFilterMode == FilterMode.ENTITY"
+					:grid-configs="gridConfigs"
 					ref="refFilterEntity"
 				/>
 			</template>
 		</div>
-		<div :class="ns.e('fotter')">
+
+		<div style="text-align: right; padding: 10px 10px 10px 0">
 			<a-button style="margin-right: 8px" @click="resetFilterEvent"
 				>重置</a-button
 			>
@@ -66,54 +64,40 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
 import { Segmented as ASegmented, Button as AButton } from 'ant-design-vue';
-import { useAttrs, useNamespace } from '@lt-frame/hooks';
-import { isUndefined } from 'lodash-es';
+import { computed, ref } from 'vue';
+import {
+	ComparisonOperator,
+	FilterMode,
+	TemporalOperator,
+	advanceFilterProps,
+} from './advanced-filter';
+import { useConfigFilter } from './use-config-filter';
+import { useResetFilter } from './use-reset-filter';
 import FilterText from './components/filter-text.vue';
 import FilterNumber from './components/filter-number.vue';
 import FilterContent from './components/filter-content.vue';
 import FilterDate from './components/filter-date.vue';
 import FilterEntity from './components/filter-entity.vue';
-import {
-	ComparisonOperator,
-	FilterComponentInstance,
-	FilterContentInstance,
-	FilterEntityInstance,
-	FilterMode,
-	TemporalOperator,
-} from './types';
-import { filterDeepProps } from './filter-deep';
-import { useConfigFilter } from './use-config-filter';
-import { useResetFilter } from './use-reset-filter';
 
-defineOptions({
-	name: 'LTDeepFilter',
-	inheritAttrs: false,
-});
+const props = defineProps(advanceFilterProps);
 
-const attrs = useAttrs();
-
-const ns = useNamespace('filter-deep');
-
-const props = defineProps(filterDeepProps);
-
-const refFilterText = ref<FilterComponentInstance>();
-const refFilterNumber = ref<FilterComponentInstance>();
-const refFilterDate = ref<FilterComponentInstance>();
-const refFilterContent = ref<FilterContentInstance>();
-const refFilterEntity = ref<FilterEntityInstance>();
+const refFilterText = ref();
+const refFilterNumber = ref();
+const refFilterDate = ref();
+const refFilterContent = ref();
+const refFilterEntity = ref();
 
 const {
 	currentFilterMode,
 	getCheckedKeys,
 	getTextFilterConfig,
-	getContentFilterConfig,
 	getNumberFilterConfig,
+	getContentFilterConfig,
 	getDateFilterConfig,
 } = useConfigFilter(props.params!!);
 
-/** 加载筛选方式，如果没有设置值则默认开启['文本筛选', '分类筛选'] */
+/** 选中的筛选模式 */
 const getFilterModes = computed(() => {
 	const { filterModes } = props;
 	if (filterModes) {
@@ -155,7 +139,7 @@ const getDisabled = computed(() => {
 		return refFilterContent.value?.getConfig().checkedKeys.length === 0;
 	}
 	if (currentFilterMode.value === FilterMode.ENTITY) {
-		return isUndefined(refFilterEntity.value?.getConfig());
+		return refFilterEntity.value?.getConfig().records.length === 0;
 	}
 	return true;
 });
@@ -199,6 +183,7 @@ const confirmFilterEvent = () => {
 			data.currentFilterMode === FilterMode.ENTITY
 				? refFilterEntity.value?.getConfig()
 				: resetEntityFilter();
+
 		const { $panel } = params;
 		$panel.changeOption(null, true, params.column.filters[0]);
 		$panel.confirmFilter();

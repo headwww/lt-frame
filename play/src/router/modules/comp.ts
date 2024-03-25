@@ -47,11 +47,19 @@ const comps: LTRouteRecordRaw = {
 		{
 			path: 'table',
 			name: 'Table',
-			redirect: '/component/table/table-edit',
+			redirect: '/component/table/grid',
 			meta: {
 				title: 'Table',
 			},
 			children: [
+				{
+					path: 'grid',
+					name: 'Grid',
+					component: () => import('../../demo/grid/index.vue'),
+					meta: {
+						title: '配置表单',
+					},
+				},
 				{
 					path: 'table-edit',
 					name: 'TableEdit',

@@ -37,6 +37,7 @@ export default defineComponent({
 		onUnmounted(() => {
 			clearInterval(ping);
 		});
+
 		return {
 			getCaches,
 		};

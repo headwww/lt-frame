@@ -16,9 +16,6 @@ import {
 	LogicalOperators,
 	ComparisonOperator,
 	TemporalOperator,
-	FilterDeepProps,
-	FilterDeepAttrs,
-	FilterDeepRef,
 } from '@lt-frame/components';
 import { onMounted, ref } from 'vue';
 import { VxeColumnPropTypes, VxeColumnProps } from 'vxe-table';
@@ -61,14 +58,14 @@ const colConfigs: VxeColumnProps[] = [
 					contentFilterConfig: {
 						checkedKeys: ['$_SELECT_ALL'],
 					},
-				} as FilterDeepRef,
+				},
 			},
 		],
 		filterRender: {
-			name: 'Filter-Deep',
+			name: '$advancedFilter',
 			props: {
 				filterModes: [FilterMode.TEXT, FilterMode.CONTENT],
-			} as FilterDeepProps,
+			},
 		},
 	},
 	{
@@ -93,7 +90,7 @@ const colConfigs: VxeColumnProps[] = [
 						// 第二个查询文本
 						secondQueryText: '',
 					},
-				} as FilterDeepRef,
+				},
 			},
 		],
 		filterRender: {
@@ -101,9 +98,6 @@ const colConfigs: VxeColumnProps[] = [
 			props: {
 				filterModes: [FilterMode.NUMBER],
 			},
-			attrs: {
-				numberAttrs: {},
-			} as FilterDeepAttrs,
 		},
 	},
 	{
@@ -122,20 +116,17 @@ const colConfigs: VxeColumnProps[] = [
 						secondQueryCondition: TemporalOperator.EMPTY,
 						secondQueryText: '',
 					},
-				} as FilterDeepRef,
+				},
 			},
 		],
 		filterRender: {
-			name: 'Filter-Deep',
+			name: '$advancedFilter',
 			props: {
 				filterModes: [FilterMode.DATE],
-			},
-			attrs: {
-				dateAttrs: {
+				datePickerProps: {
 					showTime: true,
-					format: 'YYYY年MM月DD日 HH时mm分ss秒',
 				},
-			} as FilterDeepAttrs,
+			},
 		},
 	},
 	{
@@ -149,61 +140,14 @@ const colConfigs: VxeColumnProps[] = [
 					contentFilterConfig: {
 						checkedKeys: ['$_SELECT_ALL'],
 					},
-				} as FilterDeepRef,
+				},
 			},
 		],
 		filterRender: {
-			name: 'Filter-Deep',
+			name: '$advancedFilter',
 			props: {
 				filterModes: [FilterMode.CONTENT],
 			},
-		},
-	},
-	{
-		field: 'corp.name',
-		title: 'entity',
-		sortable: true,
-		filters: [
-			{
-				data: {
-					// 选中的筛选方式
-					currentFilterMode: FilterMode.ENTITY,
-					entityFilterConfig: {
-						currentRow: '',
-					},
-				} as FilterDeepRef,
-			},
-		],
-		filterRender: {
-			name: 'Filter-Deep',
-			props: {
-				filterModes: [FilterMode.ENTITY],
-				entityConfig: {
-					compareField: 'name',
-					colConfigs: [
-						{
-							field: 'name',
-							title: '名称',
-							width: 300,
-						},
-						{
-							field: 'code',
-							title: '编码',
-							width: 200,
-						},
-					],
-					tableDatePromise: () =>
-						LTHttp.post({
-							url: 'api/corpService/findCorps',
-							data: [
-								{
-									targetClass: 'com.ltscm.laf.application.model.Corp',
-									queryPath: [],
-								},
-							],
-						}),
-				},
-			} as FilterDeepProps,
 		},
 	},
 ];
