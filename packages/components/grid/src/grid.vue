@@ -1,7 +1,7 @@
 <template>
 	<vxe-grid
-		:class="getgridConfigs.thumb ? 'lt-table-scrollbar' : ''"
-		v-bind="getgridConfigs"
+		:class="getGridConfigs.thumb ? 'lt-table-scrollbar' : ''"
+		v-bind="getGridConfigs"
 		ref="vxeGridRef"
 	>
 		<template v-if="gridConfigs?.enableEdit" #lt-edit-operate="params">
@@ -83,7 +83,7 @@ async function cancelRowEvent(params: any) {
 	}
 }
 
-const getgridConfigs = computed((): LTGridProps => {
+const getGridConfigs = computed((): LTGridProps => {
 	const seq = {
 		type: 'seq',
 		width: 40,

@@ -4,6 +4,7 @@
 			:loading="loading"
 			:colConfigs="colConfigs"
 			:data="tableData"
+			enable-toolbar
 		></LTTable>
 	</LTPageLayout>
 </template>
@@ -62,7 +63,7 @@ const colConfigs: VxeColumnProps[] = [
 			},
 		],
 		filterRender: {
-			name: '$advancedFilter',
+			name: '$AdvancedFilter',
 			props: {
 				filterModes: [FilterMode.TEXT, FilterMode.CONTENT],
 			},
@@ -120,7 +121,7 @@ const colConfigs: VxeColumnProps[] = [
 			},
 		],
 		filterRender: {
-			name: '$advancedFilter',
+			name: '$AdvancedFilter',
 			props: {
 				filterModes: [FilterMode.DATE],
 				datePickerProps: {
@@ -144,7 +145,7 @@ const colConfigs: VxeColumnProps[] = [
 			},
 		],
 		filterRender: {
-			name: '$advancedFilter',
+			name: '$AdvancedFilter',
 			props: {
 				filterModes: [FilterMode.CONTENT],
 			},

@@ -37,7 +37,7 @@ const gridOptions = reactive<LTGridProps>({
 			title: '公司名称',
 			width: '200',
 			editRender: {
-				name: '$editEntity',
+				name: '$EditEntity',
 				props: {
 					gridConfigs: {
 						enableSeq: true,
@@ -84,7 +84,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.ENTITY, FilterMode.TEXT, FilterMode.CONTENT],
 					gridConfigs: {
@@ -113,7 +113,7 @@ const gridOptions = reactive<LTGridProps>({
 			title: '用户名',
 			width: '200',
 			editRender: {
-				name: '$editInput',
+				name: '$EditInput',
 				props: {
 					allowClear: true,
 				},
@@ -124,7 +124,7 @@ const gridOptions = reactive<LTGridProps>({
 			title: '版本',
 			width: '200',
 			editRender: {
-				name: '$editInputNumber',
+				name: '$EditInputNumber',
 				// name: 'input',
 			},
 			filters: [
@@ -149,7 +149,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$editDatePicker',
+				name: '$EditDatePicker',
 				props: {
 					filterModes: [FilterMode.NUMBER],
 				},
@@ -162,7 +162,7 @@ const gridOptions = reactive<LTGridProps>({
 			formatter: ({ cellValue }) =>
 				XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss'),
 			editRender: {
-				name: '$editDatePicker',
+				name: '$EditDatePicker',
 				props: {
 					showTime: true,
 				},
@@ -176,7 +176,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.DATE],
 					datePickerProps: {
@@ -191,7 +191,7 @@ const gridOptions = reactive<LTGridProps>({
 			width: '200',
 			formatter: formatEnum(CorpType),
 			editRender: {
-				name: '$editSelect',
+				name: '$EditSelect',
 				props: {
 					options: [
 						{
@@ -221,7 +221,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.CONTENT],
 				},

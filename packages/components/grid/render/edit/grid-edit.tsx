@@ -5,7 +5,7 @@ import EditDatePicker from './src/edit-date-picker.vue';
 import EditSelect from './src/edit-select.vue';
 import EditEntity from './src/edit-entity.vue';
 
-VXETable.renderer.add('$editInput', {
+VXETable.renderer.add('$EditInput', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditInput {...props} {...attrs} {...events} params={params}></EditInput>
@@ -13,7 +13,7 @@ VXETable.renderer.add('$editInput', {
 	},
 });
 
-VXETable.renderer.add('$editInputNumber', {
+VXETable.renderer.add('$EditInputNumber', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditInputNumber
@@ -26,7 +26,7 @@ VXETable.renderer.add('$editInputNumber', {
 	},
 });
 
-VXETable.renderer.add('$editDatePicker', {
+VXETable.renderer.add('$EditDatePicker', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditDatePicker
@@ -39,7 +39,7 @@ VXETable.renderer.add('$editDatePicker', {
 	},
 });
 
-VXETable.renderer.add('$editSelect', {
+VXETable.renderer.add('$EditSelect', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditSelect
@@ -52,7 +52,7 @@ VXETable.renderer.add('$editSelect', {
 	},
 });
 
-VXETable.renderer.add('$editEntity', {
+VXETable.renderer.add('$EditEntity', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditEntity

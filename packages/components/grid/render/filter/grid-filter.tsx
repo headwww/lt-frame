@@ -6,7 +6,7 @@ import { useResetFilter } from './src/use-reset-filter';
 import { FilterMode } from './src/advanced-filter';
 import { compareFilter } from './src/util';
 
-VXETable.renderer.add('$advancedFilter', {
+VXETable.renderer.add('$AdvancedFilter', {
 	showFilterFooter: false,
 	renderFilter({ props = {}, attrs = {}, events = {} }, params) {
 		return (

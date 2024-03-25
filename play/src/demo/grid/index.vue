@@ -1,5 +1,5 @@
 <template>
-	<LTPageLayout title="配置表单" dense contentFullHeight fixedHeight>
+	<LTPageLayout title="配置表单" contentFullHeight fixedHeight>
 		<LTGrid :grid-configs="gridOptions"></LTGrid>
 	</LTPageLayout>
 </template>
@@ -14,13 +14,15 @@ import {
 	LogicalOperators,
 	ComparisonOperator,
 	TemporalOperator,
+	ToolBusinessProps,
 } from '@lt-frame/components';
 import { reactive } from 'vue';
 import { parseRef } from '@lt-frame/utils';
 import XEUtils from 'xe-utils';
 import { VxeColumnPropTypes } from 'vxe-table';
-import { FilterMode } from '@lt-frame/components/grid';
+import { FilterMode, ToolBusinessOptions } from '@lt-frame/components/grid';
 import dayjs from 'dayjs';
+import { useMessage } from '@lt-frame/hooks';
 import { LTHttp } from '../../application';
 
 enum CorpType {
@@ -28,6 +30,8 @@ enum CorpType {
 	SUBSIDIARY = '公司',
 	FACTORY = '工厂',
 }
+
+const { createMessage } = useMessage();
 
 const gridOptions = reactive<LTGridProps>({
 	enableSeq: true,
@@ -39,7 +43,7 @@ const gridOptions = reactive<LTGridProps>({
 			title: '公司名称',
 			width: '200',
 			editRender: {
-				name: '$editEntity',
+				name: '$EditEntity',
 				props: {
 					gridConfigs: {
 						enableSeq: true,
@@ -86,7 +90,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.ENTITY, FilterMode.TEXT, FilterMode.CONTENT],
 					gridConfigs: {
@@ -124,7 +128,7 @@ const gridOptions = reactive<LTGridProps>({
 			title: '用户名',
 			width: '200',
 			editRender: {
-				name: '$editInput',
+				name: '$EditInput',
 				props: {
 					allowClear: true,
 				},
@@ -135,8 +139,7 @@ const gridOptions = reactive<LTGridProps>({
 			title: '版本',
 			width: '200',
 			editRender: {
-				name: '$editInputNumber',
-				// name: 'input',
+				name: '$EditInputNumber',
 			},
 			filters: [
 				{
@@ -160,7 +163,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.NUMBER],
 				},
@@ -173,7 +176,7 @@ const gridOptions = reactive<LTGridProps>({
 			formatter: ({ cellValue }) =>
 				XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss'),
 			editRender: {
-				name: '$editDatePicker',
+				name: '$EditDatePicker',
 				props: {
 					showTime: true,
 				},
@@ -193,7 +196,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.DATE],
 					datePickerProps: {
@@ -208,7 +211,7 @@ const gridOptions = reactive<LTGridProps>({
 			width: '200',
 			formatter: formatEnum(CorpType),
 			editRender: {
-				name: '$editSelect',
+				name: '$EditSelect',
 				props: {
 					options: [
 						{
@@ -238,7 +241,7 @@ const gridOptions = reactive<LTGridProps>({
 				},
 			],
 			filterRender: {
-				name: '$advancedFilter',
+				name: '$AdvancedFilter',
 				props: {
 					filterModes: [FilterMode.CONTENT],
 				},
@@ -258,6 +261,56 @@ const gridOptions = reactive<LTGridProps>({
 		created: [{ required: true, message: '必填日期' }],
 		type: [{ required: true, message: '必填字段' }],
 		'corp.name': [{ required: true, message: '必填字段' }],
+	},
+	toolbarConfig: {
+		buttons: [
+			{
+				buttonRender: {
+					name: '$ToolFunction',
+					props: {},
+					events: {
+						onSave: (param: any) => {
+							createMessage.success('保存');
+							console.log(param);
+						},
+						onRemove: (records: any) => {
+							createMessage.success('删除');
+							console.log(records);
+						},
+						onRefresh: () => {
+							createMessage.success('刷新');
+						},
+					},
+				},
+			},
+		],
+		tools: [
+			{
+				toolRender: {
+					name: '$ToolBusiness',
+					props: {
+						options: [
+							{
+								code: 'PASS',
+								type: 'primary',
+								text: '审核',
+							},
+							{
+								code: 'END',
+								type: 'default',
+								text: '结束',
+							},
+						],
+					} as ToolBusinessProps,
+					events: {
+						onItemClick: (option: ToolBusinessOptions, params: any) => {
+							createMessage.success(option.text);
+							console.log(params);
+						},
+					},
+				},
+			},
+		],
 	},
 });
 
