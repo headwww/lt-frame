@@ -4,28 +4,6 @@
 		v-bind="getGridConfigs"
 		ref="vxeGridRef"
 	>
-		<template v-if="gridConfigs?.enableEdit" #lt-edit-column="params">
-			<template v-if="isActiveStatus(params.row)">
-				<a-button
-					@click="cancelRowEvent(params)"
-					style="color: #6a6a6a"
-					type="text"
-					shape="circle"
-					size="small"
-					:icon="h(StopOutlined)"
-				/>
-			</template>
-			<template v-else>
-				<a-button
-					@click="editRowEvent(params.row)"
-					style="color: #6a6a6a"
-					type="text"
-					shape="circle"
-					:icon="h(EditOutlined)"
-				/>
-			</template>
-		</template>
-
 		<template v-if="gridConfigs?.operateColumConfig" #lt-edit-operate="params">
 			<GridOperateColumn
 				:operate-colum-config="getGridConfigs.operateColumConfig"
@@ -41,9 +19,7 @@
 
 <script lang="ts" setup>
 import { deepMerge } from '@lt-frame/utils';
-import { PropType, computed, h, ref } from 'vue';
-import { Button as AButton } from 'ant-design-vue';
-import { StopOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { PropType, computed, ref } from 'vue';
 import { VxeGridInstance } from 'vxe-table';
 import { LTGridProps, LTColumns } from './grid';
 import GridOperateColumn from './components/grid-operate-column.vue';
@@ -60,37 +36,6 @@ const props = defineProps({
 	},
 });
 
-/** 开启编辑 */
-const editRowEvent = async (row: any) => {
-	const $grid = vxeGridRef.value;
-	if ($grid) {
-		$grid.setEditRow(row);
-	}
-};
-
-/** 是否是编辑状态 */
-function isActiveStatus(row: any) {
-	const $grid = vxeGridRef.value;
-	if ($grid) {
-		return $grid.isEditByRow(row);
-	}
-	return false;
-}
-
-/** 取消编辑并还原数据 */
-async function cancelRowEvent(params: any) {
-	const $grid = vxeGridRef.value;
-
-	if ($grid) {
-		await $grid.clearEdit();
-		if (params.row._X_ROW_INSERT) {
-			$grid.remove(params.row);
-		} else {
-			await $grid.revertData(params.row);
-		}
-	}
-}
-
 const getGridConfigs = computed((): LTGridProps => {
 	const seq = {
 		type: 'seq',
@@ -102,15 +47,6 @@ const getGridConfigs = computed((): LTGridProps => {
 	const checkbox = {
 		type: 'checkbox',
 		width: 40,
-		fixed: 'left',
-		align: 'center',
-	};
-
-	const edit = {
-		title: '编辑',
-		width: 55,
-		minWidth: 55,
-		slots: { default: 'lt-edit-column' },
 		fixed: 'left',
 		align: 'center',
 	};
@@ -131,9 +67,6 @@ const getGridConfigs = computed((): LTGridProps => {
 		}
 		if (gridConfigs.enableSeq) {
 			columns.push(seq as any);
-		}
-		if (gridConfigs.enableEdit) {
-			columns.push(edit as any);
 		}
 		if (gridConfigs.operateColumConfig) {
 			const { width } = gridConfigs.operateColumConfig;

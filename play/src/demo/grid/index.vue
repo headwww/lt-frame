@@ -36,7 +36,6 @@ const { createMessage } = useMessage();
 const gridOptions = reactive<LTGridProps>({
 	enableSeq: true,
 	enableCheckbox: true,
-	enableEdit: true,
 	height: 800,
 	operateColumConfig: {
 		width: 300,
@@ -346,7 +345,10 @@ const gridOptions = reactive<LTGridProps>({
 								event: 'PASS',
 								type: 'primary',
 								text: '审核',
-								disabled: false,
+								disabled: (params) => {
+									console.log(params);
+									return true;
+								},
 							},
 							{
 								event: 'END',

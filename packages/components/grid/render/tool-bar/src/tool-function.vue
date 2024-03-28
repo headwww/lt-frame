@@ -76,7 +76,7 @@ function insert() {
 	if (params) {
 		const { $grid } = params;
 		if ($grid) {
-			$grid.insert({});
+			$grid.insert({ _X_ROW_INSERT: true });
 		}
 	}
 }

@@ -212,6 +212,11 @@ export default defineComponent({
 			getContentFilterConfig,
 			getDateFilterConfig,
 			FilterMode,
+			refFilterText,
+			refFilterNumber,
+			refFilterDate,
+			refFilterContent,
+			refFilterEntity,
 		};
 	},
 });

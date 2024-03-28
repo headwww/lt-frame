@@ -19,8 +19,6 @@ export interface LTGridProps<D = VxeTableDataRow> extends VxeGridProps<D> {
 	enableCheckbox?: boolean;
 	// 列配置
 	columns?: LTColumns<D>;
-	// 是否开启默认的编辑
-	enableEdit?: boolean;
 	// 内置操作列的配置
 	operateColumConfig?: OperateColumConfig;
 }

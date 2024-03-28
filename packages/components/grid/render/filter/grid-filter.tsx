@@ -87,6 +87,8 @@ VXETable.renderer.add('$AdvancedFilter', {
 				splitList.shift();
 				const otherKey = join(splitList, '.');
 				const arr: string[] = [];
+				console.log(data.entityFilterConfig);
+
 				if (data.entityFilterConfig.records.length > 0) {
 					data.entityFilterConfig.records.forEach((item: any) => {
 						arr.push(get(item, otherKey));

@@ -44,14 +44,14 @@
 		</template>
 
 		<LTButton
-			v-for="(item, index) in getButtons"
+			v-for="item in getButtons"
 			:disabled="handleDisabled(item.disabled)"
 			:style="{
 				color: handleDisabled(item.disabled) ? '#d9d9d9' : '#3370ff',
 			}"
 			type="text"
 			size="small"
-			:key="index"
+			:key="item.event"
 			@click="handleButtonsItemClick(item.event)"
 			>{{ item.text }}</LTButton
 		>
@@ -254,7 +254,6 @@ function isActiveStatus() {
 /** 取消编辑并还原数据 */
 async function cancelRowEvent() {
 	const { $grid, row } = props.params;
-
 	if ($grid) {
 		await $grid.clearEdit();
 		if (row._X_ROW_INSERT) {

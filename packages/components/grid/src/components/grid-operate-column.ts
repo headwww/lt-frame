@@ -11,9 +11,7 @@ export interface OperationOption {
 	// 图标
 	icon?: string;
 	// 点击事件的
-	event?: string | number;
-	// 文本颜色
-	color?: string;
+	event: string | number;
 }
 
 export interface OperateColumConfig {
@@ -26,7 +24,7 @@ export interface OperateColumConfig {
 	viewVisible?: boolean | Fn<any, boolean>;
 	viewDisabled?: boolean | Fn<any, boolean>;
 	// 其他按钮
-	buttons?: Array<Omit<OperationOption, 'icon' | 'color'>>;
+	buttons?: Array<Omit<OperationOption, 'icon'>>;
 	// 更多菜单
 	menus?: Array<OperationOption>;
 	// 查看按钮的点击事件
