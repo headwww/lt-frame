@@ -18,7 +18,7 @@ let config: AppConfigV1 = {
 		scrollBehavior: () => ({ left: 0, top: 0 }),
 	},
 	homePage: '/home-page',
-	whitePathList: [''],
+	whitePathList: [],
 	removeAllHttpPending: false,
 	redirectName: 'Redirect',
 	basicRoutes: {
@@ -134,7 +134,9 @@ export function defineConfig_v1(options: AppConfigV1) {
 			mWhitePathList.push(LOGIN_ROUTE.path);
 		}
 		// 将外部的路由白名单合并到一起
-		if (whitePathList) mWhitePathList.concat(whitePathList);
+		if (whitePathList) {
+			if (whitePathList.length > 0) mWhitePathList.push(...whitePathList);
+		}
 		if (ROOT_ROUTE) mBasicRoutes.push(ROOT_ROUTE);
 		if (REDIRECT_ROUTE) mBasicRoutes.push(REDIRECT_ROUTE);
 		if (PAGE_NOT_FOUND_ROUTE) mBasicRoutes.push(PAGE_NOT_FOUND_ROUTE);

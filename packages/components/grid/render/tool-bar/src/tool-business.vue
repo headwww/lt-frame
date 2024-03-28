@@ -3,7 +3,7 @@
 		style="margin-right: 10px"
 		v-for="item in options"
 		v-bind="item"
-		:key="item.code"
+		:key="item.event"
 		@click="handClick(item)"
 		>{{ item.text }}</LTButton
 	>

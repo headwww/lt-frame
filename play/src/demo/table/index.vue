@@ -1,322 +1,184 @@
 <template>
-	<LTPageLayout title="配置表单" dense contentFullHeight fixedHeight>
-		<LTGrid :grid-configs="gridOptions"></LTGrid>
+	<LTPageLayout contentFullHeight fixedHeight>
+		<vxe-grid v-bind="gridOptions">
+			<template #toolbar_buttons>
+				<vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
+				<vxe-button status="primary">搜索</vxe-button>
+				<vxe-button>刷新</vxe-button>
+				<vxe-button>新增</vxe-button>
+				<vxe-button>保存</vxe-button>
+				<vxe-button>导出</vxe-button>
+			</template>
+
+			<template #name_edit="{ row }">
+				<vxe-input v-model="row.name"></vxe-input>
+			</template>
+			<template #nickname_edit="{ row }">
+				<vxe-input v-model="row.nickname"></vxe-input>
+			</template>
+			<template #role_edit="{ row }">
+				<vxe-input v-model="row.role"></vxe-input>
+			</template>
+			<template #address_edit="{ row }">
+				<vxe-input v-model="row.address"></vxe-input>
+			</template>
+		</vxe-grid>
 	</LTPageLayout>
 </template>
 
-<script setup lang="ts">
-import {
-	LTPageLayout,
-	LTGrid,
-	LTGridProps,
-	AdvanceFilterProps,
-	AdvanceFilterData,
-	LogicalOperators,
-	ComparisonOperator,
-} from '@lt-frame/components';
-import { reactive } from 'vue';
-import { parseRef } from '@lt-frame/utils';
-import XEUtils from 'xe-utils';
-import { VxeColumnPropTypes } from 'vxe-table';
-import { FilterMode } from '@lt-frame/components/grid';
-import { LTHttp } from '../../application';
+<script lang="ts" setup>
+import { LTPageLayout } from '@lt-frame/components';
+import { ref, reactive } from 'vue';
+import { VxeGridProps } from 'vxe-table';
 
-enum CorpType {
-	HEAD = '集团',
-	SUBSIDIARY = '公司',
-	FACTORY = '工厂',
+interface RowVO {
+	id: number;
+	name: string;
+	nickname: string;
+	role: string;
+	sex: string;
+	age: number;
+	address: string;
 }
 
-const gridOptions = reactive<LTGridProps>({
-	enableSeq: true,
-	enableCheckbox: true,
-	enableEdit: true,
+const searchName = ref('');
+
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+	border: true,
+	keepSource: true,
+	showOverflow: true,
+	height: 530,
+	id: 'toolbar_demo_2',
+	loading: false,
+	columnConfig: {
+		resizable: true,
+	},
+	customConfig: {
+		storage: true,
+	},
+	editConfig: {
+		trigger: 'click',
+		mode: 'row',
+		showStatus: true,
+	},
+	toolbarConfig: {
+		custom: true,
+		slots: {
+			buttons: 'toolbar_buttons',
+		},
+	},
 	columns: [
+		{ type: 'checkbox', width: 50 },
+		{ type: 'seq', width: 60 },
 		{
-			field: 'corp.name',
-			title: '公司名称',
-			width: '200',
-			editRender: {
-				name: '$EditEntity',
-				props: {
-					gridConfigs: {
-						enableSeq: true,
-						columns: [
-							{
-								field: 'name',
-								title: '编码',
-							},
-							{
-								field: 'code',
-								title: '编码',
-							},
-						],
-						proxyConfig: {
-							// 自定义的代理方案，调用实体筛选不使用ajax的方式
-							dataSource: () => findCorps(),
-						},
-					} as LTGridProps,
-				},
-			},
-			filters: [
+			field: 'name',
+			title: 'Name',
+			editRender: { autofocus: '.vxe-input--inner' },
+			slots: { edit: 'name_edit' },
+		},
+		{
+			title: '分类',
+			children: [
 				{
-					data: {
-						// 选中的筛选方式
-						currentFilterMode: FilterMode.ENTITY,
-						// 文本筛选配置
-						textFilterConfig: {
-							// 两个条件之间的逻辑操作
-							logicalOperators: LogicalOperators.AND,
-							// 第一个查询条件
-							firstQueryCondition: ComparisonOperator.INCLUDE,
-							// 第一个查询文本
-							firstQueryText: '',
-							// 第二个查询条件
-							secondQueryCondition: ComparisonOperator.EMPTY,
-							// 第二个查询文本
-							secondQueryText: '',
-						},
-						// 内容筛选
-						contentFilterConfig: {
-							checkedKeys: ['$_SELECT_ALL'],
-						},
-					} as AdvanceFilterData,
+					field: 'nickname',
+					title: 'Nickname',
+					editRender: {},
+					slots: { edit: 'nickname_edit' },
 				},
-			],
-			filterRender: {
-				name: '$AdvancedFilter',
-				props: {
-					filterModes: [FilterMode.ENTITY, FilterMode.TEXT, FilterMode.CONTENT],
-					gridConfigs: {
-						enableSeq: true,
-						enableCheckbox: true,
-						columns: [
-							{
-								field: 'name',
-								title: '编码',
-							},
-							{
-								field: 'code',
-								title: '编码',
-							},
-						],
-						proxyConfig: {
-							// 自定义的代理方案，调用实体筛选不使用ajax的方式
-							dataSource: () => findCorps(),
-						},
-					},
-				} as AdvanceFilterProps,
-			},
-		},
-		{
-			field: 'username',
-			title: '用户名',
-			width: '200',
-			editRender: {
-				name: '$EditInput',
-				props: {
-					allowClear: true,
-				},
-			},
-		},
-		{
-			field: 'version',
-			title: '版本',
-			width: '200',
-			editRender: {
-				name: '$EditInputNumber',
-				// name: 'input',
-			},
-			filters: [
 				{
-					data: {
-						// 选中的筛选方式
-						currentFilterMode: FilterMode.NUMBER,
-						// 数字筛选配置
-						numberFilterConfig: {
-							// 两个条件之间的逻辑操作
-							logicalOperators: LogicalOperators.AND,
-							// 第一个查询条件
-							firstQueryCondition: ComparisonOperator.INCLUDE,
-							// 第一个查询文本
-							firstQueryText: '',
-							// 第二个查询条件
-							secondQueryCondition: ComparisonOperator.EMPTY,
-							// 第二个查询文本
-							secondQueryText: '',
-						},
-					},
-				},
-			],
-			filterRender: {
-				name: '$EditDatePicker',
-				props: {
-					filterModes: [FilterMode.NUMBER],
-				},
-			},
-		},
-		{
-			field: 'created',
-			title: '用户名',
-			width: '200',
-			formatter: ({ cellValue }) =>
-				XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss'),
-			editRender: {
-				name: '$EditDatePicker',
-				props: {
-					showTime: true,
-				},
-			},
-			filters: [
-				{
-					data: {
-						currentFilterMode: FilterMode.DATE,
-						dateFilterConfig: {},
-					} as AdvanceFilterData,
-				},
-			],
-			filterRender: {
-				name: '$AdvancedFilter',
-				props: {
-					filterModes: [FilterMode.DATE],
-					datePickerProps: {
-						showTime: true,
-					},
-				} as AdvanceFilterProps,
-			},
-		},
-		{
-			field: 'corp.type',
-			title: '类型',
-			width: '200',
-			formatter: formatEnum(CorpType),
-			editRender: {
-				name: '$EditSelect',
-				props: {
-					options: [
+					title: '子类',
+					children: [
 						{
-							label: '公司',
-							value: 'SUBSIDIARY',
-						},
-						{
-							label: '集团',
-							value: 'HEAD',
-							disabled: true,
-						},
-						{
-							label: '工厂',
-							value: 'FACTORY',
+							field: 'role',
+							title: 'Role',
+							editRender: {},
+							slots: { edit: 'role_edit' },
 						},
 					],
 				},
-			},
-			filters: [
-				{
-					data: {
-						currentFilterMode: FilterMode.CONTENT,
-						contentFilterConfig: {
-							checkedKeys: ['$_SELECT_ALL'],
-						},
-					},
-				},
 			],
-			filterRender: {
-				name: '$AdvancedFilter',
-				props: {
-					filterModes: [FilterMode.CONTENT],
-				},
-			},
+		},
+		{
+			field: 'address',
+			title: 'Address',
+			showOverflow: true,
+			editRender: {},
+			slots: { edit: 'address_edit' },
 		},
 	],
-	proxyConfig: {
-		ajax: {
-			query: () => findRoles(),
+	data: [
+		{
+			id: 10001,
+			name: 'Test1',
+			nickname: 'T1',
+			role: 'Develop',
+			sex: 'Man',
+			age: 28,
+			address: 'Shenzhen',
 		},
-	},
-	editRules: {
-		username: [{ required: true, message: '必填字段' }],
-		version: [
-			{ type: 'number', min: 0, max: 100000, message: '输入 0 ~ 100000 范围' },
-		],
-		created: [{ required: true, message: '必填日期' }],
-		type: [{ required: true, message: '必填字段' }],
-		'corp.name': [{ required: true, message: '必填字段' }],
-	},
+		{
+			id: 10002,
+			name: 'Test2',
+			nickname: 'T2',
+			role: 'Test',
+			sex: 'Women',
+			age: 22,
+			address: 'Guangzhou',
+		},
+		{
+			id: 10003,
+			name: 'Test3',
+			nickname: 'T3',
+			role: 'PM',
+			sex: 'Man',
+			age: 32,
+			address: 'Shanghai',
+		},
+		{
+			id: 10004,
+			name: 'Test4',
+			nickname: 'T4',
+			role: 'Designer',
+			sex: 'Women',
+			age: 23,
+			address: 'Shenzhen',
+		},
+		{
+			id: 10005,
+			name: 'Test5',
+			nickname: 'T5',
+			role: 'Develop',
+			sex: 'Women',
+			age: 30,
+			address: 'Shanghai',
+		},
+		{
+			id: 10006,
+			name: 'Test6',
+			nickname: 'T6',
+			role: 'Designer',
+			sex: 'Women',
+			age: 21,
+			address: 'Shenzhen',
+		},
+		{
+			id: 10007,
+			name: 'Test7',
+			nickname: 'T7',
+			role: 'Test',
+			sex: 'Man',
+			age: 29,
+			address: 'Shenzhen',
+		},
+		{
+			id: 10008,
+			name: 'Test8',
+			nickname: 'T8',
+			role: 'Develop',
+			sex: 'Man',
+			age: 35,
+			address: 'Shenzhen',
+		},
+	],
 });
-
-function formatEnum(enumObj: any) {
-	const setDate: VxeColumnPropTypes.Formatter = ({ cellValue }) =>
-		enumObj[cellValue];
-	return setDate;
-}
-
-const findCorps = () =>
-	new Promise<any[]>((resolve, reject) => {
-		LTHttp.post({
-			url: 'api/corpServiceImpl/findCorps',
-			data: [
-				{
-					targetClass: 'lt.fw.core.model.biz.Corp',
-					queryPath: ['code', 'name', 'type'],
-				},
-			],
-		})
-			.then((data) => {
-				resolve(parseRef(data));
-			})
-			.catch(() => {
-				reject();
-			}).finally;
-	});
-
-const findRoles = () =>
-	new Promise<any[]>((resolve, reject) => {
-		LTHttp.post({
-			url: 'api/securityModelService/findUsers',
-			data: [
-				{
-					targetClass: 'lt.fw.core.model.biz.User',
-					queryPath: [
-						'username',
-						'corp.name',
-						'corp.id',
-						'corp.code',
-						'createdBy',
-					],
-				},
-			],
-		})
-			.then((data) => {
-				resolve(parseRef(data));
-			})
-			.catch(() => {
-				reject();
-			}).finally;
-	});
-
-// const findRoles = () => {
-// 	gridOptions.loading = true;
-// 	LTHttp.post({
-// 		url: 'api/securityModelService/findUsers',
-// 		data: [
-// 			{
-// 				targetClass: 'lt.fw.core.model.biz.User',
-// 				queryPath: [
-// 					'username',
-// 					'corp.name',
-// 					'corp.id',
-// 					'corp.code',
-// 					'createdBy',
-// 				],
-// 			},
-// 		],
-// 	})
-// 		.then((data) => {
-// 			gridOptions.data = parseRef(data);
-// 		})
-// 		.finally(() => {
-// 			gridOptions.loading = false;
-// 			// tableData.value = [];
-// 		});
-// };
 </script>

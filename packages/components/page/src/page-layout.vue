@@ -107,7 +107,6 @@ const getContentStyle = computed((): CSSProperties => {
 	const height = `${unref(contentHeight)}px`;
 
 	return {
-		background: '#FFF',
 		...contentStyle,
 		minHeight: height,
 		...(fixedHeight ? { height } : {}),
@@ -115,12 +114,13 @@ const getContentStyle = computed((): CSSProperties => {
 });
 
 const getContentClass = computed(() => {
-	const { contentClass } = props;
+	const { contentBackground, contentClass } = props;
+
 	return [
 		ns.b('content'),
 		contentClass,
 		{
-			[`${ns.b('content-bg')}`]: true,
+			[`${ns.b('content-bg')}`]: contentBackground,
 		},
 	];
 });

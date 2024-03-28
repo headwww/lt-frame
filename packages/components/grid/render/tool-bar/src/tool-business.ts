@@ -4,7 +4,7 @@ import { ButtonType } from 'ant-design-vue/es/button';
 import { ButtonProps } from '../../../../button';
 
 export interface ToolBusinessOptions extends ButtonProps {
-	code: string;
+	event: string | number;
 	type?: ButtonType;
 	text?: string;
 }

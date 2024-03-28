@@ -96,7 +96,7 @@
 					</div>
 
 					<div>
-						<h3>ghost 常规幽灵按钮通常用于有色背景下</h3>
+						<h3></h3>
 						<div class="bg-gray-400 py-2">
 							<LTButton ghost type="primary"> 幽灵主要 </LTButton>
 							<LTButton ghost type="default"> 幽灵默认 </LTButton>

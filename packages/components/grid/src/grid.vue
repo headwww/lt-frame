@@ -4,7 +4,7 @@
 		v-bind="getGridConfigs"
 		ref="vxeGridRef"
 	>
-		<template v-if="gridConfigs?.enableEdit" #lt-edit-operate="params">
+		<template v-if="gridConfigs?.enableEdit" #lt-edit-column="params">
 			<template v-if="isActiveStatus(params.row)">
 				<a-button
 					@click="cancelRowEvent(params)"
@@ -26,6 +26,13 @@
 			</template>
 		</template>
 
+		<template v-if="gridConfigs?.operateColumConfig" #lt-edit-operate="params">
+			<GridOperateColumn
+				:operate-colum-config="getGridConfigs.operateColumConfig"
+				:params="params"
+			></GridOperateColumn>
+		</template>
+
 		<template #[item]="data" v-for="item in Object.keys($slots)">
 			<slot :name="item" v-bind="data || {}"></slot>
 		</template>
@@ -39,6 +46,7 @@ import { Button as AButton } from 'ant-design-vue';
 import { StopOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { VxeGridInstance } from 'vxe-table';
 import { LTGridProps, LTColumns } from './grid';
+import GridOperateColumn from './components/grid-operate-column.vue';
 
 defineOptions({
 	name: 'LTGrid',
@@ -99,11 +107,19 @@ const getGridConfigs = computed((): LTGridProps => {
 	};
 
 	const edit = {
-		title: '操作',
+		title: '编辑',
 		width: 55,
 		minWidth: 55,
-		slots: { default: 'lt-edit-operate' },
+		slots: { default: 'lt-edit-column' },
 		fixed: 'left',
+		align: 'center',
+	};
+
+	const operate = {
+		title: '编辑',
+		width: 100,
+		slots: { default: 'lt-edit-operate' },
+		fixed: 'right',
 		align: 'center',
 	};
 
@@ -118,6 +134,13 @@ const getGridConfigs = computed((): LTGridProps => {
 		}
 		if (gridConfigs.enableEdit) {
 			columns.push(edit as any);
+		}
+		if (gridConfigs.operateColumConfig) {
+			const { width } = gridConfigs.operateColumConfig;
+			if (width) {
+				operate.width = width;
+			}
+			columns.push(operate as any);
 		}
 	}
 
@@ -136,7 +159,7 @@ const getGridConfigs = computed((): LTGridProps => {
 			// 默认开启虚拟滚动
 			scrollY: { enabled: true },
 			// 默认最大高度是100%
-			maxHeight: '100%',
+			height: '100%',
 			// 复选框配置项
 			checkboxConfig: {
 				// 绑定选中属性（行数据中必须存在该字段，否则无效）

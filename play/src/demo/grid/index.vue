@@ -1,6 +1,6 @@
 <template>
 	<LTPageLayout title="配置表单" contentFullHeight fixedHeight>
-		<LTGrid :grid-configs="gridOptions"></LTGrid>
+		<LTGrid :grid-configs="gridOptions"> </LTGrid>
 	</LTPageLayout>
 </template>
 
@@ -37,11 +37,63 @@ const gridOptions = reactive<LTGridProps>({
 	enableSeq: true,
 	enableCheckbox: true,
 	enableEdit: true,
+	height: 800,
+	operateColumConfig: {
+		width: 300,
+		viewVisible: true,
+		viewDisabled: (row: any) => row.id === '1',
+		editVisible: true,
+		editDisabled: (row: any) => row.id === '1',
+		buttons: [
+			{
+				text: '按钮1',
+				visible: (row: any) => row.id === '1',
+				event: 'BTN1',
+			},
+			{
+				text: '按钮2',
+				//
+				disabled: (row: any) => row.id === '1',
+				event: 'BTN2',
+			},
+			{
+				text: '按钮3',
+				event: 'BTN3',
+			},
+		],
+		menus: [
+			{
+				text: '菜单1',
+				visible: (row: any) => row.id === '1',
+				event: 'MENU1',
+			},
+			{
+				text: '菜单2',
+				disabled: (row: any) => row.id === '1',
+				event: 'MENU2',
+			},
+			{
+				text: '菜单3',
+				disabled: true,
+				event: 'MENU3',
+			},
+		],
+		onViewClick: (params) => {
+			console.log(params);
+		},
+
+		onButtonsItemClick: (event, params) => {
+			console.log(event, params);
+		},
+		onMenusItemClick: (event, params) => {
+			console.log(event, params);
+		},
+	},
 	columns: [
 		{
 			field: 'corp.name',
 			title: '公司名称',
-			width: '200',
+			width: '800',
 			editRender: {
 				name: '$EditEntity',
 				props: {
@@ -291,12 +343,13 @@ const gridOptions = reactive<LTGridProps>({
 					props: {
 						options: [
 							{
-								code: 'PASS',
+								event: 'PASS',
 								type: 'primary',
 								text: '审核',
+								disabled: false,
 							},
 							{
-								code: 'END',
+								event: 'END',
 								type: 'default',
 								text: '结束',
 							},
@@ -304,7 +357,7 @@ const gridOptions = reactive<LTGridProps>({
 					} as ToolBusinessProps,
 					events: {
 						onItemClick: (option: ToolBusinessOptions, params: any) => {
-							createMessage.success(option.text);
+							createMessage.success(option.event);
 							console.log(params);
 						},
 					},

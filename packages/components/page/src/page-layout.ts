@@ -38,6 +38,10 @@ export const pageLayoutProps = {
 	contentStyle: {
 		type: Object as PropType<CSSProperties>,
 	},
+	contentBackground: {
+		type: Boolean,
+		default: true,
+	},
 };
 
 export type PageLayoutProps = ExtractPropTypes<typeof pageLayoutProps>;
