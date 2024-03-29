@@ -61,6 +61,14 @@ const comps: LTRouteRecordRaw = {
 					},
 				},
 				{
+					path: 'mainsub',
+					name: 'MainSub',
+					component: () => import('../../demo/grid/main-sub-grid.vue'),
+					meta: {
+						title: '主子表',
+					},
+				},
+				{
 					path: 'table-edit',
 					name: 'TableEdit',
 					component: () => import('../../demo/table/index.vue'),

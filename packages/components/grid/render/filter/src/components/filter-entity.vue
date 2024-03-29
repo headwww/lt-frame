@@ -54,6 +54,7 @@ const gridEvents: VxeGridListeners<any> = {
 		records.value = params.$grid.getCheckboxRecords();
 	},
 };
+
 getGridConfigs.height = 190;
 
 watch(inputValue, (newVal) => {

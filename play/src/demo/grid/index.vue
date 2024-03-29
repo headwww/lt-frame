@@ -416,7 +416,7 @@ const findRoles = () =>
 			})
 			.catch(() => {
 				reject();
-			}).finally;
+			});
 	});
 
 // const findRoles = () => {

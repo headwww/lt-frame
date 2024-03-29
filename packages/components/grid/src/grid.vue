@@ -11,7 +11,7 @@
 			></GridOperateColumn>
 		</template>
 
-		<template #[item]="data" v-for="item in Object.keys($slots)">
+		<template #[item]="data" v-for="item in Object.keys(getSlots)">
 			<slot :name="item" v-bind="data || {}"></slot>
 		</template>
 	</vxe-grid>
@@ -19,14 +19,19 @@
 
 <script lang="ts" setup>
 import { deepMerge } from '@lt-frame/utils';
-import { PropType, computed, ref } from 'vue';
+import { PropType, computed, ref, useSlots } from 'vue';
 import { VxeGridInstance } from 'vxe-table';
+import { omit } from 'lodash-es';
 import { LTGridProps, LTColumns } from './grid';
 import GridOperateColumn from './components/grid-operate-column.vue';
 
 defineOptions({
 	name: 'LTGrid',
 });
+
+const slots = useSlots();
+
+const getSlots = computed(() => Object.keys(omit(slots, 'lt-edit-operate')));
 
 const vxeGridRef = ref<VxeGridInstance>();
 
@@ -52,7 +57,7 @@ const getGridConfigs = computed((): LTGridProps => {
 	};
 
 	const operate = {
-		title: '编辑',
+		title: '操作',
 		width: 100,
 		slots: { default: 'lt-edit-operate' },
 		fixed: 'right',
