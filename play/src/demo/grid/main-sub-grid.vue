@@ -1,30 +1,27 @@
 <template>
 	<LTPageLayout contentFullHeight fixedHeight>
-		<div style="background: #fff; padding: 15px">
-			<LTDescription
-				v-show="visible"
-				layout="vertical"
-				bordered
-				title="主表"
-				:column="6"
-				:data="row"
-				:schema="getSchema"
-			>
-				<template #extra>
-					<LTButton type="text" @click="visible = !visible">
-						展开主表
-					</LTButton>
-				</template>
-			</LTDescription>
-		</div>
-
-		<LTGrid v-show="!visible" :grid-configs="gridOptions"> </LTGrid>
-		<LTGrid
-			style="margin-top: 5px"
-			v-show="visible"
-			:grid-configs="gridOptions2"
-		>
-		</LTGrid>
+		<transition name="fade">
+			<LTGrid v-show="!visible" :grid-configs="gridOptions"> </LTGrid>
+		</transition>
+		<transition name="fade1">
+			<div v-show="visible" style="background: #fff; padding: 15px">
+				<LTDescription
+					layout="vertical"
+					bordered
+					title="主表"
+					:column="6"
+					:data="row"
+					:schema="getSchema"
+				>
+					<template #extra>
+						<LTButton type="text" @click="visible = !visible">
+							展开主表
+						</LTButton>
+					</template>
+				</LTDescription>
+				<LTGrid style="margin-top: 5px" :grid-configs="gridOptions2"> </LTGrid>
+			</div>
+		</transition>
 	</LTPageLayout>
 </template>
 
@@ -206,3 +203,35 @@ const findLines = (id: string) =>
 // 	})
 // 	.catch(() => {});
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+	opacity: 1;
+}
+
+.fade1-enter-active,
+.fade1-leave-active {
+	transition: opacity 0.8s;
+}
+
+.fade1-enter-from,
+.fade1-leave-to {
+	opacity: 0;
+}
+
+.fade1-enter-to,
+.fade1-leave-from {
+	opacity: 1;
+}
+</style>

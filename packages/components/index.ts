@@ -13,3 +13,4 @@ export * from './virlual-scroller';
 export * from './modal';
 export * from './table';
 export * from './grid';
+export * from './transition';

@@ -418,30 +418,4 @@ const findRoles = () =>
 				reject();
 			});
 	});
-
-// const findRoles = () => {
-// 	gridOptions.loading = true;
-// 	LTHttp.post({
-// 		url: 'api/securityModelService/findUsers',
-// 		data: [
-// 			{
-// 				targetClass: 'lt.fw.core.model.biz.User',
-// 				queryPath: [
-// 					'username',
-// 					'corp.name',
-// 					'corp.id',
-// 					'corp.code',
-// 					'createdBy',
-// 				],
-// 			},
-// 		],
-// 	})
-// 		.then((data) => {
-// 			gridOptions.data = parseRef(data);
-// 		})
-// 		.finally(() => {
-// 			gridOptions.loading = false;
-// 			// tableData.value = [];
-// 		});
-// };
 </script>

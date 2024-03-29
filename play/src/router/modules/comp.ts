@@ -29,6 +29,14 @@ const comps: LTRouteRecordRaw = {
 			},
 		},
 		{
+			path: 'transition',
+			name: 'Transition',
+			component: () => import('../../demo/transition/index.vue'),
+			meta: {
+				title: '动画组件',
+			},
+		},
+		{
 			path: 'page',
 			name: 'pageDemo',
 			component: () => import('../../demo/page/index.vue'),
