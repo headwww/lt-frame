@@ -7,18 +7,7 @@
 			justify-content: center;
 		"
 	>
-		<LTButton
-			v-if="getViewVisible"
-			:disabled="getViewDisabled"
-			:style="{
-				color: getViewDisabled ? '#d9d9d9' : '#3370ff',
-			}"
-			type="text"
-			@click="handleViewClick"
-			size="small"
-			>查看</LTButton
-		>
-		<template v-if="getEditVisible">
+		<template v-if="getIsInsert">
 			<LTButton
 				v-if="isActiveStatus()"
 				@click="cancelRowEvent"
@@ -28,7 +17,7 @@
 				}"
 				type="text"
 				size="small"
-				>取消</LTButton
+				>删除</LTButton
 			>
 			<LTButton
 				v-else
@@ -42,33 +31,70 @@
 				>编辑</LTButton
 			>
 		</template>
+		<template v-else>
+			<LTButton
+				v-if="getViewVisible"
+				:disabled="getViewDisabled"
+				:style="{
+					color: getViewDisabled ? '#d9d9d9' : '#3370ff',
+				}"
+				type="text"
+				@click="handleViewClick"
+				size="small"
+				>查看</LTButton
+			>
+			<template v-if="getEditVisible">
+				<LTButton
+					v-if="isActiveStatus()"
+					@click="cancelRowEvent"
+					:disabled="getEditDisabled"
+					:style="{
+						color: getViewDisabled ? '#d9d9d9' : '#f54a45',
+					}"
+					type="text"
+					size="small"
+					>撤回</LTButton
+				>
+				<LTButton
+					v-else
+					@click="editRowEvent"
+					:disabled="getEditDisabled"
+					:style="{
+						color: getViewDisabled ? '#d9d9d9' : '#3370ff',
+					}"
+					type="text"
+					size="small"
+					>编辑</LTButton
+				>
+			</template>
 
-		<LTButton
-			v-for="item in getButtons"
-			:disabled="handleDisabled(item.disabled)"
-			:style="{
-				color: handleDisabled(item.disabled) ? '#d9d9d9' : '#3370ff',
-			}"
-			type="text"
-			size="small"
-			:key="item.event"
-			@click="handleButtonsItemClick(item.event)"
-			>{{ item.text }}</LTButton
-		>
-
-		<LTDropdown
-			:trigger="['hover']"
-			v-if="menus.length > 0"
-			@menu-event="handleMenuEvent"
-			:dropMenuList="handleMenuDisabled(menus)"
-		>
-			<Button
-				style="color: #3370ff"
+			<LTButton
+				v-for="item in getButtons"
+				:disabled="handleDisabled(item.disabled)"
+				:style="{
+					color: handleDisabled(item.disabled) ? '#d9d9d9' : '#3370ff',
+				}"
 				type="text"
 				size="small"
-				:icon="h(EllipsisOutlined)"
-			></Button>
-		</LTDropdown>
+				:key="item.event"
+				@click="handleButtonsItemClick(item.event)"
+				>{{ item.text }}</LTButton
+			>
+
+			<LTDropdown
+				:trigger="['hover']"
+				v-if="menus.length > 0"
+				@menu-event="handleMenuEvent"
+				:dropMenuList="handleMenuDisabled(menus)"
+			>
+				<Button
+					style="color: #3370ff"
+					type="text"
+					size="small"
+					:icon="h(EllipsisOutlined)"
+				></Button>
+			</LTDropdown>
+		</template>
 	</div>
 </template>
 
@@ -83,6 +109,12 @@ import { LTButton } from '../../../button';
 import { gridOperateColumProps } from './grid-operate-column';
 
 const props = defineProps(gridOperateColumProps);
+
+/** 判断是否是新增的数据，如果是新增的数据只显示删除按钮 */
+const getIsInsert = computed(() => {
+	const { row } = props.params;
+	return row._X_ROW_INSERT;
+});
 
 function handleMenuEvent(menu: DropMenu) {
 	const { operateColumConfig, params } = props;

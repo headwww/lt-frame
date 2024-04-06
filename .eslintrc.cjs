@@ -73,6 +73,7 @@ module.exports = {
 		"vue/no-template-shadow":0,
 		"import/no-self-import":0,
 		"vue/require-default-prop":0,
-		"vue/one-component-per-file":0
+		"vue/one-component-per-file":0,
+		"no-nested-ternary":0
 	},
 }

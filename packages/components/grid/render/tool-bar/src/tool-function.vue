@@ -62,6 +62,7 @@
 
 <script lang="ts" setup>
 import { useMessage } from '@lt-frame/hooks';
+import { last } from 'lodash-es';
 import { LTButton } from '../../../../button';
 import { toolFunctionProps } from './tool-function';
 
@@ -77,6 +78,8 @@ function insert() {
 		const { $grid } = params;
 		if ($grid) {
 			$grid.insert({ _X_ROW_INSERT: true });
+			const { insertRecords } = $grid.getRecordset();
+			$grid.setEditRow(last(insertRecords));
 		}
 	}
 }

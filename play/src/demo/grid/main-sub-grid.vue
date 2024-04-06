@@ -1,10 +1,26 @@
 <template>
-	<LTPageLayout contentFullHeight fixedHeight>
-		<transition name="fade">
-			<LTGrid v-show="!visible" :grid-configs="gridOptions"> </LTGrid>
-		</transition>
-		<transition name="fade1">
-			<div v-show="visible" style="background: #fff; padding: 15px">
+	<LTPageLayout style="position: relative">
+		<LTFadeTransition>
+			<div
+				v-show="!visible"
+				style="
+					background-color: #fff;
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					padding: 20px;
+				"
+			>
+				<div style="font-size: 16px">生产订单</div>
+
+				<LTGrid :grid-configs="gridOptions"> </LTGrid>
+			</div>
+		</LTFadeTransition>
+		<LTFadeTransition>
+			<div
+				v-show="visible"
+				style="background: #fff; padding: 15px; position: absolute; width: 100%"
+			>
 				<LTDescription
 					layout="vertical"
 					bordered
@@ -21,7 +37,8 @@
 				</LTDescription>
 				<LTGrid style="margin-top: 5px" :grid-configs="gridOptions2"> </LTGrid>
 			</div>
-		</transition>
+		</LTFadeTransition>
+		<Drawer st @register="register1" />
 	</LTPageLayout>
 </template>
 
@@ -32,10 +49,15 @@ import {
 	LTGridProps,
 	LTDescription,
 	LTButton,
+	LTFadeTransition,
 } from '@lt-frame/components';
 import { parseRef } from '@lt-frame/utils';
 import { computed, reactive, ref } from 'vue';
+import { useDrawer } from '@lt-frame/hooks';
 import { LTHttp } from '../../application';
+import Drawer from './drawer.vue';
+
+const [register1, { openDrawer }] = useDrawer();
 
 const visible = ref(false);
 
@@ -50,10 +72,17 @@ const getSchema = computed(() => {
 const row = ref();
 
 const gridOptions = reactive<LTGridProps>({
+	height: 800,
 	columns: [
 		{
 			field: 'id',
 			title: 'id',
+			editRender: {
+				name: '$EditInput',
+				props: {
+					allowClear: true,
+				},
+			},
 		},
 		{
 			field: 'code',
@@ -95,6 +124,7 @@ const gridOptions = reactive<LTGridProps>({
 });
 
 const gridOptions2 = reactive<LTGridProps>({
+	height: 400,
 	columns: [
 		{
 			field: 'id',
@@ -115,6 +145,9 @@ const gridOptions2 = reactive<LTGridProps>({
 	],
 	operateColumConfig: {
 		viewVisible: true,
+		onViewClick: () => {
+			openDrawer();
+		},
 	},
 	data: [],
 	toolbarConfig: {
@@ -176,62 +209,4 @@ const findLines = (id: string) =>
 				reject();
 			});
 	});
-
-// c.prop('id', '522059243654746112');
-// c.prop('id', '522059738179964928');
-// console.log(c);
-
-// LTHttp.post({
-// 	url: 'api/productOrderServiceImpl/findMains',
-// 	data: [
-// 		{
-// 			targetClass: 'lt.app.product.model.ProductOrder',
-// 			queryPath: [
-// 				'corp.name',
-// 				'factory.name',
-// 				'code',
-// 				'dept.name',
-// 				'process.name',
-// 				'status',
-// 			],
-// 			// propertyParams: { id: '522059243654746112' },
-// 		},
-// 	],
-// })
-// 	.then((data) => {
-// 		console.log(parseRef(data));
-// 	})
-// 	.catch(() => {});
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.5s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-	opacity: 1;
-}
-
-.fade1-enter-active,
-.fade1-leave-active {
-	transition: opacity 0.8s;
-}
-
-.fade1-enter-from,
-.fade1-leave-to {
-	opacity: 0;
-}
-
-.fade1-enter-to,
-.fade1-leave-from {
-	opacity: 1;
-}
-</style>

@@ -1,0 +1,13 @@
+.lt-help {
+	display: inline-block;
+	margin-left: 6px;
+	color: #909399;
+	font-size: 14px;
+	cursor: pointer;
+
+	&__wrap {
+		p {
+			margin-bottom: 0;
+		}
+	}
+}

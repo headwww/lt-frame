@@ -186,3 +186,10 @@ export function useRafThrottle<T extends FunctionArgs>(fn: T): T {
 		});
 	};
 }
+
+/**
+ * @description:  设置ui装载节点
+ */
+export function getPopupContainer(node?: HTMLElement): HTMLElement {
+	return (node?.parentNode as HTMLElement) ?? document.body;
+}

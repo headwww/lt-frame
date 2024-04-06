@@ -8,12 +8,12 @@ import { addClass, removeClass } from '@lt-frame/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-	name: 'CollapseTransition',
+	name: 'LTTransition',
 	setup() {
 		return {
 			on: {
 				beforeEnter(el: any) {
-					addClass(el, 'collapse-transition');
+					addClass(el, 'lt-transition');
 					if (!el.dataset) el.dataset = {};
 
 					el.dataset.oldPaddingTop = el.style.paddingTop;
@@ -57,7 +57,7 @@ export default defineComponent({
 
 				leave(el: any) {
 					if (el.scrollHeight !== 0) {
-						addClass(el, 'collapse-transition');
+						addClass(el, 'lt-transition');
 						el.style.height = 0;
 						el.style.paddingTop = 0;
 						el.style.paddingBottom = 0;

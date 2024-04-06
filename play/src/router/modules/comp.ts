@@ -163,7 +163,7 @@ const comps: LTRouteRecordRaw = {
 				{
 					path: 'baseform',
 					name: 'BaseForm',
-					component: () => import('../../demo/icon/index.vue'),
+					component: () => import('../../demo/form/index.vue'),
 					meta: {
 						title: '基础表单',
 					},

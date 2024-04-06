@@ -14,3 +14,4 @@ export * from './modal';
 export * from './table';
 export * from './grid';
 export * from './transition';
+export * from './form';
