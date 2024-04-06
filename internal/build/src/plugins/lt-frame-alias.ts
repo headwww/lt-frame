@@ -1,6 +1,6 @@
 import type { Plugin } from 'rollup';
 
-export function LTFrameAlias(): Plugin {
+export function LtFrameAlias(): Plugin {
 	const themeChalk = 'theme-chalk';
 	const sourceThemeChalk = `@lt-frame/${themeChalk}` as const;
 	const bundleThemeChalk = `lt-frame/${themeChalk}` as const;
