@@ -14,7 +14,7 @@ import { asyncRoutes } from '../router';
 
 VXETable.use(VXETablePluginAntd);
 
-export const { config, router, pinia, LTHttp } = defineConfig_v1({
+export const { config, router, pinia, LtHttp } = defineConfig_v1({
 	routerConfig: {
 		history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
 		strict: true,

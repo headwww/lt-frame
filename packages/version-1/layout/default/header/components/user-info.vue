@@ -1,5 +1,5 @@
 <template>
-	<LTDropdown
+	<LtDropdown
 		:trigger="['click']"
 		@openChange="handleOpenChange"
 		:drop-menu-list="getDropMenuList"
@@ -21,11 +21,11 @@
 				<CaretDownOutlined style="color: rgb(100 106 115)" />
 			</div>
 		</div>
-	</LTDropdown>
+	</LtDropdown>
 </template>
 
 <script lang="ts" setup>
-import { DropMenu, LTDropdown } from '@lt-frame/components';
+import { DropMenu, LtDropdown } from '@lt-frame/components';
 import { useNamespace } from '@lt-frame/hooks';
 import { Avatar } from 'ant-design-vue';
 import { CaretDownOutlined } from '@ant-design/icons-vue';

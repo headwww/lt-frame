@@ -16,7 +16,7 @@ import Icon from '../../icon';
 import { buttonProps } from './button';
 
 defineOptions({
-	name: 'LTButton',
+	name: 'LtButton',
 	extends: Button as ComponentOptionsMixin,
 	inheritAttrs: false,
 });

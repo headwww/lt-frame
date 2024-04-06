@@ -10,7 +10,7 @@ import { epRoot, excludeFiles, pkgRoot } from '@lt-frame/build-utils';
 import type { OutputOptions } from 'rollup';
 import { generateExternal, writeBundles } from '../utils';
 import { buildConfigEntries, target } from '../build-info';
-import { LTFrameAlias } from '../plugins/lt-frame-alias';
+import { LtFrameAlias } from '../plugins/lt-frame-alias';
 
 export const buildModules = async () => {
 	const input = excludeFiles(
@@ -23,7 +23,7 @@ export const buildModules = async () => {
 	const bundle = await rollup({
 		input,
 		plugins: [
-			LTFrameAlias(),
+			LtFrameAlias(),
 			VueMacros({
 				setupComponent: false,
 				setupSFC: false,

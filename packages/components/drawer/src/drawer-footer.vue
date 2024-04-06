@@ -2,15 +2,15 @@
 	<div :class="ns.b()" :style="getStyle" v-if="showFooter || $slots.footer">
 		<template v-if="!$slots.footer">
 			<slot name="insertFooter"></slot>
-			<LTButton
+			<LtButton
 				v-bind="cancelButtonProps"
 				@click="handleClose"
 				v-if="showCancelBtn"
 			>
 				{{ cancelText }}
-			</LTButton>
+			</LtButton>
 			<slot name="centerFooter"></slot>
-			<LTButton
+			<LtButton
 				:type="okType"
 				@click="handleOk"
 				v-bind="okButtonProps"
@@ -18,7 +18,7 @@
 				v-if="showOkBtn"
 			>
 				{{ okText }}
-			</LTButton>
+			</LtButton>
 			<slot name="appendFooter"></slot>
 		</template>
 
@@ -31,7 +31,7 @@
 import type { CSSProperties } from 'vue';
 import { computed } from 'vue';
 import { useNamespace } from '@lt-frame/hooks';
-import { LTButton } from '../../button';
+import { LtButton } from '../../button';
 import { drawerFooterProps } from './drawer-footer';
 
 const ns = useNamespace('drawer-footer');

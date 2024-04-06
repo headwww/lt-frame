@@ -20,7 +20,7 @@ import {
 } from './description';
 
 export default defineComponent({
-	name: 'LTDescription',
+	name: 'LtDescription',
 	props,
 	emits: ['register'],
 	setup(props, { slots, emit }) {

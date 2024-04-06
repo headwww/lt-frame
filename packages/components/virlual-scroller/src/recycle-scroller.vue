@@ -109,7 +109,7 @@ import { recycleScrollerProps } from './recycle-scroller';
 const ns = useNamespace('recycle-scroller');
 
 defineOptions({
-	name: 'LTRecycleScroller',
+	name: 'LtRecycleScroller',
 });
 
 const props = defineProps(recycleScrollerProps);

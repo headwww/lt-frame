@@ -77,7 +77,7 @@ import { ModalMethods } from './typing';
 import { useFullScreen } from './hooks/useModalFullScreen';
 
 defineOptions({
-	name: 'LTModal',
+	name: 'LtModal',
 	inheritAttrs: false,
 });
 

@@ -1,6 +1,6 @@
-import { IFRAME, LAYOUT, LTRouteRecordRaw } from '@lt-frame/version-1';
+import { IFRAME, LAYOUT, LtRouteRecordRaw } from '@lt-frame/version-1';
 
-const about: LTRouteRecordRaw = {
+const about: LtRouteRecordRaw = {
 	path: '/frame',
 	name: 'Frame',
 	component: LAYOUT,

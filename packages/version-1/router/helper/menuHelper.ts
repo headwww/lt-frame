@@ -1,16 +1,16 @@
 import { findPath, isUrl, treeMap } from '@lt-frame/utils';
 import { cloneDeep } from 'lodash-es';
 import { Menu } from '../../types';
-import { LTRouteRecordRaw } from '../types';
+import { LtRouteRecordRaw } from '../types';
 
 export function getAllParentPath<T>(treeData: T[], path: string) {
 	const menuList = findPath(treeData, (n) => n.path === path) as Menu[];
 	return (menuList || []).map((item) => item.path);
 }
 
-export function transformRouteToMenu(routes: LTRouteRecordRaw[]) {
+export function transformRouteToMenu(routes: LtRouteRecordRaw[]) {
 	const cloneRoute = cloneDeep(routes);
-	const routeList: LTRouteRecordRaw[] = [];
+	const routeList: LtRouteRecordRaw[] = [];
 	// 将标注了hideChildrenInMenu的路由的redirect添加到path上
 	cloneRoute.forEach((item) => {
 		if (item.meta.hideChildrenInMenu && typeof item.redirect === 'string') {
@@ -21,7 +21,7 @@ export function transformRouteToMenu(routes: LTRouteRecordRaw[]) {
 
 	// 将路由的树结构转换为菜单的树结构
 	const list = treeMap(routeList, {
-		conversion: (node: LTRouteRecordRaw) => {
+		conversion: (node: LtRouteRecordRaw) => {
 			const { meta: { title, hideMenu = false } = {} } = node;
 			return {
 				...(node.meta || {}),

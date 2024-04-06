@@ -1,14 +1,14 @@
 <template>
-	<LTPageLayout title="配置表单" contentFullHeight fixedHeight>
-		<LTGrid :grid-configs="gridOptions"> </LTGrid>
-	</LTPageLayout>
+	<LtPageLayout title="配置表单" contentFullHeight fixedHeight>
+		<LtGrid :grid-configs="gridOptions"> </LtGrid>
+	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
 import {
-	LTPageLayout,
-	LTGrid,
-	LTGridProps,
+	LtPageLayout,
+	LtGrid,
+	LtGridProps,
 	AdvanceFilterProps,
 	AdvanceFilterData,
 	LogicalOperators,
@@ -23,7 +23,7 @@ import { VxeColumnPropTypes } from 'vxe-table';
 import { FilterMode, ToolBusinessOptions } from '@lt-frame/components/grid';
 import dayjs from 'dayjs';
 import { useMessage } from '@lt-frame/hooks';
-import { LTHttp } from '../../application';
+import { LtHttp } from '../../application';
 
 enum CorpType {
 	HEAD = '集团',
@@ -33,7 +33,7 @@ enum CorpType {
 
 const { createMessage } = useMessage();
 
-const gridOptions = reactive<LTGridProps>({
+const gridOptions = reactive<LtGridProps>({
 	enableSeq: true,
 	enableCheckbox: true,
 	height: 800,
@@ -112,7 +112,7 @@ const gridOptions = reactive<LTGridProps>({
 							// 自定义的代理方案，调用实体筛选不使用ajax的方式
 							dataSource: () => findCorps(),
 						},
-					} as LTGridProps,
+					} as LtGridProps,
 				},
 			},
 			filters: [
@@ -377,7 +377,7 @@ function formatEnum(enumObj: any) {
 
 const findCorps = () =>
 	new Promise<any[]>((resolve, reject) => {
-		LTHttp.post({
+		LtHttp.post({
 			url: 'api/corpServiceImpl/findCorps',
 			data: [
 				{
@@ -396,7 +396,7 @@ const findCorps = () =>
 
 const findRoles = () =>
 	new Promise<any[]>((resolve, reject) => {
-		LTHttp.post({
+		LtHttp.post({
 			url: 'api/securityModelService/findUsers',
 			data: [
 				{

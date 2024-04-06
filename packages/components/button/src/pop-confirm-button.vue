@@ -4,11 +4,11 @@ import { Popconfirm } from 'ant-design-vue';
 import { omit } from 'lodash-es';
 import { extendSlots } from '@lt-frame/utils';
 import { useAttrs } from '@lt-frame/hooks';
-import LTButton from './button.vue';
+import LtButton from './button.vue';
 import { popConfirmButtonProps } from './pop-confirm-button';
 
 export default defineComponent({
-	name: 'LTPopConfirmButton',
+	name: 'LtPopConfirmButton',
 	inheritAttrs: false,
 	props: popConfirmButtonProps,
 	setup(props, { slots }) {
@@ -25,7 +25,7 @@ export default defineComponent({
 			const bindValues = omit(unref(getBindValues), 'icon');
 			const btnBind = omit(bindValues, 'title') as any;
 			if (btnBind.disabled) btnBind.color = '';
-			const Button = h(LTButton, btnBind, extendSlots(slots));
+			const Button = h(LtButton, btnBind, extendSlots(slots));
 
 			if (!props.enable) {
 				return Button;

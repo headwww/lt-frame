@@ -1,7 +1,7 @@
-import { LTGridProps } from '@lt-frame/components/grid/src/grid';
 import { DatePickerProps } from 'ant-design-vue';
 import { ExtractPropTypes, PropType } from 'vue';
 import { VxeGlobalRendererHandles } from 'vxe-table';
+import { LtGridProps } from '../../../../grid';
 
 /**
  * 筛选模式
@@ -104,7 +104,7 @@ export const advanceFilterProps = {
 	// 开启的筛选的模式
 	filterModes: Array<FilterMode>,
 	// 实体筛选需要提供的配置
-	gridConfigs: Object as PropType<LTGridProps>,
+	gridConfigs: Object as PropType<LtGridProps>,
 	// 日期筛选是否开启时间
 	datePickerProps: Object as PropType<DatePickerProps>,
 };

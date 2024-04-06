@@ -1,5 +1,5 @@
 <template>
-	<LTPageLayout title="Modal组件使用示例">
+	<LtPageLayout title="Modal组件使用示例">
 		<Alert
 			message="使用 useModal 进行弹窗操作，默认可以拖动，可以通过 draggable
     参数进行控制是否可以拖动/全屏，并演示了在Modal内动态加载内容并自动调整高度"
@@ -49,13 +49,13 @@
 		<Modal2 @register="register2" />
 		<Modal3 @register="register3" />
 		<Modal4 @register="register4" />
-	</LTPageLayout>
+	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
 import {
-	LTPageLayout,
-	LTButton as AButton,
+	LtPageLayout,
+	LtButton as AButton,
 	useModal,
 } from '@lt-frame/components';
 import { Alert, Space as ASpace } from 'ant-design-vue';

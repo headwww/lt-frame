@@ -32,7 +32,7 @@ import SvgIcon from '../../svg-icon';
 import { iconProps } from './icon';
 
 defineOptions({
-	name: 'LTIcon',
+	name: 'LtIcon',
 });
 const props = defineProps(iconProps);
 const ns = useNamespace('icon');

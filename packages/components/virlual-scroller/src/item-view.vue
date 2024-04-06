@@ -8,7 +8,7 @@
 import { useNamespace } from '@lt-frame/hooks';
 import { itemViewProps } from './item-view';
 
-defineOptions({ name: 'LTItemView' });
+defineOptions({ name: 'LtItemView' });
 
 defineProps(itemViewProps);
 const ns = useNamespace('recycle-scroller');

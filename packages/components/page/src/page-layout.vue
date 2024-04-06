@@ -37,7 +37,7 @@ import { CSSProperties, computed, ref, unref, useSlots } from 'vue';
 import { pageLayoutProps } from './page-layout';
 
 defineOptions({
-	name: 'LTPageLayout',
+	name: 'LtPageLayout',
 	inheritAttrs: false,
 });
 

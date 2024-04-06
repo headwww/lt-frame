@@ -1,5 +1,5 @@
 <template>
-	<LTDrawer
+	<LtDrawer
 		v-bind="$attrs"
 		title="Modal Title"
 		width="50%"
@@ -8,23 +8,23 @@
 	>
 		<p class="h-20" v-for="index in 40" :key="index">根据屏幕高度自适应</p>
 		<template #insertFooter>
-			<LTButton> btn</LTButton>
+			<LtButton> btn</LtButton>
 		</template>
 		<template #centerFooter>
-			<LTButton> btn2</LTButton>
+			<LtButton> btn2</LtButton>
 		</template>
 
 		<template #appendFooter>
-			<LTButton> btn3</LTButton>
+			<LtButton> btn3</LtButton>
 		</template>
 
 		<!-- <template #footer>
-			<LTButton> customerFooter</LTButton>
+			<LtButton> customerFooter</LtButton>
 		</template> -->
-	</LTDrawer>
+	</LtDrawer>
 </template>
 <script lang="ts" setup>
-import { LTDrawer, LTButton } from '@lt-frame/components';
+import { LtDrawer, LtButton } from '@lt-frame/components';
 
 const handleOk = () => {
 	console.log('ok');

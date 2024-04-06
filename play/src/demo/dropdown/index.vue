@@ -1,32 +1,32 @@
 <template>
-	<LTPageLayout title="下拉菜单">
-		<LTDropdown
+	<LtPageLayout title="下拉菜单">
+		<LtDropdown
 			@menu-event="handleMenuEvent"
 			:dropMenuList="dropMenuList"
 			:trigger="['contextmenu']"
-			><LTButton>单击右键</LTButton></LTDropdown
+			><LtButton>单击右键</LtButton></LtDropdown
 		>
-		<LTDropdown
+		<LtDropdown
 			@menu-event="handleMenuEvent"
 			:dropMenuList="dropMenuList"
 			:trigger="['hover']"
-			><LTButton>hover</LTButton></LTDropdown
+			><LtButton>hover</LtButton></LtDropdown
 		>
-		<LTDropdown
+		<LtDropdown
 			:popconfirm="false"
 			:dropMenuList="dropMenuList"
 			:trigger="['click']"
 			@menu-event="handleMenuEvent"
-			><LTButton>点击显示</LTButton></LTDropdown
+			><LtButton>点击显示</LtButton></LtDropdown
 		>
-	</LTPageLayout>
+	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
 import {
-	LTButton,
-	LTPageLayout,
-	LTDropdown,
+	LtButton,
+	LtPageLayout,
+	LtDropdown,
 	DropMenu,
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';

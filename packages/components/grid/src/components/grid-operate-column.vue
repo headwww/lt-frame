@@ -8,7 +8,7 @@
 		"
 	>
 		<template v-if="getIsInsert">
-			<LTButton
+			<LtButton
 				v-if="isActiveStatus()"
 				@click="cancelRowEvent"
 				:disabled="getEditDisabled"
@@ -17,9 +17,9 @@
 				}"
 				type="text"
 				size="small"
-				>删除</LTButton
+				>删除</LtButton
 			>
-			<LTButton
+			<LtButton
 				v-else
 				@click="editRowEvent"
 				:disabled="getEditDisabled"
@@ -28,11 +28,11 @@
 				}"
 				type="text"
 				size="small"
-				>编辑</LTButton
+				>编辑</LtButton
 			>
 		</template>
 		<template v-else>
-			<LTButton
+			<LtButton
 				v-if="getViewVisible"
 				:disabled="getViewDisabled"
 				:style="{
@@ -41,10 +41,10 @@
 				type="text"
 				@click="handleViewClick"
 				size="small"
-				>查看</LTButton
+				>查看</LtButton
 			>
 			<template v-if="getEditVisible">
-				<LTButton
+				<LtButton
 					v-if="isActiveStatus()"
 					@click="cancelRowEvent"
 					:disabled="getEditDisabled"
@@ -53,9 +53,9 @@
 					}"
 					type="text"
 					size="small"
-					>撤回</LTButton
+					>撤回</LtButton
 				>
-				<LTButton
+				<LtButton
 					v-else
 					@click="editRowEvent"
 					:disabled="getEditDisabled"
@@ -64,11 +64,11 @@
 					}"
 					type="text"
 					size="small"
-					>编辑</LTButton
+					>编辑</LtButton
 				>
 			</template>
 
-			<LTButton
+			<LtButton
 				v-for="item in getButtons"
 				:disabled="handleDisabled(item.disabled)"
 				:style="{
@@ -78,10 +78,10 @@
 				size="small"
 				:key="item.event"
 				@click="handleButtonsItemClick(item.event)"
-				>{{ item.text }}</LTButton
+				>{{ item.text }}</LtButton
 			>
 
-			<LTDropdown
+			<LtDropdown
 				:trigger="['hover']"
 				v-if="menus.length > 0"
 				@menu-event="handleMenuEvent"
@@ -93,7 +93,7 @@
 					size="small"
 					:icon="h(EllipsisOutlined)"
 				></Button>
-			</LTDropdown>
+			</LtDropdown>
 		</template>
 	</div>
 </template>
@@ -104,8 +104,8 @@ import { Button } from 'ant-design-vue';
 import { computed, h } from 'vue';
 import { isFunction, isUndefined } from 'lodash-es';
 import { Fn } from '@lt-frame/utils';
-import { DropMenu, LTDropdown } from '../../../dropdown';
-import { LTButton } from '../../../button';
+import { DropMenu, LtDropdown } from '../../../dropdown';
+import { LtButton } from '../../../button';
 import { gridOperateColumProps } from './grid-operate-column';
 
 const props = defineProps(gridOperateColumProps);

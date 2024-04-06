@@ -18,4 +18,4 @@ export const tableProps = {
 	colConfigs: { type: Array<VxeColumnProps>, default: [] },
 };
 
-export type LTTableProps = ExtractPropTypes<typeof tableProps>;
+export type LtTableProps = ExtractPropTypes<typeof tableProps>;

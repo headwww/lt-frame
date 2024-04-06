@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { cloneDeep } from 'lodash-es';
 import { filter } from '@lt-frame/utils';
-import { LTRouteRecordRaw } from '../router';
+import { LtRouteRecordRaw } from '../router';
 import { flatMultiLevelRoutes } from '../router/helper/routeHelper';
 import { getAppConfig } from '../configs';
 import { Menu } from '../types';
@@ -38,16 +38,16 @@ export const usePermissionStore = defineStore({
 			this.menuList = list;
 		},
 		async buildRoutesAction(
-			asyncRoutes: LTRouteRecordRaw[] = []
-		): Promise<LTRouteRecordRaw[]> {
-			const routeRemoveIgnoreFilter = (route: LTRouteRecordRaw) => {
+			asyncRoutes: LtRouteRecordRaw[] = []
+		): Promise<LtRouteRecordRaw[]> {
+			const routeRemoveIgnoreFilter = (route: LtRouteRecordRaw) => {
 				const { meta } = route;
 				// ignoreRoute 为true 则路由仅用于菜单生成，不会在实际的路由表中出现
 				const { ignoreRoute } = meta || {};
 				// arr.filter 返回 true 表示该元素通过测试
 				return !ignoreRoute;
 			};
-			let routes: LTRouteRecordRaw[] = cloneDeep(asyncRoutes);
+			let routes: LtRouteRecordRaw[] = cloneDeep(asyncRoutes);
 
 			// 将路由转换成菜单
 			const menuList = transformRouteToMenu(routes);

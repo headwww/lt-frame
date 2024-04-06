@@ -5,10 +5,10 @@ import {
 	createRouter,
 	createWebHashHistory,
 } from 'vue-router';
-import { LTRouteRecordRaw } from '../types';
+import { LtRouteRecordRaw } from '../types';
 
-export function flatMultiLevelRoutes(routeModules: LTRouteRecordRaw[]) {
-	const modules: LTRouteRecordRaw[] = cloneDeep(routeModules);
+export function flatMultiLevelRoutes(routeModules: LtRouteRecordRaw[]) {
+	const modules: LtRouteRecordRaw[] = cloneDeep(routeModules);
 	for (let index = 0; index < modules.length; index += 1) {
 		const routeModule = modules[index];
 		// 判断级别是否多级路由
@@ -24,7 +24,7 @@ export function flatMultiLevelRoutes(routeModules: LTRouteRecordRaw[]) {
  * 路由等级提升
  */
 
-function promoteRouteLevel(routeModule: LTRouteRecordRaw) {
+function promoteRouteLevel(routeModule: LtRouteRecordRaw) {
 	// Use vue-router to splice menus
 	// 使用vue-router拼接菜单
 	// createRouter 创建一个可以被 Vue 应用程序使用的路由实例
@@ -52,8 +52,8 @@ function promoteRouteLevel(routeModule: LTRouteRecordRaw) {
  */
 function addToChildren(
 	routes: RouteRecordNormalized[],
-	children: LTRouteRecordRaw[],
-	routeModule: LTRouteRecordRaw
+	children: LtRouteRecordRaw[],
+	routeModule: LtRouteRecordRaw
 ) {
 	for (let index = 0; index < children.length; index += 1) {
 		const child = children[index];
@@ -61,7 +61,7 @@ function addToChildren(
 		if (route) {
 			routeModule.children = routeModule.children || [];
 			if (!routeModule.children.find((item) => item.name === route.name)) {
-				routeModule.children?.push(route as unknown as LTRouteRecordRaw);
+				routeModule.children?.push(route as unknown as LtRouteRecordRaw);
 			}
 			if (child.children?.length) {
 				addToChildren(routes, child.children, routeModule);
@@ -72,7 +72,7 @@ function addToChildren(
 /**
  * 判断级别是否超过2级
  */
-function isMultipleRoute(routeModule: LTRouteRecordRaw) {
+function isMultipleRoute(routeModule: LtRouteRecordRaw) {
 	// Reflect.has 与 in 操作符 相同, 用于检查一个对象(包括它原型链上)是否拥有某个属性
 	if (
 		!routeModule ||

@@ -5,7 +5,7 @@
 		</template>
 		<template #dropdown>
 			<div style="width: 100%; min-width: 430px; height: 300px">
-				<LTGrid :grid-configs="getGridConfigs" v-on="gridEvents"></LTGrid>
+				<LtGrid :grid-configs="getGridConfigs" v-on="gridEvents"></LtGrid>
 			</div>
 		</template>
 	</vxe-pulldown>
@@ -18,20 +18,20 @@ import { VxePulldownInstance } from 'vxe-table';
 import type { VxeGlobalRendererHandles, VxeGridListeners } from 'vxe-table';
 import { get, join, omit, set, split } from 'lodash-es';
 import Fuse from 'Fuse.js';
-import LTGrid from '../../../src/grid.vue';
-import { LTGridProps } from '../../../src/grid';
+import LtGrid from '../../../src/grid.vue';
+import { LtGridProps } from '../../../src/grid';
 
 const pulldownRef = ref<VxePulldownInstance>();
 
 const props = defineProps({
 	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
 	gridConfigs: {
-		type: Object as PropType<LTGridProps>,
+		type: Object as PropType<LtGridProps>,
 		default: () => ({}),
 	},
 });
 
-const getGridConfigs = reactive<LTGridProps>(
+const getGridConfigs = reactive<LtGridProps>(
 	omit(props.gridConfigs, 'proxyConfig')
 );
 

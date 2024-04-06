@@ -1,25 +1,25 @@
 <template>
-	<LTDropdown
+	<LtDropdown
 		:dropMenuList="getDropMenuList"
 		:trigger="['contextmenu']"
 		placement="bottom"
 		@menu-event="handleMenuEvent"
 	>
 		<span @contextmenu="handleContext">{{ getTitle }}</span>
-	</LTDropdown>
+	</LtDropdown>
 </template>
 
 <script lang="ts">
-import { DropMenu, LTDropdown } from '@lt-frame/components';
+import { DropMenu, LtDropdown } from '@lt-frame/components';
 import { PropType, computed, defineComponent, reactive, unref } from 'vue';
 import { RouteLocationNormalized, useRouter } from 'vue-router';
 import { useTabStore } from '../../../../stores';
 import { getGlobalRouter } from '../../../../configs';
 
 export default defineComponent({
-	name: 'LTTabContent',
+	name: 'LtTabContent',
 	components: {
-		LTDropdown,
+		LtDropdown,
 	},
 	props: {
 		tabItem: {

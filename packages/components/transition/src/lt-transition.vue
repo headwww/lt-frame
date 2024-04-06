@@ -8,7 +8,7 @@ import { addClass, removeClass } from '@lt-frame/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-	name: 'LTTransition',
+	name: 'LtTransition',
 	setup() {
 		return {
 			on: {

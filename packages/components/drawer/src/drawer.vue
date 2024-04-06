@@ -16,13 +16,13 @@
 			<slot name="title"></slot>
 		</template>
 
-		<LTScrollbar
+		<LtScrollbar
 			:style="getScrollContentStyle"
 			v-loading="getLoading"
 			:loading-tip="loadingText || '加载中...'"
 		>
 			<slot></slot>
-		</LTScrollbar>
+		</LtScrollbar>
 
 		<DrawerFooter
 			v-bind="getProps"
@@ -54,10 +54,10 @@ import { useAttrs } from '@lt-frame/hooks';
 import { deepMerge, isFunction, isNumber } from '@lt-frame/utils';
 import DrawerHeader from './drawer-header.vue';
 import DrawerFooter from './drawer-footer.vue';
-import LTScrollbar from '../../scrollbar';
+import LtScrollbar from '../../scrollbar';
 import { drawerProps, DrawerInstance, DrawerProps } from './drawer';
 
-defineOptions({ name: 'LTDrawer', inheritAttrs: false });
+defineOptions({ name: 'LtDrawer', inheritAttrs: false });
 const emit = defineEmits(['open-change', 'ok', 'close', 'register']);
 const props = defineProps(drawerProps);
 const drawerInstance: DrawerInstance = {

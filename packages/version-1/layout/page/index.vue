@@ -11,12 +11,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, onUnmounted } from 'vue';
-import { getLTHttp } from '@lt-frame/utils';
+import { getLtHttp } from '@lt-frame/utils';
 import FrameLayout from '../iframe/index.vue';
 import { useTabStore } from '../../stores';
 
 export default defineComponent({
-	name: 'LTLayoutPage',
+	name: 'LtLayoutPage',
 	components: { FrameLayout },
 	setup() {
 		const tabStore = useTabStore();
@@ -26,7 +26,7 @@ export default defineComponent({
 		/** 心跳保持登录 */
 		const ping = setInterval(async () => {
 			// 定时器执行的代码
-			getLTHttp().get(
+			getLtHttp().get(
 				{
 					url: '/ping',
 				},

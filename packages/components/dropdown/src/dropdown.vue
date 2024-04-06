@@ -44,7 +44,7 @@ import Icon from '../../icon';
 import { dropdownProps, type DropMenu } from './dropdown';
 
 defineOptions({
-	name: 'LTDropdown',
+	name: 'LtDropdown',
 });
 const ADropdown = Dropdown;
 const AMenu = Menu;

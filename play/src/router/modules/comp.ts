@@ -1,6 +1,6 @@
-import { LAYOUT, LTRouteRecordRaw } from '@lt-frame/version-1';
+import { LAYOUT, LtRouteRecordRaw } from '@lt-frame/version-1';
 
-const comps: LTRouteRecordRaw = {
+const comps: LtRouteRecordRaw = {
 	path: '/component',
 	name: 'Component',
 	component: LAYOUT,
@@ -139,7 +139,7 @@ const comps: LTRouteRecordRaw = {
 					name: 'ScrollBar',
 					component: () => import('../../demo/scroll/index.vue'),
 					meta: {
-						title: 'LTscrollBar',
+						title: 'LtscrollBar',
 					},
 				},
 				{

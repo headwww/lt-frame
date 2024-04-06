@@ -7,7 +7,7 @@ import { useNamespace } from '@lt-frame/hooks';
 import { helpProps } from './help';
 
 export default defineComponent({
-	name: 'LTHelp',
+	name: 'LtHelp',
 	components: { Tooltip },
 	props: helpProps,
 	setup(props, { slots }) {

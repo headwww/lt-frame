@@ -1,6 +1,6 @@
-import { LAYOUT, LTRouteRecordRaw } from '@lt-frame/version-1';
+import { LAYOUT, LtRouteRecordRaw } from '@lt-frame/version-1';
 
-const homePage: LTRouteRecordRaw = {
+const homePage: LtRouteRecordRaw = {
 	path: '/home-page',
 	name: 'HomePage',
 	component: LAYOUT,

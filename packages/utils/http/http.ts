@@ -1,7 +1,7 @@
 import { clone } from 'lodash-es';
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { useMessage } from '@lt-frame/hooks';
-import LTAxios from './Axios';
+import LtAxios from './Axios';
 import { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { ContentTypeEnum, RequestEnum } from './httpEnum';
 import { RequestOptions, Result } from './types';
@@ -80,10 +80,10 @@ const transform: AxiosTransform = {
 	},
 };
 
-let ltHttp: LTAxios;
+let ltHttp: LtAxios;
 
 export function defineHttp(opt?: Partial<CreateAxiosOptions>) {
-	ltHttp = new LTAxios(
+	ltHttp = new LtAxios(
 		deepMerge(
 			{
 				// 基础请求地址
@@ -122,6 +122,6 @@ export function defineHttp(opt?: Partial<CreateAxiosOptions>) {
 	return ltHttp;
 }
 
-export function getLTHttp() {
+export function getLtHttp() {
 	return ltHttp;
 }

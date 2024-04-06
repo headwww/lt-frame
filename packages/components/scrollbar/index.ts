@@ -2,8 +2,8 @@ import { withInstall } from '@lt-frame/utils';
 
 import Scrollbar from './src/scrollbar.vue';
 
-export const LTScrollbar = withInstall(Scrollbar);
-export default LTScrollbar;
+export const LtScrollbar = withInstall(Scrollbar);
+export default LtScrollbar;
 
 export * from './src/util';
 export * from './src/scrollbar';

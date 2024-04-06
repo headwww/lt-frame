@@ -58,7 +58,7 @@ import { BarInstance } from './bar';
 
 const ns = useNamespace('scrollbar');
 
-const COMPONENT_NAME = 'LTScrollbar';
+const COMPONENT_NAME = 'LtScrollbar';
 defineOptions({
 	name: COMPONENT_NAME,
 });

@@ -1,19 +1,19 @@
 <template>
-	<LTPageLayout dense contentFullHeight fixedHeight>
-		<LTTable
+	<LtPageLayout dense contentFullHeight fixedHeight>
+		<LtTable
 			:loading="loading"
 			:colConfigs="colConfigs"
 			:data="tableData"
 			enable-toolbar
-		></LTTable>
-	</LTPageLayout>
+		></LtTable>
+	</LtPageLayout>
 </template>
 
 <script lang="ts" setup>
 import {
 	FilterMode,
-	LTPageLayout,
-	LTTable,
+	LtPageLayout,
+	LtTable,
 	LogicalOperators,
 	ComparisonOperator,
 	TemporalOperator,
@@ -23,7 +23,7 @@ import { VxeColumnPropTypes, VxeColumnProps } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import { parseRef } from '@lt-frame/utils';
 import dayjs from 'dayjs';
-import { LTHttp } from '../../application';
+import { LtHttp } from '../../application';
 
 const tableData = ref([]);
 
@@ -172,7 +172,7 @@ onMounted(async () => {
 const findRoles = () => {
 	loading.value = true;
 
-	LTHttp.post({
+	LtHttp.post({
 		url: 'api/securityModelManager/findRoles',
 		data: [
 			{

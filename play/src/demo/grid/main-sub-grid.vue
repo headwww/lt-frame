@@ -1,6 +1,6 @@
 <template>
-	<LTPageLayout style="position: relative">
-		<LTFadeTransition>
+	<LtPageLayout style="position: relative">
+		<LtFadeTransition>
 			<div
 				v-show="!visible"
 				style="
@@ -13,15 +13,15 @@
 			>
 				<div style="font-size: 16px">生产订单</div>
 
-				<LTGrid :grid-configs="gridOptions"> </LTGrid>
+				<LtGrid :grid-configs="gridOptions"> </LtGrid>
 			</div>
-		</LTFadeTransition>
-		<LTFadeTransition>
+		</LtFadeTransition>
+		<LtFadeTransition>
 			<div
 				v-show="visible"
 				style="background: #fff; padding: 15px; position: absolute; width: 100%"
 			>
-				<LTDescription
+				<LtDescription
 					layout="vertical"
 					bordered
 					title="主表"
@@ -30,31 +30,31 @@
 					:schema="getSchema"
 				>
 					<template #extra>
-						<LTButton type="text" @click="visible = !visible">
+						<LtButton type="text" @click="visible = !visible">
 							展开主表
-						</LTButton>
+						</LtButton>
 					</template>
-				</LTDescription>
-				<LTGrid style="margin-top: 5px" :grid-configs="gridOptions2"> </LTGrid>
+				</LtDescription>
+				<LtGrid style="margin-top: 5px" :grid-configs="gridOptions2"> </LtGrid>
 			</div>
-		</LTFadeTransition>
+		</LtFadeTransition>
 		<Drawer st @register="register1" />
-	</LTPageLayout>
+	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
 import {
-	LTPageLayout,
-	LTGrid,
-	LTGridProps,
-	LTDescription,
-	LTButton,
-	LTFadeTransition,
+	LtPageLayout,
+	LtGrid,
+	LtGridProps,
+	LtDescription,
+	LtButton,
+	LtFadeTransition,
 } from '@lt-frame/components';
 import { parseRef } from '@lt-frame/utils';
 import { computed, reactive, ref } from 'vue';
 import { useDrawer } from '@lt-frame/hooks';
-import { LTHttp } from '../../application';
+import { LtHttp } from '../../application';
 import Drawer from './drawer.vue';
 
 const [register1, { openDrawer }] = useDrawer();
@@ -71,7 +71,7 @@ const getSchema = computed(() => {
 
 const row = ref();
 
-const gridOptions = reactive<LTGridProps>({
+const gridOptions = reactive<LtGridProps>({
 	height: 800,
 	columns: [
 		{
@@ -123,7 +123,7 @@ const gridOptions = reactive<LTGridProps>({
 	},
 });
 
-const gridOptions2 = reactive<LTGridProps>({
+const gridOptions2 = reactive<LtGridProps>({
 	height: 400,
 	columns: [
 		{
@@ -165,7 +165,7 @@ const gridOptions2 = reactive<LTGridProps>({
 
 const findMains = () =>
 	new Promise<any[]>((resolve, reject) => {
-		LTHttp.post({
+		LtHttp.post({
 			url: 'api/productOrderServiceImpl/findMains',
 			data: [
 				{
@@ -192,7 +192,7 @@ const findMains = () =>
 
 const findLines = (id: string) =>
 	new Promise<any[]>((resolve, reject) => {
-		LTHttp.post({
+		LtHttp.post({
 			url: 'api/productOrderServiceImpl/findLines',
 			data: [
 				{

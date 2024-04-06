@@ -11,7 +11,7 @@ import Icon from '../../icon';
 import { arrowProps } from './arrow';
 
 defineOptions({
-	name: 'LTArrow',
+	name: 'LtArrow',
 });
 
 const props = defineProps(arrowProps);

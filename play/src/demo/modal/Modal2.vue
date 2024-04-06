@@ -1,5 +1,5 @@
 <template>
-	<LTModal
+	<LtModal
 		@register="register"
 		title="Modal Title"
 		:helpMessage="['提示1', '提示2']"
@@ -18,12 +18,12 @@
 		>
 			从内部修改title
 		</a-button>
-	</LTModal>
+	</LtModal>
 </template>
 <script lang="ts" setup>
 import {
-	LTModal,
-	LTButton as AButton,
+	LtModal,
+	LtButton as AButton,
 	useModalInner,
 	ButtonProps,
 } from '@lt-frame/components';

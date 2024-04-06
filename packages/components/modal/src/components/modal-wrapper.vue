@@ -1,5 +1,5 @@
 <template>
-	<LTScrollbar scroll-animation-off ref="wrapperRef">
+	<LtScrollbar scroll-animation-off ref="wrapperRef">
 		<div
 			:style="getContentStyle"
 			ref="contentRef"
@@ -8,7 +8,7 @@
 		>
 			<slot></slot>
 		</div>
-	</LTScrollbar>
+	</LtScrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -24,7 +24,7 @@ import {
 import { useMutationObserver } from '@vueuse/core';
 import { useWindowSizeFn } from '@lt-frame/hooks';
 import { Loading as vLoading } from '@lt-frame/directives';
-import LTScrollbar from '../../../scrollbar';
+import LtScrollbar from '../../../scrollbar';
 import { modalWrapperProps } from './modal-wrapper';
 
 const props = defineProps(modalWrapperProps);

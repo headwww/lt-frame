@@ -34,7 +34,7 @@ import { initAffixTabs, useTabsDrag } from './useTabs';
 import { useGo } from '../../../hooks';
 
 export default defineComponent({
-	name: 'LTTab',
+	name: 'LtTab',
 	components: {
 		Tabs,
 		TabPane,

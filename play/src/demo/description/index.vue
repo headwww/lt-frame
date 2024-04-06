@@ -1,11 +1,11 @@
 <template>
-	<LTPageLayout title="详情组件">
-		<LTDescription title="基础实例" :schema="schema" :data="data">
+	<LtPageLayout title="详情组件">
+		<LtDescription title="基础实例" :schema="schema" :data="data">
 			<template #extra>
-				<LTButton color="error"> 错误 </LTButton>
+				<LtButton color="error"> 错误 </LtButton>
 			</template>
-		</LTDescription>
-		<LTDescription
+		</LtDescription>
+		<LtDescription
 			style="margin-top: 20px"
 			:column="3"
 			bordered
@@ -13,18 +13,18 @@
 			:schema="schema"
 			:data="data"
 			layout="vertical"
-		></LTDescription>
-		<LTDescription @register="register" />
-		<LTDescription @register="register1" />
-	</LTPageLayout>
+		></LtDescription>
+		<LtDescription @register="register" />
+		<LtDescription @register="register1" />
+	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
 import {
-	LTPageLayout,
-	LTDescription,
+	LtPageLayout,
+	LtDescription,
 	DescItem,
-	LTButton,
+	LtButton,
 } from '@lt-frame/components';
 import { useDescription } from '@lt-frame/hooks';
 import { reactive } from 'vue';

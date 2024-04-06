@@ -1,5 +1,5 @@
 <template>
-	<LTModal
+	<LtModal
 		v-bind="$attrs"
 		destroyOnClose
 		@register="register"
@@ -20,12 +20,12 @@
 				<li v-for="index in lines" :key="index">加载完成{{ index }}！</li>
 			</ul>
 		</template>
-	</LTModal>
+	</LtModal>
 </template>
 <script lang="ts" setup>
 import {
-	LTModal,
-	LTButton as AButton,
+	LtModal,
+	LtButton as AButton,
 	useModalInner,
 } from '@lt-frame/components';
 import { ref, watch } from 'vue';

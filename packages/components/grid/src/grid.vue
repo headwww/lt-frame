@@ -22,11 +22,11 @@ import { deepMerge } from '@lt-frame/utils';
 import { PropType, computed, ref, useSlots } from 'vue';
 import { VxeGridInstance } from 'vxe-table';
 import { omit } from 'lodash-es';
-import { LTGridProps, LTColumns } from './grid';
+import { LtGridProps, LtColumns } from './grid';
 import GridOperateColumn from './components/grid-operate-column.vue';
 
 defineOptions({
-	name: 'LTGrid',
+	name: 'LtGrid',
 });
 
 const slots = useSlots();
@@ -37,11 +37,11 @@ const vxeGridRef = ref<VxeGridInstance>();
 
 const props = defineProps({
 	gridConfigs: {
-		type: Object as PropType<LTGridProps>,
+		type: Object as PropType<LtGridProps>,
 	},
 });
 
-const getGridConfigs = computed((): LTGridProps => {
+const getGridConfigs = computed((): LtGridProps => {
 	const seq = {
 		type: 'seq',
 		width: 40,
@@ -64,7 +64,7 @@ const getGridConfigs = computed((): LTGridProps => {
 		align: 'center',
 	};
 
-	const columns: LTColumns = [];
+	const columns: LtColumns = [];
 	const { gridConfigs } = props;
 	if (gridConfigs) {
 		if (gridConfigs.enableCheckbox) {
@@ -137,7 +137,7 @@ const getGridConfigs = computed((): LTGridProps => {
 				isCurrent: true,
 			},
 			columns,
-		} as LTGridProps,
+		} as LtGridProps,
 		props.gridConfigs,
 		'union'
 	);

@@ -1,15 +1,15 @@
 <template>
-	<LTDrawer
+	<LtDrawer
 		v-bind="$attrs"
 		@register="register"
 		title="Drawer Title"
 		width="50%"
 	>
-		<LTDescription @register="registerD"> </LTDescription>
-	</LTDrawer>
+		<LtDescription @register="registerD"> </LtDescription>
+	</LtDrawer>
 </template>
 <script lang="ts" setup>
-import { LTDrawer, LTDescription, DescItem } from '@lt-frame/components';
+import { LtDrawer, LtDescription, DescItem } from '@lt-frame/components';
 import { useDescription, useDrawerInner } from '@lt-frame/hooks';
 
 const schema: DescItem[] = [

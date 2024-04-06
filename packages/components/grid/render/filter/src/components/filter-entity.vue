@@ -5,7 +5,7 @@
 			placeholder="模糊查询，请输入查询条件"
 		></a-input>
 
-		<LTGrid :grid-configs="getGridConfigs" v-on="gridEvents"></LTGrid>
+		<LtGrid :grid-configs="getGridConfigs" v-on="gridEvents"></LtGrid>
 	</div>
 </template>
 
@@ -24,13 +24,13 @@ import {
 import { omit } from 'lodash-es';
 import Fuse from 'Fuse.js';
 import { VxeGridListeners } from 'vxe-table';
-import LTGrid from '../../../../src/grid.vue';
+import LtGrid from '../../../../src/grid.vue';
 import { EntityFilterConfig } from '../advanced-filter';
-import { LTGridProps } from '../../../../src/grid';
+import { LtGridProps } from '../../../../src/grid';
 
 const props = defineProps({
 	gridConfigs: {
-		type: Object as PropType<LTGridProps>,
+		type: Object as PropType<LtGridProps>,
 		default: () => ({}),
 	},
 	config: {
@@ -43,7 +43,7 @@ const inputValue = ref();
 
 const filterRawData: Ref<Array<any>> = ref([]);
 
-const getGridConfigs = reactive<LTGridProps>(
+const getGridConfigs = reactive<LtGridProps>(
 	omit(props.gridConfigs, 'proxyConfig')
 );
 

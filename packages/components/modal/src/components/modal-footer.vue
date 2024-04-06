@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<slot name="insertFooter"></slot>
-		<LTButton
+		<LtButton
 			v-bind="cancelButtonProps"
 			@click="
 				(e) => {
@@ -11,9 +11,9 @@
 			v-if="showCancelBtn"
 		>
 			{{ cancelText }}
-		</LTButton>
+		</LtButton>
 		<slot name="centerFooter"></slot>
-		<LTButton
+		<LtButton
 			:type="okType"
 			@click="
 				(e) => {
@@ -25,14 +25,14 @@
 			v-bind="okButtonProps"
 		>
 			{{ okText }}
-		</LTButton>
+		</LtButton>
 		<slot name="appendFooter"></slot>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { modalFooterProps } from './modal-footer';
-import { LTButton } from '../../../button';
+import { LtButton } from '../../../button';
 
 defineProps(modalFooterProps);
 

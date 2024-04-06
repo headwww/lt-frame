@@ -6,7 +6,7 @@
 		:width="236"
 	>
 		<div :class="ns.e('children')">
-			<LTScrollbar :class="ns.e('menu')">
+			<LtScrollbar :class="ns.e('menu')">
 				<Menu
 					:class="ns.e('menu-list')"
 					mode="inline"
@@ -18,7 +18,7 @@
 						<SubMenuItem :item="item" />
 					</template>
 				</Menu>
-			</LTScrollbar>
+			</LtScrollbar>
 
 			<Trigger></Trigger>
 		</div>
@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import { LayoutSider, Menu } from 'ant-design-vue';
 import { useNamespace } from '@lt-frame/hooks';
-import { LTScrollbar } from '@lt-frame/components';
+import { LtScrollbar } from '@lt-frame/components';
 import { ref, unref, watch } from 'vue';
 import { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 import { isUrl, listenerRouteChange, openWindow } from '@lt-frame/utils';

@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 import { createBreakpointListen } from '@lt-frame/hooks';
 
 export default defineComponent({
-	name: 'LTApplication',
+	name: 'LtApplication',
 	inheritAttrs: false,
 	setup(_, { slots }) {
 		createBreakpointListen();

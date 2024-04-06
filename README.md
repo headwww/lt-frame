@@ -4,7 +4,9 @@
 
 ### Monorepo
 
-项目的依照Monorepo思想搭建的基本框架，包的管理使用的是pnpm的方式，对于一个Monorepo项目使用pnpm有天然的支持，因为Monorepo项目存在很多packages，而这些包在本地需要相互关联、测试、使用。
+项目的依照Monorepo思想搭建的基本框架，包的管理使用的是pnpm的方式，对于一个
+Monorepo项目使用pnpm有天然的支持，因为Monorepo项目存在很多packages，而这些包在本
+地需要相互关联、测试、使用。
 
 ### pnpm
 
@@ -18,20 +20,21 @@ npm install pnpm -g
 
 #### 初始化项目
 
-不使用脚手架和vite的方式创建项目，新建一个项目文件夹，在项目的根目录执行`pnpm init`指令生成`package.json`文件
+不使用脚手架和vite的方式创建项目，新建一个项目文件夹，在项目的根目录执
+行`pnpm init`指令生成`package.json`文件
 
 ```json
 {
-  "name": "lt-frame",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+	"name": "lt-frame",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
 ```
 
@@ -41,7 +44,8 @@ npm install pnpm -g
 
 暂时先做这样一个结构，后续可能会有一定的调整
 
-⚠️注意：`{components, utils,......}/packages.json`里面的name设置成`@lt-frame/对应的包名字` 如 `@lt-frame/utils`
+⚠️注意：`{components, utils,......}/packages.json`里面的name设置
+成`@lt-frame/对应的包名字` 如 `@lt-frame/utils`
 
 ```yaml
 ltframe:
@@ -66,14 +70,16 @@ ltframe:
 
 ```yaml
 packages:
-  - "packages/**"
-  - "play"
-
+  - 'packages/**'
+  - 'play'
 ```
 
-这样就表示 packages 目录下的所有包都被关联了,然后你需要使用packages内部某个包的地方再执行`pnpm add @lt-frame/包名`，执行完之后即可发现该目录下的node_modules出现了另外一个包的软连接
+这样就表示 packages 目录下的所有包都被关联了,然后你需要使用packages内部某个包的
+地方再执行`pnpm add @lt-frame/包名`，执行完之后即可发现该目录下的node_modules出
+现了另外一个包的软连接
 
-⚠️注意：这里我们使用了 import es6 语法,所以我们要在各个包的`package.json`中新增字段`"type": "module"`
+⚠️注意：这里我们使用了 import es6 语法,所以我们要在各个包的`package.json`中新增
+字段`"type": "module"`
 
 ##### 组件环境
 
@@ -87,36 +93,39 @@ pnpm add vue typescript less -D -w
 
 ##### 初始化ts
 
-在根目录的终端执行 `npx tsc --init`,然后项目就会生成tsconfig.json，然后我们对其做一个更改
+在根目录的终端执行 `npx tsc --init`,然后项目就会生成tsconfig.json，然后我们对其
+做一个更改
 
 `tsconfig.json`暂时先做这样一个配置,后续可能会有一定的调整
 
 ```json
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "jsx": "preserve",
-    "strict": true,
-    "target": "ES2015",
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "lib": ["esnext", "dom"]
-  }
+	"compilerOptions": {
+		"baseUrl": ".",
+		"jsx": "preserve",
+		"strict": true,
+		"target": "ES2015",
+		"module": "ESNext",
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"moduleResolution": "Node",
+		"lib": ["esnext", "dom"]
+	}
 }
-
 ```
 
 ##### 搭建基于vite的vue3项目
 
-因为我们开发的是一个vue3的组件库所以我们肯定需要一个vue3的环境来测试我们的组件库，所以这里将自己搭建一个
+因为我们开发的是一个vue3的组件库所以我们肯定需要一个vue3的环境来测试我们的组件
+库，所以这里将自己搭建一个
 
-一个基于vite的vue3项目。因此我们在根目录下新建play的文件夹然后初始化`pnpm init`修改name`@lt-frame/play`。
+一个基于vite的vue3项目。因此我们在根目录下新建play的文件夹然后初始
+化`pnpm init`修改name`@lt-frame/play`。
 
 ###### 安装插件
 
-我们需要安装`vite`和`vitejs/plugin-vue`插件,`@vitejs/plugin-vue`插件是为了解析后缀为`.vue`文件的。在 play 目录下执行
+我们需要安装`vite`和`vitejs/plugin-vue`插件,`@vitejs/plugin-vue`插件是为了解析后
+缀为`.vue`文件的。在 play 目录下执行
 
 ```sh
 pnpm add vite @vitejs/plugin-vue -D
@@ -141,18 +150,18 @@ export default defineConfig({
 `@vitejs/plugin-vue`会默认加载 play 下的 index.html
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>play</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="main.ts" type="module"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>play</title>
+	</head>
+	<body>
+		<div id="app"></div>
+		<script src="main.ts" type="module"></script>
+	</body>
 </html>
 ```
 
@@ -164,7 +173,7 @@ export default defineConfig({
 
 ```vue
 <template>
-  <div>启动测试</div>
+	<div>启动测试</div>
 </template>
 ```
 
@@ -173,11 +182,11 @@ export default defineConfig({
 新建`main.ts`
 
 ```typescript
-import App from "./app.vue";
+import App from './app.vue';
 
 const app = createApp(App);
 
-app.mount("#app");
+app.mount('#app');
 ```
 
 ###### 配置脚本启动项目
@@ -186,29 +195,30 @@ app.mount("#app");
 
 ```json
 {
-  "name": "@lt-frame/play",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "vite"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^4.0.0",
-    "vite": "^4.1.1"
-  }
+	"name": "@lt-frame/play",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "vite"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^4.0.0",
+		"vite": "^4.1.1"
+	}
 }
 ```
 
-因为 play 项目需要测试本地的组件库,所以也需要将 play 和我们的组件库关联在一起。修改一下`pnpm-workspace.yaml`文件
+因为 play 项目需要测试本地的组件库,所以也需要将 play 和我们的组件库关联在一起。
+修改一下`pnpm-workspace.yaml`文件
 
 ```yaml
 packages:
-  - "packages/**"
-  - "play"
+  - 'packages/**'
+  - 'play'
 ```
 
 此时 play 项目便可以安装本地 packages 下的包了
@@ -221,12 +231,16 @@ packages:
 
 朗通bs架构使用如下方案来搭建的代码规范
 
-- `eslint`运行代码前就可以发现一些语法错误和潜在的 bug，目标是保证团队代码的一致 性和避免错误
-- `prettier`是代码格式化工具，用于检测代码中的格式问题，比如单行代码长度，tab 长 度，空格，逗号表达式等等
+- `eslint`运行代码前就可以发现一些语法错误和潜在的 bug，目标是保证团队代码的一致
+  性和避免错误
+- `prettier`是代码格式化工具，用于检测代码中的格式问题，比如单行代码长度，tab 长
+  度，空格，逗号表达式等等
 - `husky`是一个未 git 客户端增加 hook 的工具，在一些 git 操作之前自动触发的函数
-- `lint-staged`过滤出 git 代码暂存区（被 git add 的文件）的工具，将所有暂存文件 的列表传递给任务
+- `lint-staged`过滤出 git 代码暂存区（被 git add 的文件）的工具，将所有暂存文件
+  的列表传递给任务
 - `commitlint`是对我们 git commit 提交的注释进行校验的工具
-- `stylelint`CSS 检查器(linter)，帮助我们规避 CSS 代码中的错误并保持一致的编码风格
+- `stylelint`CSS 检查器(linter)，帮助我们规避 CSS 代码中的错误并保持一致的编码风
+  格
 
 ### eslint/prettier
 
@@ -257,7 +271,8 @@ eslint-import-resolver-alias				让我们可以用import的时候使用@别名
 
 ##### eslintrc文件修改
 
-因为`eslint`是 node 工具，所以文件名是`.cjs`结尾(commonjs 规范)——对应 的`.mjs`就是 ES Module 规范
+因为`eslint`是 node 工具，所以文件名是`.cjs`结尾(commonjs 规范)——对应 的`.mjs`就
+是 ES Module 规范
 
 ```js
 module.exports = {
@@ -277,11 +292,7 @@ module.exports = {
 	// eslint-config-airbnb-base提供的
 	// eslint-config-prettier提供的
 	// 前缀 eslint-config-, 可省略
-	extends: [
-		'plugin:vue/vue3-strongly-recommended',
-		'airbnb-base',
-		'prettier'
-	],
+	extends: ['plugin:vue/vue3-strongly-recommended', 'airbnb-base', 'prettier'],
 	// eslint 会对我们的代码进行检验
 	// parser的作用是将我们写的代码转换为ESTree（AST）
 	// ESLint会对ESTree进行校验
@@ -310,17 +321,14 @@ module.exports = {
 	// 前缀 eslint-plugin-, 可省略
 	// vue官方提供了一个ESLint插件 eslint-plugin-vue，它提供了parser和rules
 	// parser为 vue-eslint-parser，放在上面的parsr字段，rules放在extends字段里，选择合适的规则
-	plugins: [
-		'vue',
-		'@typescript-eslint'
-	],
+	plugins: ['vue', '@typescript-eslint'],
 	settings: {
 		// 设置项目内的别名
 		'import/reslover': {
 			alias: {
 				map: [
 					['@', './src'],
-          ['#', './types']
+					['#', './types'],
 				],
 			},
 		},
@@ -351,7 +359,8 @@ plugins: [vue(), eslintPlugin()]
 
 ##### 修改添加常见配置文件
 
-prettier结合eslint，外部新建文件 `.eslintrcignore`、`.prettierrc.cjs`、`.prettierignore`
+prettier结合eslint，外部新建文件
+`.eslintrcignore`、`.prettierrc.cjs`、`.prettierignore`
 
 ```js
 .eslintrcignore文件内容：
@@ -400,8 +409,6 @@ dist-ssr
 components.d.ts
 ```
 
-
-
 ```js
 .prettiercjs.js文件内容：
 
@@ -442,8 +449,6 @@ module.exports = {
 };
 ```
 
-
-
 ```js
 /dist/*
 .local
@@ -460,7 +465,8 @@ src/.DS_Store
 components.d.ts
 ```
 
-修改 package.json 文件，添加一个脚本命令 `"prettier-format": "prettier --config .prettierrc.cjs "src/**/*.{vue,js,ts}" --write"`
+修改 package.json 文件，添加一个脚本命令
+`"prettier-format": "prettier --config .prettierrc.cjs "src/**/*.{vue,js,ts}" --write"`
 
 ### Husky/lint-staged/commitlint
 
@@ -468,7 +474,8 @@ components.d.ts
 
 如果我们希望在检测错误的同时，自动修复`eslint`语法错误，就可以通过后面钩子实现
 
-`lint-staged`过滤出 git 代码暂存区（被 git add 的文件）的工具，将所有暂存文件 的列表传递给任务
+`lint-staged`过滤出 git 代码暂存区（被 git add 的文件）的工具，将所有暂存文件 的
+列表传递给任务
 
 `commitlint`是对我们 git commit 提交的注释进行校验的工具
 
@@ -668,13 +675,12 @@ module.exports = {
 
 ## 组件
 
-
-
 ## hook
 
 ### useAttrs
 
-提供一个方便的工具函数，用于获取和过滤当前Vue组件实例的属性，以便在组件中更灵活地处理和使用这些属性。
+提供一个方便的工具函数，用于获取和过滤当前Vue组件实例的属性，以便在组件中更灵活
+地处理和使用这些属性。
 
 #### Usage
 
@@ -688,7 +694,7 @@ const atts = useAttrs({
 });
 ```
 
-#### Type Declarations 
+#### Type Declarations
 
 ```typescript
 export interface UseAttrsOptions {
@@ -724,9 +730,9 @@ export interface UseAttrsOptions {
 
 #### Usage
 
-搭配LTApplication组件使用，组件已内置。只需要在App.vue中使用即可。
+搭配LtApplication组件使用，组件已内置。只需要在App.vue中使用即可。
 
-App.vue使用示例`<LTApplication> <RouterView /> </LTApplication>`
+App.vue使用示例`<LtApplication> <RouterView /> </LtApplication>`
 
 然后只需要在需要使用的地方按照如下方式调用即可
 
@@ -738,11 +744,11 @@ import { useBreakpoint } from 'lt-frame';
  * realWidthRef: 返回窗口实际的宽度值。
  * screenEnum: 屏幕尺寸的枚举类型，包含了 XS、SM、MD、LG、XL、XXL。
  * realWidthRef: 返回全局窗口的实际宽度。
-*/
-const {screenRef,widthRef,screenEnum,realWidthRef} = useBreakpoint();
+ */
+const { screenRef, widthRef, screenEnum, realWidthRef } = useBreakpoint();
 ```
 
-#### Type Declarations 
+#### Type Declarations
 
 ```typescript
 export interface CreateCallbackParams {
@@ -775,7 +781,8 @@ export interface CreateCallbackParams {
 
 ### useEventListener
 
-此函数用于在元素、引用或窗口上添加事件监听器，并提供自动移除功能。它可以选择使用防抖或节流功能。
+此函数用于在元素、引用或窗口上添加事件监听器，并提供自动移除功能。它可以选择使用
+防抖或节流功能。
 
 #### Usage
 
@@ -795,12 +802,12 @@ export interface CreateCallbackParams {
 import { useEventListener } from 'path/to/useEventListener';
 
 const { removeEvent } = useEventListener({
-  el: window,
-  name: 'scroll',
-  listener: (event) => {
-    console.log('Scroll event:', event);
-  },
-  options: true,
+	el: window,
+	name: 'scroll',
+	listener: (event) => {
+		console.log('Scroll event:', event);
+	},
+	options: true,
 });
 ```
 
@@ -820,32 +827,32 @@ export interface UseEventParams {
 	 * 要添加事件监听器的元素、引用或窗口对象，默认为 `window`
 	 */
 	el?: Element | Ref<Element | undefined> | Window | any;
-	
+
 	/**
 	 * 事件名称
 	 */
 	name: string;
-	
+
 	/**
 	 * 事件监听器函数
 	 */
 	listener: EventListener;
-	
+
 	/**
 	 * 事件监听器的选项
 	 */
 	options?: boolean | AddEventListenerOptions;
-	
+
 	/**
 	 * 是否在组件卸载时自动移除事件监听器，默认为 `true`
 	 */
 	autoRemove?: boolean;
-	
+
 	/**
 	 * 是否使用防抖功能，默认为 `true`
 	 */
 	isDebounce?: boolean;
-	
+
 	/**
 	 * 防抖或节流的等待时间，默认为 `80` 毫秒
 	 */
@@ -875,7 +882,21 @@ export function useEventListener({
 ```typescript
 import { useNamespace } from 'path/to/useNamespace';
 
-const { namespace, b, e, m, be, em, bm, bem, is, cssVar, cssVarName, cssVarBlock, cssVarBlockName } = useNamespace('block');
+const {
+	namespace,
+	b,
+	e,
+	m,
+	be,
+	em,
+	bm,
+	bem,
+	is,
+	cssVar,
+	cssVarName,
+	cssVarBlock,
+	cssVarBlockName,
+} = useNamespace('block');
 ```
 
 #### 返回值
@@ -904,15 +925,4 @@ export type UseNamespaceReturn = ReturnType<typeof useNamespace>;
 
 ### useMessage⚠️
 
-
-
 ## utils
-
-
-
-
-
-
-
-
-

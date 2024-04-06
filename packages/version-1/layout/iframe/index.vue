@@ -16,7 +16,7 @@ import { computed, toRaw, unref } from 'vue';
 import { useRouter } from 'vue-router';
 import FramePage from '../../view/iframe/index.vue';
 import { useTabStore } from '../../stores';
-import { LTRouteRecordRaw } from '../../router';
+import { LtRouteRecordRaw } from '../../router';
 
 const router = useRouter();
 const { currentRoute } = router;
@@ -37,7 +37,7 @@ function hasRenderFrame(name: string) {
 	return unref(getOpenTabList).includes(name);
 }
 
-function showIframe(item: LTRouteRecordRaw) {
+function showIframe(item: LtRouteRecordRaw) {
 	return item.name === unref(currentRoute).name;
 }
 
@@ -45,13 +45,13 @@ function showIframe(item: LTRouteRecordRaw) {
 const getFramePages = computed(() => {
 	const ret =
 		getAllFramePages(
-			toRaw(router.getRoutes()) as unknown as LTRouteRecordRaw[]
+			toRaw(router.getRoutes()) as unknown as LtRouteRecordRaw[]
 		) || [];
 	return ret;
 });
 
-function getAllFramePages(routes: LTRouteRecordRaw[]): LTRouteRecordRaw[] {
-	let res: LTRouteRecordRaw[] = [];
+function getAllFramePages(routes: LtRouteRecordRaw[]): LtRouteRecordRaw[] {
+	let res: LtRouteRecordRaw[] = [];
 	for (const route of routes) {
 		const { meta: { frameSrc } = {}, children } = route;
 		if (frameSrc) {

@@ -7,12 +7,12 @@ export type Component<T = any> =
 	| (() => Promise<T>);
 
 // @ts-ignore
-export interface LTRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
+export interface LtRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
 	name: string; // 路由名称
 	meta: RouteMeta; // 路由元信息
 	component?: Component | string; // 路由组件
 	components?: Component; // 带有命名视图的路由组件
-	children?: LTRouteRecordRaw[]; // 子路由配置
+	children?: LtRouteRecordRaw[]; // 子路由配置
 	props?: Record<string, any>; // 路由组件的 props
 	fullPath?: string; // 完整的路由路径
 }

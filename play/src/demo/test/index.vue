@@ -1,17 +1,17 @@
 <template>
 	<input type="text" />
-	<LTPageLayout title="测试" dense contentFullHeight fixedHeight>
-		<LTTable :loading="loading" :data="tableData" :colConfigs="colConfigs">
-		</LTTable>
-	</LTPageLayout>
+	<LtPageLayout title="测试" dense contentFullHeight fixedHeight>
+		<LtTable :loading="loading" :data="tableData" :colConfigs="colConfigs">
+		</LtTable>
+	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
-import { LTPageLayout, LTTable } from '@lt-frame/components';
+import { LtPageLayout, LtTable } from '@lt-frame/components';
 import { onMounted, ref } from 'vue';
 import { VxeColumnProps } from 'vxe-table';
 import { parseRef } from '@lt-frame/utils';
-import { LTHttp } from '../../application';
+import { LtHttp } from '../../application';
 
 const tableData = ref([]);
 const loading = ref(false);
@@ -40,7 +40,7 @@ onMounted(async () => {
 });
 const findRoles = () => {
 	loading.value = true;
-	LTHttp.post({
+	LtHttp.post({
 		url: 'api/securityModelService/findUsers',
 		data: [
 			{

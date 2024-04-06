@@ -1,12 +1,12 @@
 <template>
-	<LTPageLayout title="虚拟滚动">
+	<LtPageLayout title="虚拟滚动">
 		<a-alert style="margin: 10px" message="固定尺寸的" />
 
 		<a-button @click="recycleScroller.scrollToItem(20)">跳转到指定项</a-button>
 		<a-button @click="recycleScroller.scrollToPosition(200)"
 			>跳转到指像素</a-button
 		>
-		<LTRecycleScroller
+		<LtRecycleScroller
 			ref="recycleScroller"
 			@visible="visible"
 			@hidden="hidden"
@@ -37,17 +37,17 @@
 			<template #after>
 				<div>after</div>
 			</template>
-		</LTRecycleScroller>
-	</LTPageLayout>
+		</LtRecycleScroller>
+	</LtPageLayout>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Alert as AAlert } from 'ant-design-vue';
 import {
-	LTPageLayout,
-	LTButton as AButton,
-	LTRecycleScroller,
+	LtPageLayout,
+	LtButton as AButton,
+	LtRecycleScroller,
 } from '@lt-frame/components';
 
 const items: any = ref([]);

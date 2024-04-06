@@ -1,19 +1,19 @@
 <template>
-	<LTModal
+	<LtModal
 		v-bind="$attrs"
 		@register="register"
 		title="Modal Title"
 		@visible-change="handleVisibleChange"
 	>
-		<LTDescription @register="registerD"> </LTDescription>
-	</LTModal>
+		<LtDescription @register="registerD"> </LtDescription>
+	</LtModal>
 </template>
 <script lang="ts" setup>
 import { nextTick, ref } from 'vue';
 import {
-	LTModal,
+	LtModal,
 	useModalInner,
-	LTDescription,
+	LtDescription,
 	DescItem,
 } from '@lt-frame/components';
 import { useDescription } from '@lt-frame/hooks';

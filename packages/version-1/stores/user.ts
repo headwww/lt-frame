@@ -1,4 +1,4 @@
-import { Persistent, getLTHttp } from '@lt-frame/utils';
+import { Persistent, getLtHttp } from '@lt-frame/utils';
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
 import { useMessage } from '@lt-frame/hooks';
@@ -24,7 +24,7 @@ export const useUserStore = defineStore({
 		},
 		async login(username: string, password: string) {
 			try {
-				const data = await getLTHttp().post(
+				const data = await getLtHttp().post(
 					{ url: 'api/login', data: [username, password] },
 					{ errorMessageMode: 'modal' }
 				);

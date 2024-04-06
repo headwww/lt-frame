@@ -3,7 +3,7 @@
 		<div :class="ns.e('header')">
 			<div :class="ns.e('header-left')">
 				<div :class="ns.e('header-left-logo')">
-					<LTSvgIcon name="ltscm" size="80"></LTSvgIcon>
+					<LtSvgIcon name="ltscm" size="80"></LtSvgIcon>
 				</div>
 				<div :class="ns.e('header-left-title')">欢迎使用</div>
 			</div>
@@ -64,7 +64,7 @@ import {
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { ref, reactive, computed } from 'vue';
 import { useMessage, useNamespace } from '@lt-frame/hooks';
-import { LTSvgIcon } from '@lt-frame/components';
+import { LtSvgIcon } from '@lt-frame/components';
 import { useUserStore } from '../../stores/user';
 
 const ns = useNamespace('login-form');

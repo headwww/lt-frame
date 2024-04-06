@@ -1,9 +1,9 @@
 <template>
-	<LTDrawer v-bind="$attrs" title="Drawer Title" width="30%">
+	<LtDrawer v-bind="$attrs" title="Drawer Title" width="30%">
 		Drawer Info.
-	</LTDrawer>
+	</LtDrawer>
 </template>
 
 <script setup lang="ts">
-import { LTDrawer } from '@lt-frame/components';
+import { LtDrawer } from '@lt-frame/components';
 </script>

@@ -15,7 +15,7 @@ import { useNamespace } from '@lt-frame/hooks';
 import { svgIconProps } from './svg-icon';
 
 defineOptions({
-	name: 'LTSvgIcon',
+	name: 'LtSvgIcon',
 });
 const props = defineProps(svgIconProps);
 

@@ -8,7 +8,7 @@ import {
 import { deepMerge, defineCache, defineHttp } from '@lt-frame/utils';
 import { createPinia } from 'pinia';
 import { AppConfigV1 } from './types';
-import { LTRouteRecordRaw } from '../router/types';
+import { LtRouteRecordRaw } from '../router/types';
 import { LAYOUT } from '../router';
 
 let config: AppConfigV1 = {
@@ -103,7 +103,7 @@ let config: AppConfigV1 = {
 
 let router: Router;
 
-let mBasicRoutes: LTRouteRecordRaw[] = [];
+let mBasicRoutes: LtRouteRecordRaw[] = [];
 
 const mWhitePathList: string[] = [];
 
@@ -158,9 +158,9 @@ export function defineConfig_v1(options: AppConfigV1) {
 
 	router = createRouter(opt);
 
-	const LTHttp = defineHttp(httpConfig);
+	const LtHttp = defineHttp(httpConfig);
 
-	return { config, router, pinia, LTHttp };
+	return { config, router, pinia, LtHttp };
 }
 
 /**

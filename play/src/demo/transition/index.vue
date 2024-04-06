@@ -1,5 +1,5 @@
 <template>
-	<LTPageLayout title="动画组件示例">
+	<LtPageLayout title="动画组件示例">
 		<div>
 			<a-select
 				:options="options"
@@ -13,42 +13,42 @@
 		<component :is="`${value}Transition`">
 			<div class="box" v-show="show"></div>
 		</component>
-	</LTPageLayout>
+	</LtPageLayout>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { Select as ASelect, Button as AButton } from 'ant-design-vue';
 import {
-	LTPageLayout,
-	LTFadeTransition,
-	LTScaleTransition,
-	LTSlideYTransition,
-	LTScrollYTransition,
-	LTSlideYReverseTransition,
-	LTScrollYReverseTransition,
-	LTSlideXTransition,
-	LTScrollXTransition,
-	LTSlideXReverseTransition,
-	LTScrollXReverseTransition,
-	LTScaleRotateTransition,
-	LTExpandXTransition,
-	LTExpandTransition,
+	LtPageLayout,
+	LtFadeTransition,
+	LtScaleTransition,
+	LtSlideYTransition,
+	LtScrollYTransition,
+	LtSlideYReverseTransition,
+	LtScrollYReverseTransition,
+	LtSlideXTransition,
+	LtScrollXTransition,
+	LtSlideXReverseTransition,
+	LtScrollXReverseTransition,
+	LtScaleRotateTransition,
+	LtExpandXTransition,
+	LtExpandTransition,
 } from '@lt-frame/components';
 
 const transitionList = [
-	'LTFade',
-	'LTScale',
-	'LTSlideY',
-	'LTScrollY',
-	'LTSlideYReverse',
-	'LTScrollYReverse',
-	'LTSlideX',
-	'LTScrollX',
-	'LTSlideXReverse',
-	'LTScrollXReverse',
-	'LTScaleRotate',
-	'LTExpandX',
-	'LTExpand',
+	'LtFade',
+	'LtScale',
+	'LtSlideY',
+	'LtScrollY',
+	'LtSlideYReverse',
+	'LtScrollYReverse',
+	'LtSlideX',
+	'LtScrollX',
+	'LtSlideXReverse',
+	'LtScrollXReverse',
+	'LtScaleRotate',
+	'LtExpandX',
+	'LtExpand',
 ];
 const options = transitionList.map((item) => ({
 	label: item,
@@ -60,20 +60,20 @@ export default defineComponent({
 	components: {
 		AButton,
 		ASelect,
-		LTPageLayout,
-		LTFadeTransition,
-		LTScaleTransition,
-		LTSlideYTransition,
-		LTScrollYTransition,
-		LTSlideYReverseTransition,
-		LTScrollYReverseTransition,
-		LTSlideXTransition,
-		LTScrollXTransition,
-		LTSlideXReverseTransition,
-		LTScrollXReverseTransition,
-		LTScaleRotateTransition,
-		LTExpandXTransition,
-		LTExpandTransition,
+		LtPageLayout,
+		LtFadeTransition,
+		LtScaleTransition,
+		LtSlideYTransition,
+		LtScrollYTransition,
+		LtSlideYReverseTransition,
+		LtScrollYReverseTransition,
+		LtSlideXTransition,
+		LtScrollXTransition,
+		LtSlideXReverseTransition,
+		LtScrollXReverseTransition,
+		LtScaleRotateTransition,
+		LtExpandXTransition,
+		LtExpandTransition,
 	},
 	setup() {
 		const value = ref('Fade');

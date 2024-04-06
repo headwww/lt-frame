@@ -2,19 +2,19 @@
 	<div :class="ns.b()">
 		<div :style="getWidth" :class="ns.e('svg')">
 			<div style="width: 132px; height: 40px">
-				<LTSvgIcon
+				<LtSvgIcon
 					@click="go()"
 					style="cursor: pointer; height: 40px"
 					name="logo-with-text"
 					size="132"
-				></LTSvgIcon>
+				></LtSvgIcon>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { LTSvgIcon } from '@lt-frame/components';
+import { LtSvgIcon } from '@lt-frame/components';
 import { useNamespace } from '@lt-frame/hooks';
 import { CSSProperties, computed } from 'vue';
 import { useGo, useMenuSetting } from '../../../../hooks';
