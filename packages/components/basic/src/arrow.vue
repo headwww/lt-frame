@@ -20,7 +20,7 @@ const getIconAttrs = computed(() => ({
 	color: props.color,
 	size: props.size,
 	spin: props.spin,
-	icon: props.icon ? props.icon : 'ion:chevron-forward',
+	icon: props.icon ? props.icon : 'svg-icon:frame-chevron-forward',
 }));
 
 const ns = useNamespace('arrow');

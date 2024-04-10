@@ -9,6 +9,8 @@ module.exports = {
 			rules: {
 				// 添加或更新你的 SCSS 规则
 				'scss/no-global-function-names': null,
+				'no-duplicate-selectors':null,
+				"number-max-precision":null
 			},
 		},
 	],
