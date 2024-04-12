@@ -5,15 +5,22 @@
 
 <script lang="ts" setup>
 import { LtForm, LtDivider, LtFormItems, LtRules } from '@lt-frame/components';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 
 const formData1 = reactive({
-	field1: '文本',
+	field1: '',
 	field2: '12',
 });
 
+watch(
+	() => formData1.field1,
+	() => {
+		console.log(formData1);
+	}
+);
+
 const formRules: LtRules = {
-	field1: [{ required: true }],
+	field1: [{ required: true, content: '此项必填' }],
 };
 const formItems = ref<LtFormItems>([
 	{
@@ -23,6 +30,7 @@ const formItems = ref<LtFormItems>([
 			{
 				field: 'field1',
 				title: '文本输入',
+				resetValue: '123',
 				span: 24,
 				itemRender: { name: '$input' },
 			},
@@ -33,6 +41,12 @@ const formItems = ref<LtFormItems>([
 				itemRender: { name: '$input-number' },
 			},
 		],
+	},
+	{
+		span: 24,
+		align: 'center',
+		collapseNode: true,
+		itemRender: { name: '$buttons' },
 	},
 ]);
 </script>

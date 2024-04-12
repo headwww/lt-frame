@@ -7,8 +7,15 @@ import {
 	provide,
 } from 'vue';
 import { useNamespace } from '@lt-frame/hooks';
-import { get, isFunction, isNull, isUndefined } from 'lodash-es';
-import { eqNull, isNaN, toValueString } from 'xe-utils';
+import {
+	eqNull,
+	isNaN,
+	toValueString,
+	get,
+	isFunction,
+	isNull,
+	isUndefined,
+} from 'xe-utils';
 import { Tooltip } from 'ant-design-vue';
 import { LtArrow, LtHelp } from '../../basic';
 import { ItemInfo } from './itemInfo';

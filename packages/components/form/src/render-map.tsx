@@ -4,9 +4,7 @@ import { get, set } from 'lodash-es';
 import { LtRender } from './render';
 
 LtRender.renderer.add('$buttons', {
-	renderItemContent(renderOpts, params) {
-		const { $form } = params;
-		$form.props;
+	renderItemContent() {
 		return (
 			<span>
 				<LtButton html-type="submit" type="primary">
@@ -21,6 +19,7 @@ LtRender.renderer.add('$buttons', {
 });
 
 LtRender.renderer.add('$input', {
+	autofocus: '.ant-input',
 	renderItemContent(renderOpts, params) {
 		const { field, data } = params;
 		const { props, attrs, events } = renderOpts;

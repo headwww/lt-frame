@@ -83,6 +83,8 @@ export interface DefineRendererOption<T> {
 	): T;
 	itemVisibleMethod?(params: FormItemTitleRenderParams): boolean;
 	itemResetMethod?(params: FormItemResetParams): void;
+
+	autofocus?: string;
 }
 
 /**
@@ -105,6 +107,11 @@ export interface RenderOptions {
 	 * 目标组件渲染的事件
 	 */
 	events?: { [key: string]: (...args: any[]) => any };
+
+	/**
+	 * 如果指定了聚焦 class
+	 */
+	autofocus?: string;
 }
 
 export const LtRender = {

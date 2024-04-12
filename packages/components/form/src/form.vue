@@ -12,8 +12,7 @@ import {
 	watch,
 } from 'vue';
 import XEUtils from 'xe-utils';
-import { isFunction } from 'lodash-es';
-import { isNullOrUnDef } from '@lt-frame/utils';
+import { isNullOrUnDef, scrollToView } from '@lt-frame/utils';
 import {
 	FormState,
 	LtFormConstructor,
@@ -23,6 +22,7 @@ import {
 	LtFormEmits,
 	FormMethods,
 	FormPrivateComputed,
+	FormPrivateRef,
 } from './form';
 import FormConfigItem from './form-config-item.vue';
 import {
@@ -63,18 +63,23 @@ export default defineComponent({
 			formItems: [],
 		});
 
-		const $ltform = {
-			xID,
-			props,
-			formState,
-			getComputeMaps: () => computeMaps,
-		} as unknown as LtFormConstructor;
+		const refMaps: FormPrivateRef = {
+			refElem,
+		};
 
 		const computeValidOpts = computed(() => ({ ...props.validConfig }));
 
 		const computeMaps: FormPrivateComputed = {
 			computeValidOpts,
 		};
+
+		const $ltform = {
+			xID,
+			props,
+			formState,
+			getRefMaps: () => refMaps,
+			getComputeMaps: () => computeMaps,
+		} as unknown as LtFormConstructor;
 
 		const callSlot = (
 			slotFunc: ((params: any) => any) | string | null,
@@ -148,9 +153,39 @@ export default defineComponent({
 			);
 		};
 
-		/** 定位到第一个 */
+		/** 聚焦 */
 		const handleFocus = (fields: string[]) => {
-			fields;
+			const el = refElem.value;
+			for (let i = 0; i < fields.length; i++) {
+				const property = fields[i];
+				const item = getItemByField(property);
+				if (item && isEnableConf(item.itemRender)) {
+					const { itemRender } = item;
+					const compConf = LtRender.renderer.get(itemRender.name);
+					let inputElem: HTMLInputElement | null = null;
+					// 定位到第一个
+					if (!i) {
+						scrollToView(el.querySelector(`.${item.id}`));
+					}
+					// 如果指定了聚焦 class
+					if (itemRender.autofocus) {
+						inputElem = el.querySelector(
+							`.${item.id} ${itemRender.autofocus}`
+						) as HTMLInputElement;
+					}
+					// 渲染器的聚焦处理
+					if (!inputElem && compConf && compConf.autofocus) {
+						inputElem = el.querySelector(
+							`.${item.id} ${compConf.autofocus}`
+						) as HTMLInputElement;
+					}
+
+					if (inputElem) {
+						inputElem.focus();
+						break;
+					}
+				}
+			}
 		};
 
 		/**
@@ -180,6 +215,7 @@ export default defineComponent({
 			}
 			return nextTick();
 		};
+
 		const reset = () => {
 			const { data } = props;
 			const itemList = getItems();
@@ -209,6 +245,7 @@ export default defineComponent({
 			}
 			return clearValidate();
 		};
+
 		/**
 		 * 校验数据
 		 */
@@ -236,7 +273,6 @@ export default defineComponent({
 							rules.forEach((rule) => {
 								const { type, trigger, required, validator } = rule;
 								if (validType === 'all' || !trigger || validType === trigger) {
-									// 自定义验证规则 未写完
 									if (validator) {
 										const validParams = {
 											itemValue,
@@ -247,8 +283,9 @@ export default defineComponent({
 											property,
 											$form: $ltform,
 										};
+										// 自定义验证规则 未写完 后期加入 高级渲染器全局渲染
 										const customValid =
-											isFunction(validator) && validator(validParams);
+											XEUtils.isFunction(validator) && validator(validParams);
 										if (customValid) {
 											if (XEUtils.isError(customValid)) {
 												errorRules.push(
@@ -568,7 +605,7 @@ export default defineComponent({
 		const renderVN = () => {
 			const { className, data } = props;
 			const getClassName = className
-				? isFunction(className)
+				? XEUtils.isFunction(className)
 					? className({ items: formState.formItems, data, $form: $ltform })
 					: className
 				: '';

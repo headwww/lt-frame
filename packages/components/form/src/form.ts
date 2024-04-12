@@ -3,6 +3,7 @@ import {
 	ComputedRef,
 	ExtractPropTypes,
 	PropType,
+	Ref,
 	RenderFunction,
 	VNode,
 } from 'vue';
@@ -105,6 +106,7 @@ export interface LtFormConstructor extends FormMethods {
 	props: FormProps;
 	formState: FormState;
 	renderVN: RenderFunction;
+	getRefMaps(): FormPrivateRef;
 	getComputeMaps(): FormPrivateComputed;
 }
 
@@ -120,6 +122,10 @@ export type ValidConfig = {
 	autoPos?: boolean;
 	showMessage?: boolean;
 };
+
+export interface FormPrivateRef {
+	refElem: Ref<HTMLFormElement>;
+}
 
 export interface FormPrivateComputed {
 	computeValidOpts: ComputedRef<ValidConfig>;

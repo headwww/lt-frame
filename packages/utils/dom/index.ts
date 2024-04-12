@@ -193,3 +193,16 @@ export function useRafThrottle<T extends FunctionArgs>(fn: T): T {
 export function getPopupContainer(node?: HTMLElement): HTMLElement {
 	return (node?.parentNode as HTMLElement) ?? document.body;
 }
+
+const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded';
+const scrollIntoView = 'scrollIntoView';
+
+export function scrollToView(elem: any) {
+	if (elem) {
+		if (elem[scrollIntoViewIfNeeded]) {
+			elem[scrollIntoViewIfNeeded]();
+		} else if (elem[scrollIntoView]) {
+			elem[scrollIntoView]();
+		}
+	}
+}
