@@ -18,4 +18,5 @@ export const toolBusinessProps = {
 		default: () => [],
 	},
 };
+
 export type ToolBusinessProps = ExtractPropTypes<typeof toolBusinessProps>;

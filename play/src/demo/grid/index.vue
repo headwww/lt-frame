@@ -1,6 +1,6 @@
 <template>
 	<LtPageLayout title="配置表单" contentFullHeight fixedHeight>
-		<LtGrid :grid-configs="gridOptions"> </LtGrid>
+		<LtGrid ref="refdd" :grid-configs="gridOptions"> </LtGrid>
 	</LtPageLayout>
 </template>
 
@@ -15,6 +15,7 @@ import {
 	ComparisonOperator,
 	TemporalOperator,
 	ToolBusinessProps,
+	ToolFunctionInstance,
 } from '@lt-frame/components';
 import { reactive } from 'vue';
 import { parseRef } from '@lt-frame/utils';
@@ -318,7 +319,11 @@ const gridOptions = reactive<LtGridProps>({
 			{
 				buttonRender: {
 					name: '$ToolFunction',
-					props: {},
+					props: {
+						save: true,
+						remove: true,
+						reset: true,
+					},
 					events: {
 						onSave: (param: any) => {
 							createMessage.success('保存');
@@ -332,7 +337,7 @@ const gridOptions = reactive<LtGridProps>({
 							createMessage.success('刷新');
 						},
 					},
-				},
+				} as ToolFunctionInstance,
 			},
 		],
 		tools: [
@@ -347,7 +352,10 @@ const gridOptions = reactive<LtGridProps>({
 								text: '审核',
 								disabled: (params) => {
 									console.log(params);
-									return true;
+									return false;
+								},
+								onClick: () => {
+									console.log('审核');
 								},
 							},
 							{

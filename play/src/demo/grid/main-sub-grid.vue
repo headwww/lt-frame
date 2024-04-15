@@ -11,8 +11,7 @@
 					padding: 20px;
 				"
 			>
-				<div style="font-size: 16px">生产订单</div>
-
+				<LtDivider title="生产订单"></LtDivider>
 				<LtGrid :grid-configs="gridOptions"> </LtGrid>
 			</div>
 		</LtFadeTransition>
@@ -21,20 +20,7 @@
 				v-show="visible"
 				style="background: #fff; padding: 15px; position: absolute; width: 100%"
 			>
-				<LtDescription
-					layout="vertical"
-					bordered
-					title="主表"
-					:column="6"
-					:data="row"
-					:schema="getSchema"
-				>
-					<template #extra>
-						<LtButton type="text" @click="visible = !visible">
-							展开主表
-						</LtButton>
-					</template>
-				</LtDescription>
+				<LtForm :data="row" :items="formItems"></LtForm>
 				<LtGrid style="margin-top: 5px" :grid-configs="gridOptions2"> </LtGrid>
 			</div>
 		</LtFadeTransition>
@@ -47,12 +33,13 @@ import {
 	LtPageLayout,
 	LtGrid,
 	LtGridProps,
-	LtDescription,
-	LtButton,
 	LtFadeTransition,
+	LtForm,
+	LtDivider,
+	LtFormItems,
 } from '@lt-frame/components';
 import { parseRef } from '@lt-frame/utils';
-import { computed, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useDrawer } from '@lt-frame/hooks';
 import { LtHttp } from '../../application';
 import Drawer from './drawer.vue';
@@ -61,15 +48,34 @@ const [register1, { openDrawer }] = useDrawer();
 
 const visible = ref(false);
 
-const getSchema = computed(() => {
-	const arr = gridOptions.columns?.map((item) => ({
-		field: item.field!!,
-		label: item.title!!,
-	}));
-	return arr;
-});
-
 const row = ref();
+
+const formItems = reactive<LtFormItems>([
+	{
+		field: 'id',
+		title: 'id',
+		span: 6,
+		itemRender: { name: '$input' },
+	},
+	{
+		field: 'code',
+		title: 'code',
+		span: 6,
+		itemRender: { name: '$input' },
+	},
+	{
+		field: 'checkDate',
+		title: 'checkDate',
+		span: 6,
+		itemRender: { name: '$input' },
+	},
+	{
+		field: 'createdBy',
+		title: 'createdBy',
+		span: 6,
+		itemRender: { name: '$input' },
+	},
+]);
 
 const gridOptions = reactive<LtGridProps>({
 	height: 800,

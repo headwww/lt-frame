@@ -4,3 +4,4 @@ import './tool-bar/grid-tool-bar';
 
 export * from './filter/src/advanced-filter';
 export * from './tool-bar/src/tool-business';
+export * from './tool-bar/src/tool-function';

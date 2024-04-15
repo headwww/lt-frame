@@ -1,8 +1,14 @@
 import { ExtractPropTypes, PropType } from 'vue';
 import Button from './button.vue';
 
-const validColors = ['primary', 'error', 'warning', 'success', ''] as const;
-type ButtonColorType = (typeof validColors)[number];
+export const validColors = [
+	'primary',
+	'error',
+	'warning',
+	'success',
+	'',
+] as const;
+export type ButtonColorType = (typeof validColors)[number];
 
 export const buttonProps = {
 	color: {
