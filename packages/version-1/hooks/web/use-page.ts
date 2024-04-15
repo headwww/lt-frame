@@ -16,7 +16,7 @@ function handleError(e: Error) {
 export function useGo(_router?: Router) {
 	const { push, replace } = _router || useRouter();
 	function go(
-		opt: RouteLocationRaw = getAppConfig().homePage!!,
+		opt: RouteLocationRaw = getAppConfig().routes?.homePage!!,
 		isReplace = false
 	) {
 		if (!opt) {
@@ -35,7 +35,7 @@ export const useRedo = (_router?: Router) => {
 	const { query, params = {}, name, fullPath } = unref(currentRoute.value);
 	function redo(): Promise<boolean> {
 		return new Promise((resolve) => {
-			if (name === getAppConfig().redirectName) {
+			if (name === 'Redirect') {
 				resolve(false);
 				return;
 			}
@@ -48,9 +48,7 @@ export const useRedo = (_router?: Router) => {
 				params.path = fullPath;
 			}
 
-			replace({ name: getAppConfig().redirectName, params, query }).then(() =>
-				resolve(true)
-			);
+			replace({ name: 'Redirect', params, query }).then(() => resolve(true));
 		});
 	}
 	return redo;

@@ -14,7 +14,7 @@ import { DropMenu, LtDropdown } from '@lt-frame/components';
 import { PropType, computed, defineComponent, reactive, unref } from 'vue';
 import { RouteLocationNormalized, useRouter } from 'vue-router';
 import { useTabStore } from '../../../../stores';
-import { getGlobalRouter } from '../../../../configs';
+import { LtRouter } from '../../../../configs';
 
 export default defineComponent({
 	name: 'LtTabContent',
@@ -118,25 +118,24 @@ export default defineComponent({
 
 		function handleMenuEvent(menu: DropMenu): void {
 			const { event } = menu;
-			const router = getGlobalRouter();
 			switch (event) {
 				case 'REFRESH_PAGE':
-					tabStore.refreshPage(router);
+					tabStore.refreshPage(LtRouter);
 					break;
 				case 'CLOSE_CURRENT':
-					tabStore.closeTab(props.tabItem, router);
+					tabStore.closeTab(props.tabItem, LtRouter);
 					break;
 				case 'CLOSE_LEFT':
-					tabStore.closeLeftTabs(getCurrentTab(), router);
+					tabStore.closeLeftTabs(getCurrentTab(), LtRouter);
 					break;
 				case 'CLOSE_RIGHT':
-					tabStore.closeRightTabs(getCurrentTab(), router);
+					tabStore.closeRightTabs(getCurrentTab(), LtRouter);
 					break;
 				case 'CLOSE_OTHER':
-					tabStore.closeOtherTabs(getCurrentTab(), router);
+					tabStore.closeOtherTabs(getCurrentTab(), LtRouter);
 					break;
 				case 'CLOSE_ALL':
-					tabStore.closeAllTab(router);
+					tabStore.closeAllTab(LtRouter);
 					break;
 				default:
 					break;

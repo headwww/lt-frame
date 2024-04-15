@@ -6,7 +6,7 @@ import {
 	throwError,
 } from '@lt-frame/utils';
 import { Modal, notification } from 'ant-design-vue';
-import { getAppConfig, getWhitePathList } from '../../configs';
+import { getAppConfig, getWhitePaths } from '../../configs';
 import {
 	useAppStore,
 	usePermissionStore,
@@ -80,16 +80,19 @@ function createPageLoadingGuard(router: Router) {
  * 提示：需要在projectSetting中开启removeAllHttpPending。
  */
 function createHttpGuard(router: Router) {
-	const { removeAllHttpPending } = getAppConfig();
-	let axiosCanceler: AxiosCanceler | null;
-	if (removeAllHttpPending) {
-		axiosCanceler = new AxiosCanceler();
+	const { other } = getAppConfig();
+	if (other) {
+		const { removeAllHttpPending } = other;
+		let axiosCanceler: AxiosCanceler | null;
+		if (removeAllHttpPending) {
+			axiosCanceler = new AxiosCanceler();
+		}
+		router.beforeEach(async () => {
+			// 切换路由将删除以前的请求
+			axiosCanceler?.removeAllPending();
+			return true;
+		});
 	}
-	router.beforeEach(async () => {
-		// 切换路由将删除以前的请求
-		axiosCanceler?.removeAllPending();
-		return true;
-	});
 }
 
 /**
@@ -111,19 +114,21 @@ function createScrollGuard(router: Router) {
  * 确保在路由切换前关闭可能已经打开的消息弹窗和通知，以提供更好的用户体验，避免用户在页面切换时看到未关闭的消息弹窗。
  */
 export function createMessageGuard(router: Router) {
-	const { closeMessageOnSwitch } = getAppConfig();
-
-	router.beforeEach(async () => {
-		try {
-			if (closeMessageOnSwitch) {
-				Modal.destroyAll();
-				notification.destroy();
+	const { other } = getAppConfig();
+	if (other) {
+		router.beforeEach(async () => {
+			try {
+				const { closeMessageOnSwitch } = other;
+				if (closeMessageOnSwitch) {
+					Modal.destroyAll();
+					notification.destroy();
+				}
+			} catch (error) {
+				throwError('createMessageGuard', `message guard error:${error}`);
 			}
-		} catch (error) {
-			throwError('createMessageGuard', `message guard error:${error}`);
-		}
-		return true;
-	});
+			return true;
+		});
+	}
 }
 
 /**
@@ -135,17 +140,18 @@ export function createPermissionGuard(router: Router) {
 
 	router.beforeEach(async (to, from, next) => {
 		const userInfo = userStore.getUserInfo;
-		const { dynamicRoutes, basicRoutes } = getAppConfig();
+
+		const { routes: routesConfig } = getAppConfig();
 		let loginPath = '';
-		if (basicRoutes) {
-			const { LOGIN_ROUTE } = basicRoutes;
+		if (routesConfig) {
+			const { LOGIN_ROUTE } = routesConfig;
 			if (LOGIN_ROUTE) {
 				loginPath = LOGIN_ROUTE.path;
 			}
 		}
 
 		// 处理白名单路径
-		if (getWhitePathList().includes(to.path)) {
+		if (getWhitePaths().includes(to.path)) {
 			// 如果用户已登录并且目标路径是登录页,则跳过登录页面直接进入（to.query?.redirect）或根路径('/')
 			if (to.path === loginPath && userInfo) {
 				try {
@@ -193,50 +199,52 @@ export function createPermissionGuard(router: Router) {
 		}
 
 		// 添加动态路由
-		const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
-		routes.forEach((route) => {
-			router.addRoute(route as unknown as RouteRecordRaw);
-		});
-		router.addRoute(
-			basicRoutes?.PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw
-		);
-
-		permissionStore.setDynamicAddedRoute(true);
-		if (to.name === getAppConfig().basicRoutes?.PAGE_NOT_FOUND_ROUTE?.name) {
-			// 动态添加路由后，此处应当重定向到fullPath，否则会加载404页面内容
-			next({ path: to.fullPath, replace: true, query: to.query });
-		} else {
-			const redirectPath = (from.query.redirect || to.path) as string;
-			const redirect = decodeURIComponent(redirectPath);
-			const nextData =
-				to.path === redirect ? { ...to, replace: true } : { path: redirect };
-			next(nextData);
+		if (routesConfig) {
+			const { dynamicRoutes, PAGE_NOT_FOUND_ROUTE } = routesConfig;
+			const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
+			routes.forEach((route) => {
+				router.addRoute(route as unknown as RouteRecordRaw);
+			});
+			if (PAGE_NOT_FOUND_ROUTE) {
+				router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
+			}
+			permissionStore.setDynamicAddedRoute(true);
+			if (to.name === PAGE_NOT_FOUND_ROUTE?.name) {
+				// 动态添加路由后，此处应当重定向到fullPath，否则会加载404页面内容
+				next({ path: to.fullPath, replace: true, query: to.query });
+			} else {
+				const redirectPath = (from.query.redirect || to.path) as string;
+				const redirect = decodeURIComponent(redirectPath);
+				const nextData =
+					to.path === redirect ? { ...to, replace: true } : { path: redirect };
+				next(nextData);
+			}
 		}
 	});
 }
 
 export function createStateGuard(router: Router) {
 	router.afterEach((to) => {
-		const { basicRoutes } = getAppConfig();
+		const { routes } = getAppConfig();
+		if (routes) {
+			const { LOGIN_ROUTE } = routes;
 
-		let loginPath = '';
-		if (basicRoutes) {
-			const { LOGIN_ROUTE } = basicRoutes;
+			let loginPath = '';
 			if (LOGIN_ROUTE) {
 				loginPath = LOGIN_ROUTE.path;
 			}
-		}
 
-		if (to.path === loginPath) {
-			const tabStore = useTabStore();
-			const userStore = useUserStore();
-			const appStore = useAppStore();
-			const permissionStore = usePermissionStore();
-			appStore.resetAllState();
-			permissionStore.resetState();
-			tabStore.resetState();
-			userStore.resetState();
-			removeTabChangeListener();
+			if (to.path === loginPath) {
+				const tabStore = useTabStore();
+				const userStore = useUserStore();
+				const appStore = useAppStore();
+				const permissionStore = usePermissionStore();
+				appStore.resetAllState();
+				permissionStore.resetState();
+				tabStore.resetState();
+				userStore.resetState();
+				removeTabChangeListener();
+			}
 		}
 	});
 }

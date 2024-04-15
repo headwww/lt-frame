@@ -15,13 +15,13 @@ export interface CacheConfig extends CreateStorageParams {
 }
 
 export function defineCache({
-	appSessionCacheKey = 'LT__SESSION__KEY__',
-	appLocalCacheKey = 'LT__LOCAL__KEY__',
-	prefixKey = '',
-	key = 'langtongkeji',
-	iv = 'ltscm',
-	hasEncrypt = true,
-	timeout = 60 * 60 * 24 * 7,
+	appSessionCacheKey,
+	appLocalCacheKey,
+	prefixKey,
+	key = '',
+	iv = '',
+	hasEncrypt,
+	timeout,
 }: Partial<CacheConfig> = {}) {
 	cacheKey = {
 		appSessionCacheKey,

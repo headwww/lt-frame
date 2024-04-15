@@ -1,6 +1,8 @@
 import {
+	LtPinia,
+	LtRouter,
 	ProjectConfig,
-	defineConfig_v1,
+	defineConfig,
 	setupRouterGuard,
 	useAppStore,
 } from '@lt-frame/version-1';
@@ -14,17 +16,19 @@ import { asyncRoutes } from '../router';
 
 VXETable.use(VXETablePluginAntd);
 
-export const { config, router, pinia, LtHttp } = defineConfig_v1({
-	routerConfig: {
+defineConfig({
+	routes: {
+		dynamicRoutes: asyncRoutes,
+	},
+	router: {
 		history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
 		strict: true,
 		scrollBehavior: () => ({ left: 0, top: 0 }),
 	},
-	cacheConfig: {
+	cache: {
 		appLocalCacheKey: 'LT-DEMO',
 		hasEncrypt: !import.meta.env.DEV,
 	},
-	dynamicRoutes: asyncRoutes,
 });
 
 export function initProjectConfig() {
@@ -46,10 +50,9 @@ export function initProjectConfig() {
 }
 
 export function onCreate(app: App) {
-	app.use(pinia);
+	app.use(LtPinia);
 	initProjectConfig();
-	app.use(router);
+	app.use(LtRouter);
 	app.use(VXETable);
-
-	setupRouterGuard(router);
+	setupRouterGuard(LtRouter);
 }

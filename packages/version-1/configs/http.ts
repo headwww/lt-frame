@@ -1,13 +1,18 @@
 import { clone } from 'lodash-es';
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { useMessage } from '@lt-frame/hooks';
-import LtAxios from './Axios';
-import { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
-import { ContentTypeEnum, RequestEnum } from './httpEnum';
-import { RequestOptions, Result } from './types';
-import { AxiosRetry } from './axiosRetry';
-import { checkStatus } from './checkStatus';
-import { deepMerge } from '../objects';
+import {
+	AxiosRetry,
+	AxiosTransform,
+	ContentTypeEnum,
+	CreateAxiosOptions,
+	LTAxios,
+	RequestEnum,
+	RequestOptions,
+	Result,
+	checkStatus,
+	deepMerge,
+} from '@lt-frame/utils';
 
 const { createMessage, createErrorModal } = useMessage();
 
@@ -80,11 +85,10 @@ const transform: AxiosTransform = {
 	},
 };
 
-let ltHttp: LtAxios;
-
-export function defineHttp(opt?: Partial<CreateAxiosOptions>) {
-	ltHttp = new LtAxios(
+function defineHttp(opt?: Partial<CreateAxiosOptions>): LTAxios {
+	return new LTAxios(
 		deepMerge(
+			// 默认请求配置
 			{
 				// 基础请求地址
 				baseURL: '/ltApi',
@@ -119,9 +123,6 @@ export function defineHttp(opt?: Partial<CreateAxiosOptions>) {
 			opt || {}
 		)
 	);
-	return ltHttp;
 }
 
-export function getLtHttp() {
-	return ltHttp;
-}
+export default defineHttp;

@@ -62,7 +62,8 @@ export const usePermissionStore = defineStore({
 			// 将多级路由转换成2级路由
 			routes = flatMultiLevelRoutes(routes);
 			// 将日志路由添加进去
-			routes.push(getAppConfig().basicRoutes?.ERROR_LOG_ROUTE!!);
+			const { routes: routesConfig } = getAppConfig();
+			if (routesConfig) routes.push(routesConfig.ERROR_LOG_ROUTE!!);
 			return routes;
 		},
 		resetState(): void {

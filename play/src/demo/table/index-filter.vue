@@ -23,7 +23,7 @@ import { VxeColumnPropTypes, VxeColumnProps } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import { parseRef } from '@lt-frame/utils';
 import dayjs from 'dayjs';
-import { LtHttp } from '../../application';
+import { LtHttp } from '@lt-frame/version-1';
 
 const tableData = ref([]);
 

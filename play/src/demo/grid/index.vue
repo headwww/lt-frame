@@ -24,7 +24,7 @@ import { VxeColumnPropTypes } from 'vxe-table';
 import { FilterMode, ToolBusinessOptions } from '@lt-frame/components/grid';
 import dayjs from 'dayjs';
 import { useMessage } from '@lt-frame/hooks';
-import { LtHttp } from '../../application';
+import { LtHttp } from '@lt-frame/version-1';
 
 enum CorpType {
 	HEAD = '集团',

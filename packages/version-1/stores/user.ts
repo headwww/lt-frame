@@ -1,9 +1,9 @@
-import { Persistent, getLtHttp } from '@lt-frame/utils';
+import { Persistent } from '@lt-frame/utils';
 import { defineStore } from 'pinia';
 import { RouteRecordRaw } from 'vue-router';
 import { useMessage } from '@lt-frame/hooks';
 import { h } from 'vue';
-import { getAppConfig, getGlobalRouter } from '../configs';
+import { LtHttp, LtRouter, getAppConfig } from '../configs';
 import { usePermissionStore } from './permission';
 
 export const useUserStore = defineStore({
@@ -24,7 +24,7 @@ export const useUserStore = defineStore({
 		},
 		async login(username: string, password: string) {
 			try {
-				const data = await getLtHttp().post(
+				const data = await LtHttp.post(
 					{ url: 'api/login', data: [username, password] },
 					{ errorMessageMode: 'modal' }
 				);
@@ -39,29 +39,40 @@ export const useUserStore = defineStore({
 			// 动态添加路由
 			const permissionStore = usePermissionStore();
 			if (!permissionStore.isDynamicAddedRoute) {
-				const { dynamicRoutes, basicRoutes } = getAppConfig();
-				const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
-				routes.forEach((route) => {
-					getGlobalRouter().addRoute(route as unknown as RouteRecordRaw);
-				});
-				getGlobalRouter().addRoute(
-					basicRoutes?.PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw
-				);
-				permissionStore.setDynamicAddedRoute(true);
+				const { routes: routesConfig } = getAppConfig();
+				if (routesConfig) {
+					const { dynamicRoutes, PAGE_NOT_FOUND_ROUTE } = routesConfig;
+					if (dynamicRoutes) {
+						const routes =
+							await permissionStore.buildRoutesAction(dynamicRoutes);
+						routes.forEach((route) => {
+							LtRouter.addRoute(route as unknown as RouteRecordRaw);
+						});
+						if (PAGE_NOT_FOUND_ROUTE) {
+							LtRouter.addRoute(
+								PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw
+							);
+						}
+
+						permissionStore.setDynamicAddedRoute(true);
+					}
+				}
 			}
-			await getGlobalRouter().replace(getAppConfig().homePage!!);
+			await LtRouter.replace(getAppConfig().routes?.homePage!!);
 		},
 		async logout() {
 			this.setUserInfo(null);
-			const { basicRoutes } = getAppConfig();
+
+			const { routes } = getAppConfig();
 			let loginPath = '';
-			if (basicRoutes) {
-				const { LOGIN_ROUTE } = basicRoutes;
+			if (routes) {
+				const { LOGIN_ROUTE } = routes;
 				if (LOGIN_ROUTE) {
 					loginPath = LOGIN_ROUTE.path;
 				}
 			}
-			getGlobalRouter().push(loginPath);
+
+			LtRouter.push(loginPath);
 		},
 		confirmLoginOut() {
 			const { createConfirm } = useMessage();

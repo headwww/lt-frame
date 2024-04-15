@@ -1,2 +1,2 @@
-export * from './defineConfigV1';
+export * from './application';
 export * from './types';

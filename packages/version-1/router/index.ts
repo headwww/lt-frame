@@ -1,4 +1,4 @@
-import { getBasicRoutes, getGlobalRouter } from '../configs';
+import { LtRouter, getBasicRoutes } from '../configs';
 
 /**
  * 重置路由器的路由配置
@@ -13,14 +13,12 @@ export function resetRouter() {
 		});
 	getRouteNames(getBasicRoutes());
 
-	getGlobalRouter()
-		.getRoutes()
-		.forEach((route) => {
-			const { name } = route;
-			if (name && !WHITE_NAME_LIST.includes(name as string)) {
-				getGlobalRouter().hasRoute(name) && getGlobalRouter().removeRoute(name);
-			}
-		});
+	LtRouter.getRoutes().forEach((route) => {
+		const { name } = route;
+		if (name && !WHITE_NAME_LIST.includes(name as string)) {
+			LtRouter.hasRoute(name) && LtRouter.removeRoute(name);
+		}
+	});
 }
 export * from './types';
 export * from './constant';

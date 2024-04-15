@@ -1,8 +1,8 @@
 // import { Persistent } from '@lt-frame/utils';
 import { useMessage } from '@lt-frame/hooks';
-import { getLtHttp } from '@lt-frame/utils';
 import { useUserStore } from '@lt-frame/version-1/stores';
 import { Router } from 'vue-router';
+import { LtHttp } from '../../configs';
 
 export function createKeepLogin(router: Router) {
 	const userStore = useUserStore();
@@ -13,11 +13,10 @@ export function createKeepLogin(router: Router) {
 		const { createErrorModal } = useMessage();
 		// 有用户登录信息 并且是刚打开页面直接重新登录
 		if (userInfo && !window.LT_KEEP_LOGIN) {
-			const isGo = await getLtHttp()
-				.post(
-					{ url: 'api/login', data: [userInfo.username, userInfo.password] },
-					{ errorMessageMode: 'none' }
-				)
+			const isGo = await LtHttp.post(
+				{ url: 'api/login', data: [userInfo.username, userInfo.password] },
+				{ errorMessageMode: 'none' }
+			)
 				.then(() => {
 					window.LT_KEEP_LOGIN = true;
 					return true;

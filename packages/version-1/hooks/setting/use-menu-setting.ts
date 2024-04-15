@@ -1,5 +1,5 @@
 import { computed, unref } from 'vue';
-import { MenuSetting } from '@lt-frame/version-1/types';
+import { MenuSetting } from '../../types';
 import { useAppStore } from '../../stores';
 
 export function useMenuSetting() {

@@ -27,7 +27,6 @@ import { computed, defineComponent, ref, unref } from 'vue';
 import { RouteMeta, useRouter } from 'vue-router';
 import { listenerRouteChange } from '@lt-frame/utils';
 import { useNamespace } from '@lt-frame/hooks';
-import { getAppConfig } from '../../../configs';
 import { useTabStore, useUserStore } from '../../../stores';
 import TabContent from './components/tab-content.vue';
 import { initAffixTabs, useTabsDrag } from './useTabs';
@@ -65,11 +64,7 @@ export default defineComponent({
 
 		listenerRouteChange((route) => {
 			const { name } = route;
-			if (
-				name === getAppConfig().redirectName ||
-				!route ||
-				!userStore.getUserInfo
-			) {
+			if (name === 'Redirect' || !route || !userStore.getUserInfo) {
 				return;
 			}
 			const { path, fullPath, meta = {} } = route;

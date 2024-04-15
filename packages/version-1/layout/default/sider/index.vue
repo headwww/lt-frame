@@ -34,7 +34,6 @@ import { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 import { isUrl, listenerRouteChange, openWindow } from '@lt-frame/utils';
 import { useRouter } from 'vue-router';
 import { uniq } from 'lodash-es';
-import { getAppConfig } from '../../../configs';
 import { usePermissionStore } from '../../../stores';
 import Trigger from './components/trigger.vue';
 import SubMenuItem from './components/sub-menu-item.vue';
@@ -67,7 +66,7 @@ async function handleMenuClick(menu: MenuInfo) {
 }
 
 listenerRouteChange((route) => {
-	if (route.name === getAppConfig().redirectName) return;
+	if (route.name === 'Redirect') return;
 	const { path } = route || unref(currentRoute);
 	selectedKeys.value[0] = path;
 	const keys = getAllParentPath(items, path);

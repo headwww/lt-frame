@@ -41,7 +41,7 @@ import {
 import { parseRef } from '@lt-frame/utils';
 import { reactive, ref } from 'vue';
 import { useDrawer } from '@lt-frame/hooks';
-import { LtHttp } from '../../application';
+import { LtHttp } from '@lt-frame/version-1';
 import Drawer from './drawer.vue';
 
 const [register1, { openDrawer }] = useDrawer();

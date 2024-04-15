@@ -25,7 +25,7 @@ const getToTarget = (tabItem: RouteLocationNormalized) => {
 	};
 };
 
-export const useTabStore = defineStore({
+const useTabStore = defineStore({
 	id: 'lt-tab',
 	state: (): TabState => ({
 		// 需要缓存的选项
@@ -67,11 +67,11 @@ export const useTabStore = defineStore({
 			// 404页面不需要添加
 			if (
 				path === '/exception' ||
-				path === getAppConfig().basicRoutes?.LOGIN_ROUTE?.path ||
+				path === getAppConfig().routes?.LOGIN_ROUTE?.path ||
 				!name ||
 				[
-					getAppConfig().basicRoutes?.REDIRECT_ROUTE?.name,
-					getAppConfig().basicRoutes?.PAGE_NOT_FOUND_ROUTE?.name,
+					getAppConfig().routes?.REDIRECT_ROUTE?.name,
+					getAppConfig().routes?.PAGE_NOT_FOUND_ROUTE?.name,
 				].includes(name as string)
 			) {
 				return;
@@ -131,7 +131,7 @@ export const useTabStore = defineStore({
 				if (this.tabList.length === 1) {
 					// const userStore = useUserStore();
 					// toTarget = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
-					toTarget = getAppConfig().homePage!!;
+					toTarget = getAppConfig().routes?.homePage!!;
 				} else {
 					//  跳转到右侧选项卡
 					const page = this.tabList[index + 1];
@@ -198,7 +198,7 @@ export const useTabStore = defineStore({
 			const len = this.tabList.length;
 			const { path } = unref(router.currentRoute);
 
-			let toPath = getAppConfig().homePage;
+			let toPath = getAppConfig().routes?.homePage;
 
 			if (len > 0) {
 				const page = this.tabList[len - 1];
@@ -313,3 +313,5 @@ export const useTabStore = defineStore({
 		},
 	},
 });
+
+export { useTabStore };
