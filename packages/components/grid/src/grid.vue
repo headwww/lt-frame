@@ -94,10 +94,11 @@ const getGridConfigs = computed((): LtGridProps => {
 			showOverflow: true,
 			// 保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后影响性能，具体取决于数据量）
 			keepSource: true,
+			// 响应式宽高
+			autoResize: true,
+			height: 'auto',
 			// 默认开启虚拟滚动
 			scrollY: { enabled: true },
-			// 默认最大高度是100%
-			height: '100%',
 			// 复选框配置项
 			checkboxConfig: {
 				// 绑定选中属性（行数据中必须存在该字段，否则无效）

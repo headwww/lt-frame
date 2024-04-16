@@ -1,8 +1,8 @@
 .lt-page-layout {
 	position: relative;
 
-	.page-layout-content {
-		margin: 12px;
+	.lt-page-layout-content {
+		// margin: 16px;
 	}
 
 	.ant-page-header {
@@ -12,7 +12,8 @@
 	}
 
 	&-content-bg {
-		background-color: rgb(242 243 245);
+		background-color: #fff;
+		// background-color: rgb(242 243 245);
 	}
 
 	&--dense {

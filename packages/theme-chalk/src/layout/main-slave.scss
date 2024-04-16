@@ -1,0 +1,13 @@
+.lt-main-slave {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.lt-main-slave__main,
+.lt-main-slave__slave {
+	width: 100%;
+	height: 100%;
+	padding: 12px;
+	position: absolute;
+}

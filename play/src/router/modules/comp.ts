@@ -61,6 +61,14 @@ const comps: LtRouteRecordRaw = {
 			},
 			children: [
 				{
+					path: 'layout',
+					name: 'Layout',
+					component: () => import('../../demo/grid/layout.vue'),
+					meta: {
+						title: '布局表单',
+					},
+				},
+				{
 					path: 'grid',
 					name: 'Grid',
 					component: () => import('../../demo/grid/index.vue'),

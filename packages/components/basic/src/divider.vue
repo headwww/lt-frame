@@ -23,7 +23,7 @@ const ns = useNamespace('divider');
 
 const getStrip = computed(
 	(): CSSProperties => ({
-		width: '2px',
+		width: '3px',
 		height: '16px',
 		lineHeight: '24px',
 		backgroundColor: '#3370ff',

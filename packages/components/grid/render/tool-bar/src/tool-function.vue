@@ -1,7 +1,5 @@
 <template>
-	<div
-		style="height: 40px; display: flex; align-items: center; margin-left: 10px"
-	>
+	<div style="height: 40px; display: flex; align-items: center">
 		<LtButton
 			:disabled="isInsert"
 			@click="insert"
