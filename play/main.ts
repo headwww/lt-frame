@@ -10,5 +10,4 @@ import 'vxe-table/lib/style.css';
 const app = createApp(App);
 
 onCreate(app);
-
 app.mount('#app');

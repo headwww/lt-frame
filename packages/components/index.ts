@@ -1,3 +1,5 @@
+import './vxe-table';
+
 export * from './icon';
 export * from './svg-icon';
 export * from './button';
@@ -11,8 +13,7 @@ export * from './loading';
 export * from './page';
 export * from './virlual-scroller';
 export * from './modal';
-export * from './table';
-export * from './grid';
 export * from './transition';
 export * from './form';
 export * from './layout';
+export * from './vxe-table';

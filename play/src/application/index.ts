@@ -12,9 +12,11 @@ import VXETable from 'vxe-table';
 import VXETablePluginAntd from 'vxe-table-plugin-antd';
 
 import { Persistent, deepMerge } from '@lt-frame/utils';
+import { LtTableConfig } from '@lt-frame/components';
 import { asyncRoutes } from '../router';
 
 VXETable.use(VXETablePluginAntd);
+LtTableConfig();
 
 defineConfig({
 	routes: {
