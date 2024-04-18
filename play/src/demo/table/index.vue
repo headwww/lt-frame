@@ -239,6 +239,35 @@ const gridOptions = reactive<VxeGridProps>({
 			field: 'corp.name',
 			title: '公司名称',
 			width: '800',
+			filters: [
+				{
+					data: {
+						currentMode: FilterMode.ENTITY,
+					},
+				},
+			],
+			filterRender: {
+				name: '$lt-filter',
+				props: {
+					filterModes: [FilterMode.ENTITY],
+
+					configs: {
+						columns: [
+							{ type: 'checkbox', width: 40 },
+
+							{
+								field: 'name',
+								title: '编码',
+							},
+							{
+								field: 'code',
+								title: '编码',
+							},
+						],
+					},
+					ajax: () => findCorps(),
+				},
+			},
 			editRender: {
 				name: '$lt-edit-entity',
 				props: {

@@ -31,7 +31,7 @@ VXETable.renderer.add('$lt-filter', {
 
 		options.forEach((option) => {
 			option.data = {
-				currentFilterMode: option.data.currentFilterMode,
+				currentMode: option.data.currentMode,
 				textFilterData: resetTextFilter(),
 				numberFilterData: resetNumberFilter(),
 				dateFilterData: resetDateFilter(),
@@ -49,28 +49,16 @@ VXETable.renderer.add('$lt-filter', {
 			? formatter({ cellValue: params.cellValue, row: null, column })
 			: params.cellValue;
 		const { data } = column.filters[0];
-		if (data.currentFilterMode === FilterMode.TEXT) {
-			return compareFilter(
-				data.currentFilterMode,
-				cellValue,
-				data.textFilterData
-			);
+		if (data.currentMode === FilterMode.TEXT) {
+			return compareFilter(data.currentMode, cellValue, data.textFilterData);
 		}
-		if (data.currentFilterMode === FilterMode.NUMBER) {
-			return compareFilter(
-				data.currentFilterMode,
-				cellValue,
-				data.numberFilterData
-			);
+		if (data.currentMode === FilterMode.NUMBER) {
+			return compareFilter(data.currentMode, cellValue, data.numberFilterData);
 		}
-		if (data.currentFilterMode === FilterMode.DATE) {
-			return compareFilter(
-				data.currentFilterMode,
-				cellValue,
-				data.dateFilterData
-			);
+		if (data.currentMode === FilterMode.DATE) {
+			return compareFilter(data.currentMode, cellValue, data.dateFilterData);
 		}
-		if (data.currentFilterMode === FilterMode.CONTENT) {
+		if (data.currentMode === FilterMode.CONTENT) {
 			const arr: Array<any> = data.contentFilterData.checkedKeys;
 			if (arr.includes('$_SELECT_ALL')) {
 				return true;
@@ -81,7 +69,7 @@ VXETable.renderer.add('$lt-filter', {
 			return arr.includes(cellValue);
 		}
 
-		if (data.currentFilterMode === FilterMode.ENTITY) {
+		if (data.currentMode === FilterMode.ENTITY) {
 			const splitList = split(params.column.field, '.');
 			if (splitList.length > 1) {
 				splitList.shift();
