@@ -12,6 +12,7 @@ import {
 	Result,
 	checkStatus,
 	deepMerge,
+	parseRef,
 } from '@lt-frame/utils';
 
 const { createMessage, createErrorModal } = useMessage();
@@ -21,19 +22,25 @@ const transform: AxiosTransform = {
 		res: AxiosResponse<Result>,
 		options: RequestOptions
 	) => {
-		const { isTransformResponse, isReturnNativeResponse } = options;
+		const { isTransformResponse, isReturnNativeResponse, fastjson } = options;
 		// 是否返回原生响应头
 		if (isReturnNativeResponse) {
 			return res;
 		}
 		// 提取出data
 		if (!isTransformResponse) {
-			return res.data;
+			if (fastjson === false) {
+				return res.data;
+			}
+			return parseRef(res.data);
 		}
+
 		// 本项目后端接口没有做统一返回处理，所以无法做下面的操作，
 		// 因为所有的报错全部被后端通过try-catch出去了所以只会走responseInterceptorsCatch
-
-		return res.data;
+		if (fastjson === false) {
+			return res.data;
+		}
+		return parseRef(res.data);
 	},
 
 	beforeRequestHook: (config) => config,
@@ -74,6 +81,8 @@ const transform: AxiosTransform = {
 		}
 
 		checkStatus(error?.response?.status, msg, errorMessageMode);
+
+		console.log(error);
 
 		// 添加自动重试机制 保险起见 只针对GET请求
 		const retryRequest = new AxiosRetry();

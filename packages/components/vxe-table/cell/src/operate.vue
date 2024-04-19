@@ -49,7 +49,7 @@
 					@click="cancelRowEvent"
 					:disabled="getEditDisabled"
 					:style="{
-						color: getViewDisabled ? '#d9d9d9' : '#f54a45',
+						color: getEditDisabled ? '#d9d9d9' : '#f54a45',
 					}"
 					type="text"
 					size="small"
@@ -60,7 +60,7 @@
 					@click="editRowEvent"
 					:disabled="getEditDisabled"
 					:style="{
-						color: getViewDisabled ? '#d9d9d9' : '#3370ff',
+						color: getEditDisabled ? '#d9d9d9' : '#3370ff',
 					}"
 					type="text"
 					size="small"
@@ -110,16 +110,16 @@ import { DropMenu, LtDropdown } from '../../../dropdown';
 
 const props = defineProps(operateProps);
 
-const emit = defineEmits(['viewClick', 'buttonsItemClick', 'menusItemClick']);
+const emit = defineEmits(['viewClick', 'itemClick']);
 
 function handleMenuEvent(menu: DropMenu) {
 	const { params } = props;
-	emit('buttonsItemClick', menu.event, params);
+	emit('itemClick', menu.event, params);
 }
 
 function handleButtonsItemClick(event?: string | number) {
 	const { params } = props;
-	emit('buttonsItemClick', event, params);
+	emit('itemClick', event, params);
 }
 
 function handleViewClick() {
@@ -135,7 +135,7 @@ const getMenus = computed(() => {
 			const { visible } = item;
 			if (!isUndefined(visible)) {
 				if (isFunction(visible)) {
-					return visible(params?.row);
+					return visible(params!!);
 				}
 				return visible;
 			}
@@ -166,7 +166,7 @@ const getButtons = computed(() => {
 			const { visible } = item;
 			if (!isUndefined(visible)) {
 				if (isFunction(visible)) {
-					return visible(params?.row);
+					return visible(params!!);
 				}
 				return visible;
 			}
@@ -180,7 +180,7 @@ const getButtons = computed(() => {
 
 function handleDisabled(disabled?: boolean | Fn<any>): boolean {
 	if (isFunction(disabled)) {
-		return disabled(props.params?.row);
+		return disabled(props.params!!);
 	}
 	return disabled as boolean;
 }
@@ -189,7 +189,7 @@ const getViewVisible = computed(() => {
 	const { viewVisible, params } = props;
 	if (viewVisible) {
 		if (isFunction(viewVisible)) {
-			return viewVisible(params?.row);
+			return viewVisible(params!!);
 		}
 		return viewVisible;
 	}
@@ -200,7 +200,7 @@ const getViewDisabled = computed(() => {
 	const { viewDisabled, params } = props;
 	if (viewDisabled) {
 		if (isFunction(viewDisabled)) {
-			return viewDisabled(params?.row);
+			return viewDisabled(params!!);
 		}
 		return viewDisabled;
 	}
@@ -211,7 +211,7 @@ const getEditVisible = computed(() => {
 	const { editVisible, params } = props;
 	if (editVisible) {
 		if (isFunction(editVisible)) {
-			return editVisible(params?.row);
+			return editVisible(params!!);
 		}
 		return editVisible;
 	}
@@ -222,7 +222,7 @@ const getEditDisabled = computed(() => {
 	const { editDisabled, params } = props;
 	if (editDisabled) {
 		if (isFunction(editDisabled)) {
-			return editDisabled(params?.row);
+			return editDisabled(params!!);
 		}
 		return editDisabled;
 	}

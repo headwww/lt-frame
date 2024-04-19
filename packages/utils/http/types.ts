@@ -37,6 +37,8 @@ export interface RequestOptions {
 	ignoreCancelToken?: boolean;
 	// 请求重试机制配置
 	retryRequest?: RetryRequest;
+	// 是否是循环引用的返回值，需要解决fastjson的循环引用bug，默认开启
+	fastjson?: boolean;
 }
 
 /**

@@ -12,15 +12,20 @@ import {
 	LogicalOperators,
 	LtPageLayout,
 	TemporalOperator,
-	ToolBusinessProps,
+	LtToolBusinessProps,
 	ToolBusinessOptions,
+	LtToolFunctionProps,
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { parseRef } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
 import dayjs from 'dayjs';
 import { reactive } from 'vue';
-import { VxeColumnPropTypes, VxeGridProps } from 'vxe-table';
+import {
+	VxeColumnPropTypes,
+	VxeGlobalRendererHandles,
+	VxeGridProps,
+} from 'vxe-table';
 import XEUtils from 'xe-utils';
 
 enum CorpType {
@@ -86,10 +91,7 @@ const gridOptions = reactive<VxeGridProps>({
 						console.log(params);
 					},
 
-					onButtonsItemClick: (event, params) => {
-						console.log(event, params);
-					},
-					onMenusItemClick: (event, params) => {
+					onItemClick: (event, params) => {
 						console.log(event, params);
 					},
 				},
@@ -250,7 +252,6 @@ const gridOptions = reactive<VxeGridProps>({
 				name: '$lt-filter',
 				props: {
 					filterModes: [FilterMode.ENTITY],
-
 					configs: {
 						columns: [
 							{ type: 'checkbox', width: 40 },
@@ -300,21 +301,69 @@ const gridOptions = reactive<VxeGridProps>({
 				buttonRender: {
 					name: '$lt-tool-function',
 					props: {
-						save: true,
-						remove: true,
-						reset: true,
-					},
+						options: [
+							{
+								default: 'insert',
+								text: '新增',
+								type: 'primary',
+								divider: false,
+								preIcon: 'svg-icon:frame-insert',
+							},
+							{
+								default: 'save',
+								text: '保存',
+								type: 'text',
+								preIcon: 'svg-icon:frame-save',
+							},
+							{
+								default: 'refresh',
+								text: '刷新',
+								type: 'text',
+								preIcon: 'svg-icon:frame-refresh',
+							},
+							{
+								default: 'reset',
+								text: '清除筛选',
+								type: 'text',
+								preIcon: 'svg-icon:frame-clean',
+							},
+							{
+								default: 'remove',
+								text: '删除',
+								type: 'text',
+								preIcon: 'svg-icon:frame-delete',
+							},
+							{
+								event: '',
+								text: '多选',
+								divider: false,
+								children: [
+									{
+										default: 'save',
+										text: '保存',
+									},
+									{
+										event: 'TEST1',
+										text: '多选1',
+									},
+								],
+							},
+						],
+					} as LtToolFunctionProps,
 					events: {
-						onSave: (param: any) => {
+						onSave: (param: VxeGlobalRendererHandles.RenderButtonParams) => {
 							createMessage.success('保存');
 							console.log(param);
 						},
-						onRemove: (records: any) => {
+						onRemove: (param: VxeGlobalRendererHandles.RenderButtonParams) => {
 							createMessage.success('删除');
-							console.log(records);
+							console.log(param);
 						},
 						onRefresh: () => {
 							createMessage.success('刷新');
+						},
+						onItemClick: (event, params) => {
+							console.log(event, params);
 						},
 					},
 				},
@@ -344,9 +393,12 @@ const gridOptions = reactive<VxeGridProps>({
 								text: '结束',
 							},
 						],
-					} as ToolBusinessProps,
+					} as LtToolBusinessProps,
 					events: {
-						onItemClick: (option: ToolBusinessOptions, params: any) => {
+						onItemClick: (
+							option: ToolBusinessOptions,
+							params: VxeGlobalRendererHandles.RenderToolParams
+						) => {
 							createMessage.success(option.event);
 							console.log(params);
 						},
@@ -356,13 +408,13 @@ const gridOptions = reactive<VxeGridProps>({
 		],
 	},
 	editRules: {
-		username: [{ required: true, message: '必填字段' }],
+		username: [{ required: true, content: '必填字段' }],
 		version: [
-			{ type: 'number', min: 0, max: 100000, message: '输入 0 ~ 100000 范围' },
+			{ type: 'number', min: 0, max: 100000, content: '输入 0 ~ 100000 范围' },
 		],
-		created: [{ required: true, message: '必填日期' }],
-		type: [{ required: true, message: '必填字段' }],
-		'corp.name': [{ required: true, message: '必填字段' }],
+		created: [{ required: true, content: '必填日期' }],
+		type: [{ required: true, content: '必填字段' }],
+		'corp.name': [{ required: true, content: '必填字段' }],
 	},
 });
 

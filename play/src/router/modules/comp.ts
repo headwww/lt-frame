@@ -55,49 +55,25 @@ const comps: LtRouteRecordRaw = {
 		{
 			path: 'table',
 			name: 'Table',
-			redirect: '/component/table/grid',
+			redirect: '/component/table/tableDemo',
 			meta: {
 				title: 'Table',
 			},
 			children: [
 				{
-					path: 'layout',
-					name: 'Layout',
-					component: () => import('../../demo/grid/layout.vue'),
-					meta: {
-						title: '布局表单',
-					},
-				},
-				{
-					path: 'grid',
-					name: 'Grid',
-					component: () => import('../../demo/grid/index.vue'),
-					meta: {
-						title: '配置表单',
-					},
-				},
-				{
-					path: 'mainsub',
-					name: 'MainSub',
-					component: () => import('../../demo/grid/main-sub-grid.vue'),
-					meta: {
-						title: '主子表',
-					},
-				},
-				{
-					path: 'table-edit',
-					name: 'TableEdit',
+					path: 'tableDemo',
+					name: 'TableDemo',
 					component: () => import('../../demo/table/index.vue'),
 					meta: {
-						title: '编辑表单',
+						title: '表格',
 					},
 				},
 				{
-					path: 'table-filter',
-					name: 'TableFilter',
-					component: () => import('../../demo/table/index-filter.vue'),
+					path: 'tableTree',
+					name: 'TableTree',
+					component: () => import('../../demo/table/tree.vue'),
 					meta: {
-						title: '筛选表单',
+						title: '树表格',
 					},
 				},
 			],

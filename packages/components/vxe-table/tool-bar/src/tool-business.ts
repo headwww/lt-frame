@@ -19,4 +19,4 @@ export const toolBusinessProps = {
 	},
 };
 
-export type ToolBusinessProps = ExtractPropTypes<typeof toolBusinessProps>;
+export type LtToolBusinessProps = ExtractPropTypes<typeof toolBusinessProps>;

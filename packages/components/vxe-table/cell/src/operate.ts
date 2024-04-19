@@ -4,9 +4,11 @@ import { VxeGlobalRendererHandles } from 'vxe-table';
 
 export interface OperationOption {
 	// 是否显示按钮
-	visible?: boolean | Fn<any, boolean>;
+	visible?: boolean | Fn<VxeGlobalRendererHandles.RenderDefaultParams, boolean>;
 	// 是否禁用按钮
-	disabled?: boolean | Fn<any, boolean>;
+	disabled?:
+		| boolean
+		| Fn<VxeGlobalRendererHandles.RenderDefaultParams, boolean>;
 	// 显示文本
 	text?: string;
 	// 图标
@@ -19,17 +21,25 @@ export const operateProps = {
 	params: Object as PropType<VxeGlobalRendererHandles.RenderDefaultParams>,
 	// 编辑按钮
 	editVisible: {
-		type: [Boolean, Function] as PropType<boolean | Fn<any, boolean>>,
+		type: [Boolean, Function] as PropType<
+			boolean | Fn<VxeGlobalRendererHandles.RenderDefaultParams, boolean>
+		>,
 	},
 	editDisabled: {
-		type: [Boolean, Function] as PropType<boolean | Fn<any, boolean>>,
+		type: [Boolean, Function] as PropType<
+			boolean | Fn<VxeGlobalRendererHandles.RenderDefaultParams, boolean>
+		>,
 	},
 	// 查看按钮
 	viewVisible: {
-		type: [Boolean, Function] as PropType<boolean | Fn<any, boolean>>,
+		type: [Boolean, Function] as PropType<
+			boolean | Fn<VxeGlobalRendererHandles.RenderDefaultParams, boolean>
+		>,
 	},
 	viewDisabled: {
-		type: [Boolean, Function] as PropType<boolean | Fn<any, boolean>>,
+		type: [Boolean, Function] as PropType<
+			boolean | Fn<VxeGlobalRendererHandles.RenderDefaultParams, boolean>
+		>,
 	},
 	//  其他按钮
 	buttons: {

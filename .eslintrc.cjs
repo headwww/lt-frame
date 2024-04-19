@@ -74,6 +74,8 @@ module.exports = {
 		"import/no-self-import":0,
 		"vue/require-default-prop":0,
 		"vue/one-component-per-file":0,
-		"no-nested-ternary":0
+		"no-nested-ternary":0,
+		"default-case":0,
+		'no-case-declarations':0
 	},
 }
