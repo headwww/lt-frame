@@ -18,6 +18,9 @@ export function checkStatus(
 		case 531:
 			errMessage = `${msg}`;
 			break;
+		case 600:
+			errMessage = `${msg}`;
+			break;
 		default:
 	}
 	if (errMessage) {

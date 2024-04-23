@@ -22,19 +22,31 @@ const transform: AxiosTransform = {
 		res: AxiosResponse<Result>,
 		options: RequestOptions
 	) => {
-		const { isTransformResponse, isReturnNativeResponse, fastjson } = options;
+		const {
+			isTransformResponse,
+			isReturnNativeResponse,
+			fastjson,
+			isParameters,
+		} = options;
 		// 是否返回原生响应头
-		if (isReturnNativeResponse) {
+		if (isReturnNativeResponse !== false) {
 			return res;
 		}
-		// 提取出data
-		if (!isTransformResponse) {
-			if (fastjson === false) {
-				return res.data;
+		// 提取出data或者parameters 默认提取
+		if (isTransformResponse !== false) {
+			if (isParameters === true) {
+				if (fastjson === false) {
+					return res.data.parameters;
+				}
+				return parseRef(res.data).parameters;
 			}
-			return parseRef(res.data);
+			if (fastjson === false) {
+				return res.data.data;
+			}
+			return parseRef(res.data).data;
 		}
 
+		// 不踢去保留parameters
 		// 本项目后端接口没有做统一返回处理，所以无法做下面的操作，
 		// 因为所有的报错全部被后端通过try-catch出去了所以只会走responseInterceptorsCatch
 		if (fastjson === false) {
@@ -81,9 +93,6 @@ const transform: AxiosTransform = {
 		}
 
 		checkStatus(error?.response?.status, msg, errorMessageMode);
-
-		console.log(error);
-
 		// 添加自动重试机制 保险起见 只针对GET请求
 		const retryRequest = new AxiosRetry();
 		const { isOpenRetry } = config.requestOptions.retryRequest;
@@ -116,9 +125,9 @@ function defineHttp(opt?: Partial<CreateAxiosOptions>): LTAxios {
 					// 是否返回原生响应头 比如：需要获取响应头时使用该属性
 					isReturnNativeResponse: false,
 					// 需要对返回数据进行处理
-					isTransformResponse: false,
+					// isTransformResponse: true,
 					// 消息提示类型
-					errorMessageMode: 'message',
+					errorMessageMode: 'modal',
 					retryRequest: {
 						// 请求重试机制配置
 						isOpenRetry: false,

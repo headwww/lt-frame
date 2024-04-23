@@ -29,6 +29,8 @@ export interface RequestOptions {
 	// 是否返回原生响应头
 	// 例如：在需要获取响应头时使用该属性
 	isReturnNativeResponse?: boolean;
+	// 是否携带parameters
+	isParameters?: boolean;
 	// 错误消息提示类型
 	errorMessageMode?: ErrorMessageMode;
 	// 成功消息提示类型
@@ -43,14 +45,28 @@ export interface RequestOptions {
 
 /**
  * 统一返回格式
+ *
  */
 export interface Result<T = any> {
-	// 响应码
-	code: number;
-	// 响应类型，可以是'success'、'error'或'warning'
-	type: 'success' | 'error' | 'warning';
-	// 响应消息
-	message: string;
-	// 响应数据
-	result: T;
+	// // 响应码
+	// code: number;
+	// // 响应类型，可以是'success'、'error'或'warning'
+	// type: 'success' | 'error' | 'warning';
+	// // 响应消息
+	// message: string;
+	// // 响应数据
+	// result: T;
+
+	// 提交成功后返回请求时候的参数，这个参数由后端产生id字段
+	parameters: T;
+	// 返回的数据
+	data: T;
+	// 是否请求成功
+	success: boolean;
+	// 错误编码
+	errorCode: number;
+	// 错误提示
+	errorText: string;
+	// 系统级别错误
+	throwable: string;
 }

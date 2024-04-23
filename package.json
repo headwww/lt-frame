@@ -102,7 +102,6 @@
 		"@lt-frame/hooks": "workspace:^",
 		"@lt-frame/theme-chalk": "workspace:^",
 		"@lt-frame/utils": "workspace:^",
-		"@lt-frame/version-1": "workspace:^",
-		"flatted": "^3.3.1"
+		"@lt-frame/version-1": "workspace:^"
 	}
 }

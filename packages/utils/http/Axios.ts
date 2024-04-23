@@ -188,6 +188,7 @@ export class LTAxios {
 					if (transformResponseHook && isFunction(transformResponseHook)) {
 						try {
 							const ret = transformResponseHook(res, opt);
+
 							resolve(ret);
 						} catch (err) {
 							reject(err || new Error('request error!'));

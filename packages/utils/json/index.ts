@@ -1,4 +1,4 @@
-import { isNaN, isObject } from 'lodash-es';
+import { isObject } from 'lodash-es';
 import { Recordable } from '../types';
 
 export function parseRef(root: any): any {
@@ -45,13 +45,20 @@ export function parseRef(root: any): any {
 		for (let i = 1; i < parts.length; i++) {
 			// 从索引1开始，0是$
 			const key = parts[i];
+
 			if (!key) continue;
-			if (!isNaN(key)) {
-				// 非数字
-				value = value[key];
-			} else {
-				value = value[parseInt(key, 10)];
-			}
+
+			value = value[key];
+
+			// if (!isNaN(Number(key))) {
+			// 	// 非数字
+			// 	console.log(key, isNaN(Number(key)));
+
+			// } else {
+			// 	console.log(key, isNaN(Number(key)), value[key]);
+
+			// 	value = value[key];
+			// }
 		}
 		return value;
 	}

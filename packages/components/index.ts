@@ -17,3 +17,4 @@ export * from './transition';
 export * from './form';
 export * from './layout';
 export * from './vxe-table';
+export * from './tree';

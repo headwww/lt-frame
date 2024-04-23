@@ -14,7 +14,7 @@ import { LtPageLayout } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { Condition } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
-import { concat, get, omit } from 'lodash-es';
+import { get, merge, omit, uniqueId } from 'lodash-es';
 import { reactive, ref } from 'vue';
 import {
 	VxeGridInstance,
@@ -23,6 +23,7 @@ import {
 	VxeColumnPropTypes,
 	VxeGlobalRendererHandles,
 } from 'vxe-table';
+import { remove, toTreeArray } from 'xe-utils';
 
 enum CorpType {
 	HEAD = '集团',
@@ -40,8 +41,11 @@ const gridEvents = reactive<VxeGridListeners>({
 			switch (menu.code) {
 				case 'insertChild':
 					const { row: newRow } = await $grid.insert({
-						parent: { ...omit(row, 'children', '_X_ROW_CHILD', '_X_ROW_KEY') },
-						parentId: row.id,
+						parent: {
+							...omit(row, 'children', '_X_ROW_CHILD'),
+						},
+						$id: uniqueId('$'),
+						$parentId: row.$id,
 					});
 					await $grid.setTreeExpand(row, true); // 将父节点展开
 					await $grid.setEditRow(newRow); // 插入子节点
@@ -63,8 +67,8 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 	treeConfig: {
 		transform: true,
-		rowField: 'id',
-		parentField: 'parentId',
+		rowField: '$id',
+		parentField: '$parentId',
 		hasChild: 'hasChild',
 	},
 	columns: [
@@ -84,7 +88,6 @@ const gridOptions = reactive<VxeGridProps>({
 				},
 			},
 		},
-
 		{
 			treeNode: true,
 			width: 200,
@@ -97,7 +100,6 @@ const gridOptions = reactive<VxeGridProps>({
 				},
 			},
 		},
-
 		{
 			width: 250,
 			field: 'name',
@@ -189,9 +191,19 @@ const gridOptions = reactive<VxeGridProps>({
 						onSave: (param: VxeGlobalRendererHandles.RenderButtonParams) => {
 							const { $grid } = param;
 							if ($grid) {
-								const insertRecords = $grid.getInsertRecords();
-								const updateRecords = $grid.getUpdateRecords();
-								const mergedArray = concat(insertRecords, updateRecords);
+								const a = toTreeArray(xGrid.value?.getTableData().fullData, {
+									children: '_X_ROW_CHILD',
+								});
+
+								const mergedArray: any[] = [];
+								a.forEach((item) => {
+									if (
+										xGrid.value?.isUpdateByRow(item) ||
+										xGrid.value?.isInsertByRow(item)
+									) {
+										mergedArray.push(item);
+									}
+								});
 								if (mergedArray.length > 0) {
 									saveCorps(mergedArray);
 								}
@@ -203,7 +215,6 @@ const gridOptions = reactive<VxeGridProps>({
 						onRemove: (param: VxeGlobalRendererHandles.RenderButtonParams) => {
 							const checkboxRecords = param.$grid?.getCheckboxRecords();
 							const b = checkboxRecords?.some((item) => item.type === 'HEAD');
-
 							if (b) {
 								createMessage.warn('集团无法删除');
 							} else {
@@ -235,8 +246,10 @@ const findCorps = () => {
 				const data = resp.map((item: any) => ({
 					...item,
 					hasChild: item.type !== 'FACTORY',
-					parentId: get(item, 'parent.id'),
+					$parentId: get(item, 'parent.id'),
+					$id: get(item, 'id'),
 				}));
+
 				resolve(data);
 			})
 			.catch(() => {
@@ -244,21 +257,40 @@ const findCorps = () => {
 			});
 	});
 };
-const saveCorps = (value: any) => {
-	LtHttp.post({
-		url: 'api/corpServiceImpl/saveCorps',
-		data: [value],
-	}).then(() => {
-		xGrid.value?.commitProxy('query');
+
+const saveCorps = (arr: any[]) => {
+	LtHttp.post(
+		{
+			url: 'api/corpServiceImpl/saveCorps',
+			data: [arr],
+		},
+		{ isParameters: true }
+	).then((data) => {
+		data[0].forEach((item: any, index: number) => {
+			merge(arr[index], item);
+		});
+		xGrid.value?.removeInsertRow();
 	});
 };
 
 const deleteCorps = (value: any) => {
-	LtHttp.post({
-		url: 'api/corpServiceImpl/deleteCorps',
-		data: [value],
-	}).then(() => {
-		xGrid.value?.commitProxy('query');
+	LtHttp.post(
+		{
+			url: 'api/corpServiceImpl/deleteCorps',
+			data: [value],
+		},
+		{ isParameters: true }
+	).then((data) => {
+		const a = toTreeArray(xGrid.value?.getTableData().fullData, {
+			children: '_X_ROW_CHILD',
+		});
+
+		const d = data[0];
+		d.forEach((element: any) => {
+			remove(a, (item) => item.id === element.id);
+		});
+
+		xGrid.value?.loadData(a);
 	});
 };
 

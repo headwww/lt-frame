@@ -111,6 +111,14 @@ const comps: LtRouteRecordRaw = {
 			},
 		},
 		{
+			path: 'tree',
+			name: 'Tree',
+			component: () => import('../../demo/tree/index.vue'),
+			meta: {
+				title: '树形控件',
+			},
+		},
+		{
 			path: 'scroll',
 			name: 'ScrollView',
 			redirect: '/component/scroll/scrollBar',
