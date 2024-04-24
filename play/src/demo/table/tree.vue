@@ -270,6 +270,7 @@ const saveCorps = (arr: any[]) => {
 			merge(arr[index], item);
 		});
 		xGrid.value?.removeInsertRow();
+		arr.forEach((item) => xGrid.value?.reloadRow(item, {}));
 	});
 };
 

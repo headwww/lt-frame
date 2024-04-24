@@ -31,6 +31,7 @@ import { Avatar } from 'ant-design-vue';
 import { CaretDownOutlined } from '@ant-design/icons-vue';
 import { computed, ref } from 'vue';
 import { useUserStore } from '../../../../stores';
+import { useGo } from '../../../../hooks';
 
 const ns = useNamespace('user-info');
 
@@ -55,13 +56,22 @@ const getDropMenuList = computed(() => [
 		text: '退出登录',
 		event: 'LOGIN_OUT',
 	},
+	{
+		text: '错误日志',
+		event: 'ERROR_LOG',
+	},
 ]);
+
+const go = useGo();
 
 function handleMenuEvent(menu: DropMenu): void {
 	const { event } = menu;
 	switch (event) {
 		case 'LOGIN_OUT':
 			userStore.confirmLoginOut();
+			break;
+		case 'ERROR_LOG':
+			go('/error-log');
 			break;
 		default:
 			break;

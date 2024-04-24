@@ -3,6 +3,7 @@ import {
 	LtRouter,
 	ProjectConfig,
 	defineConfig,
+	setupErrorHandle,
 	setupRouterGuard,
 	useAppStore,
 } from '@lt-frame/version-1';
@@ -57,4 +58,5 @@ export function onCreate(app: App) {
 	app.use(LtRouter);
 	app.use(VXETable);
 	setupRouterGuard(LtRouter);
+	setupErrorHandle(app);
 }

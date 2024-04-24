@@ -1,7 +1,12 @@
 /**
  * 请求报错时的提示方式
  */
-export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
+export type ErrorMessageMode =
+	| 'none'
+	| 'modal'
+	| 'message'
+	| 'notification'
+	| undefined;
 
 /**
  * 请求成功时的提示方式

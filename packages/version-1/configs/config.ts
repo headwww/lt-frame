@@ -97,7 +97,7 @@ export const defaultConfig: AppConfig = {
 					name: 'ErrorLogList',
 					component: () => import('../view/log/index.vue'),
 					meta: {
-						title: '日志列表',
+						title: '错误日志',
 						currentActiveMenu: '/error-log',
 					},
 				},

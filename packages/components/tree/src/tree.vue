@@ -8,7 +8,6 @@ export default defineComponent({
 	props: treeProps,
 	setup(props) {
 		const treeData = computed(() => props.treeData);
-
 		return () => <Tree treeData={treeData.value}></Tree>;
 	},
 });

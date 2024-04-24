@@ -4,6 +4,7 @@ import './cell/cell';
 import './edit/edit';
 import './filter/filter';
 import './tool-bar/tool-bar';
+import './empty/empty';
 
 export * from './filter/src/advanced-filter';
 export * from './filter/src/use-filter-data';
@@ -69,6 +70,9 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					// 当鼠标点击行时，是否要高亮当前行
 					isCurrent: true,
 				},
+				emptyRender: {
+					name: '$lt-empty',
+				},
 			},
 			grid: {
 				// 是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）
@@ -121,6 +125,9 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					isHover: true,
 					// 当鼠标点击行时，是否要高亮当前行
 					isCurrent: true,
+				},
+				emptyRender: {
+					name: '$lt-empty',
 				},
 			},
 		} as VXETableConfigOptions,

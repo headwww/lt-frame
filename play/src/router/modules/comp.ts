@@ -73,7 +73,15 @@ const comps: LtRouteRecordRaw = {
 					name: 'TableTree',
 					component: () => import('../../demo/table/tree.vue'),
 					meta: {
-						title: '树表格',
+						title: '公司维护',
+					},
+				},
+				{
+					path: 'danbiao',
+					name: 'Danbiao',
+					component: () => import('../../demo/table/danbiao.vue'),
+					meta: {
+						title: '登录日志',
 					},
 				},
 			],

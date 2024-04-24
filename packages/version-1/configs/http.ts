@@ -10,10 +10,11 @@ import {
 	RequestEnum,
 	RequestOptions,
 	Result,
-	checkStatus,
 	deepMerge,
 	parseRef,
 } from '@lt-frame/utils';
+import { checkStatus } from './checkStatus';
+import { useErrorLogStore } from '../stores';
 
 const { createMessage, createErrorModal } = useMessage();
 
@@ -62,6 +63,8 @@ const transform: AxiosTransform = {
 	responseInterceptors: (res: AxiosResponse<any>) => res,
 
 	responseInterceptorsCatch(axiosInstance: AxiosInstance, error: any) {
+		const errorLogStore = useErrorLogStore();
+		errorLogStore.addAjaxErrorInfo(error);
 		const { response, code, config, message } = error || {};
 		const msg: string = response?.data?.errorText ?? '';
 		const err: string = error?.toString?.() ?? '';
@@ -127,7 +130,7 @@ function defineHttp(opt?: Partial<CreateAxiosOptions>): LTAxios {
 					// 需要对返回数据进行处理
 					// isTransformResponse: true,
 					// 消息提示类型
-					errorMessageMode: 'modal',
+					errorMessageMode: 'notification',
 					retryRequest: {
 						// 请求重试机制配置
 						isOpenRetry: false,
