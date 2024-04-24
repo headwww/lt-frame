@@ -95,6 +95,14 @@ const comps: LtRouteRecordRaw = {
 			},
 		},
 		{
+			path: 'context',
+			name: 'Context',
+			component: () => import('../../demo/context-menu/index.vue'),
+			meta: {
+				title: '右键菜单',
+			},
+		},
+		{
 			path: 'drawer',
 			name: 'Drawer',
 			component: () => import('../../demo/drawer/index.vue'),
