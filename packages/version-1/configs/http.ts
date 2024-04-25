@@ -11,7 +11,7 @@ import {
 	RequestOptions,
 	Result,
 	deepMerge,
-	parseRef,
+	parse,
 } from '@lt-frame/utils';
 import { checkStatus } from './checkStatus';
 import { useErrorLogStore } from '../stores';
@@ -39,12 +39,12 @@ const transform: AxiosTransform = {
 				if (fastjson === false) {
 					return res.data.parameters;
 				}
-				return parseRef(res.data).parameters;
+				return parse(res.data).parameters;
 			}
 			if (fastjson === false) {
 				return res.data.data;
 			}
-			return parseRef(res.data).data;
+			return parse(res.data).data;
 		}
 
 		// 不踢去保留parameters
@@ -53,7 +53,7 @@ const transform: AxiosTransform = {
 		if (fastjson === false) {
 			return res.data;
 		}
-		return parseRef(res.data);
+		return parse(res.data);
 	},
 
 	beforeRequestHook: (config) => config,

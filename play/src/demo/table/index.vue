@@ -17,7 +17,7 @@ import {
 	LtToolFunctionProps,
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
-import { parseRef } from '@lt-frame/utils';
+import { parse } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
 import dayjs from 'dayjs';
 import { reactive } from 'vue';
@@ -442,7 +442,7 @@ const findRoles = () =>
 			],
 		})
 			.then((data) => {
-				resolve(parseRef(data));
+				resolve(parse(data));
 			})
 			.catch(() => {
 				reject();
@@ -461,7 +461,7 @@ const findCorps = () =>
 			],
 		})
 			.then((data) => {
-				resolve(parseRef(data));
+				resolve(parse(data));
 			})
 			.catch(() => {
 				reject();

@@ -12,9 +12,9 @@
 <script setup lang="ts">
 import { LtPageLayout } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
-import { Condition } from '@lt-frame/utils';
+import { Condition, serialize } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
-import { get, merge, omit, uniqueId } from 'lodash-es';
+import { cloneDeep, get, merge, omit, remove, uniqueId } from 'lodash-es';
 import { reactive, ref } from 'vue';
 import {
 	VxeGridInstance,
@@ -23,7 +23,7 @@ import {
 	VxeColumnPropTypes,
 	VxeGlobalRendererHandles,
 } from 'vxe-table';
-import { remove, toTreeArray } from 'xe-utils';
+import { toTreeArray } from 'xe-utils';
 
 enum CorpType {
 	HEAD = '集团',
@@ -41,9 +41,7 @@ const gridEvents = reactive<VxeGridListeners>({
 			switch (menu.code) {
 				case 'insertChild':
 					const { row: newRow } = await $grid.insert({
-						parent: {
-							...omit(row, 'children', '_X_ROW_CHILD'),
-						},
+						parent: row,
 						$id: uniqueId('$'),
 						$parentId: row.$id,
 					});
@@ -57,7 +55,7 @@ const gridEvents = reactive<VxeGridListeners>({
 
 const gridOptions = reactive<VxeGridProps>({
 	autoResize: true,
-	editConfig: {},
+	editConfig: { trigger: 'click', mode: 'row' },
 	height: 'auto',
 	stripe: false,
 	checkboxConfig: {
@@ -136,6 +134,14 @@ const gridOptions = reactive<VxeGridProps>({
 				},
 			},
 		},
+		{
+			field: 'id',
+			title: 'id',
+		},
+		{
+			field: 'parent.id',
+			title: '父亲id',
+		},
 	],
 	menuConfig: {
 		body: {
@@ -205,7 +211,20 @@ const gridOptions = reactive<VxeGridProps>({
 									}
 								});
 								if (mergedArray.length > 0) {
-									saveCorps(mergedArray);
+									const cloneArr = cloneDeep(mergedArray);
+									cloneArr.forEach((item) => {
+										delete item.$_checked;
+										delete item._X_ROW_CHILD;
+										delete item.children;
+										delete item.parent.children;
+										delete item.parent._X_ROW_CHILD;
+										delete item.$id;
+										delete item.parent.$id;
+										delete item.$parentId;
+										delete item._X_ROW_KEY;
+										delete item.parent._X_ROW_KEY;
+									});
+									saveCorps(mergedArray, cloneArr);
 								}
 							}
 						},
@@ -214,12 +233,23 @@ const gridOptions = reactive<VxeGridProps>({
 						},
 						onRemove: (param: VxeGlobalRendererHandles.RenderButtonParams) => {
 							const checkboxRecords = param.$grid?.getCheckboxRecords();
+
 							const b = checkboxRecords?.some((item) => item.type === 'HEAD');
 							if (b) {
 								createMessage.warn('集团无法删除');
 							} else {
 								if (checkboxRecords && checkboxRecords.length > 0) {
-									deleteCorps(checkboxRecords);
+									const omitArr = checkboxRecords.map((item) =>
+										omit(
+											item,
+											'children',
+											'_X_ROW_CHILD',
+											'parent.children',
+											'parent._X_ROW_CHILD'
+										)
+									);
+
+									deleteCorps(omitArr);
 								}
 							}
 						},
@@ -258,17 +288,18 @@ const findCorps = () => {
 	});
 };
 
-const saveCorps = (arr: any[]) => {
+const saveCorps = (rawArr: any[], arr: any[]) => {
 	LtHttp.post(
 		{
 			url: 'api/corpServiceImpl/saveCorps',
-			data: [arr],
+			data: serialize([arr]),
 		},
 		{ isParameters: true }
 	).then((data) => {
 		data[0].forEach((item: any, index: number) => {
-			merge(arr[index], item);
+			merge(rawArr[index], item);
 		});
+
 		xGrid.value?.removeInsertRow();
 		arr.forEach((item) => xGrid.value?.reloadRow(item, {}));
 	});
@@ -282,15 +313,14 @@ const deleteCorps = (value: any) => {
 		},
 		{ isParameters: true }
 	).then((data) => {
+		// xGrid.value?.commitProxy('query');
 		const a = toTreeArray(xGrid.value?.getTableData().fullData, {
 			children: '_X_ROW_CHILD',
 		});
-
 		const d = data[0];
 		d.forEach((element: any) => {
 			remove(a, (item) => item.id === element.id);
 		});
-
 		xGrid.value?.loadData(a);
 	});
 };

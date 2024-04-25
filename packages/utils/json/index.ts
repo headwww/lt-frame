@@ -1,6 +1,14 @@
 import { isObject } from 'lodash-es';
 import { Recordable } from '../types';
 
+export * from './fastjson';
+
+/**
+ * 废弃使用 fastjson中的函数
+ * @deprecated
+ * @param root
+ * @returns
+ */
 export function parseRef(root: any): any {
 	if (!isObject(root)) {
 		return root;
