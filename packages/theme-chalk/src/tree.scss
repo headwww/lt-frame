@@ -1,0 +1,72 @@
+.lt-tree {
+	background-color: #fff;
+
+	.ant-tree {
+		.ant-tree-checkbox {
+			margin-block-start: 0;
+			margin-inline: 4px 4px;
+
+			& + span {
+				padding-left: 4px;
+			}
+		}
+	}
+
+	.ant-tree-node-content-wrapper {
+		position: relative;
+
+		.ant-tree-title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	&__title {
+		display: flex;
+		position: relative;
+		align-items: center;
+		width: 100%;
+		padding-right: 10px;
+
+		&:hover {
+			.lt_tree__action {
+				visibility: visible;
+			}
+		}
+	}
+
+	&__content {
+		overflow: hidden;
+	}
+
+	&__actions {
+		display: flex;
+		position: absolute;
+		//top: 2px;
+		right: 3px;
+	}
+
+	&__action {
+		visibility: hidden;
+		margin-left: 4px;
+	}
+
+	&-header {
+		display: flex;
+		align-items: center;
+		padding: 0.375rem 0.5rem;
+
+		&-search {
+			justify-self: stretch;
+			align-items: center;
+			cursor: pointer;
+			flex: 1 1 0%;
+			display: flex;
+		}
+	}
+
+	&-full {
+		height: 100%;
+	}
+}

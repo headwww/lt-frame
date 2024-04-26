@@ -1,6 +1,7 @@
-import { withInstall } from '@lt-frame/utils';
 import tree from './src/tree.vue';
 
-export const LtTree = withInstall(tree);
+export const LtTree = tree;
 
 export * from './src/tree';
+
+export * from './src/use-tree';

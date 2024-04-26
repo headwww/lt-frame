@@ -137,10 +137,28 @@ const comps: LtRouteRecordRaw = {
 		{
 			path: 'tree',
 			name: 'Tree',
-			component: () => import('../../demo/tree/index.vue'),
+			redirect: '/component/tree/treeDemo',
 			meta: {
-				title: '树形控件',
+				title: 'Tree',
 			},
+			children: [
+				{
+					path: 'treeDemo',
+					name: 'TreeDemo',
+					component: () => import('../../demo/tree/index.vue'),
+					meta: {
+						title: '基础tree',
+					},
+				},
+				{
+					path: 'searchTree',
+					name: 'SearchTree',
+					component: () => import('../../demo/tree/EditTree.vue'),
+					meta: {
+						title: '可搜索',
+					},
+				},
+			],
 		},
 		{
 			path: 'scroll',
