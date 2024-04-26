@@ -147,8 +147,8 @@ export default defineComponent({
 								if (!contentMinWidth) {
 									return (
 										<div style={fieldStyle}>
-											{getContent()}
 											{renderCopyIcon(isCopyEnabled, getContent)}
+											{getContent()}
 										</div>
 									);
 								}
@@ -158,8 +158,8 @@ export default defineComponent({
 								};
 								return (
 									<div style={style}>
-										{getContent()}
 										{renderCopyIcon(isCopyEnabled, getContent)}
+										{getContent()}
 									</div>
 								);
 							}}

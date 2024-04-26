@@ -81,10 +81,18 @@ const comps: LtRouteRecordRaw = {
 					name: 'Danbiao',
 					component: () => import('../../demo/table/danbiao.vue'),
 					meta: {
-						title: '登录日志',
+						title: '币别',
 					},
 				},
 			],
+		},
+		{
+			path: 'split-pane',
+			name: 'SplitPane',
+			component: () => import('../../demo/split-pane/index.vue'),
+			meta: {
+				title: '分割窗体',
+			},
 		},
 		{
 			path: 'modal',

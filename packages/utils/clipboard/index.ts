@@ -1,24 +1,33 @@
-import { message } from 'ant-design-vue';
+const doc = window.document;
+let copyElem: HTMLTextAreaElement;
 
-/**
- * 复制文本到剪切板的工具函数
- * @param text 要复制的文本
- * @param prompt 复制成功后的提示消息，可选，默认为 '已成功复制到剪切板!'
- */
-export function copyText(
-	text: string,
-	prompt: string | null = '已成功复制到剪切板!'
-) {
-	if (navigator.clipboard) {
-		navigator.clipboard.writeText(text).then(
-			() => {
-				prompt && message.success(prompt);
-			},
-			(error: Error) => {
-				message.error(`复制失败!${error.message}`);
-			}
-		);
-	} else {
-		message.error('你的浏览器不支持剪贴板操作');
+export function handleText(content: string | number) {
+	if (!copyElem) {
+		copyElem = doc.createElement('textarea');
+		copyElem.id = '$XECopy';
+		const styles = copyElem.style;
+		styles.width = '48px';
+		styles.height = '24px';
+		styles.position = 'fixed';
+		styles.zIndex = '0';
+		styles.left = '-500px';
+		styles.top = '-500px';
+		doc.body.appendChild(copyElem);
 	}
+	copyElem.value =
+		content === null || content === undefined ? '' : `${content}`;
+}
+
+export function copyText(content: string | number): boolean {
+	let result = false;
+	try {
+		handleText(content);
+		copyElem.select();
+		copyElem.setSelectionRange(0, copyElem.value.length);
+		result = doc.execCommand('copy');
+		copyElem.blur();
+	} catch (e) {
+		//
+	}
+	return result;
 }

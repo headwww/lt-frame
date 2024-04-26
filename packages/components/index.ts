@@ -19,3 +19,4 @@ export * from './layout';
 export * from './vxe-table';
 export * from './tree';
 export * from './context-menu';
+export * from './splitpanes';

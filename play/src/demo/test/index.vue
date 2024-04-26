@@ -1,35 +1,32 @@
 <template>
-	<div></div>
+	<div class="demo">
+		<SplitPaneLayout horizontal style="height: 400px; background-color: white">
+			<Pane>1</Pane>
+			<Pane>
+				<SplitPaneLayout>
+					<Pane>1</Pane>
+					<Pane>1</Pane>
+					<Pane>1</Pane>
+				</SplitPaneLayout>
+			</Pane>
+			<Pane :minSize="21">2</Pane>
+		</SplitPaneLayout>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import { parse } from '@lt-frame/utils';
-import { LtHttp } from '@lt-frame/version-1';
-
-LtHttp.post(
-	{
-		url: 'api/securityModelService/findUsers',
-		data: [
-			{
-				targetClass: 'lt.fw.core.model.biz.User',
-				queryPath: [
-					'username',
-					'corp.name',
-					'corp.id',
-					'corp.code',
-					'createdBy',
-				],
-			},
-		],
-	},
-	{
-		isTransformResponse: false,
-		fastjson: false,
-	}
-)
-	.then((data) => {
-		console.log(data);
-		console.log(parse(data));
-	})
-	.catch(() => {});
+import {
+	LtSplitpanes as SplitPaneLayout,
+	LtPane as Pane,
+} from '@lt-frame/components';
 </script>
+
+<style lang="scss">
+.demo {
+	font-size: 50px;
+
+	.splitpanes__splitter {
+		border: 1px;
+	}
+}
+</style>

@@ -27,6 +27,7 @@ const [register] = useDescription({
 		{
 			field: 'url',
 			label: 'URL',
+			isCopyEnabled: true,
 		},
 		{
 			field: 'time',
@@ -43,10 +44,12 @@ const [register] = useDescription({
 		{
 			field: 'message.message',
 			label: '错误信息',
+			isCopyEnabled: true,
 		},
 		{
 			field: 'stack',
 			label: 'stack信息',
+			isCopyEnabled: true,
 		},
 	],
 });
