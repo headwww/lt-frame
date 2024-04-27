@@ -137,6 +137,11 @@ export const treeProps = {
 		default: false,
 	},
 	treeWrapperClassName: String,
+	// 是否是目录树
+	directoryTree: {
+		type: Boolean,
+		default: false,
+	},
 };
 
 export type TreeProps = ExtractPropTypes<typeof treeProps>;

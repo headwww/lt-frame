@@ -84,6 +84,14 @@ const comps: LtRouteRecordRaw = {
 						title: '币别',
 					},
 				},
+				{
+					path: 'bmwh',
+					name: 'BMWH',
+					component: () => import('../../demo/table/bmwh.vue'),
+					meta: {
+						title: '部门维护',
+					},
+				},
 			],
 		},
 		{

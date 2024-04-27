@@ -8,16 +8,6 @@ type ToolConfig =
 
 export const toolFunctionProps = {
 	params: Object as PropType<VxeGlobalRendererHandles.RenderButtonParams>,
-	insertDisabled: [Function, Boolean] as PropType<ToolConfig>,
-	saveDisabled: [Function, Boolean] as PropType<ToolConfig>,
-	removeDisabled: [Function, Boolean] as PropType<ToolConfig>,
-	refreshDisabled: [Function, Boolean] as PropType<ToolConfig>,
-	resetDisabled: [Function, Boolean] as PropType<ToolConfig>,
-	insertVisible: [Function, Boolean] as PropType<ToolConfig>,
-	saveVisible: [Function, Boolean] as PropType<ToolConfig>,
-	removeVisible: [Function, Boolean] as PropType<ToolConfig>,
-	refreshVisible: [Function, Boolean] as PropType<ToolConfig>,
-	resetVisible: [Function, Boolean] as PropType<ToolConfig>,
 	options: {
 		type: Array as PropType<ToolButtonOptions[]>,
 		default: [],
@@ -39,8 +29,8 @@ export interface ToolButtonOptions {
 	preIcon?: string;
 	type: 'link' | 'default' | 'primary' | 'ghost' | 'dashed' | 'text';
 	className?: string;
-	visible?: boolean;
-	disabled?: boolean;
+	visible?: ToolConfig;
+	disabled?: ToolConfig;
 	divider?: boolean;
 	// 如果是下拉菜单
 	children?: ToolMenuChildOption[];
@@ -51,7 +41,7 @@ export interface ToolMenuChildOption {
 	default?: DefaultEvent;
 	text?: string;
 	preIcon?: string;
-	visible?: boolean;
-	disabled?: boolean;
+	visible?: ToolConfig;
+	disabled?: ToolConfig;
 	[key: string]: any;
 }

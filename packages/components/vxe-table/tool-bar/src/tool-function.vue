@@ -10,7 +10,7 @@
 				>
 					<LtButton
 						:preIcon="item.preIcon"
-						:disabled="item.disabled"
+						:disabled="getDisabled(item.disabled)"
 						:key="index"
 						:type="item.type"
 						:class="item.className"
@@ -32,7 +32,7 @@
 			<template v-else>
 				<LtButton
 					:preIcon="item.preIcon"
-					:disabled="item.disabled"
+					:disabled="getDisabled(item.disabled)"
 					:key="index"
 					:type="item.type"
 					:class="item.className"
@@ -57,8 +57,10 @@
 
 <script lang="ts" setup>
 import { useMessage } from '@lt-frame/hooks';
-import { last } from 'lodash-es';
+import { isFunction, last } from 'lodash-es';
 import { computed } from 'vue';
+import { VxeGlobalRendererHandles } from 'vxe-table';
+import { Fn } from '@lt-frame/utils';
 import { LtButton } from '../../../button';
 import {
 	ToolMenuChildOption,
@@ -68,6 +70,15 @@ import {
 import { LtDropdown } from '../../../dropdown';
 
 const props = defineProps(toolFunctionProps);
+
+function getDisabled(
+	disabled?: boolean | Fn<VxeGlobalRendererHandles.RenderButtonParams, boolean>
+): boolean {
+	if (isFunction(disabled)) {
+		disabled(props.params!!);
+	}
+	return disabled as boolean;
+}
 
 const defaulEvent = ['insert', 'save', 'refresh', 'reset', 'remove'];
 

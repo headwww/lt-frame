@@ -19,6 +19,7 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 	const opt = deepMerge(
 		{
 			table: {
+				border: 'none',
 				// 是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）
 				stripe: true,
 				// 表格的尺寸
@@ -75,6 +76,7 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 				},
 			},
 			grid: {
+				border: 'none',
 				// 是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）
 				stripe: true,
 				// 表格的尺寸

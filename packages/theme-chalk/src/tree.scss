@@ -12,6 +12,16 @@
 		}
 	}
 
+	.ant-tree.ant-tree-directory .ant-tree-treenode-selected::before {
+		background: rgb(51 109 244);
+		border-radius: 6px;
+	}
+
+	.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+		background: rgb(51 109 244);
+		color: #fff;
+	}
+
 	.ant-tree-node-content-wrapper {
 		position: relative;
 

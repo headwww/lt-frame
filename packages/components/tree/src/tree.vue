@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { Tree, Spin, Empty, TreeProps } from 'ant-design-vue';
+import { Tree, Spin, Empty, TreeProps, DirectoryTree } from 'ant-design-vue';
 import {
 	CSSProperties,
 	computed,
@@ -489,19 +489,25 @@ export default defineComponent({
 						tip={'加载中...'}
 					>
 						<LtScrollbar style={scrollStyle} v-show={!unref(getNotFound)}>
-							<Tree
-								{...unref(getBindValues)}
-								showIcon={false}
-								treeData={treeData.value}
-							>
-								{extendSlots(slots, ['title'])}
-							</Tree>
+							{props.directoryTree ? (
+								<DirectoryTree
+									{...unref(getBindValues)}
+									showIcon={false}
+									treeData={treeData.value}
+								></DirectoryTree>
+							) : (
+								<Tree
+									else
+									{...unref(getBindValues)}
+									showIcon={false}
+									treeData={treeData.value}
+								>
+									{extendSlots(slots, ['title'])}
+								</Tree>
+							)}
 						</LtScrollbar>
 
-						<Empty
-							v-show={unref(getNotFound)}
-							image={Empty.PRESENTED_IMAGE_SIMPLE}
-						/>
+						<Empty v-show={unref(getNotFound)} />
 					</Spin>
 				</div>
 			);

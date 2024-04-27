@@ -6,7 +6,7 @@
 			{{ title }}
 		</LtTitle>
 		<div :class="ns.b('search')" v-if="search || toolbar">
-			<div :class="getInputSearchCls" v-if="search">
+			<div :style="getInputSearchStyle" v-if="search">
 				<InputSearch
 					:placeholder="'搜索'"
 					allowClear
@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
 import { useNamespace } from '@lt-frame/hooks';
-import { PropType, computed, ref, useSlots, watch } from 'vue';
+import { CSSProperties, PropType, computed, ref, useSlots, watch } from 'vue';
 import {
 	MenuProps,
 	InputSearch,
@@ -89,15 +89,13 @@ const emit = defineEmits(['strictly-change', 'search']);
 
 const slots = useSlots();
 
-const getInputSearchCls = computed(() => {
+const getInputSearchStyle = computed(() => {
 	const titleExists = slots.headerTitle || props.title;
-	return [
-		'mr-1',
-		'w-full',
-		{
-			'ml-5': titleExists,
-		},
-	];
+	return {
+		width: '100%',
+		marginRight: '8px',
+		marginLeft: titleExists ? '15px' : 0,
+	} as CSSProperties;
 });
 
 const toolbarList = computed(() => {

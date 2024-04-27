@@ -1,4 +1,6 @@
 <template>
+	<p class="text-green text-xl">绿色 大号</p>
+
 	<Row :gutter="[16, 16]">
 		<Col :span="8">
 			<LtTree
