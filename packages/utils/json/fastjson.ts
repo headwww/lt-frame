@@ -1,5 +1,5 @@
 import { isObject } from 'xe-utils';
-import { isNull } from 'lodash-es';
+import { get, isNull } from 'lodash-es';
 import { Recordable } from '../types';
 
 export function parse(root: any): any {
@@ -23,8 +23,8 @@ export function parse(root: any): any {
 
 		if (!isObject(fieldValue)) {
 			newCurrent[fieldName] = fieldValue;
-		} else if (fieldValue.$ref) {
-			const value = fieldValue.$ref;
+		} else if (get(fieldValue, '$ref')) {
+			const value = get(fieldValue, '$ref');
 			let refValue: any;
 			if (value === '$') {
 				// root
