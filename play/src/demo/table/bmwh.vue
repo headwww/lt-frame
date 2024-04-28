@@ -39,7 +39,7 @@
 						></LtFunction>
 					</template>
 				</vxe-toolbar>
-				<vxe-grid ref="xGrid" v-bind="gridOptions"></vxe-grid>
+				<vxe-grid v-on="gridEvents" ref="xGrid" v-bind="gridOptions"></vxe-grid>
 			</LtPane>
 		</LtSplitpanes>
 	</LtPageLayout>
@@ -62,11 +62,12 @@ import { Condition } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
 import { Tooltip } from 'ant-design-vue';
 import { EventDataNode } from 'ant-design-vue/es/tree';
-import { isArray } from 'lodash-es';
+import { get, isArray, uniqueId } from 'lodash-es';
 import { onMounted, reactive, ref, watch } from 'vue';
 import {
 	VxeGlobalRendererHandles,
 	VxeGridInstance,
+	VxeGridListeners,
 	VxeGridProps,
 	VxeToolbarInstance,
 } from 'vxe-table';
@@ -142,16 +143,48 @@ const options = reactive<ToolButtonOptions[]>([
 	},
 ]);
 
+const gridEvents = reactive<VxeGridListeners>({
+	async menuClick({ menu, row }) {
+		const $grid = xGrid.value;
+		if ($grid) {
+			switch (menu.code) {
+				case 'insertChild':
+					const { row: newRow } = await $grid.insert({
+						corp: row,
+						$id: uniqueId('$'),
+						$parentId: row.$id,
+					});
+					await $grid.setTreeExpand(row, true); // 将父节点展开
+					await $grid.setEditRow(newRow); // 插入子节点
+					break;
+			}
+		}
+	},
+});
+
 const gridOptions = reactive<VxeGridProps>({
 	autoResize: true,
 	height: 'auto',
 	editConfig: {
-		trigger: 'click',
+		trigger: 'dblclick',
 		mode: 'row',
+	},
+	treeConfig: {
+		transform: true,
+		rowField: '$id',
+		parentField: '$parentId',
+		hasChild: 'hasChild',
+	},
+	checkboxConfig: {
+		range: false,
+		isShiftKey: false,
+		checkStrictly: true,
 	},
 	align: 'center',
 	loading: false,
 	data: [],
+	stripe: false,
+
 	columns: [
 		{ type: 'checkbox', width: 40 },
 		{ type: 'seq', width: 40, title: '#' },
@@ -170,6 +203,7 @@ const gridOptions = reactive<VxeGridProps>({
 			},
 		},
 		{
+			treeNode: true,
 			field: 'code',
 			title: '编码',
 			width: '300',
@@ -196,6 +230,11 @@ const gridOptions = reactive<VxeGridProps>({
 	editRules: {
 		code: [{ required: true, content: '必填字段' }],
 		name: [{ required: true, content: '必填字段' }],
+	},
+	menuConfig: {
+		body: {
+			options: [[{ code: 'insertChild', name: '新增子级' }]],
+		},
 	},
 });
 
@@ -231,13 +270,17 @@ const finDepts = (item?: TreeItem) => {
 	gridOptions.loading = true;
 	const condition = new Condition();
 	condition.setTargetClass('lt.fw.core.model.biz.Dept');
-	condition.prop('parent.id', item?.row.id);
+	condition.prop('corp.id', item?.row.id);
 	LtHttp.post({
 		url: 'api/deptServiceImpl/findDepts',
 		data: [condition],
 	})
 		.then((resp) => {
-			gridOptions.data = resp;
+			gridOptions.data = resp.map((item: any) => ({
+				...item,
+				$parentId: get(item, 'corp.id'),
+				$id: get(item, 'id'),
+			}));
 		})
 		.catch(() => {})
 		.finally(() => {
