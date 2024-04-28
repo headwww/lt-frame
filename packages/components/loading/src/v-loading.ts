@@ -1,5 +1,5 @@
-import { createLoading } from '@lt-frame/components';
 import type { Directive, App } from 'vue';
+import { createLoading } from './util';
 
 const loading: Directive = {
 	mounted(el, binding) {

@@ -4,8 +4,13 @@
 	</LtDrawer>
 </template>
 <script lang="ts" setup>
-import { LtDrawer, LtDescription, DescItem } from '@lt-frame/components';
-import { useDescription, useDrawerInner } from '@lt-frame/hooks';
+import {
+	LtDrawer,
+	LtDescription,
+	DescItem,
+	useDrawerInner,
+	useDescription,
+} from '@lt-frame/components';
 
 const schema: DescItem[] = [
 	{

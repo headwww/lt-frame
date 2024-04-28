@@ -11,9 +11,6 @@ importers:
       '@lt-frame/components':
         specifier: workspace:^
         version: link:packages/components
-      '@lt-frame/directives':
-        specifier: workspace:^
-        version: link:packages/directives
       '@lt-frame/hooks':
         specifier: workspace:^
         version: link:packages/hooks

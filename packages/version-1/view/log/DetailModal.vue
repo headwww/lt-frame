@@ -7,9 +7,8 @@
 </template>
 
 <script lang="ts" setup>
-import { LtDescription, LtModal } from '@lt-frame/components';
+import { LtDescription, LtModal, useDescription } from '@lt-frame/components';
 import { PropType } from 'vue';
-import { useDescription } from '@lt-frame/hooks';
 
 defineProps({
 	info: {

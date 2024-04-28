@@ -10,14 +10,15 @@ import {
 } from 'vue';
 import { tryOnUnmounted } from '@vueuse/core';
 import { isEqual, isFunction } from 'lodash-es';
+
+import { Fn, Nullable } from '@lt-frame/utils';
 import {
 	DrawerInstance,
 	DrawerProps,
 	DrawerReturnMethods,
 	UseDrawerInnerReturnType,
 	UseDrawerReturnType,
-} from '@lt-frame/components';
-import { Fn, Nullable } from '@lt-frame/utils';
+} from '../drawer';
 
 const dataTransferRef = reactive<any>({});
 

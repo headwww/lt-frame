@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import { LayoutContent } from 'ant-design-vue';
 import { useNamespace } from '@lt-frame/hooks';
-import { Loading as vLoading } from '@lt-frame/directives';
+import { Loading as vLoading } from '@lt-frame/components';
 import PageLayout from '../../page/index.vue';
 import { useAppSetting } from '../../../hooks';
 

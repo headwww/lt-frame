@@ -1,5 +1,6 @@
-import { LoadingProps, createLoading } from '@lt-frame/components';
 import { Ref, unref } from 'vue';
+import { createLoading } from '../util';
+import { LoadingProps } from '../loading';
 
 export interface UseLoadingOptions {
 	target?: any;

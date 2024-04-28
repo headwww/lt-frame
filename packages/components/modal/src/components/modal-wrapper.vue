@@ -23,7 +23,7 @@ import {
 } from 'vue';
 import { useMutationObserver } from '@vueuse/core';
 import { useWindowSizeFn } from '@lt-frame/hooks';
-import { Loading as vLoading } from '@lt-frame/directives';
+import { Loading as vLoading } from '../../../loading';
 import LtScrollbar from '../../../scrollbar';
 import { modalWrapperProps } from './modal-wrapper';
 

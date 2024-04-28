@@ -39,7 +39,6 @@
 
 <script lang="ts" setup>
 import { Drawer } from 'ant-design-vue';
-import { Loading as vLoading } from '@lt-frame/directives';
 import {
 	getCurrentInstance,
 	computed,
@@ -52,6 +51,7 @@ import {
 } from 'vue';
 import { useAttrs } from '@lt-frame/hooks';
 import { deepMerge, isFunction, isNumber } from '@lt-frame/utils';
+import { Loading as vLoading } from '../../loading';
 import DrawerHeader from './drawer-header.vue';
 import DrawerFooter from './drawer-footer.vue';
 import LtScrollbar from '../../scrollbar';

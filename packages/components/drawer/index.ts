@@ -7,3 +7,4 @@ export default LtDrawer;
 export * from './src/drawer';
 export * from './src/drawer-footer';
 export * from './src/drawer-header';
+export * from './src/use-drawer';

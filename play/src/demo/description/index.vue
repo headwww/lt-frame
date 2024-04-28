@@ -25,8 +25,8 @@ import {
 	LtDescription,
 	DescItem,
 	LtButton,
+	useDescription,
 } from '@lt-frame/components';
-import { useDescription } from '@lt-frame/hooks';
 import { reactive } from 'vue';
 
 const data = reactive({
