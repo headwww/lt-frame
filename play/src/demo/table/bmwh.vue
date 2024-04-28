@@ -1,7 +1,7 @@
 <template>
 	<LtPageLayout>
 		<LtSplitpanes class="default-theme">
-			<LtPane size="18" min-size="18" max-size="36" style="padding: 12px">
+			<LtPane size="18" min-size="18" max-size="36" class="p12">
 				<template #default="{ height }">
 					<LtTree
 						:loading="treeLoading"
@@ -23,12 +23,10 @@
 							</div>
 						</template>
 					</LtTree>
-					<LtButton @click="findCorps" style="width: 100%; margin-top: 35px"
-						>刷新</LtButton
-					>
+					<LtButton @click="findCorps" class="w-full mt-35">刷新</LtButton>
 				</template>
 			</LtPane>
-			<LtPane size="82" style="padding: 12px">
+			<LtPane size="82" class="p12">
 				<LtDivider title="部门信息"></LtDivider>
 				<vxe-toolbar ref="toolbarRef">
 					<template #buttons>

@@ -1,11 +1,14 @@
 <template>
-	<div :class="ns.b()">
+	<div :class="ns.b()" class="flex mb-1 px-2 py-1.5 items-center">
 		<slot name="headerTitle" v-if="slots.headerTitle"></slot>
 
 		<LtTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
 			{{ title }}
 		</LtTitle>
-		<div :class="ns.b('search')" v-if="search || toolbar">
+		<div
+			class="flex items-center flex-1 cursor-pointer justify-self-stretch"
+			v-if="search || toolbar"
+		>
 			<div :style="getInputSearchStyle" v-if="search">
 				<InputSearch
 					:placeholder="'搜索'"
