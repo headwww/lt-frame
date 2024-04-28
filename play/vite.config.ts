@@ -5,6 +5,7 @@ import eslintPlugin from 'vite-plugin-eslint';
 import stylelitPlugin from 'vite-plugin-stylelint';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import { resolve } from 'node:path';
+import UnoCss from 'unocss/vite';
 
 export default defineConfig({
 	plugins: [
@@ -12,6 +13,9 @@ export default defineConfig({
 		vueJsx(),
 		eslintPlugin(),
 		stylelitPlugin(),
+		UnoCss({
+			configFile: '../uno.config.ts',
+		}),
 		createSvgIconsPlugin({
 			iconDirs: [resolve(process.cwd(), 'assets/icons')],
 			symbolId: 'icon-[dir]-[name]',

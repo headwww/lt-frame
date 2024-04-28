@@ -31,6 +31,7 @@
 		"pinia": "^2.1.7",
 		"qs": "^6.11.2",
 		"sortablejs": "^1.15.2",
+		"unocss": "^0.59.4",
 		"vue-router": "^4.2.5",
 		"vxe-table": "^4.5.21",
 		"vxe-table-plugin-antd": "^4.0.0",
