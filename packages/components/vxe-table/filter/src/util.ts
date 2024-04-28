@@ -82,7 +82,7 @@ export function filterDataMethod(
 
 	const cellTimeStamp = dayjs(replaceCellValue);
 
-	const queryTextTimeStamp = dayjs(queryText);
+	const queryTextTimeStamp = queryText;
 
 	switch (method) {
 		case TemporalOperator.EQUALS:

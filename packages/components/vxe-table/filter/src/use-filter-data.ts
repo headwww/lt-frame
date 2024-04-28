@@ -1,6 +1,7 @@
-import { VxeGlobalRendererHandles } from 'vxe-table';
+import { VXETable, VxeGlobalRendererHandles } from 'vxe-table';
 import { computed, ref } from 'vue';
-import { cloneDeep, get, set, uniqBy } from 'lodash-es';
+import { cloneDeep, get, isArray, isFunction, set, uniqBy } from 'lodash-es';
+import XEUtils from 'xe-utils';
 import { ComparisonOperator, LogicalOperators } from './advanced-filter';
 
 export function useFilterData(
@@ -106,12 +107,39 @@ export function useFilterData(
 		// 格式化后的表格数据
 		const fullDataFormatter = cloneDeep(fullData);
 		fullDataFormatter.forEach((item) => {
-			if (typeof formatter === 'function') {
-				set(
-					item,
-					field,
-					formatter({ cellValue: get(item, field), row: item, column })
-				);
+			if (formatter) {
+				if (isFunction(formatter)) {
+					set(
+						item,
+						field,
+						formatter({ cellValue: get(item, field), row: item, column })
+					);
+				} else {
+					if (isArray(formatter)) {
+						if (formatter.length > 0) {
+							const fm = VXETable.formats.get(formatter[0]).cellFormatMethod;
+							if (isFunction(fm)) {
+								set(
+									item,
+									field,
+									fm(
+										{ cellValue: get(item, field), row: item, column },
+										...XEUtils.slice(formatter, 1)
+									)
+								);
+							}
+						}
+					} else {
+						const fm = VXETable.formats.get(formatter).cellFormatMethod;
+						if (isFunction(fm)) {
+							set(
+								item,
+								field,
+								fm({ cellValue: get(item, field), row: item, column })
+							);
+						}
+					}
+				}
 			}
 		});
 		const uniqByArr = uniqBy(fullDataFormatter, field);

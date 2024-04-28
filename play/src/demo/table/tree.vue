@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { LtPageLayout } from '@lt-frame/components';
+import { LtPageLayout, LtTablePlugins } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { Condition, serialize } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
@@ -76,8 +76,9 @@ const gridOptions = reactive<VxeGridProps>({
 			width: 100,
 			fixed: 'right',
 			align: 'center',
+			title: '操作',
 			cellRender: {
-				name: '$lt-cell-operate',
+				name: LtTablePlugins.CellOperate,
 				props: {
 					editVisible: true,
 					editDisabled: (

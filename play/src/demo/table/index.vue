@@ -15,18 +15,14 @@ import {
 	LtToolBusinessProps,
 	ToolBusinessOptions,
 	LtToolFunctionProps,
+	LtTablePlugins,
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { parse } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
 import dayjs from 'dayjs';
 import { reactive } from 'vue';
-import {
-	VxeColumnPropTypes,
-	VxeGlobalRendererHandles,
-	VxeGridProps,
-} from 'vxe-table';
-import XEUtils from 'xe-utils';
+import { VxeGlobalRendererHandles, VxeGridProps } from 'vxe-table';
 
 enum CorpType {
 	HEAD = '集团',
@@ -44,8 +40,9 @@ const gridOptions = reactive<VxeGridProps>({
 		{ type: 'seq', width: 40 },
 		{
 			width: 300,
+			title: '操作',
 			cellRender: {
-				name: '$lt-cell-operate',
+				name: LtTablePlugins.CellOperate,
 				props: {
 					viewVisible: true,
 					viewDisabled: (row: any) => row.id === '1',
@@ -144,6 +141,7 @@ const gridOptions = reactive<VxeGridProps>({
 			field: 'version',
 			title: '版本',
 			width: '200',
+			formatter: ['$lt-formatter-to-fixed', 2, '元'],
 			editRender: {
 				name: '$lt-edit-input-number',
 			},
@@ -178,13 +176,14 @@ const gridOptions = reactive<VxeGridProps>({
 		{
 			field: 'created',
 			title: '时间',
-			width: '200',
-			formatter: ({ cellValue }) =>
-				XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss'),
+			width: '400',
+			// formatter: ({ cellValue }) =>
+			// 	XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss'),
+			formatter: ['$lt-formatter-time', 'yyyy-MM-dd'],
 			editRender: {
 				name: '$lt-edit-date-picker',
 				props: {
-					showTime: true,
+					showTime: false,
 				},
 			},
 			filters: [
@@ -194,7 +193,8 @@ const gridOptions = reactive<VxeGridProps>({
 						dateFilterData: {
 							logicalOperators: LogicalOperators.AND,
 							firstQueryCondition: TemporalOperator.EQUALS,
-							firstQueryText: dayjs('2021-12-21 13:12:30'),
+							// firstQueryText: dayjs('2021-12-21 13:12:30'),
+							firstQueryText: dayjs('2018-05-31'),
 							secondQueryCondition: TemporalOperator.EMPTY,
 							secondQueryText: '',
 						},
@@ -206,7 +206,8 @@ const gridOptions = reactive<VxeGridProps>({
 				props: {
 					filterModes: [FilterMode.DATE],
 					datePickerProps: {
-						showTime: true,
+						// showTime: { defaultValue: dayjs('00:00:00', 'HH:mm:ss') },
+						format: 'YYYY-MM-DD',
 					},
 				},
 			},
@@ -215,7 +216,7 @@ const gridOptions = reactive<VxeGridProps>({
 			field: 'corp.type',
 			title: '类型',
 			width: '200',
-			formatter: formatEnum(CorpType),
+			formatter: ['$lt-formatter-enum', CorpType],
 			editRender: {
 				name: '$lt-edit-select',
 				props: {
@@ -234,6 +235,36 @@ const gridOptions = reactive<VxeGridProps>({
 							value: 'FACTORY',
 						},
 					],
+				},
+			},
+			filters: [
+				{
+					data: {
+						// 选中的筛选方式
+						currentMode: FilterMode.TEXT,
+						// 数字筛选配置
+						textFilterData: {
+							// 两个条件之间的逻辑操作
+							logicalOperators: LogicalOperators.AND,
+							// 第一个查询条件
+							firstQueryCondition: ComparisonOperator.INCLUDE,
+							// 第一个查询文本
+							firstQueryText: '',
+							// 第二个查询条件
+							secondQueryCondition: ComparisonOperator.EMPTY,
+							// 第二个查询文本
+							secondQueryText: '',
+						},
+						contentFilterConfig: {
+							checkedKeys: ['$_SELECT_ALL'],
+						},
+					},
+				},
+			],
+			filterRender: {
+				name: '$lt-filter',
+				props: {
+					filterModes: [FilterMode.TEXT, FilterMode.CONTENT],
 				},
 			},
 		},
@@ -418,11 +449,11 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 });
 
-function formatEnum(enumObj: any) {
-	const setDate: VxeColumnPropTypes.Formatter = ({ cellValue }) =>
-		enumObj[cellValue];
-	return setDate;
-}
+// function formatEnum(enumObj: any) {
+// 	const setDate: VxeColumnPropTypes.Formatter = ({ cellValue }) =>
+// 		enumObj[cellValue];
+// 	return setDate;
+// }
 
 const findRoles = () =>
 	new Promise<any[]>((resolve, reject) => {

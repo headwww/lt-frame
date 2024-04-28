@@ -7,6 +7,7 @@ import './edit/edit';
 import './filter/filter';
 import './tool-bar/tool-bar';
 import './empty/empty';
+import './formatter/formatter';
 
 export const LtFunction = ltFunction;
 export const LtBusiness = ltBusiness;
@@ -143,3 +144,34 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 
 	VXETable.config(opt);
 }
+
+export const LtTablePlugins = {
+	// 内置的工具栏Button按钮
+	ToolFunction: '$lt-tool-function',
+	// 内置的工具栏Tool按钮
+	ToolBusiness: '$lt-tool-business',
+	// 格式化工具 保留几位小数默认两位，加单位
+	FormatterToFixedUnit: '$lt-formatter-to-fixed-unit',
+	// 格式化日期默认是yyyy-MM-dd HH:mm:ss
+	FormatterTime: '$lt-formatter-time',
+	// 格式化枚举
+	FormatterEnum: '$lt-formatter-enum',
+	// 高级筛选
+	FilterAdvanced: '$lt-filter',
+	// 空数据渲染
+	DefaultEmpty: '$lt-default-empty',
+	// 空数据渲染antv的Empty组件
+	AntvEmpty: '$lt-empty',
+	// 单元格渲染，操作列单元格
+	CellOperate: '$lt-cell-operate',
+	// 编辑渲染 input
+	EditInput: '$lt-edit-input',
+	// 编辑渲染 input-number
+	EditInputNumber: '$lt-edit-input-number',
+	// 编辑渲染 date-picker
+	EditDatePicker: '$lt-edit-date-picker',
+	// 编辑渲染 select
+	EditSelect: '$lt-edit-select',
+	// 编辑渲染 entity
+	EditEntity: '$lt-edit-entity',
+};
