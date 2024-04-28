@@ -1,10 +1,15 @@
 import { deepMerge } from '@lt-frame/utils';
 import { VXETable, VXETableConfigOptions } from 'vxe-table';
+import ltFunction from './tool-bar/src/lt-function.vue';
+import ltBusiness from './tool-bar/src/lt-business.vue';
 import './cell/cell';
 import './edit/edit';
 import './filter/filter';
 import './tool-bar/tool-bar';
 import './empty/empty';
+
+export const LtFunction = ltFunction;
+export const LtBusiness = ltBusiness;
 
 export * from './filter/src/advanced-filter';
 export * from './filter/src/use-filter-data';

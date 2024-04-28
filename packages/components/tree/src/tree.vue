@@ -12,7 +12,6 @@ import {
 	watch,
 	watchEffect,
 } from 'vue';
-import LtScrollbar from '@lt-frame/components/scrollbar';
 import { useNamespace } from '@lt-frame/hooks';
 import {
 	Recordable,
@@ -466,7 +465,7 @@ export default defineComponent({
 			const showTitle = title || toolbar || search || slots.headerTitle;
 			const scrollStyle: CSSProperties = { height: 'calc(100% - 38px)' };
 			return (
-				<div class={[ns.b(), 'lt-tree-full', attrs.class]}>
+				<div class={[ns.b(), attrs.class]}>
 					{showTitle && (
 						<TreeHeader
 							checkable={checkable}
@@ -488,7 +487,7 @@ export default defineComponent({
 						spinning={unref(props.loading)}
 						tip={'加载中...'}
 					>
-						<LtScrollbar style={scrollStyle} v-show={!unref(getNotFound)}>
+						<div style={scrollStyle} v-show={!unref(getNotFound)}>
 							{props.directoryTree ? (
 								<DirectoryTree
 									{...unref(getBindValues)}
@@ -505,7 +504,7 @@ export default defineComponent({
 									{extendSlots(slots, ['title'])}
 								</Tree>
 							)}
-						</LtScrollbar>
+						</div>
 
 						<Empty v-show={unref(getNotFound)} />
 					</Spin>

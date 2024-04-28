@@ -27,7 +27,7 @@ export interface ToolButtonOptions {
 	default?: DefaultEvent;
 	text?: string;
 	preIcon?: string;
-	type: 'link' | 'default' | 'primary' | 'ghost' | 'dashed' | 'text';
+	type?: 'link' | 'default' | 'primary' | 'ghost' | 'dashed' | 'text';
 	className?: string;
 	visible?: ToolConfig;
 	disabled?: ToolConfig;

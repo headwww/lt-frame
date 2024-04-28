@@ -5,7 +5,7 @@
 		@click="onPaneClick($event, instance?.uid)"
 		:style="style"
 	>
-		<slot></slot>
+		<slot :width="rect.width" :height="rect.height"></slot>
 	</div>
 </template>
 
@@ -17,10 +17,13 @@ import {
 	inject,
 	onBeforeUnmount,
 	onMounted,
+	reactive,
 	ref,
 	watch,
 } from 'vue';
 import { isString } from 'lodash-es';
+// import { useElementSize } from '@vueuse/core';
+import { useResizeObserver } from '@vueuse/core';
 import { splitpanesKey, SplitpanesMethods } from './splitpanes';
 import { paneProps } from './pane';
 
@@ -37,6 +40,24 @@ const paneRef = ref<HTMLDivElement>();
 
 const style = ref<CSSProperties>();
 
+const rect = reactive<{
+	width: number;
+	height: number;
+}>({
+	width: 0,
+	height: 0,
+});
+
+useResizeObserver(paneRef, (entries) => {
+	const entry = entries[0];
+	const { width, height } = entry.contentRect;
+	rect.width = width;
+	rect.height = height;
+});
+// const { width, height } = useElementSize(paneRef);
+
+// console.log(width, height);
+
 onMounted(() => {
 	onPaneAdd(getPane.value);
 });
@@ -44,6 +65,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
 	onPaneRemove(getPane.value);
 });
+
 const instance = getCurrentInstance();
 
 const getPane = computed(() => ({

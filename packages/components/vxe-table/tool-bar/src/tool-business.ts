@@ -8,6 +8,7 @@ export interface ToolBusinessOptions extends Omit<ButtonProps, 'disabled'> {
 	event: string | number;
 	type?: ButtonType;
 	text?: string;
+	visible?: boolean | Fn<VxeGlobalRendererHandles.RenderToolParams, boolean>;
 	disabled?: boolean | Fn<VxeGlobalRendererHandles.RenderToolParams, boolean>;
 }
 
