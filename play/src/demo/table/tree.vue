@@ -67,7 +67,7 @@ const gridOptions = reactive<VxeGridProps>({
 		transform: true,
 		rowField: '$id',
 		parentField: '$parentId',
-		hasChild: 'hasChild',
+		hasChildField: 'hasChild',
 	},
 	columns: [
 		{ type: 'seq', width: 30 },
