@@ -506,7 +506,7 @@ export default defineComponent({
 							)}
 						</div>
 
-						<Empty v-show={unref(getNotFound)} />
+						<Empty class="!mt-12" v-show={unref(getNotFound)} />
 					</Spin>
 				</div>
 			);

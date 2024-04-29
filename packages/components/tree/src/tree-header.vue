@@ -9,7 +9,7 @@
 			class="flex items-center flex-1 cursor-pointer justify-self-stretch"
 			v-if="search || toolbar"
 		>
-			<div :style="getInputSearchStyle" v-if="search">
+			<div :class="getInputSearchCls" v-if="search">
 				<InputSearch
 					:placeholder="'搜索'"
 					allowClear
@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 import { useNamespace } from '@lt-frame/hooks';
-import { CSSProperties, PropType, computed, ref, useSlots, watch } from 'vue';
+import { PropType, computed, ref, useSlots, watch } from 'vue';
 import {
 	MenuProps,
 	InputSearch,
@@ -92,13 +92,15 @@ const emit = defineEmits(['strictly-change', 'search']);
 
 const slots = useSlots();
 
-const getInputSearchStyle = computed(() => {
+const getInputSearchCls = computed(() => {
 	const titleExists = slots.headerTitle || props.title;
-	return {
-		width: '100%',
-		marginRight: '8px',
-		marginLeft: titleExists ? '15px' : 0,
-	} as CSSProperties;
+	return [
+		'mr-1',
+		'w-full',
+		{
+			'ml-5': titleExists,
+		},
+	];
 });
 
 const toolbarList = computed(() => {
