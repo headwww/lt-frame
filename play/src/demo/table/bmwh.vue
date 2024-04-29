@@ -16,7 +16,7 @@
 						:beforeRightClick="getRightMenuList"
 					>
 						<template #title="data">
-							<div class="h40 lh-40" style="line-height:">
+							<div class="h40 lh-40">
 								<Tooltip :title="data.title">
 									{{ data.title }}
 								</Tooltip>

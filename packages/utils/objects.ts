@@ -1,5 +1,14 @@
 import { unref } from 'vue';
-import { isEqual, mergeWith, unionWith, intersectionWith } from 'lodash-es';
+import {
+	isEqual,
+	mergeWith,
+	unionWith,
+	intersectionWith,
+	cloneDeep,
+	clone,
+	concat,
+} from 'lodash-es';
+import { uniq } from 'xe-utils';
 import { Recordable } from './types';
 import { isArray, isObject } from './is';
 /**
@@ -86,4 +95,94 @@ export function wrapDataInPromise(data: any | any[]) {
 				reject(error);
 			}
 		});
+}
+
+/**
+ * 剔除数组没个对象中指定的属性,不改变内置的引用关系，返回一个新数组
+ *
+ * @param array
+ * @param keys 需要删除的字段
+ * @param option
+ *
+ */
+export function deleteArrayProperty<T>(
+	array: Array<T>,
+	keys: string[] = [],
+	option?: {
+		// 是否深拷贝
+		cloneDeep?: boolean;
+		// 是否启用内置筛选的属性，删除vxetable内置的属性 默认开启
+		builtIn?: boolean;
+	}
+): T[] {
+	let arr: any = [];
+	let k: string[] = [];
+	if (!option?.cloneDeep) {
+		arr = cloneDeep(array);
+	} else {
+		arr = clone(array);
+	}
+
+	if (option?.builtIn !== false) {
+		k = uniq(
+			concat(keys, [
+				'$_checked',
+				'parent.$_checked',
+				'_X_ROW_CHILD',
+				'parent._X_ROW_CHILD',
+				'children',
+				'parent.children',
+				'$id',
+				'parent.$id',
+				'$parentId',
+				'parent.$parentId',
+				'_X_ROW_KEY',
+				'parent._X_ROW_KEY',
+			])
+		);
+	}
+
+	k.forEach((key) => {
+		arr.forEach((item: any) => {
+			deleteObjectProperty(item, key);
+		});
+	});
+
+	return arr as T[];
+}
+
+function deleteObjectProperty<T>(obj: T, keyPath: string) {
+	// 将路径转换为数组，如果它已经是字符串的话
+	const path = keyPath.split('.');
+
+	// 检查路径是否有效
+	if (!Array.isArray(path) || path.length === 0) {
+		return; // 无效的路径，不执行任何操作
+	}
+
+	// 递归函数，用于遍历嵌套对象并找到要删除的属性
+	function traverseAndDelete(obj: any, pathArr: string[]) {
+		// 如果没有更多的路径段要遍历，则不执行任何操作
+		if (pathArr.length === 0) {
+			return;
+		}
+
+		// 获取当前路径段和剩余路径段
+		const currentKey = pathArr[0];
+		const remainingPath = pathArr.slice(1);
+
+		// 检查当前对象是否有当前路径段对应的属性
+		if (obj && obj.hasOwnProperty(currentKey)) {
+			// 如果没有更多的路径段，则删除属性
+			if (remainingPath.length === 0) {
+				delete obj[currentKey];
+			} else {
+				// 递归遍历剩余路径段
+				traverseAndDelete(obj[currentKey], remainingPath);
+			}
+		}
+	}
+
+	// 开始遍历并删除属性
+	traverseAndDelete(obj, path);
 }

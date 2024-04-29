@@ -6,7 +6,7 @@
 			{{ title }}
 		</LtTitle>
 		<div
-			class="flex items-center flex-1 cursor-pointer justify-self-stretch"
+			class="flex items-center flex-1 cursor-pointer justify-self-stretch w-full"
 			v-if="search || toolbar"
 		>
 			<div :class="getInputSearchCls" v-if="search">

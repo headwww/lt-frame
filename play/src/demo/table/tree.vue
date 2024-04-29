@@ -12,9 +12,9 @@
 <script setup lang="ts">
 import { LtPageLayout, LtTablePlugins } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
-import { Condition, serialize } from '@lt-frame/utils';
+import { Condition, deleteArrayProperty, serialize } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
-import { cloneDeep, get, merge, omit, remove, uniqueId } from 'lodash-es';
+import { get, merge, omit, remove, uniqueId } from 'lodash-es';
 import { reactive, ref } from 'vue';
 import {
 	VxeGridInstance,
@@ -212,19 +212,7 @@ const gridOptions = reactive<VxeGridProps>({
 									}
 								});
 								if (mergedArray.length > 0) {
-									const cloneArr = cloneDeep(mergedArray);
-									cloneArr.forEach((item) => {
-										delete item.$_checked;
-										delete item._X_ROW_CHILD;
-										delete item.children;
-										delete item.parent.children;
-										delete item.parent._X_ROW_CHILD;
-										delete item.$id;
-										delete item.parent.$id;
-										delete item.$parentId;
-										delete item._X_ROW_KEY;
-										delete item.parent._X_ROW_KEY;
-									});
+									const cloneArr = deleteArrayProperty(mergedArray);
 									saveCorps(mergedArray, cloneArr);
 								}
 							}

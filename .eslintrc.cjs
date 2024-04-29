@@ -77,6 +77,7 @@ module.exports = {
 		"no-nested-ternary":0,
 		"default-case":0,
 		'no-case-declarations':0,
-		"vue/no-deprecated-v-on-native-modifier":0
+		"vue/no-deprecated-v-on-native-modifier":0,
+		"no-prototype-builtins":0,
 	},
 }

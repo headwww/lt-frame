@@ -488,7 +488,7 @@ export default defineComponent({
 						tip={'加载中...'}
 					>
 						<div
-							class={'mt12'}
+							class={'mt-12'}
 							style={scrollStyle}
 							v-show={!unref(getNotFound)}
 						>
