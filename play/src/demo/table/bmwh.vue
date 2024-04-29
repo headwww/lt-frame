@@ -163,6 +163,7 @@ const gridEvents = reactive<VxeGridListeners>({
 const gridOptions = reactive<VxeGridProps>({
 	autoResize: true,
 	height: 'auto',
+
 	editConfig: {
 		trigger: 'dblclick',
 		mode: 'row',
@@ -181,7 +182,7 @@ const gridOptions = reactive<VxeGridProps>({
 	align: 'center',
 	loading: false,
 	data: [],
-	stripe: false,
+	stripe: true,
 
 	columns: [
 		{ type: 'checkbox', width: 40 },

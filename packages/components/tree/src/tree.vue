@@ -487,7 +487,11 @@ export default defineComponent({
 						spinning={unref(props.loading)}
 						tip={'加载中...'}
 					>
-						<div style={scrollStyle} v-show={!unref(getNotFound)}>
+						<div
+							class={'mt12'}
+							style={scrollStyle}
+							v-show={!unref(getNotFound)}
+						>
 							{props.directoryTree ? (
 								<DirectoryTree
 									{...unref(getBindValues)}

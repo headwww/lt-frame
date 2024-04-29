@@ -57,7 +57,7 @@
 
 <script lang="ts" setup>
 import { useMessage } from '@lt-frame/hooks';
-import { isFunction, last } from 'lodash-es';
+import { isFunction } from 'lodash-es';
 import { computed } from 'vue';
 import { VxeGlobalRendererHandles } from 'vxe-table';
 import { Fn } from '@lt-frame/utils';
@@ -82,7 +82,7 @@ function getDisabled(
 
 const defaulEvent = ['insert', 'save', 'refresh', 'reset', 'remove'];
 
-const emit = defineEmits(['remove', 'save', 'refresh', 'itemClick']);
+const emit = defineEmits(['insert', 'remove', 'save', 'refresh', 'itemClick']);
 
 const { createMessage } = useMessage();
 
@@ -144,9 +144,10 @@ function insert() {
 	if (params) {
 		const { $grid } = params;
 		if ($grid) {
-			$grid.insert({});
-			const { insertRecords } = $grid.getRecordset();
-			$grid.setEditRow(last(insertRecords));
+			emit('insert', params);
+			// $grid.insert({});
+			// const { insertRecords } = $grid.getRecordset();
+			// $grid.setEditRow(last(insertRecords));
 		}
 	}
 }

@@ -4,7 +4,7 @@
 			<LtPane>1</LtPane>
 			<LtPane>
 				<LtSplitpanes horizontal>
-					<LtPane>3</LtPane>
+					<LtPane> </LtPane>
 					<LtPane>4</LtPane>
 					<LtPane>5</LtPane>
 				</LtSplitpanes>
