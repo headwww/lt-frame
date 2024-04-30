@@ -1,48 +1,74 @@
 <template>
-	<DirectoryTree
-		v-model:expandedKeys="expandedKeys"
-		v-model:selectedKeys="selectedKeys"
-		:tree-data="treeData"
-	></DirectoryTree>
+	<button @click="start">start</button>
+	<button @click="pause">pause</button>
+	<button @click="disabled = true">disabled</button>
+	<div class="flex">
+		<LtDraggable
+			ref="el"
+			v-model="list"
+			:disabled="disabled"
+			:animation="150"
+			ghostClass="ghost"
+			class="flex flex-col gap-2 p-4 w-300px h-300px m-auto bg-gray-500/5 rounded"
+			@start="onStart"
+			@update="onUpdate"
+		>
+			<div
+				v-for="item in list"
+				:key="item.id"
+				class="cursor-move h-30 bg-gray-500/5 rounded p-3 cursor-move"
+			>
+				{{ item.name }}
+			</div>
+		</LtDraggable>
+	</div>
 </template>
-<script lang="ts" setup>
-import { DirectoryTree, type TreeProps } from 'ant-design-vue';
+
+<script setup lang="ts">
+import { LtDraggable, UseDraggableReturn } from '@lt-frame/components';
 import { ref } from 'vue';
 
-const expandedKeys = ref<string[]>(['0-0', '0-1']);
-const selectedKeys = ref<string[]>([]);
-const treeData: TreeProps['treeData'] = [
+const list = ref([
 	{
-		title: 'parent 0',
-		key: '0-0',
-		children: [
-			{
-				title: 'leaf 0-0',
-				key: '0-0-0',
-				isLeaf: true,
-			},
-			{
-				title: 'leaf 0-1',
-				key: '0-0-1',
-				isLeaf: true,
-			},
-		],
+		name: 'Joao',
+		id: 1,
 	},
 	{
-		title: 'parent 1',
-		key: '0-1',
-		children: [
-			{
-				title: 'leaf 1-0',
-				key: '0-1-0',
-				isLeaf: true,
-			},
-			{
-				title: 'leaf 1-1',
-				key: '0-1-1',
-				isLeaf: true,
-			},
-		],
+		name: 'Jean',
+		id: 2,
 	},
-];
+	{
+		name: 'Johanna',
+		id: 3,
+	},
+	{
+		name: 'Juan',
+		id: 4,
+	},
+]);
+
+const el = ref<UseDraggableReturn>();
+const disabled = ref(false);
+function pause() {
+	el.value?.pause();
+}
+
+function start() {
+	el.value?.start();
+}
+
+const onStart = () => {
+	console.log('start');
+};
+
+const onUpdate = () => {
+	console.log('update');
+};
 </script>
+
+<style scoped>
+.ghost {
+	opacity: 0.5;
+	background: #c8ebfb;
+}
+</style>
