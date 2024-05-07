@@ -5,35 +5,48 @@ import { useMessage } from '@lt-frame/hooks';
 import { h } from 'vue';
 import { LtHttp, LtRouter, getAppConfig } from '../configs';
 import { usePermissionStore } from './permission';
+import { Client } from './model/client';
+
+export interface UserState {
+	client: Client | null;
+}
 
 export const useUserStore = defineStore({
 	id: 'lt-user',
-	state: () => ({
-		userInfo: null,
+	state: (): UserState => ({
+		client: null,
 	}),
 	getters: {
-		getUserInfo(state): any {
-			state.userInfo = Persistent.getLocal('USER_INFO');
-			return state.userInfo;
+		getClient(state): Client | null {
+			state.client = Persistent.getLocal<Client>('USER_CLIENT');
+			return state.client;
 		},
 	},
 	actions: {
-		setUserInfo(info: any) {
-			this.userInfo = info;
-			Persistent.setLocal('USER_INFO', this.userInfo, true);
+		setClient(client: Client | null) {
+			this.client = client;
+			Persistent.setLocal('USER_CLIENT', this.client, true);
 		},
 		async login(username: string, password: string) {
-			try {
-				const data = await LtHttp.post(
+			return new Promise((resolve, reject) => {
+				LtHttp.post(
 					{ url: 'api/login', data: [username, password] },
 					{ errorMessageMode: 'modal' }
-				);
-				this.setUserInfo({ ...data, password });
-				this.afterLoginAction();
-				return data;
-			} catch (error) {
-				return Promise.reject(error);
-			}
+				)
+					.then(() => {
+						LtHttp.get<Client>(
+							{ url: 'api/appContextService/getClient' },
+							{ errorMessageMode: 'modal' }
+						).then((resp) => {
+							resolve(resp);
+							this.setClient(resp);
+							this.afterLoginAction();
+						});
+					})
+					.catch((error) => {
+						reject(error);
+					});
+			});
 		},
 		async afterLoginAction() {
 			// 动态添加路由
@@ -61,8 +74,7 @@ export const useUserStore = defineStore({
 			await LtRouter.replace(getAppConfig().routes?.homePage!!);
 		},
 		async logout() {
-			this.setUserInfo(null);
-
+			this.setClient(null);
 			const { routes } = getAppConfig();
 			let loginPath = '';
 			if (routes) {
@@ -87,7 +99,7 @@ export const useUserStore = defineStore({
 			});
 		},
 		resetState() {
-			this.userInfo = null;
+			this.client = null;
 		},
 	},
 });

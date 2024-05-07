@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 packages/theme-chalk/dist/
+pnpm-lock.yaml
 *.local
 
 # Editor directories and files

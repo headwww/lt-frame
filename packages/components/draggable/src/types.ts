@@ -7,4 +7,4 @@ export type RefOrElement<T = HTMLElement> =
 	| T
 	| Ref<T | undefined | null>
 	| string;
-export type Fn = (...args: any[]) => any;
+export type Fnc = (...args: any[]) => any;

@@ -64,7 +64,7 @@ export default defineComponent({
 
 		listenerRouteChange((route) => {
 			const { name } = route;
-			if (name === 'Redirect' || !route || !userStore.getUserInfo) {
+			if (name === 'Redirect' || !route || !userStore.getClient) {
 				return;
 			}
 			const { path, fullPath, meta = {} } = route;

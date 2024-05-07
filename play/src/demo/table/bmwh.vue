@@ -163,7 +163,6 @@ const gridEvents = reactive<VxeGridListeners>({
 const gridOptions = reactive<VxeGridProps>({
 	autoResize: true,
 	height: 'auto',
-
 	editConfig: {
 		trigger: 'dblclick',
 		mode: 'row',

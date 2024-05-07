@@ -21,3 +21,4 @@ export * from './tree';
 export * from './context-menu';
 export * from './splitpanes';
 export * from './draggable';
+export * from './table-designer';

@@ -25,7 +25,8 @@ const getToTarget = (tabItem: RouteLocationNormalized) => {
 	};
 };
 
-const useTabStore = defineStore({
+// @ts-ignore
+const useTabStore: any = defineStore({
 	id: 'lt-tab',
 	state: (): TabState => ({
 		// 需要缓存的选项
@@ -130,7 +131,6 @@ const useTabStore = defineStore({
 				// 只有一个选项卡，然后跳到主页，否则跳到右侧选项卡
 				if (this.tabList.length === 1) {
 					// const userStore = useUserStore();
-					// toTarget = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
 					toTarget = getAppConfig().routes?.homePage!!;
 				} else {
 					//  跳转到右侧选项卡

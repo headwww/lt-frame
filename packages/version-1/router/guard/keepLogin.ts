@@ -8,13 +8,16 @@ export function createKeepLogin(router: Router) {
 	const userStore = useUserStore();
 
 	router.beforeEach(async (to, from, next) => {
-		const userInfo = userStore.getUserInfo;
+		const client = userStore.getClient;
 
 		const { createErrorModal } = useMessage();
 		// 有用户登录信息 并且是刚打开页面直接重新登录
-		if (userInfo && !window.LT_KEEP_LOGIN) {
+		if (client && !window.LT_KEEP_LOGIN) {
 			const isGo = await LtHttp.post(
-				{ url: 'api/login', data: [userInfo.username, userInfo.password] },
+				{
+					url: 'api/login',
+					data: [client.user?.username, client.user?.password],
+				},
 				{ errorMessageMode: 'none' }
 			)
 				.then(() => {

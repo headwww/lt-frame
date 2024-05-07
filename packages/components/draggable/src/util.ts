@@ -124,7 +124,7 @@ export function getElementBySelector(
 
 /**
  * It takes a function and returns a function that executes the original function and then executes the second function.
- * @param {Function} fn - The function to be executed
+ * @param {Function}  - The function to be executed
  * @param {Function} afterFn - The function to be executed after the original function.
  * @param {any} [ctx=null] - The context of the function.
  * @returns {Function}

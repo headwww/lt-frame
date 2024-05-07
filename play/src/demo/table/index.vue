@@ -141,7 +141,7 @@ const gridOptions = reactive<VxeGridProps>({
 			field: 'version',
 			title: '版本',
 			width: '200',
-			formatter: ['$lt-formatter-to-fixed', 2, '元'],
+			formatter: ['$lt-formatter-to-fixed-unit', 2, '元'],
 			editRender: {
 				name: '$lt-edit-input-number',
 			},
@@ -301,7 +301,7 @@ const gridOptions = reactive<VxeGridProps>({
 				},
 			},
 			editRender: {
-				name: '$lt-edit-entity',
+				name: LtTablePlugins.EditEntity,
 				props: {
 					configs: {
 						enableSeq: true,

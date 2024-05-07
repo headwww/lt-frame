@@ -53,7 +53,7 @@ function createPageLoadingGuard(router: Router) {
 	const userStore = useUserStore();
 	const appStore = useAppStore();
 	router.beforeEach(async (to) => {
-		if (!userStore.getUserInfo) {
+		if (!userStore.getClient) {
 			return true;
 		}
 		if (to.meta.loaded) {
@@ -139,7 +139,7 @@ export function createPermissionGuard(router: Router) {
 	const userStore = useUserStore();
 
 	router.beforeEach(async (to, from, next) => {
-		const userInfo = userStore.getUserInfo;
+		const client = userStore.getClient;
 
 		const { routes: routesConfig } = getAppConfig();
 		let loginPath = '';
@@ -153,9 +153,9 @@ export function createPermissionGuard(router: Router) {
 		// 处理白名单路径
 		if (getWhitePaths().includes(to.path)) {
 			// 如果用户已登录并且目标路径是登录页,则跳过登录页面直接进入（to.query?.redirect）或根路径('/')
-			if (to.path === loginPath && userInfo) {
+			if (to.path === loginPath && client) {
 				try {
-					if (userInfo) {
+					if (client) {
 						next((to.query?.redirect as string) || '/');
 						return;
 					}
@@ -168,7 +168,7 @@ export function createPermissionGuard(router: Router) {
 		}
 
 		// 处理未登录情况
-		if (!userInfo) {
+		if (!client) {
 			// 如果用户未登录且目标路径不在白名单中，根据路由的元信息（meta.ignoreAuth）判断是否需要权限验证。
 			if (to.meta.ignoreAuth) {
 				next();

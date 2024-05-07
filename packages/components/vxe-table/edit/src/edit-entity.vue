@@ -1,12 +1,20 @@
 <template>
-	<vxe-pulldown style="width: 100%" ref="pulldownRef" transfer>
+	<vxe-pulldown
+		popup-class-name="shadow-2xl"
+		className="w-full h-350px"
+		ref="pulldownRef"
+		transfer
+	>
 		<template #default>
 			<Input :status="status" v-model:value="inputValue" @focus="focus"></Input>
 		</template>
 		<template #dropdown>
-			<div style="width: 100%; min-width: 430px; height: 300px">
-				<vxe-grid v-bind="getGridConfigs" v-on="gridEvents"></vxe-grid>
-			</div>
+			<vxe-grid
+				class="lt-table-scrollbar"
+				height="350"
+				v-bind="getGridConfigs"
+				v-on="gridEvents"
+			></vxe-grid>
 		</template>
 	</vxe-pulldown>
 </template>

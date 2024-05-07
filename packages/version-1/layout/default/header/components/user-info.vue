@@ -6,13 +6,15 @@
 		@menu-event="handleMenuEvent"
 	>
 		<div :class="ns.b()">
-			<Avatar :class="ns.e('avatar')">{{ getUserInfo.username[0] }}</Avatar>
+			<Avatar :class="ns.e('avatar')">{{
+				getClient?.user?.username[0]
+			}}</Avatar>
 			<div :class="ns.e('content')">
-				<div :class="ns.e('content-name')">{{ getUserInfo.username }}</div>
+				<div :class="ns.e('content-name')">{{ getClient?.user?.username }}</div>
 				<div :class="ns.e('content-tag')">
 					<span :class="ns.e('content-tag-content')" style="cursor: inherit"
 						><div :class="ns.e('content-tag-content-text')">
-							{{ getUserInfo.employee }}
+							{{ getClient?.user?.employee.name }}
 						</div></span
 					>
 				</div>
@@ -37,10 +39,7 @@ const ns = useNamespace('user-info');
 
 const userStore = useUserStore();
 
-const getUserInfo = computed(() => {
-	const { username = '', employee } = userStore.getUserInfo || {};
-	return { username, employee };
-});
+const getClient = computed(() => userStore.getClient);
 
 const rotation = ref(0);
 const rotate: any = computed(() => ({

@@ -5,7 +5,11 @@
 			placeholder="模糊查询，请输入查询条件"
 		></a-input>
 
-		<vxe-grid v-bind="getGridConfigs" v-on="gridEvents"></vxe-grid>
+		<vxe-grid
+			class="lt-table-scrollbar"
+			v-bind="getGridConfigs"
+			v-on="gridEvents"
+		></vxe-grid>
 	</div>
 </template>
 

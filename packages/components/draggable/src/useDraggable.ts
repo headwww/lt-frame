@@ -9,7 +9,7 @@ import {
 	watch,
 	type Ref,
 } from 'vue';
-import type { Fn, RefOrElement, RefOrValue } from './types';
+import type { Fnc, RefOrElement, RefOrValue } from './types';
 
 import {
 	forEachObject,
@@ -35,7 +35,7 @@ function defaultClone<T>(element: T): T {
  * Call onUnmounted() if it's inside a component lifecycle, if not, do nothing
  * @param fn
  */
-function tryOnUnmounted(fn: Fn) {
+function tryOnUnmounted(fn: Fnc) {
 	if (getCurrentInstance()) onUnmounted(fn);
 }
 
@@ -44,7 +44,7 @@ function tryOnUnmounted(fn: Fn) {
  * Call onMounted() if it's inside a component lifecycle, if not, just call the function
  * @param fn
  */
-function tryOnMounted(fn: Fn) {
+function tryOnMounted(fn: Fnc) {
 	if (getCurrentInstance()) onMounted(fn);
 	else nextTick(fn);
 }
