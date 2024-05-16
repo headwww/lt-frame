@@ -1,3 +1,5 @@
+import { PropType } from 'vue';
+
 // 任意类型的记录，键为字符串
 export type Recordable<T = any> = Record<string, T>;
 
@@ -35,3 +37,23 @@ export interface Fn<T = any, R = T> {
 export type DeepPartial<T> = {
 	[P in keyof T]?: DeepPartial<T[P]>;
 };
+
+export function someType<T>(types?: any[], defaultVal?: T) {
+	return types
+		? { type: types as PropType<T>, default: defaultVal as T }
+		: anyType<T>(defaultVal);
+}
+
+export function anyType<T = any>(defaultVal?: T, required?: boolean) {
+	const type = { validator: () => true, default: defaultVal as T } as unknown;
+	return required
+		? (type as {
+				type: PropType<T>;
+				default: T;
+				required: true;
+			})
+		: (type as {
+				default: T;
+				type: PropType<T>;
+			});
+}

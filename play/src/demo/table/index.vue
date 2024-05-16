@@ -1,6 +1,8 @@
 <template>
 	<LtPageLayout title="vxe-table">
 		<vxe-grid class="lt-table-scrollbar" v-bind="gridOptions"></vxe-grid>
+
+		<LtTableDesigner></LtTableDesigner>
 	</LtPageLayout>
 </template>
 
@@ -16,6 +18,7 @@ import {
 	ToolBusinessOptions,
 	LtToolFunctionProps,
 	LtTablePlugins,
+	LtTableDesigner,
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { parse } from '@lt-frame/utils';
@@ -365,6 +368,12 @@ const gridOptions = reactive<VxeGridProps>({
 								preIcon: 'svg-icon:frame-delete',
 							},
 							{
+								event: 'setting',
+								text: '配置',
+								type: 'text',
+								preIcon: 'svg-icon:frame-delete',
+							},
+							{
 								event: '',
 								text: '多选',
 								divider: false,
@@ -393,9 +402,7 @@ const gridOptions = reactive<VxeGridProps>({
 						onRefresh: () => {
 							createMessage.success('刷新');
 						},
-						onItemClick: (event, params) => {
-							console.log(event, params);
-						},
+						onItemClick: () => {},
 					},
 				},
 			},
@@ -411,7 +418,8 @@ const gridOptions = reactive<VxeGridProps>({
 								type: 'primary',
 								text: '审核',
 								disabled: (params) => {
-									console.log(params);
+									params;
+									// console.log(params);
 									return false;
 								},
 								onClick: () => {

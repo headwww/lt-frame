@@ -9,6 +9,8 @@ import './tool-bar/tool-bar';
 import './empty/empty';
 import './formatter/formatter';
 
+export * from './designer';
+
 export const LtFunction = ltFunction;
 export const LtBusiness = ltBusiness;
 

@@ -21,4 +21,5 @@ export * from './tree';
 export * from './context-menu';
 export * from './splitpanes';
 export * from './draggable';
-export * from './table-designer';
+export * from './lowcode-engine';
+export * from './collapse';

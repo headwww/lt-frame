@@ -3,9 +3,17 @@ export class Condition {
 
 	private propertyParams?: { [key: string]: any };
 
+	private expression?: string;
+
+	private ordinalParams?: any[];
+
 	private queryPath?: string[];
 
 	private orderBy?: string;
+
+	constructor(targetClass?: string) {
+		this.targetClass = targetClass;
+	}
 
 	setTargetClass(targetClass: string): Condition {
 		this.targetClass = targetClass;
@@ -21,6 +29,19 @@ export class Condition {
 			this.propertyParams = {};
 		}
 		this.propertyParams[property] = value;
+		return this;
+	}
+
+	expr(expression: string, ...params: any[]): Condition {
+		if (this.expression == null) {
+			this.expression = expression;
+		} else {
+			this.expression = `(${this.expression}) and (${expression})`;
+		}
+		if (this.ordinalParams == null) {
+			this.ordinalParams = [];
+		}
+		this.ordinalParams.push(...params);
 		return this;
 	}
 

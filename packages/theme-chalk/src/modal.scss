@@ -5,6 +5,7 @@
 		inset: 0 !important;
 		width: 100% !important;
 		height: 100%;
+		max-width: calc(100vw);
 
 		&-content {
 			height: 100%;

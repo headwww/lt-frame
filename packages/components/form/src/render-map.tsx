@@ -1,5 +1,5 @@
 import { LtButton } from '@lt-frame/components/button';
-import { Input, InputNumber } from 'ant-design-vue';
+import { Input, InputNumber, RadioGroup, Select, Switch } from 'ant-design-vue';
 import { get, set } from 'lodash-es';
 import { LtRender } from './render';
 
@@ -55,6 +55,63 @@ LtRender.renderer.add('$input-number', {
 					set(data, field, e);
 				}}
 			></InputNumber>
+		);
+	},
+});
+
+LtRender.renderer.add('$switch', {
+	renderItemContent(renderOpts, params) {
+		const { field, data } = params;
+		const { props, attrs, events } = renderOpts;
+		const itemValue = get(data, field);
+		return (
+			<Switch
+				{...props}
+				{...attrs}
+				{...events}
+				checked={itemValue}
+				onChange={(e) => {
+					set(data, field, e);
+				}}
+			></Switch>
+		);
+	},
+});
+
+LtRender.renderer.add('$select', {
+	renderItemContent(renderOpts, params) {
+		const { field, data } = params;
+		const { props, attrs, events } = renderOpts;
+		const itemValue = get(data, field);
+		return (
+			<Select
+				{...props}
+				{...attrs}
+				{...events}
+				value={itemValue}
+				onChange={(e) => {
+					set(data, field, e);
+				}}
+			></Select>
+		);
+	},
+});
+
+LtRender.renderer.add('$radio-group', {
+	renderItemContent(renderOpts, params) {
+		const { field, data } = params;
+		const { props, attrs, events } = renderOpts;
+		const itemValue = get(data, field);
+		return (
+			<RadioGroup
+				{...props}
+				{...attrs}
+				{...events}
+				value={itemValue}
+				onChange={(e) => {
+					set(data, field, e.target.value);
+				}}
+			></RadioGroup>
 		);
 	},
 });

@@ -556,6 +556,9 @@ export default defineComponent({
 			() => props.items,
 			() => {
 				itemFlag.value++;
+			},
+			{
+				deep: true,
 			}
 		);
 		watch(itemFlag, () => {
