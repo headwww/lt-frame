@@ -4,26 +4,22 @@
 
 <script lang="ts" setup>
 import { InputNumber } from 'ant-design-vue';
-import { ref, watch } from 'vue';
-
-const emit = defineEmits(['change']);
 
 defineOptions({
 	name: 'NumberSetter',
 	inheritAttrs: false,
 });
 
-const props = defineProps({
-	value: Number,
+defineProps({
 	defaultValue: Number,
 });
 
-const value = ref<number | undefined>(props.value);
+const emit = defineEmits(['change']);
 
-watch(
-	() => value.value,
-	() => {
-		emit('change', value.value);
-	}
-);
+const value = defineModel('value', {
+	type: Number,
+	set(v) {
+		emit('change', v);
+	},
+});
 </script>

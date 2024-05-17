@@ -3,36 +3,26 @@
 		v-model:value="value"
 		:options="options"
 		option-type="button"
+		@change="(v) => emit('change', v.target.value)"
 	></RadioGroup>
 </template>
 
 <script lang="ts" setup>
 import { RadioGroup, RadioGroupProps } from 'ant-design-vue';
-import { PropType, ref, watch } from 'vue';
+import { PropType } from 'vue';
 
 defineOptions({
 	name: 'RadioGroupSetter',
 	inheritAttrs: false,
 });
 
-const props = defineProps({
+defineProps({
 	options: {
 		type: Array as PropType<RadioGroupProps['options']>,
 	},
-	value: [Array, Object, String, Number],
 });
-
-const value = ref<any>(props.value);
 
 const emit = defineEmits(['change']);
 
-watch(
-	() => value.value,
-	() => {
-		emit('change', value.value);
-	},
-	{
-		immediate: true,
-	}
-);
+const value = defineModel('value', { type: [Array, Object, String, Number] });
 </script>

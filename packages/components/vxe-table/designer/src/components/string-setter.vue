@@ -4,26 +4,22 @@
 
 <script lang="ts" setup>
 import { Input } from 'ant-design-vue';
-import { ref, watch } from 'vue';
-
-const emit = defineEmits(['change']);
 
 defineOptions({
 	name: 'StringSetter',
 	inheritAttrs: false,
 });
 
-const props = defineProps({
-	value: String,
+defineProps({
 	defaultValue: String,
 });
 
-const value = ref<string | undefined>(props.value);
+const emit = defineEmits(['change']);
 
-watch(
-	() => value.value,
-	() => {
-		emit('change', value.value);
-	}
-);
+const value = defineModel('value', {
+	type: String,
+	set(v) {
+		emit('change', v);
+	},
+});
 </script>

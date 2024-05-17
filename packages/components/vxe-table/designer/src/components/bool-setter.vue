@@ -1,32 +1,24 @@
 <template>
-	<Switch :disabled="disabled" v-model:checked="checked"> </Switch>
+	<Switch
+		:disabled="disabled"
+		v-model:checked="value"
+		@change="(v) => emit('change', v)"
+	>
+	</Switch>
 </template>
 
 <script lang="ts" setup>
 import { Switch } from 'ant-design-vue';
-import { ref, watch } from 'vue';
-
-const emit = defineEmits(['change']);
 
 defineOptions({
 	name: 'BoolSetter',
 	inheritAttrs: false,
 });
-
-const props = defineProps({
-	value: Boolean,
+defineProps({
 	disabled: Boolean,
 });
 
-const checked = ref<boolean>(props.value);
+const emit = defineEmits(['change']);
 
-watch(
-	() => checked.value,
-	() => {
-		emit('change', checked.value);
-	},
-	{
-		immediate: true,
-	}
-);
+const value = defineModel('value', { type: Boolean });
 </script>
