@@ -1,6 +1,6 @@
 <script lang="tsx">
-import { PropType, defineComponent, reactive, watch } from 'vue';
-import { isArray, isString } from 'lodash-es';
+import { PropType, defineComponent, reactive, toRaw, watch } from 'vue';
+import { cloneDeep, isArray, isString } from 'lodash-es';
 import { Tooltip } from 'ant-design-vue';
 import { Recordable } from '@lt-frame/utils';
 import { FieldConfig, TitleConfig } from './types/field';
@@ -18,16 +18,15 @@ export default defineComponent({
 			type: Object as PropType<any>,
 		},
 	},
-	emits: ['update:value'],
-	setup(props) {
-		const output = reactive<{
-			[key: string]: any;
-		}>(props.value);
+	emits: ['update:value', 'change'],
+	setup(props, { emit }) {
+		const state = reactive<Recordable>(cloneDeep(props.value));
 
 		watch(
-			() => output,
+			() => state,
 			() => {
-				console.log('内部===》', output);
+				emit('update:value', toRaw(state));
+				emit('change', toRaw(state));
 			},
 			{
 				deep: true,
@@ -59,12 +58,6 @@ export default defineComponent({
 			);
 		}
 
-		/**
-		 * setter配置对应的设置器
-		 *
-		 * @param key
-		 * @param componentName
-		 */
 		function createComp(
 			key: any,
 			setter: string | SetterConfig | SetterConfig[],
@@ -89,12 +82,12 @@ export default defineComponent({
 				...compProps,
 				onChange: (value: any) => {
 					if (isArray(value)) {
-						output[key] = [];
+						state[key] = [];
 						value.map((item) => {
-							output[key].push(item);
+							state[key].push(item);
 						});
 					} else {
-						output[key] = value;
+						state[key] = value;
 					}
 				},
 			};
@@ -104,7 +97,7 @@ export default defineComponent({
 				if (setter.defaultValue) compAttr.value = setter.defaultValue;
 				if (setter.initialValue) compAttr.value = setter.initialValue;
 			}
-			if (output[key]) compAttr.value = output[key];
+			if (state[key]) compAttr.value = state[key];
 
 			return <Comp {...compAttr}></Comp>;
 		}
