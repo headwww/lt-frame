@@ -11,7 +11,7 @@ import { UseDraggableOptions, useDraggable } from './useDraggable';
 import { objectMap } from './util';
 
 interface IProps extends UseDraggableOptions<any> {
-	modelValue: any[];
+	modelValue?: any[];
 	tag?: string;
 	target?: string;
 }

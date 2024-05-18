@@ -1,6 +1,6 @@
 <script lang="tsx">
-import { PropType, defineComponent, reactive, watch } from 'vue';
-import { isArray, isString } from 'lodash-es';
+import { PropType, defineComponent, reactive, toRaw, watch } from 'vue';
+import { cloneDeep, isArray, isString } from 'lodash-es';
 import { Tooltip } from 'ant-design-vue';
 import { Recordable } from '@lt-frame/utils';
 import { FieldConfig, TitleConfig } from '../types/field';
@@ -18,14 +18,14 @@ export default defineComponent({
 		value: Object as PropType<any>,
 	},
 	setup(props, { emit }) {
-		const output = reactive<{
+		const state = reactive<{
 			[key: string]: any;
-		}>({ ...props.value });
+		}>(cloneDeep(props.value));
 
 		watch(
-			() => output,
+			() => state,
 			() => {
-				emit('change', output);
+				emit('change', toRaw(state));
 			},
 			{
 				deep: true,
@@ -85,7 +85,7 @@ export default defineComponent({
 			const compAttr: Recordable = {
 				...compProps,
 				onChange: (value: any) => {
-					output[key] = value;
+					state[key] = value;
 				},
 			};
 			if (item.defaultValue) compAttr.value = item.defaultValue;
@@ -94,7 +94,7 @@ export default defineComponent({
 				if (setter.defaultValue) compAttr.value = setter.defaultValue;
 				if (setter.initialValue) compAttr.value = setter.initialValue;
 			}
-			if (output[key]) compAttr.value = output[key];
+			if (state[key]) compAttr.value = state[key];
 
 			return <Comp {...compAttr}></Comp>;
 		}

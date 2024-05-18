@@ -24,7 +24,8 @@
 			<div :class="[ns.e('workbench-body-setting'), 'overflow-auto']">
 				<SettingsPane
 					:config="TableSchema"
-					v-model:value="gridProps"
+					@change="handleChange"
+					:value="gridProps"
 				></SettingsPane>
 			</div>
 		</div>
@@ -34,8 +35,9 @@
 <script lang="ts" setup>
 import { useNamespace } from '@lt-frame/hooks';
 import { Modal, Button } from 'ant-design-vue';
-import { ref, watch } from 'vue';
+import { reactive, ref } from 'vue';
 import { VxeGridInstance, VxeGridProps } from 'vxe-table';
+import { isArray } from 'lodash-es';
 import SettingsPane from './settings-pane.vue';
 import { TableSchema } from './schema';
 
@@ -43,7 +45,7 @@ const ns = useNamespace('table-designer');
 
 const xGrid = ref<VxeGridInstance>();
 
-const gridProps = ref<VxeGridProps>({
+const gridProps = reactive<VxeGridProps>({
 	stripe: true,
 	align: 'center',
 	data: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
@@ -57,13 +59,20 @@ const gridProps = ref<VxeGridProps>({
 	},
 });
 
-watch(
-	() => gridProps.value,
-	() => {
-		console.log('外部===》', gridProps.value);
-	},
-	{ deep: true }
-);
+type GridPropsKey = keyof VxeGridProps;
+
+function handleChange(e: { key: GridPropsKey; value: any }) {
+	const { key, value } = e;
+	console.log(e);
+
+	if (isArray(value)) {
+		// 更新 columns 数组，触发响应式更新
+		gridProps[key] = [...value];
+	} else {
+		// 处理其他属性的更新
+		gridProps[key] = value;
+	}
+}
 
 const open = ref<boolean>(true);
 </script>

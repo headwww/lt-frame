@@ -13,6 +13,9 @@ export const TableSchema: FieldConfig[] = [
 			props: {
 				itemSetter: {
 					componentName: 'ObjectSetter',
+					initialValue: {
+						title: '标题',
+					},
 					props: {
 						config: [
 							{
@@ -25,12 +28,18 @@ export const TableSchema: FieldConfig[] = [
 								name: 'field',
 								title: '字段名',
 								isRequired: true,
-								setter: 'StringSetter',
+								setter: {
+									componentName: 'StringSetter',
+									condition: (target: any) => {
+										console.log(target);
+
+										return true;
+									},
+								},
 							},
 							{
 								name: 'visible',
 								title: '省略',
-								isRequired: true,
 								setter: 'BoolSetter',
 							},
 						] as Array<FieldConfig>,
@@ -210,7 +219,14 @@ export const TableSchema: FieldConfig[] = [
 				type: 'field',
 				name: 'showHeader',
 				title: '显示表头',
-				setter: 'BoolSetter',
+				setter: {
+					componentName: 'BoolSetter',
+					condition: (target: any) => {
+						console.log(target);
+
+						return true;
+					},
+				},
 			},
 			{
 				type: 'field',

@@ -1,12 +1,22 @@
 <script lang="tsx">
-import { PropType, computed, defineComponent, h, ref, watch } from 'vue';
+import {
+	PropType,
+	computed,
+	defineComponent,
+	h,
+	nextTick,
+	ref,
+	unref,
+	watch,
+} from 'vue';
 import { Alert, Button, Popover } from 'ant-design-vue';
 import {
 	DeleteOutlined,
 	EditOutlined,
 	HolderOutlined,
 } from '@ant-design/icons-vue';
-import { isArray, isString } from 'lodash-es';
+import { isArray, isString, omit, uniqueId } from 'lodash-es';
+import { useScrollTo } from '@lt-frame/hooks';
 import { SetterConfig } from '../types/setter';
 import { LtDraggable } from '../../../../draggable';
 import { componentMap } from '../componentMap';
@@ -22,10 +32,30 @@ export default defineComponent({
 	},
 	emits: ['change'],
 	setup(props, { emit }) {
-		const list = ref<any[]>(props.value);
+		const draggable = ref();
+
+		const list = ref<any[]>(
+			props.value.map((item) => ({ ...item, $lt_id: uniqueId('LT_') }))
+		);
 
 		function handleAdd() {
-			list.value.push({});
+			list.value.push({
+				...props.itemSetter?.initialValue,
+				$lt_id: uniqueId('LT_'),
+			});
+			nextTick(() => {
+				const wrap = unref(draggable);
+				if (!wrap) {
+					return;
+				}
+				const scrollHeight = wrap.scrollHeight as number;
+
+				const { start } = useScrollTo({
+					el: wrap,
+					to: scrollHeight,
+				});
+				start();
+			});
 		}
 
 		function handleRemove(index: number) {
@@ -35,7 +65,10 @@ export default defineComponent({
 		watch(
 			() => list.value,
 			() => {
-				emit('change', list.value);
+				emit(
+					'change',
+					list.value.map((item) => ({ ...omit(item, '$lt_id') }))
+				);
 			},
 			{
 				deep: true,
@@ -54,7 +87,6 @@ export default defineComponent({
 		});
 
 		function createCompObjectSetter(
-			item: any,
 			setter: string | SetterConfig | SetterConfig[],
 			index: number
 		) {
@@ -76,9 +108,9 @@ export default defineComponent({
 			const compAttr = {
 				...compProps,
 				onChange: (value: any) => {
-					list.value[index] = value;
+					list.value.splice(index, 1, value);
 				},
-				value: item,
+				value: list.value[index],
 			};
 
 			return <Comp {...compAttr}></Comp>;
@@ -100,26 +132,29 @@ export default defineComponent({
 				}
 			}
 
-			const Comp1 = componentMap.get(componentName) as ReturnType<
+			const Comp = componentMap.get(componentName) as ReturnType<
 				typeof defineComponent
 			>;
 
 			const compAttr = {
 				...compProps,
 				onChange: (value: any) => {
-					list.value[index][key] = value;
+					const v = {
+						...list.value[index],
+						[key]: value,
+					};
+					list.value.splice(index, 1, v);
 				},
 				value: list.value[index][key],
 			};
 
-			return <Comp1 {...compAttr}></Comp1>;
+			return <Comp {...compAttr}></Comp>;
 		}
 
 		function createItem(item: any, index: number) {
 			const { itemSetter } = props;
-
 			return (
-				<div class={['flex', 'flex-items-center', 'mt-3px']}>
+				<div key={item.$lt_id} class={['flex', 'flex-items-center', 'mt-3px']}>
 					<Popover
 						overlayStyle={{
 							height: '100%',
@@ -127,9 +162,10 @@ export default defineComponent({
 						overlayInnerStyle={{
 							height: '100%',
 						}}
-						trigger={'click'}
-						placement={'left'}
-						overlayClassName={'lt-cus-popover'}
+						destroyTooltipOnHide
+						trigger="click"
+						placement="left"
+						overlayClassName="lt-cus-popover"
 					>
 						{{
 							default: () => (
@@ -137,8 +173,7 @@ export default defineComponent({
 							),
 							content: () => (
 								<div class="w-310px h-full">
-									{itemSetter &&
-										createCompObjectSetter(item, itemSetter, index)}
+									{itemSetter && createCompObjectSetter(itemSetter, index)}
 								</div>
 							),
 						}}
@@ -146,7 +181,11 @@ export default defineComponent({
 					<div class="flex w-80%">
 						{getIsRequired.value.map(
 							(item) =>
-								item.setter && createIsRequired(item.name, item.setter, index)
+								item.setter && (
+									<div class="mr-5px">
+										{createIsRequired(item.name, item.setter, index)}
+									</div>
+								)
 						)}
 					</div>
 					<Button
@@ -167,24 +206,28 @@ export default defineComponent({
 
 		return () => (
 			<div>
-				{list.value && list.value.length === 0 && (
-					<Alert
-						message={'暂时还没有添加内容'}
-						type="info"
-						class={'m-8px'}
-						showIcon
-					></Alert>
-				)}
-				<LtDraggable
-					dragClass={'lt-table-desinger-dg-class'}
-					ghostClass={'lt-table-desinger-dg-class'}
-					animation={150}
-					handle={'.handle'}
-					modelValue={list.value}
-					class={['flex', 'flex-col', 'max-h-230px', 'overflow-auto']}
-				>
-					{list.value.map((item, index) => createItem(item, index))}
-				</LtDraggable>
+				<div ref={draggable} class={['max-h-230px', 'overflow-auto']}>
+					{list.value && list.value.length === 0 && (
+						<Alert
+							message={'暂时还没有添加内容'}
+							type="info"
+							class={'m-8px'}
+							showIcon
+						></Alert>
+					)}
+
+					<LtDraggable
+						dragClass={'lt-table-desinger-dg-class'}
+						ghostClass={'lt-table-desinger-dg-class'}
+						animation={150}
+						handle={'.handle'}
+						v-model={list.value}
+						class={['flex', 'flex-col']}
+					>
+						{list.value.map((item, index) => createItem(item, index))}
+					</LtDraggable>
+				</div>
+
 				<Button onClick={handleAdd} type={'link'}>
 					添加一项 +
 				</Button>

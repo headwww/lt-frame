@@ -26,7 +26,6 @@ export default defineComponent({
 			() => state,
 			() => {
 				emit('update:value', toRaw(state));
-				emit('change', toRaw(state));
 			},
 			{
 				deep: true,
@@ -81,16 +80,11 @@ export default defineComponent({
 			const compAttr: Recordable = {
 				...compProps,
 				onChange: (value: any) => {
-					if (isArray(value)) {
-						state[key] = [];
-						value.map((item) => {
-							state[key].push(item);
-						});
-					} else {
-						state[key] = value;
-					}
+					state[key] = value;
+					emit('change', { key, value });
 				},
 			};
+
 			if (item.defaultValue) compAttr.value = item.defaultValue;
 			if (item.initialValue) compAttr.value = item.initialValue;
 			if (!isString(setter) && !isArray(setter)) {
@@ -133,12 +127,6 @@ export default defineComponent({
 					</LtCollapse>
 				);
 			}
-			return (
-				<div class={'m-8px flex'}>
-					{title && createLabel(title)}
-					{setter && createComp(name, setter, fieldConfig)}
-				</div>
-			);
 		}
 
 		return () => props.config?.map((item) => createSettingFieldView(item));
