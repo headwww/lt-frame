@@ -1,8 +1,16 @@
 <script lang="tsx">
-import { PropType, defineComponent, reactive, toRaw, watch } from 'vue';
+import {
+	PropType,
+	computed,
+	defineComponent,
+	reactive,
+	toRaw,
+	watch,
+} from 'vue';
 import { cloneDeep, isArray, isString } from 'lodash-es';
 import { Tooltip } from 'ant-design-vue';
 import { Recordable } from '@lt-frame/utils';
+import { isFunction } from 'xe-utils';
 import { FieldConfig, TitleConfig } from './types/field';
 import { LtCollapse } from '../../../collapse';
 import { componentMap } from './componentMap';
@@ -96,8 +104,30 @@ export default defineComponent({
 			return <Comp {...compAttr}></Comp>;
 		}
 
+		function createContent(item: FieldConfig, type: number) {
+			const visible = computed(() => {
+				const { condition } = item;
+				if (condition) {
+					return isFunction(condition) ? condition(state) !== false : true;
+				}
+				return true;
+			});
+			return (
+				<div
+					v-show={visible.value}
+					class={{
+						'm-8px': true,
+						flex: type === 0,
+					}}
+				>
+					{type === 0 && item.title && createLabel(item.title)}
+					{item.setter && createComp(item.name, item.setter, item)}
+				</div>
+			);
+		}
+
 		function createSettingFieldView(fieldConfig: FieldConfig) {
-			const { display, title, name, setter, items } = fieldConfig;
+			const { display, title, setter, items } = fieldConfig;
 			if (display === 'accordion' || display === 'block') {
 				return (
 					<LtCollapse
@@ -108,19 +138,8 @@ export default defineComponent({
 							title: () => title && createLabel(title),
 							default: () => (
 								<>
-									{items &&
-										items.map((item) => (
-											<div class={'m-8px flex'}>
-												{item.title && createLabel(item.title)}
-												{item.setter &&
-													createComp(item.name, item.setter, item)}
-											</div>
-										))}
-									{setter && (
-										<div class={'m-8px'}>
-											{createComp(name, setter, fieldConfig)}
-										</div>
-									)}
+									{items && items.map((item) => createContent(item, 0))}
+									{setter && createContent(fieldConfig, 1)}
 								</>
 							),
 						}}

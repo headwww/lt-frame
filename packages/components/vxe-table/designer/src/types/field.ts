@@ -50,6 +50,13 @@ export interface FieldConfig {
 	 * 展示模式
 	 */
 	display?: 'accordion' | 'inline' | 'block';
+
+	/**
+	 * 控制是否显示
+	 * @param target
+	 * @returns
+	 */
+	condition?: (target: any) => boolean;
 }
 
 export interface TitleConfig {

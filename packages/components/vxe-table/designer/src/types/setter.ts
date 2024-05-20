@@ -21,11 +21,4 @@ export interface SetterConfig {
 	initialValue?: any;
 
 	defaultValue?: any;
-
-	/**
-	 * 控制是否显示
-	 * @param target
-	 * @returns
-	 */
-	condition?: (target: any) => boolean;
 }

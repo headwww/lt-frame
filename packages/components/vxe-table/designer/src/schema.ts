@@ -30,11 +30,6 @@ export const TableSchema: FieldConfig[] = [
 								isRequired: true,
 								setter: {
 									componentName: 'StringSetter',
-									condition: (target: any) => {
-										console.log(target);
-
-										return true;
-									},
 								},
 							},
 							{
@@ -219,13 +214,9 @@ export const TableSchema: FieldConfig[] = [
 				type: 'field',
 				name: 'showHeader',
 				title: '显示表头',
+				condition: (target: any) => target.showFooter,
 				setter: {
 					componentName: 'BoolSetter',
-					condition: (target: any) => {
-						console.log(target);
-
-						return true;
-					},
 				},
 			},
 			{
