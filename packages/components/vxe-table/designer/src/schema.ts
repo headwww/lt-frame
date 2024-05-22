@@ -1,11 +1,12 @@
+import { Column } from './types';
 import { FieldConfig } from './types/field';
 import { SetterConfig } from './types/setter';
 
-export const TableSchema: FieldConfig[] = [
+export const gridSchema: FieldConfig[] = [
 	{
 		type: 'field',
 		name: 'columns',
-		title: '列配置',
+		title: '数据列',
 		display: 'accordion',
 		setter: {
 			// 子节点只能设置ObjectSetter
@@ -13,11 +14,41 @@ export const TableSchema: FieldConfig[] = [
 			props: {
 				itemSetter: {
 					componentName: 'ObjectSetter',
-					initialValue: {
-						title: '标题',
-					},
 					props: {
 						config: [
+							{
+								type: 'field',
+								name: 'type',
+								title: '数据类型',
+								setter: {
+									componentName: 'SelectSetter',
+									props: {
+										options: [
+											{
+												label: '文本',
+												value: 'text',
+											},
+											{
+												label: '数字',
+												value: 'number',
+											},
+											{
+												label: '日期',
+												value: 'data',
+											},
+											{
+												label: '枚举',
+												value: 'enum',
+											},
+											{
+												label: '实体',
+												value: 'entity',
+											},
+										],
+									},
+									initialValue: 'text',
+								},
+							},
 							{
 								name: 'title',
 								title: '标题',
@@ -26,17 +57,145 @@ export const TableSchema: FieldConfig[] = [
 							},
 							{
 								name: 'field',
-								title: '字段名',
+								title: '数据字段',
 								isRequired: true,
 								setter: {
 									componentName: 'StringSetter',
 								},
 							},
 							{
-								name: 'visible',
-								title: '省略',
+								name: 'width',
+								title: '列宽',
+								setter: 'NumberSetter',
+							},
+							{
+								name: 'fixed',
+								title: '列固定',
+								setter: {
+									componentName: 'RadioGroupSetter',
+									props: {
+										options: [
+											{
+												label: '左侧',
+												value: 'left',
+											},
+											{
+												label: '不锁',
+												value: '',
+											},
+											{
+												label: '右侧',
+												value: 'right',
+											},
+										],
+									},
+								},
+							},
+							{
+								name: 'sortable',
+								title: '排序',
 								setter: 'BoolSetter',
 							},
+							{
+								name: 'dataFormatter',
+								title: '时间格式',
+								condition: (tager: Column) => tager.type === 'data',
+								setter: {
+									componentName: 'SelectSetter',
+									props: {
+										options: [
+											{
+												label: 'YYYY年MM月DD日 HH时mm分ss秒',
+												value: 'YYYY年MM月DD日 HH时mm分ss秒',
+											},
+											{
+												label: 'YYYY年MM月DD日 HH时mm分',
+												value: 'YYYY年MM月DD日 HH时mm分',
+											},
+											{
+												label: 'YYYY年MM月DD日',
+												value: 'YYYY年MM月DD日',
+											},
+											{
+												label: 'YYYY年MM月',
+												value: 'YYYY年MM月',
+											},
+											{
+												label: 'YYYY年',
+												value: 'YYYY年',
+											},
+											{
+												label: 'YYYY-MM-DD HH:mm:ss',
+												value: 'YYYY-MM-DD HH:mm:ss',
+											},
+											{
+												label: 'YYYY-MM-DD HH:mm',
+												value: 'YYYY-MM-DD HH:mm',
+											},
+											{
+												label: 'YYYY-MM-DD',
+												value: 'YYYY-MM-DD',
+											},
+											{
+												label: 'YYYY-MM',
+												value: 'YYYY-MM',
+											},
+											{
+												label: 'YYYY',
+												value: 'YYYY',
+											},
+										],
+									},
+								},
+							},
+							{
+								name: 'numberFormatter',
+								title: '小数位',
+								condition: (tager: Column) => tager.type === 'number',
+								setter: 'NumberSetter',
+							},
+							{
+								name: 'enumFormatter',
+								title: '枚举',
+								condition: (tager: Column) => tager.type === 'enum',
+								setter: {
+									componentName: 'ArraySetter',
+									props: {
+										edit: false,
+										drag: false,
+										itemSetter: {
+											componentName: 'ObjectSetter',
+											props: {
+												config: [
+													{
+														name: 'key',
+														title: '键',
+														isRequired: true,
+														setter: {
+															componentName: 'StringSetter',
+															props: {
+																placeholder: '键',
+															},
+														},
+													},
+													{
+														name: 'value',
+														title: '值',
+														isRequired: true,
+														setter: {
+															componentName: 'StringSetter',
+															props: {
+																placeholder: '值',
+															},
+														},
+													},
+												],
+											},
+										},
+									},
+								},
+							},
+							{},
 						] as Array<FieldConfig>,
 					},
 				} as SetterConfig,
@@ -56,6 +215,7 @@ export const TableSchema: FieldConfig[] = [
 					label: '斑马线',
 					tip: '在可编辑表格场景下，临时插入的数据不会有斑马纹样式,在树表格模式下改设置请关闭',
 				},
+				initialValue: true,
 				setter: 'BoolSetter',
 			},
 			{
@@ -100,7 +260,6 @@ export const TableSchema: FieldConfig[] = [
 					initialValue: 'default',
 				},
 			},
-
 			{
 				type: 'field',
 				name: 'size',
@@ -125,6 +284,16 @@ export const TableSchema: FieldConfig[] = [
 						],
 					},
 				},
+			},
+			{
+				type: 'field',
+				name: 'showOverflow',
+				title: {
+					label: '省略显示',
+					tip: '在可编辑表格场景下，临时插入的数据不会有斑马纹样式,在树表格模式下改设置请关闭',
+				},
+				initialValue: true,
+				setter: 'BoolSetter',
 			},
 			{
 				type: 'field',
@@ -154,189 +323,41 @@ export const TableSchema: FieldConfig[] = [
 					},
 				},
 			},
+		],
+	},
+	{
+		type: 'group',
+		name: 'seiner',
+		title: '高级',
+		display: 'accordion',
+		items: [
 			{
 				type: 'field',
-				name: 'headerAlign',
-				title: {
-					label: '表头对齐',
-					tip: '所有的表头列的对齐方式',
-				},
+				name: 'seqColunms',
+				title: '开启序号列',
 				setter: {
-					componentName: 'RadioGroupSetter',
-					initialValue: 'center',
-					props: {
-						options: [
-							{
-								label: '靠左',
-								value: 'left',
-							},
-							{
-								label: '居中',
-								value: 'center',
-							},
-							{
-								label: '靠右',
-								value: 'right',
-							},
-						],
-					},
-				},
-			},
-			{
-				type: 'field',
-				name: 'headerAlign',
-				title: {
-					label: '表尾对齐',
-					tip: '所有的表尾列的对齐方式',
-				},
-				setter: {
-					componentName: 'RadioGroupSetter',
-					initialValue: 'center',
-					props: {
-						options: [
-							{
-								label: '靠左',
-								value: 'left',
-							},
-							{
-								label: '居中',
-								value: 'center',
-							},
-							{
-								label: '靠右',
-								value: 'right',
-							},
-						],
-					},
-				},
-			},
-			{
-				type: 'field',
-				name: 'showHeader',
-				title: '显示表头',
-				condition: (target: any) => target.showFooter,
-				setter: {
+					initialValue: false,
 					componentName: 'BoolSetter',
 				},
 			},
 			{
 				type: 'field',
-				name: 'showFooter',
-				title: '显示表尾',
-				setter: 'BoolSetter',
-			},
-			{
-				type: 'field',
-				name: 'showOverflow',
-				title: {
-					label: '内容显示方式',
-					tip: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
-				},
+				name: 'radioColunms',
+				title: '开启单选列',
 				setter: {
-					componentName: 'SelectSetter',
-					initialValue: null,
-					props: {
-						options: [
-							{
-								label: '全部显示',
-								value: null,
-							},
-							{
-								label: '省略号',
-								value: 'default',
-							},
-							{
-								label: '提示性省略',
-								value: 'tooltip',
-							},
-						],
-					},
+					initialValue: false,
+					componentName: 'BoolSetter',
 				},
 			},
 			{
 				type: 'field',
-				name: 'showHeaderOverflow',
-				title: {
-					label: '表头显示方式',
-					tip: '设置表头所有内容过长时显示为省略号',
-				},
+				name: 'checkboxColunms',
+				title: '开启多选列',
 				setter: {
-					componentName: 'SelectSetter',
-					props: {
-						options: [
-							{
-								label: '全部显示',
-								value: false,
-							},
-							{
-								label: '省略号',
-								value: 'default',
-							},
-							{
-								label: '提示性省略',
-								value: 'tooltip',
-							},
-						],
-					},
-				},
-			},
-			{
-				type: 'field',
-				name: 'showFooterOverflow',
-				title: {
-					label: '内容显示方式',
-					tip: '设置表尾所有内容过长时显示为省略号',
-				},
-				setter: {
-					componentName: 'SelectSetter',
-					props: {
-						options: [
-							{
-								label: '全部显示',
-								value: false,
-							},
-							{
-								label: '省略号',
-								value: 'default',
-							},
-							{
-								label: '提示性省略',
-								value: 'tooltip',
-							},
-						],
-					},
+					initialValue: false,
+					componentName: 'BoolSetter',
 				},
 			},
 		],
-	},
-	{
-		type: 'field',
-		name: 'columnConfig',
-		title: '列配置信息',
-		display: 'accordion',
-		setter: {
-			componentName: 'ObjectSetter',
-			props: {
-				config: [
-					{
-						name: 'isCurrent',
-						title: {
-							label: '行高亮',
-							tip: '当鼠标点击列头时，是否要高亮当前列',
-						},
-						setter: 'BoolSetter',
-					},
-					{
-						name: 'isHover',
-						title: {
-							label: '列头高亮',
-							tip: '当鼠标移到列头时，是否要高亮当前头',
-						},
-						initialValue: true,
-						setter: 'BoolSetter',
-					},
-				] as Array<FieldConfig>,
-			},
-		},
 	},
 ];

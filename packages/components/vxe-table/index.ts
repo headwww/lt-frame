@@ -158,6 +158,8 @@ export const LtTablePlugins = {
 	FormatterTime: '$lt-formatter-time',
 	// 格式化枚举
 	FormatterEnum: '$lt-formatter-enum',
+	// 格式化枚举Array<{key:string,value:string|number|boole}>
+	FormatterEnum2: '$lt-formatter-enum-key-value',
 	// 高级筛选
 	FilterAdvanced: '$lt-filter',
 	// 空数据渲染

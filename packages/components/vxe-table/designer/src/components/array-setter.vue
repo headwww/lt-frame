@@ -29,6 +29,18 @@ export default defineComponent({
 			default: () => [],
 		},
 		itemSetter: Object as PropType<SetterConfig>,
+		remove: {
+			type: Boolean,
+			default: true,
+		},
+		edit: {
+			type: Boolean,
+			default: true,
+		},
+		drag: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	emits: ['change'],
 	setup(props, { emit }) {
@@ -147,7 +159,6 @@ export default defineComponent({
 				},
 				value: list.value[index][key],
 			};
-
 			return <Comp {...compAttr}></Comp>;
 		}
 
@@ -155,29 +166,31 @@ export default defineComponent({
 			const { itemSetter } = props;
 			return (
 				<div key={item.$lt_id} class={['flex', 'flex-items-center', 'mt-3px']}>
-					<Popover
-						overlayStyle={{
-							height: '100%',
-						}}
-						overlayInnerStyle={{
-							height: '100%',
-						}}
-						destroyTooltipOnHide
-						trigger="click"
-						placement="left"
-						overlayClassName="lt-cus-popover"
-					>
-						{{
-							default: () => (
-								<Button type={'text'} icon={h(EditOutlined)}></Button>
-							),
-							content: () => (
-								<div class="w-310px h-full">
-									{itemSetter && createCompObjectSetter(itemSetter, index)}
-								</div>
-							),
-						}}
-					</Popover>
+					{props.edit && (
+						<Popover
+							overlayStyle={{
+								height: '100%',
+							}}
+							overlayInnerStyle={{
+								height: '100%',
+							}}
+							destroyTooltipOnHide
+							trigger="click"
+							placement="left"
+							overlayClassName="lt-cus-popover"
+						>
+							{{
+								default: () => (
+									<Button type={'text'} icon={h(EditOutlined)}></Button>
+								),
+								content: () => (
+									<div class="w-310px h-full">
+										{itemSetter && createCompObjectSetter(itemSetter, index)}
+									</div>
+								),
+							}}
+						</Popover>
+					)}
 					<div class="flex w-80%">
 						{getIsRequired.value.map(
 							(item) =>
@@ -188,18 +201,22 @@ export default defineComponent({
 								)
 						)}
 					</div>
-					<Button
-						onClick={() => handleRemove(index)}
-						size="small"
-						type="text"
-						icon={h(DeleteOutlined)}
-					/>
-					<Button
-						size="small"
-						type="text"
-						class="handle cursor-move"
-						icon={h(HolderOutlined)}
-					/>
+					{props.remove && (
+						<Button
+							onClick={() => handleRemove(index)}
+							size="small"
+							type="text"
+							icon={h(DeleteOutlined)}
+						/>
+					)}
+					{props.drag && (
+						<Button
+							size="small"
+							type="text"
+							class="handle cursor-move"
+							icon={h(HolderOutlined)}
+						/>
+					)}
 				</div>
 			);
 		}

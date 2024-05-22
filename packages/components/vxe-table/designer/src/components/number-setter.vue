@@ -1,5 +1,12 @@
 <template>
-	<InputNumber class="w-full" v-model:value="value"> </InputNumber>
+	<InputNumber
+		class="w-full"
+		v-model:value="value"
+		:placeholder="placeholder"
+		:max="max"
+		:min="min"
+	>
+	</InputNumber>
 </template>
 
 <script lang="ts" setup>
@@ -12,6 +19,9 @@ defineOptions({
 
 defineProps({
 	defaultValue: Number,
+	placeholder: String,
+	max: Number,
+	min: Number,
 });
 
 const emit = defineEmits(['change']);

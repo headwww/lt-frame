@@ -2,7 +2,7 @@
 	<Select
 		:mode="mode"
 		:options="options"
-		class="w-full ml-12px"
+		class="w-full"
 		v-model:value="value"
 		@change="(v) => emit('change', v)"
 	></Select>

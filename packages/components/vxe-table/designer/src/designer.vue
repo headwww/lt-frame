@@ -23,9 +23,11 @@
 
 			<div :class="[ns.e('workbench-body-setting'), 'overflow-auto']">
 				<SettingsPane
-					:config="TableSchema"
+					:config="gridSchema"
 					@change="handleChange"
-					:value="gridProps"
+					:value="{
+						columns: [],
+					}"
 				></SettingsPane>
 			</div>
 		</div>
@@ -37,9 +39,11 @@ import { useNamespace } from '@lt-frame/hooks';
 import { Modal, Button } from 'ant-design-vue';
 import { reactive, ref } from 'vue';
 import { VxeGridInstance, VxeGridProps } from 'vxe-table';
-import { isArray } from 'lodash-es';
+import { isArray, isUndefined } from 'lodash-es';
 import SettingsPane from './settings-pane.vue';
-import { TableSchema } from './schema';
+import { gridSchema } from './schema';
+import { Column, TableFields } from './types';
+import { LtTablePlugins } from '../..';
 
 const ns = useNamespace('table-designer');
 
@@ -48,29 +52,142 @@ const xGrid = ref<VxeGridInstance>();
 const gridProps = reactive<VxeGridProps>({
 	stripe: true,
 	align: 'center',
-	data: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-	showHeader: true,
-	columns: [
-		{ title: '列1', field: 'L1', visible: true },
-		{ title: '列2', field: 'L2' },
+	data: [
+		{
+			id: 1,
+			data: 1648190900467,
+			enum: 'CORP',
+		},
+		{ id: 1.999999, data: 1648190900467, enum: 'DEPT' },
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
 	],
+	showHeader: true,
+	columns: [],
 	columnConfig: {
 		isCurrent: true,
 	},
 });
 
-type GridPropsKey = keyof VxeGridProps;
+function handleChange(e: { key: keyof TableFields; value: any }) {
+	if (e.key === 'stripe') {
+		gridProps.stripe = e.value;
+	}
+	if (e.key === 'round') {
+		gridProps.round = e.value;
+	}
+	if (e.key === 'border') {
+		gridProps.border = e.value;
+	}
+	if (e.key === 'size') {
+		gridProps.size = e.value;
+	}
+	if (e.key === 'align') {
+		gridProps.align = e.value;
+	}
+	if (e.key === 'showOverflow') {
+		if (e.value) {
+			gridProps.showOverflow = 'tooltip';
+		} else {
+			gridProps.showOverflow = null;
+		}
+	}
+	if (e.key === 'seqColunms') {
+		if (e.value) {
+			gridProps.columns?.push({
+				type: 'seq',
+				title: '#',
+				width: 45,
+				fixed: 'left',
+			});
+		} else {
+			gridProps.columns?.forEach((element, index) => {
+				if (element.type === 'seq') {
+					gridProps.columns?.splice(index, 1);
+				}
+			});
+		}
+	}
+	if (e.key === 'radioColunms') {
+		if (e.value) {
+			gridProps.columns?.push({
+				type: 'radio',
+				width: 50,
+				title: '单选',
+				fixed: 'left',
+			});
+		} else {
+			gridProps.columns?.forEach((element, index) => {
+				if (element.type === 'radio') {
+					gridProps.columns?.splice(index, 1);
+				}
+			});
+		}
+	}
+	if (e.key === 'checkboxColunms') {
+		if (e.value) {
+			gridProps.columns?.push({
+				type: 'checkbox',
+				width: 50,
+				fixed: 'left',
+			});
+		} else {
+			gridProps.columns?.forEach((element, index) => {
+				if (element.type === 'checkbox') {
+					gridProps.columns?.splice(index, 1);
+				}
+			});
+		}
+	}
 
-function handleChange(e: { key: GridPropsKey; value: any }) {
-	const { key, value } = e;
-	console.log(e);
+	if (e.key === 'columns') {
+		if (gridProps.columns) {
+			const typeColumns: any[] = gridProps.columns.filter(
+				(item) => !isUndefined(item.type)
+			);
+			gridProps.columns = [];
+			gridProps.columns = [...typeColumns];
+		}
 
-	if (isArray(value)) {
-		// 更新 columns 数组，触发响应式更新
-		gridProps[key] = [...value];
-	} else {
-		// 处理其他属性的更新
-		gridProps[key] = value;
+		if (isArray(e.value)) {
+			if (e.value.length === 0) {
+				if (gridProps.columns) gridProps.columns.length = 0;
+			} else {
+				e.value.forEach((item: Column) => {
+					let formatter;
+					if (item.type === 'data') {
+						formatter = [LtTablePlugins.FormatterTime, item.dataFormatter];
+					} else if (item.type === 'number') {
+						formatter = [
+							LtTablePlugins.FormatterToFixedUnit,
+							item.numberFormatter,
+						];
+					} else if (item.type === 'enum') {
+						formatter = [LtTablePlugins.FormatterEnum2, item.enumFormatter];
+					} else {
+						formatter = ({ cellValue }: any) => cellValue;
+					}
+
+					gridProps.columns?.push({
+						field: item.field,
+						title: item.title,
+						width: item.width,
+						fixed: item.fixed,
+						sortable: item.sortable,
+						formatter,
+					});
+				});
+			}
+		} else {
+			gridProps.columns!!.length = 0;
+		}
 	}
 }
 

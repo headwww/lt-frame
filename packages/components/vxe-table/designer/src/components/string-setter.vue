@@ -1,5 +1,5 @@
 <template>
-	<Input v-model:value="value"> </Input>
+	<Input v-model:value="value" :placeholder="placeholder"> </Input>
 </template>
 
 <script lang="ts" setup>
@@ -12,6 +12,7 @@ defineOptions({
 
 defineProps({
 	defaultValue: String,
+	placeholder: String,
 });
 
 const emit = defineEmits(['change']);
