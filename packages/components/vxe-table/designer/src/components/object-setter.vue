@@ -13,6 +13,7 @@ import { Recordable } from '@lt-frame/utils';
 import { FieldConfig, TitleConfig } from '../types/field';
 import { componentMap } from '../componentMap';
 import { SetterConfig } from '../types/setter';
+import { LtCollapse } from '../../../../collapse';
 
 export default defineComponent({
 	name: 'ObjectSetter',
@@ -27,7 +28,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const state = reactive<{
 			[key: string]: any;
-		}>(cloneDeep(props.value));
+		}>(cloneDeep(props.value) ? cloneDeep(props.value) : {});
 
 		watch(
 			() => state,
@@ -89,12 +90,14 @@ export default defineComponent({
 			const Comp = componentMap.get(componentName) as ReturnType<
 				typeof defineComponent
 			>;
+
 			const compAttr: Recordable = {
 				...compProps,
 				onChange: (value: any) => {
 					state[key] = value;
 				},
 			};
+
 			if (item.defaultValue) compAttr.value = item.defaultValue;
 			if (item.initialValue) compAttr.value = item.initialValue;
 			if (!isString(setter) && !isArray(setter)) {
@@ -114,10 +117,28 @@ export default defineComponent({
 				}
 				return true;
 			});
+
 			return (
 				<div v-show={visible.value} class={'mb-8px flex'}>
-					{item.title && createLabel(item.title)}
-					{item.setter && createComp(item.name, item.setter, item)}
+					{item.display === 'accordion' || item.display === 'block' ? (
+						<LtCollapse
+							class={'w-full'}
+							canExpand={item.display === 'accordion'}
+							headerClass={'bg-gray-1 h-20px'}
+						>
+							{{
+								title: () => item.title && createLabel(item.title),
+								default: () => (
+									<>{item.setter && createComp(item.name, item.setter, item)}</>
+								),
+							}}
+						</LtCollapse>
+					) : (
+						<>
+							{item.title && createLabel(item.title)}
+							{item.setter && createComp(item.name, item.setter, item)}
+						</>
+					)}
 				</div>
 			);
 		}

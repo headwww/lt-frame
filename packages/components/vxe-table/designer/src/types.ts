@@ -23,11 +23,8 @@ export interface Column {
 		key: string;
 		value: string | number | boolean;
 	}[];
-	edit: true;
 	editRules: VxeTableDefines.ValidatorRule;
-	filters: string[];
-	editRender: string;
-	// 编辑和筛选时候实体的话的数据源配置
+	// 编辑和筛选时候type是实体的话需要配置的数据源配置
 	extraDataSources: AjaxConfig;
 }
 

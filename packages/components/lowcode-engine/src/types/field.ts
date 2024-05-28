@@ -57,10 +57,6 @@ export interface FieldConfig {
 	 * @returns
 	 */
 	condition?: (target: any) => boolean;
-
-	setValue?: (value: any) => void;
-
-	getValue?: () => any;
 }
 
 export interface TitleConfig {

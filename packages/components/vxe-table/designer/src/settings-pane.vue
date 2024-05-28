@@ -7,7 +7,7 @@ import {
 	toRaw,
 	watch,
 } from 'vue';
-import { cloneDeep, isArray, isString } from 'lodash-es';
+import { cloneDeep, isArray, isString, isUndefined } from 'lodash-es';
 import { Tooltip } from 'ant-design-vue';
 import { Recordable } from '@lt-frame/utils';
 import { isFunction } from 'xe-utils';
@@ -28,7 +28,9 @@ export default defineComponent({
 	},
 	emits: ['update:value', 'change'],
 	setup(props, { emit }) {
-		const state = reactive<Recordable>(cloneDeep(props.value));
+		const state = reactive<Recordable>(
+			cloneDeep(props.value) ? cloneDeep(props.value) : {}
+		);
 
 		watch(
 			() => state,
@@ -93,13 +95,24 @@ export default defineComponent({
 				},
 			};
 
-			if (item.defaultValue) compAttr.value = item.defaultValue;
-			if (item.initialValue) compAttr.value = item.initialValue;
-			if (!isString(setter) && !isArray(setter)) {
-				if (setter.defaultValue) compAttr.value = setter.defaultValue;
-				if (setter.initialValue) compAttr.value = setter.initialValue;
+			if (!isUndefined(item.defaultValue)) {
+				compAttr.value = item.defaultValue;
 			}
-			if (state[key]) compAttr.value = state[key];
+			if (!isUndefined(item.initialValue)) {
+				compAttr.value = item.initialValue;
+			}
+			if (!isString(setter) && !isArray(setter)) {
+				if (!isUndefined(setter.defaultValue)) {
+					compAttr.value = setter.defaultValue;
+				}
+				if (!isUndefined(setter.initialValue)) {
+					compAttr.value = setter.initialValue;
+				}
+			}
+
+			if (!isUndefined(state[key])) {
+				compAttr.value = state[key];
+			}
 
 			return <Comp {...compAttr}></Comp>;
 		}
@@ -112,6 +125,7 @@ export default defineComponent({
 				}
 				return true;
 			});
+
 			return (
 				<div
 					v-show={visible.value}

@@ -195,7 +195,61 @@ export const gridSchema: FieldConfig[] = [
 									},
 								},
 							},
-							{},
+							{
+								name: 'extraDataSources',
+								title: '额外数据源',
+								display: 'accordion',
+								condition: (tager: Column) => tager.type === 'entity',
+								setter: {
+									componentName: 'ObjectSetter',
+									props: {
+										config: [
+											{
+												name: 'url',
+												title: '请求地址',
+												setter: 'StringSetter',
+											},
+											{
+												name: 'targetClass',
+												title: '实体路径',
+												setter: 'StringSetter',
+											},
+											{
+												type: 'field',
+												name: 'columns',
+												title: '列配置',
+												setter: {
+													// 子节点只能设置ObjectSetter
+													componentName: 'ArraySetter',
+													props: {
+														itemSetter: {
+															componentName: 'ObjectSetter',
+															props: {
+																config: [
+																	{
+																		name: 'title',
+																		title: '标题',
+																		isRequired: true,
+																		setter: 'StringSetter',
+																	},
+																	{
+																		name: 'field',
+																		title: '数据字段',
+																		isRequired: true,
+																		setter: {
+																			componentName: 'StringSetter',
+																		},
+																	},
+																],
+															},
+														},
+													},
+												},
+											},
+										],
+									},
+								},
+							},
 						] as Array<FieldConfig>,
 					},
 				} as SetterConfig,
@@ -288,10 +342,7 @@ export const gridSchema: FieldConfig[] = [
 			{
 				type: 'field',
 				name: 'showOverflow',
-				title: {
-					label: '省略显示',
-					tip: '在可编辑表格场景下，临时插入的数据不会有斑马纹样式,在树表格模式下改设置请关闭',
-				},
+				title: '省略显示',
 				initialValue: true,
 				setter: 'BoolSetter',
 			},
@@ -335,8 +386,8 @@ export const gridSchema: FieldConfig[] = [
 				type: 'field',
 				name: 'seqColunms',
 				title: '开启序号列',
+				initialValue: true,
 				setter: {
-					initialValue: false,
 					componentName: 'BoolSetter',
 				},
 			},
@@ -359,5 +410,111 @@ export const gridSchema: FieldConfig[] = [
 				},
 			},
 		],
+	},
+];
+
+export const items: FieldConfig[] = [
+	{
+		type: 'field',
+		name: 'key1',
+		title: {
+			label: '标题1',
+			tip: '测试',
+		},
+		defaultValue: '1ces',
+		setter: 'StringSetter',
+	},
+	{
+		type: 'field',
+		name: 'key2',
+		display: 'inline',
+		title: '标题2',
+		defaultValue: true,
+		setter: 'BoolSetter',
+	},
+	{
+		type: 'field',
+		name: 'key3',
+		title: '标题3',
+		display: 'block',
+		setter: {
+			componentName: 'RadioGroupSetter',
+			props: {
+				options: [
+					{
+						label: '靠左',
+						value: 'left',
+					},
+					{
+						label: '居中',
+						value: 'center',
+					},
+					{
+						label: '靠右',
+						value: 'right',
+					},
+				],
+			},
+		},
+	},
+	{
+		type: 'group',
+		name: 'group1',
+		display: 'accordion',
+		title: {
+			label: 'group',
+			tip: 'tipppppppppp',
+		},
+		items: [
+			{
+				type: 'field',
+				name: 'g-key1',
+				title: {
+					label: '标题',
+					tip: '------',
+				},
+				setter: {
+					componentName: 'BoolSetter',
+				},
+			},
+			{
+				type: 'field',
+				name: 'g-key2',
+				title: 'g-key2',
+				setter: {
+					componentName: 'BoolSetter',
+				},
+			},
+		],
+	},
+	{
+		name: 'operationConfig',
+		display: 'accordion',
+		title: '底部操作',
+		setter: {
+			componentName: 'ObjectSetter',
+			props: {
+				config: {
+					items: [
+						{
+							type: 'field',
+							name: 'obj-key1',
+							title: {
+								label: 'obj1',
+								tip: '测试',
+							},
+							setter: 'StringSetter',
+						},
+						{
+							type: 'field',
+							name: 'obj-key2',
+							display: 'inline',
+							title: 'obj2',
+							setter: 'BoolSetter',
+						},
+					],
+				},
+			},
+		},
 	},
 ];

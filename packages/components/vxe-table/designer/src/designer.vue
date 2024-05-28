@@ -22,12 +22,14 @@
 			</div>
 
 			<div :class="[ns.e('workbench-body-setting'), 'overflow-auto']">
+				<NSettingsPane :items="items"></NSettingsPane>
+				<Setter v-if="false" :state="a" :items="items"></Setter>
+
 				<SettingsPane
+					v-if="false"
 					:config="gridSchema"
 					@change="handleChange"
-					:value="{
-						columns: [],
-					}"
+					@update:value="handle"
 				></SettingsPane>
 			</div>
 		</div>
@@ -37,13 +39,28 @@
 <script lang="ts" setup>
 import { useNamespace } from '@lt-frame/hooks';
 import { Modal, Button } from 'ant-design-vue';
-import { reactive, ref } from 'vue';
-import { VxeGridInstance, VxeGridProps } from 'vxe-table';
+import { reactive, ref, watch } from 'vue';
+import { VxeColumnProps, VxeGridInstance, VxeGridProps } from 'vxe-table';
 import { isArray, isUndefined } from 'lodash-es';
+import { LtHttp } from '@lt-frame/version-1';
 import SettingsPane from './settings-pane.vue';
-import { gridSchema } from './schema';
+import { gridSchema, items } from './schema';
 import { Column, TableFields } from './types';
 import { LtTablePlugins } from '../..';
+import { SettingsPane as Setter } from './settings-pane';
+import { SettingsPane as NSettingsPane } from '../../../lowcode-engine';
+
+const a = ref({ field1: '0000' });
+
+watch(
+	() => a.value,
+	() => {
+		console.log('====', a.value);
+	},
+	{
+		deep: true,
+	}
+);
 
 const ns = useNamespace('table-designer');
 
@@ -52,29 +69,19 @@ const xGrid = ref<VxeGridInstance>();
 const gridProps = reactive<VxeGridProps>({
 	stripe: true,
 	align: 'center',
-	data: [
-		{
-			id: 1,
-			data: 1648190900467,
-			enum: 'CORP',
-		},
-		{ id: 1.999999, data: 1648190900467, enum: 'DEPT' },
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-	],
+	data: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
 	showHeader: true,
 	columns: [],
 	columnConfig: {
 		isCurrent: true,
 	},
 });
+
+function handle(value: any) {
+	Object.entries(value).forEach(([key, value]) => {
+		handleChange({ key, value } as { key: keyof TableFields; value: any });
+	});
+}
 
 function handleChange(e: { key: keyof TableFields; value: any }) {
 	if (e.key === 'stripe') {
@@ -99,6 +106,8 @@ function handleChange(e: { key: keyof TableFields; value: any }) {
 			gridProps.showOverflow = null;
 		}
 	}
+	console.log(e);
+
 	if (e.key === 'seqColunms') {
 		if (e.value) {
 			gridProps.columns?.push({
@@ -162,17 +171,81 @@ function handleChange(e: { key: keyof TableFields; value: any }) {
 			} else {
 				e.value.forEach((item: Column) => {
 					let formatter;
-					if (item.type === 'data') {
+					let editRender;
+
+					if (item.type === 'text') {
+						editRender = {
+							name: LtTablePlugins.EditInput,
+							props: {
+								allowClear: true,
+							},
+						};
+					} else if (item.type === 'data') {
 						formatter = [LtTablePlugins.FormatterTime, item.dataFormatter];
+						editRender = {
+							name: LtTablePlugins.EditDatePicker,
+						};
 					} else if (item.type === 'number') {
 						formatter = [
 							LtTablePlugins.FormatterToFixedUnit,
 							item.numberFormatter,
 						];
+						editRender = {
+							name: LtTablePlugins.EditInputNumber,
+						};
 					} else if (item.type === 'enum') {
 						formatter = [LtTablePlugins.FormatterEnum2, item.enumFormatter];
+						const options = item.enumFormatter.map((item) => ({
+							label: item.value,
+							value: item.key,
+						}));
+						editRender = {
+							name: LtTablePlugins.EditSelect,
+							props: {
+								options,
+							},
+						};
 					} else {
 						formatter = ({ cellValue }: any) => cellValue;
+
+						const columns: VxeColumnProps[] = item.extraDataSources.columns.map(
+							(item) => ({
+								field: item.field,
+								title: item.field,
+								width: item.width,
+							})
+						);
+						columns.push({ type: 'seq', width: 40, title: '#', fixed: 'left' });
+						const queryPath = item.extraDataSources.columns.map(
+							(item) => item.field
+						);
+
+						editRender = {
+							name: LtTablePlugins.EditEntity,
+							props: {
+								configs: {
+									columns,
+								},
+								ajax: () =>
+									new Promise<any[]>((resolve, reject) => {
+										LtHttp.post({
+											url: item.extraDataSources.url,
+											data: [
+												{
+													targetClass: item.extraDataSources.targetClass,
+													queryPath,
+												},
+											],
+										})
+											.then((data) => {
+												resolve(data);
+											})
+											.catch(() => {
+												reject();
+											});
+									}),
+							},
+						};
 					}
 
 					gridProps.columns?.push({
@@ -182,9 +255,11 @@ function handleChange(e: { key: keyof TableFields; value: any }) {
 						fixed: item.fixed,
 						sortable: item.sortable,
 						formatter,
+						editRender,
 					});
 				});
 			}
+			gridProps.editConfig = { mode: 'row', trigger: 'dblclick' };
 		} else {
 			gridProps.columns!!.length = 0;
 		}
