@@ -14,11 +14,18 @@ defineOptions({
 	name: 'BoolSetter',
 	inheritAttrs: false,
 });
-defineProps({
+const props = defineProps({
+	defaultValue: Boolean,
 	disabled: Boolean,
 });
 
 const emit = defineEmits(['change']);
 
-const value = defineModel('value', { type: Boolean });
+const value = defineModel('value', {
+	type: Boolean,
+});
+
+if (value.value === undefined || value.value === null) {
+	value.value = props.defaultValue;
+}
 </script>

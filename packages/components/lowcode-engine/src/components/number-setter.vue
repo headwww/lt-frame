@@ -3,6 +3,7 @@
 		class="w-full"
 		v-model:value="value"
 		:placeholder="placeholder"
+		:defaultValue="defaultValue"
 		:max="max"
 		:min="min"
 	>

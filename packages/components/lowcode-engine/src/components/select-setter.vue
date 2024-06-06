@@ -1,5 +1,6 @@
 <template>
 	<Select
+		:defaultValue="defaultValue"
 		:mode="mode"
 		:options="options"
 		class="w-full"
@@ -10,6 +11,7 @@
 
 <script lang="ts" setup>
 import { Select, SelectProps } from 'ant-design-vue';
+import { SelectValue } from 'ant-design-vue/es/select';
 import { PropType } from 'vue';
 
 defineOptions({
@@ -27,6 +29,7 @@ defineProps({
 	options: {
 		type: Array as PropType<SelectProps['options']>,
 	},
+	defaultValue: Object as PropType<SelectValue>,
 });
 
 const emit = defineEmits(['change']);

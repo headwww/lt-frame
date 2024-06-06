@@ -1,3 +1,4 @@
+import { Recordable } from '@lt-frame/utils';
 import {
 	VxeTablePropTypes,
 	VxeTableDefines,
@@ -11,7 +12,7 @@ export interface AjaxConfig {
 }
 
 export interface Column {
-	field: string;
+	field: Recordable;
 	title: string;
 	type: string;
 	width: number | string;
@@ -19,6 +20,7 @@ export interface Column {
 	sortable: boolean;
 	dataFormatter: string;
 	numberFormatter: number;
+
 	enumFormatter: {
 		key: string;
 		value: string | number | boolean;

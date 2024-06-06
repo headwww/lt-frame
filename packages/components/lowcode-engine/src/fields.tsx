@@ -1,7 +1,7 @@
 import { CaretDownOutlined } from '@ant-design/icons-vue';
 import { PropType, VNode, defineComponent, h, reactive } from 'vue';
-import { TitleConfig } from './types/field';
 import Title from './title';
+import { IPublicTypeTitleContent } from './types/title-config';
 
 /**
  * 创建一个属性设置器
@@ -12,11 +12,12 @@ import Title from './title';
  */
 export function createField(
 	props: FieldProps,
-	children: VNode | VNode[] | undefined
+	children: VNode | VNode[] | undefined,
+	type?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry'
 ) {
 	return h(
 		Field,
-		{ ...props },
+		{ ...props, defaultDisplay: type },
 		{
 			default: () => children,
 		}
@@ -24,24 +25,33 @@ export function createField(
 }
 
 export interface FieldProps {
-	defaultDisplay?: 'accordion' | 'inline' | 'block';
+	title?: string | IPublicTypeTitleContent;
+	defaultDisplay?:
+		| 'accordion'
+		| 'inline'
+		| 'block'
+		| 'plain'
+		| 'popup'
+		| 'entry';
 	collapsed?: boolean;
-	title?: string | TitleConfig;
 	onExpandChange?: (expandState: boolean) => void;
+	[extra: string]: any;
 }
 
 export const Field = defineComponent({
-	name: 'LcField',
+	name: 'Field',
 	props: {
 		defaultDisplay: {
-			type: String as PropType<'accordion' | 'inline' | 'block'>,
+			type: String as PropType<
+				'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry'
+			>,
 			default: 'inline',
 		},
+		title: [Object, String] as PropType<string | IPublicTypeTitleContent>,
 		collapsed: {
 			type: Boolean,
 			default: false,
 		},
-		title: [Object, String] as PropType<TitleConfig | string>,
 		onExpandChange: Function as PropType<(expandState: boolean) => void>,
 	},
 	setup(props, { slots }) {
@@ -71,15 +81,17 @@ export const Field = defineComponent({
 						},
 					]}
 				>
-					<div
-						class="lt-field-head"
-						onClick={isAccordion ? toggleExpand : undefined}
-					>
-						<div class="lt-field-title">
-							<Title title={title}></Title>
+					{display !== 'plain' && (
+						<div
+							class="lt-field-head"
+							onClick={isAccordion ? toggleExpand : undefined}
+						>
+							<div class="lt-field-title">
+								<Title title={title}></Title>
+							</div>
+							{isAccordion && <CaretDownOutlined class="lt-field-icon" />}
 						</div>
-						{isAccordion && <CaretDownOutlined class="lt-field-icon" />}
-					</div>
+					)}
 					<div class="lt-field-body">
 						{slots.default ? slots.default() : null}
 					</div>

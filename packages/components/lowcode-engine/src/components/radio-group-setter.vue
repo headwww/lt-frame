@@ -16,13 +16,20 @@ defineOptions({
 	inheritAttrs: false,
 });
 
-defineProps({
+const props = defineProps({
 	options: {
 		type: Array as PropType<RadioGroupProps['options']>,
 	},
+	defaultValue: [Array, Object, String, Number],
 });
 
 const emit = defineEmits(['change']);
 
-const value = defineModel('value', { type: [Array, Object, String, Number] });
+const value = defineModel('value', {
+	type: [Array, Object, String, Number],
+});
+
+if (value.value === undefined || value.value === null || value.value === '') {
+	value.value = props.defaultValue;
+}
 </script>

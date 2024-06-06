@@ -1,5 +1,10 @@
 <template>
-	<Input v-model:value="value" :placeholder="placeholder"> </Input>
+	<Input
+		:defaultValue="defaultValue"
+		v-model:value="value"
+		:placeholder="placeholder"
+	>
+	</Input>
 </template>
 
 <script lang="ts" setup>

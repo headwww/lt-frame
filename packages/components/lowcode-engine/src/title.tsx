@@ -1,12 +1,12 @@
 import { PropType, computed, defineComponent } from 'vue';
 import { Tooltip } from 'ant-design-vue';
 import { isString } from 'lodash-es';
-import { TitleConfig } from './types/field';
+import { IPublicTypeTitleContent } from './types/title-config';
 
 export default defineComponent({
 	name: 'LcTitle',
 	props: {
-		title: [String, Object] as PropType<TitleConfig | string>,
+		title: [String, Object] as PropType<IPublicTypeTitleContent | string>,
 	},
 	setup(props) {
 		const getClass = computed(() => {

@@ -7,7 +7,7 @@ import { defineComponent, onMounted, ref, watch, PropType } from 'vue';
 import JSONEditor, { JSONEditorOptions } from 'jsoneditor';
 
 export default defineComponent({
-	name: 'JsonEditor',
+	name: 'LtJsonEditor',
 	props: {
 		modelValue: {
 			type: Object as PropType<object>,
@@ -58,15 +58,14 @@ export default defineComponent({
 			{ deep: true }
 		);
 
+		function getJsonEditor() {
+			return jsonEditor;
+		}
+
 		return {
 			jsonEditorContainer,
+			getJsonEditor,
 		};
 	},
 });
 </script>
-
-<style scoped>
-.jsoneditor {
-	height: 100%;
-}
-</style>

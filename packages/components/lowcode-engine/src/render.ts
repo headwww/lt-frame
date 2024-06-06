@@ -7,6 +7,10 @@ import RadioGroupSetter from './components/radio-group-setter.vue';
 import SelectSetter from './components/select-setter.vue';
 import StringSetter from './components/string-setter.vue';
 import { ObjectSetter } from './components/object-setter';
+import { ArraySetter } from './components/array-setter';
+import TextSetter from './components/text-setter.vue';
+import FieldSetter from './components/field-setter.vue';
+import JsonSetter from './components/json-setter.vue';
 
 /**
  * 内置的设置器
@@ -40,6 +44,26 @@ const setterMap: Recordable = {
 	ObjectSetter: {
 		createSetterContent(props: Recordable) {
 			return h(ObjectSetter, { ...props });
+		},
+	},
+	ArraySetter: {
+		createSetterContent(props: Recordable) {
+			return h(ArraySetter, { ...props });
+		},
+	},
+	TextSetter: {
+		createSetterContent(props: Recordable) {
+			return h(TextSetter, { ...props });
+		},
+	},
+	FieldSetter: {
+		createSetterContent(props: Recordable) {
+			return h(FieldSetter, { ...props });
+		},
+	},
+	JsonSetter: {
+		createSetterContent(props: Recordable) {
+			return h(JsonSetter, { ...props });
 		},
 	},
 };

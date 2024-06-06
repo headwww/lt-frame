@@ -5,129 +5,126 @@ import {
 	computed,
 	createCommentVNode,
 	defineComponent,
-	inject,
 	onMounted,
 	provide,
 	ref,
 	watch,
 } from 'vue';
-import {
-	cloneDeep,
-	isArray,
-	isFunction,
-	isNull,
-	isObject,
-	isUndefined,
-	set,
-} from 'lodash-es';
 import { Recordable } from '@lt-frame/utils';
-import { FieldConfig } from './types/field';
 import { createField } from './fields';
 import { LtSetterRender } from './render';
+import { SettingTopEntry } from './types/setting-top-entry';
+import { ISettingField } from './types/setting-field';
+import { IPublicTypeFieldConfig } from './types/field-config';
+import { isSetterConfig } from './types/setter-config';
+import { settingsPaneContext } from './context-key';
 
 export const SettingFieldView = defineComponent({
 	name: 'SettingFieldView',
 	props: {
 		field: {
-			type: Object as PropType<FieldConfig>,
+			type: Object as PropType<ISettingField>,
 			default: () => {},
 		},
 	},
 	setup(props) {
-		const { state, setValue } = inject(settingPaneKey) as SettingPaneMethods;
+		const { field } = props;
+		const { extraProps } = field;
+		const setterInfo = computed(
+			(): {
+				setterProps: any;
+				initialValue: any;
+				setterType: any;
+			} => {
+				const { extraProps, setter } = field;
+				const { defaultValue } = extraProps;
+				let setterProps: Recordable = {};
+				let setterType: any;
+				let initialValue: any;
 
-		const setterInfo = computed(() => {
-			const { setter, defaultValue } = props.field;
+				if (Array.isArray(setter)) {
+					//
+				} else if (isSetterConfig(setter)) {
+					setterType = setter.componentName;
+					if (setter.props) {
+						setterProps = setter.props;
+					}
+					if (setter.initialValue != null) {
+						initialValue = setter.initialValue;
+					}
+				} else if (setter) {
+					setterType = setter;
+				}
 
-			let setterProps: Recordable = {};
-			let setterType;
-			let initialValue = null;
-			if (isArray(setter)) {
-				// 混合设置器
-			} else if (isObject(setter)) {
-				setterType = setter.componentName;
-				if (setter.props) {
-					setterProps = setter.props;
+				if (defaultValue != null && !('defaultValue' in setterProps)) {
+					setterProps.defaultValue = defaultValue;
+					if (initialValue == null) {
+						initialValue = defaultValue;
+					}
 				}
-				if (setter.initialValue != null) {
-					initialValue = setter.initialValue;
-				}
-			} else {
-				setterType = setter;
+
+				return {
+					setterProps,
+					setterType,
+					initialValue,
+				};
+			}
+		);
+
+		const visible = computed(() => {
+			const { condition } = extraProps;
+			try {
+				return typeof condition === 'function'
+					? condition(field) !== false
+					: true;
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.error('exception when condition (hidden) is excuted', error);
 			}
 
-			if (defaultValue != null && !('defaultValue' in setterProps)) {
-				setterProps.defaultValue = defaultValue;
-				if (initialValue == null) {
-					initialValue = defaultValue;
-				}
-			}
-
-			return {
-				setterProps,
-				setterType,
-				initialValue,
-			};
-		});
-
-		const getVisible = computed(() => {
-			const { field } = props;
-			if (field) {
-				const { condition } = field;
-				return isFunction(condition) ? condition(state.value) !== false : true;
-			}
 			return true;
 		});
 
-		const getValue = computed(() => {
-			const { name } = props.field;
-			return name ? state.value[name] : undefined;
-		});
-
-		function initDefaultValue() {
+		onMounted(() => {
 			const { initialValue } = setterInfo.value;
-
 			if (
-				!(!isUndefined(initialValue) && !isNull(initialValue)) ||
-				getValue.value !== undefined
+				!(initialValue !== undefined && initialValue !== null) ||
+				field.getValue() !== undefined
 			) {
 				return;
 			}
 
-			setValue(props.field.name!!, initialValue);
-		}
-
-		onMounted(() => {
-			initDefaultValue();
+			field.setValue(initialValue);
 		});
+
 		return () => {
-			if (!getVisible.value) {
+			const { setterType, initialValue, setterProps } = setterInfo.value;
+			const comp = setterType ? LtSetterRender.renderer.get(setterType) : null;
+
+			if (!visible.value) {
 				return null;
 			}
-
-			const { field } = props;
-			const { setterType, setterProps, initialValue } = setterInfo.value;
-			const comp = setterType ? LtSetterRender.renderer.get(setterType) : null;
 
 			return comp
 				? createField(
 						{
-							defaultDisplay: field.display,
 							title: field.title,
 						},
 						comp.createSetterContent
 							? comp.createSetterContent({
 									...setterProps,
+									forceInline: extraProps.forceInline,
+									key: field.id,
+									props: field,
 									field,
-									value: getValue.value,
 									initialValue,
+									value: field.getValue(),
 									onChange: (value: any) => {
-										if (field.name) {
-											setValue(field.name, value);
-										}
+										field.setValue(value);
 									},
 								})
-							: undefined
+							: undefined,
+						extraProps.forceInline ? 'plain' : extraProps.display
 					)
 				: createCommentVNode(
 						setterType
@@ -142,43 +139,36 @@ export const SettingGroupView = defineComponent({
 	name: 'SettingGroupView',
 	props: {
 		field: {
-			type: Object as PropType<FieldConfig>,
+			type: Object as PropType<ISettingField>,
 			default: () => {},
 		},
 	},
 	setup(props) {
-		const { state } = inject(settingPaneKey) as SettingPaneMethods;
-
-		const getVisible = computed(() => {
-			const { field } = props;
-			if (field) {
-				const { condition } = field;
-				return isFunction(condition) ? condition(state.value) !== false : true;
-			}
-			return true;
-		});
-
 		return () => {
 			const { field } = props;
-			if (!getVisible.value) {
+			const { extraProps } = field;
+			const { condition, display } = extraProps;
+			const visible =
+				typeof condition === 'function' ? condition(field) !== false : true;
+			if (!visible) {
 				return null;
 			}
 			return createField(
 				{
-					defaultDisplay: field.display,
 					title: field.title,
 				},
-				props.field.items?.map((item) => createSettingFieldView(item))
+				field.items.map((item) => createSettingFieldView(item)),
+				display
 			);
 		};
 	},
 });
 
-export function createSettingFieldView(field: FieldConfig) {
-	if (field.type === 'group') {
-		return <SettingGroupView field={field}></SettingGroupView>;
+export function createSettingFieldView(field: ISettingField) {
+	if (field.isGroup) {
+		return <SettingGroupView key={field.id} field={field}></SettingGroupView>;
 	}
-	return <SettingFieldView field={field}></SettingFieldView>;
+	return <SettingFieldView key={field.id} field={field}></SettingFieldView>;
 }
 
 export const settingPaneKey: InjectionKey<SettingPaneMethods> =
@@ -192,25 +182,30 @@ export interface SettingPaneMethods {
 export const SettingsPane = defineComponent({
 	name: 'SettingPane',
 	props: {
-		items: Object as PropType<Array<FieldConfig>>,
+		items: {
+			type: Array as PropType<Array<IPublicTypeFieldConfig>>,
+			default: () => [],
+		},
 		state: Object as PropType<Recordable>,
+
+		value: {
+			type: Object as PropType<Recordable>,
+		},
 	},
-	setup(props) {
-		const state = ref<Recordable>(props.state ? cloneDeep(props.state) : {});
+	emits: ['update:value'],
+	setup(props, { emit }) {
+		const popoverLock = ref(true);
 
-		const setValue = (attrName: string | number, attrValue: any) => {
-			set(state.value, attrName, attrValue);
-		};
-
-		provide(settingPaneKey, {
-			state,
-			setValue,
+		provide(settingsPaneContext, {
+			popoverLock,
 		});
 
+		const settingTopEntry = new SettingTopEntry(props.items, props.value || {});
+
 		watch(
-			() => state.value,
+			() => settingTopEntry.node.value,
 			() => {
-				console.log(state.value);
+				emit('update:value', settingTopEntry.node.value);
 			},
 			{
 				deep: true,
@@ -218,7 +213,7 @@ export const SettingsPane = defineComponent({
 		);
 
 		return () => {
-			const { items } = props;
+			const { items } = settingTopEntry;
 			return items?.map((item) => createSettingFieldView(item));
 		};
 	},

@@ -23,3 +23,4 @@ export * from './splitpanes';
 export * from './draggable';
 export * from './lowcode-engine';
 export * from './collapse';
+export * from './json-editor';

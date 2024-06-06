@@ -7,7 +7,10 @@ import { isArray } from '@lt-frame/utils';
 VXETable.formats.add('$lt-formatter-to-fixed-unit', {
 	cellFormatMethod({ cellValue }, digits, unit = '') {
 		if (digits) {
-			return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits }) + unit;
+			if (cellValue || cellValue === 0) {
+				return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits }) + unit;
+			}
+			return cellValue;
 		}
 		return cellValue;
 	},
@@ -30,7 +33,7 @@ VXETable.formats.add('$lt-formatter-enum', {
 	},
 });
 
-// 格式化枚举
+// 格式化枚举['$lt-formatter-enum-key-value',[{key:string,value:string},{key:string,value:string}]]
 VXETable.formats.add('$lt-formatter-enum-key-value', {
 	cellFormatMethod({ cellValue }, enumArray) {
 		if (enumArray && isArray(enumArray)) {
