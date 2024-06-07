@@ -17,12 +17,12 @@
 		<div :class="ns.e('workbench-body')">
 			<div :class="ns.e('workbench-body-center')">
 				<div :class="ns.e('workbench-body-center-workspace')">
-					<vxe-grid ref="xGrid" class="p-5px" v-bind="gridProps"></vxe-grid>
+					<vxe-grid ref="xGrid" class="p-5px" v-bind="options"></vxe-grid>
 				</div>
 			</div>
 
 			<div :class="[ns.e('workbench-body-setting'), 'overflow-auto']">
-				<SettingsPane :items="schemas"></SettingsPane>
+				<SettingsPane v-model:value="value" :items="schemas"></SettingsPane>
 			</div>
 		</div>
 	</Modal>
@@ -31,25 +31,52 @@
 <script lang="ts" setup>
 import { useNamespace } from '@lt-frame/hooks';
 import { Modal, Button } from 'ant-design-vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { VxeGridInstance, VxeGridProps } from 'vxe-table';
 import { SettingsPane } from '@lt-frame/components';
-import { schemas } from './config';
+import { TableFields, schemas } from './config';
+import { useSetterAdapter } from './use-setter-adapter';
 
 const ns = useNamespace('table-designer');
+
+const value = ref<TableFields>({});
+
+const { options, buildTableOption } = useSetterAdapter();
+
+watch(
+	() => options.value,
+	() => {
+		console.log(options.value);
+	},
+	{
+		deep: true,
+	}
+);
+
+watch(
+	() => value.value,
+	() => {
+		buildTableOption(value.value);
+	},
+	{
+		deep: true,
+	}
+);
 
 const xGrid = ref<VxeGridInstance>();
 
 const gridProps = reactive<VxeGridProps>({
 	stripe: true,
 	align: 'center',
-	data: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
+	data: [{}, {}, {}, {}, {}, {}, {}],
 	showHeader: true,
 	columns: [],
 	columnConfig: {
 		isCurrent: true,
 	},
 });
+
+gridProps;
 
 const open = ref<boolean>(true);
 </script>

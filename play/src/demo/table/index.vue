@@ -1,7 +1,6 @@
 <template>
 	<LtPageLayout title="vxe-table">
 		<vxe-grid class="lt-table-scrollbar" v-bind="gridOptions"></vxe-grid>
-
 		<LtTableDesigner></LtTableDesigner>
 	</LtPageLayout>
 </template>
@@ -18,11 +17,10 @@ import {
 	ToolBusinessOptions,
 	LtToolFunctionProps,
 	LtTablePlugins,
-	LtTableDesigner,
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { parse } from '@lt-frame/utils';
-import { LtHttp } from '@lt-frame/version-1';
+import { LtHttp, LtTableDesigner } from '@lt-frame/version-1';
 import dayjs from 'dayjs';
 import { reactive } from 'vue';
 import { VxeGlobalRendererHandles, VxeGridProps } from 'vxe-table';

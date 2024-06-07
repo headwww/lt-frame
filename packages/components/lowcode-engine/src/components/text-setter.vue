@@ -15,11 +15,8 @@ defineOptions({
 });
 
 defineProps({
+	value: String,
 	defaultValue: String,
 	placeholder: String,
-});
-
-const value = defineModel('value', {
-	type: String,
 });
 </script>

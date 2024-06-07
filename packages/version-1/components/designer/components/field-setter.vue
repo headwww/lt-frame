@@ -15,8 +15,8 @@
 <script lang="ts" setup>
 import { TreeSelect, type TreeSelectProps } from 'ant-design-vue';
 import { PropType, computed, reactive, ref, watch } from 'vue';
-import { LtHttp } from '@lt-frame/version-1';
-import { ISettingField } from '../types';
+import { ISettingField } from '@lt-frame/components';
+import { LtHttp } from '../../../configs';
 
 const props = defineProps({
 	value: {

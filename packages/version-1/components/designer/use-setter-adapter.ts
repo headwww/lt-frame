@@ -1,8 +1,8 @@
 import { ref } from 'vue';
 import { VxeColumnProps, VxeGridProps } from 'vxe-table';
 import { isArray, isBoolean, isUndefined, set } from 'lodash-es';
+import { LtTablePlugins } from '@lt-frame/components';
 import { TableFields } from './config';
-import { LtTablePlugins } from '../..';
 
 /**
  * 将设置器生产的数据转换为需要的数据

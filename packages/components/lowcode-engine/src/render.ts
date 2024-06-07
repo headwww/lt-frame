@@ -9,7 +9,6 @@ import StringSetter from './components/string-setter.vue';
 import { ObjectSetter } from './components/object-setter';
 import { ArraySetter } from './components/array-setter';
 import TextSetter from './components/text-setter.vue';
-import FieldSetter from './components/field-setter.vue';
 import JsonSetter from './components/json-setter.vue';
 
 /**
@@ -54,11 +53,6 @@ const setterMap: Recordable = {
 	TextSetter: {
 		createSetterContent(props: Recordable) {
 			return h(TextSetter, { ...props });
-		},
-	},
-	FieldSetter: {
-		createSetterContent(props: Recordable) {
-			return h(FieldSetter, { ...props });
 		},
 	},
 	JsonSetter: {

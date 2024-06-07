@@ -4,7 +4,7 @@
 		:mode="mode"
 		:options="options"
 		class="w-full"
-		v-model:value="value"
+		v-model:value="selectValue"
 		@change="(v) => emit('change', v)"
 	></Select>
 </template>
@@ -12,14 +12,15 @@
 <script lang="ts" setup>
 import { Select, SelectProps } from 'ant-design-vue';
 import { SelectValue } from 'ant-design-vue/es/select';
-import { PropType } from 'vue';
+import { PropType, ref } from 'vue';
 
 defineOptions({
 	name: 'SelectSetter',
 	inheritAttrs: false,
 });
 
-defineProps({
+const props = defineProps({
+	value: [Array, Object, String, Number],
 	mode: {
 		type: String as PropType<
 			'multiple' | 'tags' | 'SECRET_COMBOBOX_MODE_DO_NOT_USE'
@@ -34,5 +35,5 @@ defineProps({
 
 const emit = defineEmits(['change']);
 
-const value = defineModel('value', { type: [Array, Object, String, Number] });
+const selectValue = ref<SelectValue>(props.value as SelectValue);
 </script>

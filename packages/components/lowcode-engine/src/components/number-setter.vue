@@ -1,7 +1,7 @@
 <template>
 	<InputNumber
 		class="w-full"
-		v-model:value="value"
+		v-model:value="inputNumber"
 		:placeholder="placeholder"
 		:defaultValue="defaultValue"
 		:max="max"
@@ -12,13 +12,15 @@
 
 <script lang="ts" setup>
 import { InputNumber } from 'ant-design-vue';
+import { ref, watch } from 'vue';
 
 defineOptions({
 	name: 'NumberSetter',
 	inheritAttrs: false,
 });
 
-defineProps({
+const props = defineProps({
+	value: Number,
 	defaultValue: Number,
 	placeholder: String,
 	max: Number,
@@ -27,10 +29,12 @@ defineProps({
 
 const emit = defineEmits(['change']);
 
-const value = defineModel('value', {
-	type: Number,
-	set(v) {
-		emit('change', v);
-	},
-});
+const inputNumber = ref(props.value);
+
+watch(
+	() => inputNumber.value,
+	() => {
+		emit('change', inputNumber.value);
+	}
+);
 </script>

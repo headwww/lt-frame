@@ -1,9 +1,7 @@
+import { VxeTablePropTypes, VxeColumnPropTypes } from 'vxe-table';
+import { Recordable } from '@lt-frame/utils';
+import { isArray } from 'lodash-es';
 import { IPublicTypeFieldConfig, ISettingField } from '@lt-frame/components';
-import {
-	VxeTablePropTypes,
-	VxeTableDefines,
-	VxeColumnPropTypes,
-} from 'vxe-table';
 
 export interface AjaxConfig {
 	url: string;
@@ -12,21 +10,24 @@ export interface AjaxConfig {
 }
 
 export interface Column {
-	field: string;
-	title: string;
-	type: string;
-	width: number | string;
-	fixed: VxeColumnPropTypes.Fixed;
-	sortable: boolean;
-	dataFormatter: string;
-	numberFormatter: number;
-	enumFormatter: {
-		key: string;
-		value: string | number | boolean;
-	}[];
-	editRules: VxeTableDefines.ValidatorRule;
-	// 编辑和筛选时候type是实体的话需要配置的数据源配置
-	extraDataSources: AjaxConfig;
+	field?: Recordable;
+	title?: string;
+	type?: string;
+	parentType?: string;
+	width?: number | string;
+	fixed?: VxeColumnPropTypes.Fixed;
+	dataProps?: boolean;
+	sortable?: boolean;
+	json?: Array<{
+		required?: boolean;
+		min?: number;
+		max?: number;
+		pattern?: string;
+		message?: string;
+	}>;
+
+	dataFormatter?: string;
+	numberFormatter?: number;
 }
 
 /**
@@ -34,22 +35,76 @@ export interface Column {
  */
 export interface TableFields {
 	// 列的配置
-	columns: Array<Column>;
+	columns?: Array<Column>;
 	// 高级
-	seq: boolean;
-	radio: boolean;
-	checkbox: boolean;
+	seq?: boolean;
+	radio?: boolean;
+	checkbox?: boolean;
 
 	// 全局配置
-	stripe: boolean;
-	size: string;
-	align: string;
-	showOverflow: boolean;
+	stripe?: boolean;
+	size?: string;
+	align?: string;
+	showOverflow?: boolean;
 	// 列配置
-	columnConfig: VxeTablePropTypes.ColumnConfig;
+	columnConfig?: VxeTablePropTypes.ColumnConfig;
 	// 编辑配置
-	editConfig: VxeTablePropTypes.EditConfig;
+	editConfig?: VxeTablePropTypes.EditConfig;
 }
+
+const childrenColumn: IPublicTypeFieldConfig = {
+	name: 'entity',
+	display: 'accordion',
+	condition: (target: ISettingField) => {
+		const parentType = target
+			.getProps()
+			.getPropValue(target.path.slice(0, -1).concat('parentType').join('.'));
+		if (parentType) {
+			return true;
+		}
+
+		return false;
+	},
+	title: {
+		label: '实体配置',
+		tip: '配置编辑模式和筛选器需要的实体',
+	},
+	setter: {
+		componentName: 'ArraySetter',
+		props: {
+			itemSetter: {
+				componentName: 'ObjectSetter',
+				props: {
+					config: {
+						items: [
+							{
+								name: 'title',
+								isRequired: true,
+								title: '标题',
+								defaultValue: '标题',
+								setter: 'StringSetter',
+							},
+							{
+								name: 'width',
+								title: '列宽',
+								isRequired: true,
+								defaultValue: 200,
+								setter: 'NumberSetter',
+							},
+							{
+								name: 'field',
+								title: '数据字段',
+								setter: {
+									componentName: 'FieldSetter',
+								},
+							},
+						] as IPublicTypeFieldConfig[],
+					},
+				},
+			},
+		},
+	},
+};
 
 export const schemas: IPublicTypeFieldConfig[] = [
 	// 数据列
@@ -75,53 +130,74 @@ export const schemas: IPublicTypeFieldConfig[] = [
 								{
 									name: 'field',
 									title: '数据字段',
-									isRequired: true,
+									setValue(target: ISettingField, value: any) {
+										target
+											.getProps()
+											.setPropValue(
+												target.path.slice(0, -1).concat('type').join('.'),
+												value.fieldType
+											);
+										target
+											.getProps()
+											.setPropValue(
+												target.path.slice(0, -1).concat('parentType').join('.'),
+												value.parentType
+											);
+										target
+											.getProps()
+											.setPropValue(
+												target.path.slice(0, -1).concat('title').join('.'),
+												value.fieldCommnet
+											);
+									},
 									setter: {
-										componentName: 'StringSetter',
+										componentName: 'FieldSetter',
 										props: {
-											placeholder: '必填项',
+											path: 'lt.app.logistics.model.AdjustStoreLine',
 										},
 									},
+								},
+								{
+									title: {
+										label: '父级实体',
+									},
+									name: 'parentType',
+									setter: 'TextSetter',
 								},
 								{
 									title: '数据类型',
 									name: 'type',
-									defaultValue: {
-										label: '文本',
-										value: 'text',
+									setter: 'TextSetter',
+								},
+								{
+									title: {
+										label: '开启时分秒',
+										tip: '编辑和筛选的时间选择器是否支持时分秒选择',
 									},
-									setter: {
-										componentName: 'SelectSetter',
-										props: {
-											options: [
-												{
-													label: '文本',
-													value: 'text',
-												},
-												{
-													label: '数字',
-													value: 'number',
-												},
-												{
-													label: '日期',
-													value: 'data',
-												},
-												{
-													label: '枚举',
-													value: 'enum',
-												},
-												{
-													label: '实体',
-													value: 'entity',
-												},
-											],
-										},
-										initialValue: 'text',
+									name: 'dataProps',
+									condition: (target: ISettingField) => {
+										const parentType = target
+											.getProps()
+											.getPropValue(
+												target.path.slice(0, -1).concat('parentType').join('.')
+											);
+										const type = target
+											.getProps()
+											.getPropValue(
+												target.path.slice(0, -1).concat('type').join('.')
+											);
+										if (!parentType && type === 'java.util.Date') {
+											return true;
+										}
+
+										return false;
 									},
+									setter: 'BoolSetter',
 								},
 								{
 									name: 'width',
 									title: '列宽',
+									isRequired: true,
 									defaultValue: 200,
 									setter: 'NumberSetter',
 								},
@@ -150,9 +226,30 @@ export const schemas: IPublicTypeFieldConfig[] = [
 									},
 								},
 								{
-									name: 'sortable',
-									title: '排序',
-									setter: 'BoolSetter',
+									name: 'numberFormatter',
+									title: '小数位',
+									condition: (target: ISettingField) => {
+										const type = target
+											.getProps()
+											.getPropValue(
+												target.path.slice(0, -1).concat('type').join('.')
+											);
+										if (
+											type === 'java.lang.Integer' ||
+											type === 'java.lang.Long' ||
+											type === 'java.math.BigDecimal'
+										) {
+											return true;
+										}
+
+										return false;
+									},
+									setter: {
+										componentName: 'NumberSetter',
+										props: {
+											min: 0,
+										},
+									},
 								},
 								{
 									name: 'dataFormatter',
@@ -162,7 +259,7 @@ export const schemas: IPublicTypeFieldConfig[] = [
 											.getProps()
 											.getPropValue(
 												target.path.slice(0, -1).concat('type').join('.')
-											) === 'data',
+											) === 'java.util.Date',
 									setter: {
 										componentName: 'SelectSetter',
 										props: {
@@ -212,16 +309,86 @@ export const schemas: IPublicTypeFieldConfig[] = [
 									},
 								},
 								{
-									name: 'numberFormatter',
-									title: '小数位',
-									condition: (target: ISettingField) =>
-										target
-											.getProps()
-											.getPropValue(
-												target.path.slice(0, -1).concat('type').join('.')
-											) === 'number',
-									setter: 'NumberSetter',
+									name: 'json',
+									title: '编辑规则',
+									setter: {
+										componentName: 'JsonSetter',
+										props: {
+											validate: (json: any) => {
+												if (isArray(json)) {
+													return true;
+												}
+												return false;
+											},
+											document: [
+												{
+													type: 'title',
+													content: '用法',
+												},
+												{
+													type: 'paragraph',
+													content:
+														'给列设置编辑校验规则，通过设置左侧json的方式来设置，提供了如下配置：',
+												},
+												{
+													type: 'paragraph',
+													content: `required：'是否必填(true、false)'`,
+												},
+												{
+													type: 'paragraph',
+													content: `min：校验值最小长度（如果 type=number 则比较值大小）`,
+												},
+												{
+													type: 'paragraph',
+													content: `max：校验值最大长度（如果 type=number 则比较值大小）`,
+												},
+												{
+													type: 'paragraph',
+													content: `pattern：正则校验`,
+												},
+												{
+													type: 'paragraph',
+													content: `message：校验提示内容`,
+												},
+												{
+													type: 'title',
+													content: '模版',
+												},
+												{
+													type: 'paragraph',
+													content: `"required":true`,
+													copyable: true,
+												},
+												{
+													type: 'paragraph',
+													content: `"required":false`,
+													copyable: true,
+												},
+												{
+													type: 'paragraph',
+													content: `"type":"number"`,
+													copyable: true,
+												},
+												{
+													type: 'paragraph',
+													content: `"min":0`,
+													copyable: true,
+												},
+												{
+													type: 'paragraph',
+													content: `"max":99`,
+													copyable: true,
+												},
+												{
+													type: 'paragraph',
+													content: `"message":"必填项"`,
+													copyable: true,
+												},
+											],
+										},
+									},
 								},
+								childrenColumn,
 							] as IPublicTypeFieldConfig[],
 						},
 					},

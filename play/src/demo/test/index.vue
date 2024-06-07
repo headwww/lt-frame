@@ -1,72 +1,30 @@
 <template>
-	<div ref="jsonEditorContainer"></div>
+	<div>{{ a }}</div>
+	<button @click="eventBus['one']()">11</button>
+	<button @click="executeCode(state)">22</button>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch, PropType } from 'vue';
-import JSONEditor, { JSONEditorOptions } from 'jsoneditor';
+<script lang="ts" setup>
+import { ref } from 'vue';
 
-export default defineComponent({
-	name: 'JsonEditor',
-	props: {
-		modelValue: {
-			type: Object as PropType<object>,
-			required: true,
-		},
-		options: {
-			type: Object as PropType<JSONEditorOptions>,
-			default: () => ({ mode: 'tree' }),
-		},
+const a = ref(1);
+
+const state = {
+	a,
+};
+const eventBus = {
+	one: () => {
+		a.value++;
 	},
-	emits: ['update:modelValue'],
-	setup(props, { emit }) {
-		const jsonEditorContainer = ref<HTMLDivElement | null>(null);
-		let jsonEditor: JSONEditor | null = null;
-
-		onMounted(() => {
-			if (jsonEditorContainer.value) {
-				jsonEditor = new JSONEditor(jsonEditorContainer.value, {
-					...props.options,
-					onChange: () => {
-						if (jsonEditor) {
-							try {
-								const updatedValue = jsonEditor.get();
-								emit('update:modelValue', updatedValue);
-							} catch (error) {
-								// eslint-disable-next-line no-console
-								console.error('Error parsing JSON:', error);
-							}
-						}
-					},
-					onEvent: (node, event) => {
-						if (event.type === 'contextmenu') {
-							event.preventDefault();
-						}
-					},
-				});
-				jsonEditor.set(props.modelValue);
-			}
-		});
-
-		watch(
-			() => props.modelValue,
-			(newValue) => {
-				if (jsonEditor && newValue !== jsonEditor.get()) {
-					jsonEditor.update(newValue);
-				}
-			},
-			{ deep: true }
-		);
-
-		return {
-			jsonEditorContainer,
-		};
+	tow: () => {
+		console.log(a.value);
+		return a.value !== 2;
 	},
-});
+};
+
+state;
+
+const code = 'state.a.value = 30'; // 这里可以放任意的代码
+// eslint-disable-next-line no-new-func
+const executeCode = new Function('state', code);
 </script>
-
-<style scoped>
-.jsoneditor {
-	height: 100%;
-}
-</style>
