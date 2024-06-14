@@ -43,6 +43,39 @@ export function useSchemas() {
 											setterPath: 'entityPath',
 										},
 									},
+									setValue(target: ISettingField, value: any) {
+										const path = target.path.slice(0, -1);
+										target
+											.getProps()
+											.setPropValue(
+												path.concat('type').join('.'),
+												value.fieldType
+											);
+										target
+											.getProps()
+											.setPropValue(
+												path.concat('parentType').join('.'),
+												value.parentType
+											);
+										target
+											.getProps()
+											.setPropValue(
+												path.concat('title').join('.'),
+												value.fieldCommnet
+											);
+									},
+								},
+								{
+									title: {
+										label: '父级实体',
+									},
+									name: 'parentType',
+									setter: 'TextSetter',
+								},
+								{
+									title: '数据类型',
+									name: 'type',
+									setter: 'TextSetter',
 								},
 							] as IPublicTypeFieldConfig[],
 						},
@@ -74,28 +107,60 @@ export function useSchemas() {
 									},
 									{
 										name: 'field',
-										title: '数据字段',
+										title: {
+											label: '数据字段',
+											tip: '当数据字段更改时，代表着数据类型变化了，需要重新配置实体配置，小数位配置，日期格式配置',
+										},
 										setValue(target: ISettingField, value: any) {
+											const path = target.path.slice(0, -1);
 											target
 												.getProps()
 												.setPropValue(
-													target.path.slice(0, -1).concat('type').join('.'),
+													path.concat('type').join('.'),
 													value.fieldType
 												);
 											target
 												.getProps()
 												.setPropValue(
-													target.path
-														.slice(0, -1)
-														.concat('parentType')
-														.join('.'),
+													path.concat('parentType').join('.'),
 													value.parentType
 												);
 											target
 												.getProps()
 												.setPropValue(
-													target.path.slice(0, -1).concat('title').join('.'),
+													path.concat('title').join('.'),
 													value.fieldCommnet
+												);
+											// 根据数据字段的类型对其他的设置器的数据进行修改
+											target
+												.getProps()
+												.setPropValue(
+													path.concat('entityPath').join('.'),
+													undefined
+												);
+											target
+												.getProps()
+												.setPropValue(
+													path.concat('entityColumn').join('.'),
+													undefined
+												);
+											target
+												.getProps()
+												.setPropValue(
+													path.concat('datasourceContrast').join('.'),
+													undefined
+												);
+											target
+												.getProps()
+												.setPropValue(
+													path.concat('dataFormatter').join('.'),
+													undefined
+												);
+											target
+												.getProps()
+												.setPropValue(
+													path.concat('numberFormatter').join('.'),
+													undefined
 												);
 										},
 										setter: {
@@ -131,7 +196,7 @@ export function useSchemas() {
 											tip: '编辑和筛选的时间选择器是否支持时分秒选择',
 										},
 										defaultValue: true,
-										name: 'dataProps',
+										name: 'showTime',
 										condition: (target: ISettingField) => {
 											const parentType = target
 												.getProps()
@@ -271,6 +336,15 @@ export function useSchemas() {
 									{
 										name: 'json',
 										title: '编辑规则',
+										condition: (target: ISettingField) => {
+											const isEdit = target
+												.getProps()
+												.getPropValue(
+													target.path.slice(0, -1).concat('isEdit').join('.')
+												);
+
+											return isEdit;
+										},
 										setter: {
 											componentName: 'JsonSetter',
 											props: {
@@ -359,8 +433,12 @@ export function useSchemas() {
 												.getPropValue(
 													target.path.concat('parentType').join('.')
 												);
+											const isEdit = target
+												.getProps()
+												.getPropValue(target.path.concat('isEdit').join('.'));
+
 											if (parentType) {
-												return true;
+												return true && isEdit;
 											}
 
 											return false;
@@ -541,7 +619,7 @@ export function useSchemas() {
 					type: 'field',
 					name: 'align',
 					title: '对齐方式',
-					defaultValue: 'center',
+					defaultValue: 'left',
 					setter: {
 						componentName: 'RadioGroupSetter',
 						props: {

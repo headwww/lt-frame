@@ -18,7 +18,7 @@ export interface Column {
 	width?: number | string;
 	fixed?: VxeColumnPropTypes.Fixed;
 	isEdit?: boolean;
-	dataProps?: boolean;
+	showTime?: boolean;
 	sortable?: boolean;
 	json?: Array<{
 		required?: boolean;
@@ -27,6 +27,7 @@ export interface Column {
 		pattern?: string;
 		message?: string;
 	}>;
+
 	entityPath?: string;
 	entityColumn?: Column[];
 	datasourceContrast?: DatasourceContrast;

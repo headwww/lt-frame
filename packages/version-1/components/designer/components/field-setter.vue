@@ -52,7 +52,8 @@ const emit = defineEmits(['change']);
 
 const onSelect = (v: any) => {
 	const find = treeData.value?.find((item) => item.id === v);
-	emit('change', find);
+
+	find && find.isLeaf && emit('change', find);
 };
 
 const treeData = ref<TreeSelectProps['treeData']>([]);

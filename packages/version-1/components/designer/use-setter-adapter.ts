@@ -25,12 +25,18 @@ export function useSetterAdapter(datasource?: Datasource) {
 				if (datasourceContrast) {
 					const columns: VxeColumnProps[] = [];
 					item.entityColumn?.forEach((item) => {
-						columns.push({
-							title: item.title,
-							width: item.width,
-							field: item.field && item.field.value,
-						});
+						let formatter;
+						if (item) {
+							formatter = setFormatter(item);
+							columns.push({
+								title: item.title,
+								width: item.width,
+								field: item.field && item.field.value,
+								formatter: formatter && formatter,
+							});
+						}
 					});
+
 					columns.push({
 						type: 'seq',
 						title: '#',
@@ -90,7 +96,7 @@ export function useSetterAdapter(datasource?: Datasource) {
 						edit = {
 							name: LtTablePlugins.EditDatePicker,
 							props: {
-								showTime: isUndefined(item.dataProps) ? false : item.dataProps,
+								showTime: isUndefined(item.showTime) ? false : item.showTime,
 							},
 						};
 					}
