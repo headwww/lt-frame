@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { Select, SelectProps } from 'ant-design-vue';
 import { SelectValue } from 'ant-design-vue/es/select';
-import { PropType, ref } from 'vue';
+import { PropType, ref, watch } from 'vue';
 
 defineOptions({
 	name: 'SelectSetter',
@@ -36,4 +36,11 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 
 const selectValue = ref<SelectValue>(props.value as SelectValue);
+
+watch(
+	() => props.value,
+	() => {
+		selectValue.value = props.value as SelectValue;
+	}
+);
 </script>

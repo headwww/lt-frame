@@ -7,6 +7,7 @@ export interface ISettingTopEntry {
 	readonly top: ISettingTopEntry;
 	items: Array<ISettingField>;
 	readonly path: never[];
+	setNode: (value: any) => void;
 	setPropValue: (propName: any, value: any) => void;
 	getPropValue(propName: any): any;
 }
@@ -48,5 +49,9 @@ export class SettingTopEntry implements ISettingTopEntry {
 			return get(toRaw(this).node.value, propName);
 		}
 		return get(this.node.value, propName);
+	}
+
+	setNode(value: any) {
+		this.node.value = value || {};
 	}
 }

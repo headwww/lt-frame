@@ -10,7 +10,6 @@ import { ObjectSetter } from './components/object-setter';
 import { ArraySetter } from './components/array-setter';
 import TextSetter from './components/text-setter.vue';
 import JsonSetter from './components/json-setter.vue';
-
 /**
  * 内置的设置器
  */

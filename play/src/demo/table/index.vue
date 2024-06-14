@@ -1,7 +1,6 @@
 <template>
 	<LtPageLayout title="vxe-table">
 		<vxe-grid class="lt-table-scrollbar" v-bind="gridOptions"></vxe-grid>
-		<LtTableDesigner></LtTableDesigner>
 	</LtPageLayout>
 </template>
 
@@ -20,9 +19,9 @@ import {
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { parse } from '@lt-frame/utils';
-import { LtHttp, LtTableDesigner } from '@lt-frame/version-1';
+import { LtHttp } from '@lt-frame/version-1';
 import dayjs from 'dayjs';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { VxeGlobalRendererHandles, VxeGridProps } from 'vxe-table';
 
 enum CorpType {
@@ -38,7 +37,7 @@ const gridOptions = reactive<VxeGridProps>({
 	height: 'auto',
 	columns: [
 		{ type: 'checkbox', width: 40 },
-		{ type: 'seq', width: 40 },
+		{ type: 'seq', width: 40, fixed: 'left', align: 'center' },
 		{
 			width: 300,
 			title: '操作',
@@ -486,6 +485,12 @@ const findRoles = () =>
 			});
 	});
 
+const queryPath = ref<string[]>([]);
+
+setTimeout(() => {
+	queryPath.value = ['code', 'name', 'type'];
+}, 10000);
+
 const findCorps = () =>
 	new Promise<any[]>((resolve, reject) => {
 		LtHttp.post({
@@ -493,7 +498,7 @@ const findCorps = () =>
 			data: [
 				{
 					targetClass: 'lt.fw.core.model.biz.Corp',
-					queryPath: ['code', 'name', 'type'],
+					queryPath: queryPath.value,
 				},
 			],
 		})

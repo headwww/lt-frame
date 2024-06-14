@@ -84,6 +84,7 @@ watch(
 	() => {
 		// 加锁，防止Popover关闭
 		popoverLock.value = !open.value;
+		popoverLock.value;
 		if (open.value) {
 			json.value = props.value || [{}];
 		}

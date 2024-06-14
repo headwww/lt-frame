@@ -1,42 +1,72 @@
 import { ref } from 'vue';
 import { VxeColumnProps, VxeGridProps } from 'vxe-table';
 import { isArray, isBoolean, isUndefined, set } from 'lodash-es';
-import { LtTablePlugins } from '@lt-frame/components';
-import { TableFields } from './config';
+import { LtDatasource, LtTablePlugins } from '@lt-frame/components';
+import { Column, TableFields, ToolButtons } from './config';
+import { Datasource } from './material/table';
 
 /**
  * 将设置器生产的数据转换为需要的数据
  *
  */
-export function useSetterAdapter() {
+export function useSetterAdapter(datasource?: Datasource) {
 	const options = ref<VxeGridProps>({
 		columns: [],
-		data: [
-			{
-				parent: {
-					date: 1594195145000,
-					dept: {
-						corp: {
-							type: 'HEAD',
-						},
-					},
-				},
-				id: 0,
-			},
-			{ parent: { date: 1594195145000 } },
-			{},
-			{},
-			{},
-			{},
-		],
+		data: [{}, {}, {}, {}, {}],
 	});
 
-	function setEditRender(item: any) {
-		const { field } = item;
-		let edit = {};
+	const toolButtons = ref<ToolButtons[]>([]);
+
+	function setEditRender(item: Column) {
+		const { field, datasourceContrast } = item;
+		let edit: { [key: string]: any } = {};
 		if (field) {
 			if (item.parentType) {
-				//
+				if (datasourceContrast) {
+					const columns: VxeColumnProps[] = [];
+					item.entityColumn?.forEach((item) => {
+						columns.push({
+							title: item.title,
+							width: item.width,
+							field: item.field && item.field.value,
+						});
+					});
+					columns.push({
+						type: 'seq',
+						title: '#',
+						width: 40,
+						fixed: 'left',
+						align: 'center',
+					});
+					if (datasourceContrast.type === 'builtInDatasource') {
+						// 内置数据源
+						edit = {
+							name: LtTablePlugins.EditEntity,
+							props: {
+								configs: {
+									columns,
+								},
+								ajax: () =>
+									datasourceContrast.key &&
+									LtDatasource.get(datasourceContrast.key).createDatasource(),
+							},
+						};
+					} else if (datasourceContrast?.type === 'customDatasource') {
+						// 自定义数据源
+						edit = {
+							name: LtTablePlugins.EditEntity,
+							props: {
+								configs: {
+									columns,
+								},
+								ajax: () =>
+									datasourceContrast.key &&
+									datasource &&
+									datasource[datasourceContrast.key],
+							},
+						};
+					}
+				}
 			} else {
 				if (field.fieldTypeFlag === '0') {
 					if (field.fieldType === 'java.lang.String') {
@@ -66,7 +96,7 @@ export function useSetterAdapter() {
 					}
 				}
 				if (field.fieldTypeFlag === '2') {
-					let options = [];
+					let options: any[] = [];
 					if (isArray(field.enumInfo)) {
 						options = field.enumInfo.map((item: any) => ({
 							label: item.value,
@@ -82,11 +112,11 @@ export function useSetterAdapter() {
 				}
 			}
 		}
-
+		edit.enabled = item.isEdit;
 		return edit;
 	}
 
-	function setFormatter(item: any) {
+	function setFormatter(item: Column) {
 		const { field } = item;
 		let formatter;
 		if (field) {
@@ -106,7 +136,7 @@ export function useSetterAdapter() {
 				}
 			}
 			if (field.fieldTypeFlag === '2') {
-				let options = [];
+				let options: any[] = [];
 				if (isArray(field.enumInfo)) {
 					options = field.enumInfo.map((item: any) => ({
 						key: item.key,
@@ -122,8 +152,17 @@ export function useSetterAdapter() {
 
 	function buildTableOption(value: TableFields) {
 		options.value.columns = [];
-		const { columns, seq, radio, checkbox, stripe, size, align, showOverflow } =
-			value;
+		const {
+			columns,
+			seq,
+			radio,
+			checkbox,
+			stripe,
+			size,
+			align,
+			showOverflow,
+			toolButtons: buttons,
+		} = value;
 
 		const rules: { [key: string]: any } = {};
 
@@ -184,10 +223,26 @@ export function useSetterAdapter() {
 			? null
 			: showOverflow;
 		options.value.editRules = rules && { ...rules };
+
+		if (buttons) {
+			toolButtons.value = [];
+
+			buttons.forEach((item) => {
+				if (item) {
+					toolButtons.value.push({
+						title: item.title && item.title,
+						type: item.type && item.type,
+						bindClick: item.bindClick && item.bindClick,
+						bindDisabled: item.bindDisabled && item.bindDisabled,
+					});
+				}
+			});
+		}
 	}
 
 	return {
 		buildTableOption,
 		options,
+		toolButtons,
 	};
 }

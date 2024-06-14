@@ -13,7 +13,7 @@
 	</TreeSelect>
 </template>
 <script lang="ts" setup>
-import { TreeSelect, type TreeSelectProps } from 'ant-design-vue';
+import { TreeSelect, notification, type TreeSelectProps } from 'ant-design-vue';
 import { PropType, computed, reactive, ref, watch } from 'vue';
 import { ISettingField } from '@lt-frame/components';
 import { LtHttp } from '../../../configs';
@@ -27,7 +27,10 @@ const props = defineProps({
 		type: Object as PropType<ISettingField>,
 		default: () => {},
 	},
+	// 直接在协议中设置好的
 	path: String,
+	// 通过其他设置器拿到的实体路径
+	setterPath: String,
 });
 
 watch(
@@ -107,23 +110,57 @@ function postLoad(className: string) {
 
 const getPath = computed(() => {
 	const { path } = props;
-
 	return path!!;
 });
-postLoad(getPath.value).then((data) => {
-	treeData.value = [
-		...data.map((item) => ({
-			id: item.fieldName,
-			pId: 0,
-			value: item.fieldName,
-			title: `${item.fieldName}  (${item.fieldCommnet})`,
-			isLeaf: item.fieldTypeFlag !== '1',
-			fieldType: item.fieldType,
-			fieldCommnet: item.fieldCommnet,
-			fieldName: item.fieldName,
-			fieldTypeFlag: item.fieldTypeFlag,
-			enumInfo: item.enumInfo,
-		})),
-	];
-});
+
+if (props.setterPath) {
+	const path = props.field
+		.getProps()
+		.getPropValue(
+			props.field.path.slice(0, 2).concat(props.setterPath).join('.')
+		);
+	postLoad(path)
+		.then((data) => {
+			treeData.value = [
+				...data.map((item) => ({
+					id: item.fieldName,
+					pId: 0,
+					value: item.fieldName,
+					title: `${item.fieldName}  (${item.fieldCommnet})`,
+					isLeaf: item.fieldTypeFlag !== '1',
+					fieldType: item.fieldType,
+					fieldCommnet: item.fieldCommnet,
+					fieldName: item.fieldName,
+					fieldTypeFlag: item.fieldTypeFlag,
+					enumInfo: item.enumInfo,
+				})),
+			];
+		})
+		.catch(() => {
+			notification.error({
+				duration: 3,
+				message: '请配置实体路径',
+				style: {
+					zIndex: 3000,
+				},
+			});
+		});
+} else {
+	postLoad(getPath.value).then((data) => {
+		treeData.value = [
+			...data.map((item) => ({
+				id: item.fieldName,
+				pId: 0,
+				value: item.fieldName,
+				title: `${item.fieldName}  (${item.fieldCommnet})`,
+				isLeaf: item.fieldTypeFlag !== '1',
+				fieldType: item.fieldType,
+				fieldCommnet: item.fieldCommnet,
+				fieldName: item.fieldName,
+				fieldTypeFlag: item.fieldTypeFlag,
+				enumInfo: item.enumInfo,
+			})),
+		];
+	});
+}
 </script>

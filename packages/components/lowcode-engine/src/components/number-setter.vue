@@ -32,6 +32,13 @@ const emit = defineEmits(['change']);
 const inputNumber = ref(props.value);
 
 watch(
+	() => props.value,
+	() => {
+		inputNumber.value = props.value;
+	}
+);
+
+watch(
 	() => inputNumber.value,
 	() => {
 		emit('change', inputNumber.value);

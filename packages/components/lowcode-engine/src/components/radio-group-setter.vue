@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { RadioGroup, RadioGroupProps } from 'ant-design-vue';
-import { PropType, ref } from 'vue';
+import { PropType, ref, watch } from 'vue';
 
 defineOptions({
 	name: 'RadioGroupSetter',
@@ -27,6 +27,13 @@ const props = defineProps({
 const emit = defineEmits(['change']);
 
 const radioGroupValue = ref(props.value);
+
+watch(
+	() => props.value,
+	() => {
+		radioGroupValue.value = props.value;
+	}
+);
 
 if (
 	radioGroupValue.value === undefined ||

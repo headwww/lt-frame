@@ -212,6 +212,15 @@ export const SettingsPane = defineComponent({
 			}
 		);
 
+		watch(
+			() => props.value,
+			() => {
+				if (settingTopEntry) {
+					settingTopEntry.setNode(props.value);
+				}
+			}
+		);
+
 		return () => {
 			const { items } = settingTopEntry;
 			return items?.map((item) => createSettingFieldView(item));
