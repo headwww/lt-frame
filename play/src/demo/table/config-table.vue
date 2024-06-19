@@ -29,9 +29,13 @@
 			<LtPane size="82" class="p12">
 				<LtDivider title="职员信息" />
 				<LtConfigTable
+					tUid="19990290192"
 					entity="lt.fw.core.model.biz.Employee"
 					v-model:config="gridOptions"
 					v-model:pager="pager"
+					:eventBus="{
+						操作事件1: () => {},
+					}"
 				>
 					<template #table>
 						<vxe-grid

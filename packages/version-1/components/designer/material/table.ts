@@ -10,6 +10,10 @@ export interface Datasource {
 }
 
 export const tableProps = {
+	tUid: {
+		type: String,
+		required: true,
+	},
 	entity: String,
 	config: Object as PropType<VxeGridProps>,
 	eventBus: {

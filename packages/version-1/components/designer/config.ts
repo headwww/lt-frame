@@ -48,6 +48,7 @@ export interface ToolButtons {
  * 设置器产出的对象
  */
 export interface TableFields {
+	tUid?: string;
 	// 列的配置
 	columns?: Array<Column>;
 	// 高级
@@ -60,10 +61,11 @@ export interface TableFields {
 	size?: string;
 	align?: string;
 	showOverflow?: boolean;
-	// 列配置
-	columnConfig?: VxeTablePropTypes.ColumnConfig;
-	toolButtons?: ToolButtons[];
 	border?: string;
 	editTrigger?: string;
 	editMode?: string;
+
+	// 列配置
+	columnConfig?: VxeTablePropTypes.ColumnConfig;
+	toolButtons?: ToolButtons[];
 }

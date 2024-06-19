@@ -82,7 +82,7 @@
 
 <script lang="ts" setup>
 import { Button, Modal, Spin } from 'ant-design-vue';
-import { computed, h, onMounted, ref, watch } from 'vue';
+import { computed, h, nextTick, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isFunction, isUndefined, omit } from 'lodash-es';
 import { SettingOutlined } from '@ant-design/icons-vue';
@@ -91,8 +91,8 @@ import { useResizeObserver } from '@vueuse/core';
 import { tableProps } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
-import { useMock } from './usemock';
 import { useSchemas } from '../use-schemas';
+import { findBsConfigTables, saveBsConfigTablesByString } from './api';
 
 const props = defineProps(tableProps);
 
@@ -128,7 +128,9 @@ useResizeObserver(container, (entries: any) => {
 });
 
 // 临时的配置数据
-const tempSettingValue = ref<TableFields>({});
+const tempSettingValue = ref<TableFields>({
+	tUid: props.tUid,
+});
 
 const rawToolButtons = ref();
 
@@ -177,38 +179,41 @@ buildSchemas(
 	}))
 );
 
-const { getData, setDate } = useMock();
-
 watch(
 	() => open.value,
 	() => {
 		if (open.value) {
-			getSettingValue();
+			spinning.value = true;
+			findBsConfigTables(props.tUid)
+				.then((data) => {
+					tempSettingValue.value = JSON.parse(data[0].tInfo);
+					rawToolButtons.value = toolButtons.value;
+				})
+				.catch(() => {})
+				.finally(() => {
+					spinning.value = false;
+				});
 		}
 	}
 );
 
 onMounted(() => {
 	spinning2.value = true;
-	getData().then((data) => {
-		spinning2.value = false;
-		tempSettingValue.value = data as any;
-		options.value.autoResize = true;
-		options.value.height = 'auto';
-		emit('update:config', cloneDeep(omit(options.value, 'data')));
-		emit('setup');
-	});
+	findBsConfigTables(props.tUid)
+		.then((data) => {
+			tempSettingValue.value = JSON.parse(data[0].tInfo);
+			options.value.autoResize = true;
+			options.value.height = 'auto';
+			nextTick(() => {
+				emit('update:config', cloneDeep(omit(options.value, 'data')));
+				emit('setup');
+			});
+		})
+		.catch(() => {})
+		.finally(() => {
+			spinning2.value = false;
+		});
 });
-
-// 模拟请求
-const getSettingValue = () => {
-	spinning.value = true;
-	getData().then((data) => {
-		spinning.value = false;
-		tempSettingValue.value = data as any;
-		rawToolButtons.value = toolButtons.value;
-	});
-};
 
 watch(
 	() => tempSettingValue.value,
@@ -225,12 +230,13 @@ function onConfig() {
 }
 
 function onSave() {
-	setDate(cloneDeep(tempSettingValue.value));
-	open.value = false;
-	options.value.autoResize = true;
-	options.value.height = 'auto';
-	emit('update:config', cloneDeep(omit(options.value, 'data')));
-	emit('setup');
+	saveBsConfigTablesByString(tempSettingValue.value).then(() => {
+		open.value = false;
+		options.value.autoResize = true;
+		options.value.height = 'auto';
+		emit('update:config', cloneDeep(omit(options.value, 'data')));
+		emit('setup');
+	});
 }
 
 function handleDisabled(bindDisabled: DatasourceContrast) {
@@ -246,7 +252,7 @@ function handleDisabled(bindDisabled: DatasourceContrast) {
 
 function onCancel() {
 	toolButtons.value = rawToolButtons.value;
-	tempSettingValue.value = {};
+	tempSettingValue.value = { tUid: props.tUid };
 	open.value = false;
 }
 
