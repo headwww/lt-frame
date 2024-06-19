@@ -1,19 +1,34 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { VxeColumnProps, VxeGridProps } from 'vxe-table';
-import { isArray, isBoolean, isUndefined, set } from 'lodash-es';
+import { isArray, isBoolean, isUndefined, omit, set } from 'lodash-es';
 import { LtDatasource, LtTablePlugins } from '@lt-frame/components';
+import { deepMerge } from '@lt-frame/utils';
 import { Column, TableFields, ToolButtons } from './config';
-import { Datasource } from './material/table';
+import { TableProps } from './material/table';
 
 /**
  * 将设置器生产的数据转换为需要的数据
  *
  */
-export function useSetterAdapter(datasource?: Datasource) {
-	const options = ref<VxeGridProps>({
-		columns: [],
-		data: [{}, {}, {}, {}, {}],
-	});
+export function useSetterAdapter(props: TableProps) {
+	const { datasource, config } = props;
+	const isTree = computed(() => !isUndefined(props.config?.treeConfig));
+
+	const options = ref<VxeGridProps>(
+		deepMerge(
+			{
+				columns: [],
+				data: [
+					{ $id: 0, $parentId: null },
+					{ $id: 1, $parentId: null },
+					{ $id: 3, $parentId: 0 },
+					{ $id: 4, $parentId: 1 },
+					{ $id: 5, $parentId: 1 },
+				],
+			},
+			omit(config, 'data')
+		)
+	);
 
 	const toolButtons = ref<ToolButtons[]>([]);
 
@@ -166,7 +181,10 @@ export function useSetterAdapter(datasource?: Datasource) {
 			stripe,
 			size,
 			align,
+			border,
 			showOverflow,
+			editMode,
+			editTrigger,
 			toolButtons: buttons,
 		} = value;
 
@@ -174,7 +192,7 @@ export function useSetterAdapter(datasource?: Datasource) {
 
 		let cols: VxeColumnProps[] = [];
 		if (columns) {
-			cols = columns.map((item) => {
+			cols = columns.map((item, index) => {
 				let editRender = {};
 				let formatter;
 				if (item) {
@@ -190,6 +208,7 @@ export function useSetterAdapter(datasource?: Datasource) {
 						fixed: item.fixed,
 						editRender,
 						formatter: formatter && formatter,
+						treeNode: isTree.value && index === 0,
 					} as VxeColumnProps;
 				}
 				return {};
@@ -220,7 +239,13 @@ export function useSetterAdapter(datasource?: Datasource) {
 				align: 'center',
 			});
 		}
-		options.value.editConfig = { mode: 'cell', trigger: 'click' };
+
+		options.value.editConfig = {
+			mode: editMode && (editMode as any),
+			trigger: editTrigger && (editTrigger as any),
+		};
+
+		options.value.border = isUndefined(border) ? 'none' : (border as any);
 		options.value.columns = [...cols];
 		options.value.stripe = isBoolean(stripe) ? stripe : false;
 		options.value.size = isUndefined(size) ? '' : (size as any);
@@ -229,7 +254,21 @@ export function useSetterAdapter(datasource?: Datasource) {
 			? null
 			: showOverflow;
 		options.value.editRules = rules && { ...rules };
+		options.value.autoResize = true;
+		options.value.height = 'auto';
 
+		if (isTree.value) {
+			options.value.stripe = false;
+			options.value.checkboxConfig = {
+				isShiftKey: false,
+				range: false,
+			};
+		} else {
+			options.value.checkboxConfig = {
+				isShiftKey: true,
+				range: true,
+			};
+		}
 		if (buttons) {
 			toolButtons.value = [];
 

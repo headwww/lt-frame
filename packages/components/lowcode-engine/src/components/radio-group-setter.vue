@@ -3,7 +3,6 @@
 		v-model:value="radioGroupValue"
 		:options="options"
 		option-type="button"
-		@change="(v) => emit('change', v.target.value)"
 	></RadioGroup>
 </template>
 
@@ -32,6 +31,13 @@ watch(
 	() => props.value,
 	() => {
 		radioGroupValue.value = props.value;
+	}
+);
+
+watch(
+	() => radioGroupValue.value,
+	() => {
+		emit('change', radioGroupValue.value);
 	}
 );
 

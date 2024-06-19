@@ -30,7 +30,7 @@ const props = defineProps({
 	options: {
 		type: Array as PropType<SelectProps['options']>,
 	},
-	defaultValue: Object as PropType<SelectValue>,
+	defaultValue: [Array, Object, String, Number] as PropType<SelectValue>,
 });
 
 const emit = defineEmits(['change']);

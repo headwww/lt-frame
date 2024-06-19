@@ -5,3 +5,4 @@ export * from './types';
 export * from './hooks';
 export * from './error';
 export * from './components';
+export * from './model';

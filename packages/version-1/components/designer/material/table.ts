@@ -1,5 +1,6 @@
 import { Fn } from '@lt-frame/utils';
-import { PropType } from 'vue';
+import { ExtractPropTypes, PropType } from 'vue';
+import { VxeGridProps, VxePagerProps } from 'vxe-table';
 
 export interface EventBus {
 	[key: string]: Fn;
@@ -10,7 +11,7 @@ export interface Datasource {
 
 export const tableProps = {
 	entity: String,
-	config: Object as PropType<object>,
+	config: Object as PropType<VxeGridProps>,
 	eventBus: {
 		type: Object as PropType<EventBus>,
 		default: () => ({}),
@@ -19,4 +20,8 @@ export const tableProps = {
 		type: Object as PropType<Datasource>,
 		default: () => ({}),
 	},
+	pager: {
+		type: Object as PropType<VxePagerProps>,
+	},
 };
+export type TableProps = ExtractPropTypes<typeof tableProps>;

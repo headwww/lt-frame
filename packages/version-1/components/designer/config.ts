@@ -62,7 +62,8 @@ export interface TableFields {
 	showOverflow?: boolean;
 	// 列配置
 	columnConfig?: VxeTablePropTypes.ColumnConfig;
-	// 编辑配置
-	editConfig?: VxeTablePropTypes.EditConfig;
 	toolButtons?: ToolButtons[];
+	border?: string;
+	editTrigger?: string;
+	editMode?: string;
 }

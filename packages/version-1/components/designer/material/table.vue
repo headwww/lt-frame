@@ -1,28 +1,40 @@
 <template>
-	<div class="h-500px">
-		<Spin :spinning="spinning2" tip="加载配置...">
-			<div class="w-full flex p-10px">
-				<div class="flex-1">
-					<Button
-						v-for="(button, index) in toolButtons"
-						class="mr-6px"
-						:key="index"
-						:type="button.type"
-						@click="onButtonsClick(button)"
-						:disabled="handleDisabled(button.bindDisabled)"
-						>{{ button.title }}
-					</Button>
+	<div class="lt-material-table">
+		<Spin wrapperClassName="h-full" :spinning="spinning2" tip="加载配置...">
+			<div ref="container" class="flex flex-col h-full">
+				<div ref="toolBar" class="w-full flex p-10px">
+					<div class="flex-1">
+						<Button
+							v-for="(button, index) in toolButtons"
+							class="mr-6px"
+							:key="index"
+							:type="button.type"
+							@click="onButtonsClick(button)"
+							:disabled="handleDisabled(button.bindDisabled)"
+							>{{ button.title }}
+						</Button>
+					</div>
+					<div>
+						<Button
+							shape="circle"
+							:icon="h(SettingOutlined)"
+							@click="onConfig"
+						></Button>
+					</div>
 				</div>
-				<div tools>
-					<Button
-						shape="circle"
-						:icon="h(SettingOutlined)"
-						@click="onConfig"
-					></Button>
+				<div :style="tableStyle">
+					<slot name="table"> </slot>
+				</div>
+				<div ref="pagerBar" :class="isPage ? 'h-70px' : 'h-6px'">
+					<vxe-pager
+						v-if="isPage"
+						v-bind="page"
+						v-model:current-page="page.currentPage"
+						v-model:page-size="page.pageSize"
+						@page-change="handlePageChange"
+					/>
 				</div>
 			</div>
-
-			<slot name="table"> </slot>
 		</Spin>
 
 		<Modal
@@ -72,8 +84,10 @@
 import { Button, Modal, Spin } from 'ant-design-vue';
 import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
-import { cloneDeep, isFunction, omit } from 'lodash-es';
+import { cloneDeep, isFunction, isUndefined, omit } from 'lodash-es';
 import { SettingOutlined } from '@ant-design/icons-vue';
+import { VxePagerDefines, VxePagerProps } from 'vxe-table';
+import { useResizeObserver } from '@vueuse/core';
 import { tableProps } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
@@ -82,23 +96,64 @@ import { useSchemas } from '../use-schemas';
 
 const props = defineProps(tableProps);
 
-const emit = defineEmits(['update:config', 'setup']);
+const emit = defineEmits([
+	'update:config',
+	'update:pager',
+	'setup',
+	'pageChange',
+]);
 
 const open = ref(false);
 
 const spinning = ref(false);
 const spinning2 = ref(false);
 
+const container = ref<HTMLDivElement>();
+const toolBar = ref<HTMLDivElement>();
+const pagerBar = ref<HTMLDivElement>();
+const tableStyle = ref();
+
+useResizeObserver(container, (entries: any) => {
+	const entry = entries[0];
+	const { height } = entry.contentRect;
+	if (isPage.value) {
+		tableStyle.value = {
+			height: `${height - 120}px`,
+		};
+	} else {
+		tableStyle.value = {
+			height: `${height - 56}px`,
+		};
+	}
+});
+
 // 临时的配置数据
 const tempSettingValue = ref<TableFields>({});
 
 const rawToolButtons = ref();
 
-const { options, toolButtons, buildTableOption } = useSetterAdapter(
-	props.datasource
-);
+const { options, toolButtons, buildTableOption } = useSetterAdapter(props);
 
 const { schemas, buildSchemas } = useSchemas();
+
+// 处理pager
+const page = ref<VxePagerProps>(props.pager || {});
+
+const isPage = computed(() => !isUndefined(props.pager));
+
+watch(
+	() => page.value,
+	() => {
+		emit('update:pager', page.value);
+	}
+);
+
+watch(
+	() => props.pager,
+	() => {
+		page.value = { ...props.pager };
+	}
+);
 
 const eventBusKey = computed(() => {
 	const keys = Object.keys(props.eventBus);
@@ -145,6 +200,8 @@ onMounted(() => {
 	getData().then((data) => {
 		spinning2.value = false;
 		tempSettingValue.value = data as any;
+		options.value.autoResize = true;
+		options.value.height = 'auto';
 		emit('update:config', cloneDeep(omit(options.value, 'data')));
 		emit('setup');
 	});
@@ -177,6 +234,8 @@ function onConfig() {
 function onSave() {
 	setDate(cloneDeep(tempSettingValue.value));
 	open.value = false;
+	options.value.autoResize = true;
+	options.value.height = 'auto';
 	emit('update:config', cloneDeep(omit(options.value, 'data')));
 	emit('setup');
 }
@@ -191,9 +250,14 @@ function handleDisabled(bindDisabled: DatasourceContrast) {
 	}
 	return false;
 }
+
 function onCancel() {
 	toolButtons.value = rawToolButtons.value;
 	tempSettingValue.value = {};
 	open.value = false;
+}
+
+function handlePageChange(params: VxePagerDefines.PageChangeEventParams) {
+	emit('pageChange', params);
 }
 </script>

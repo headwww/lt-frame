@@ -26,8 +26,6 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 		{
 			table: {
 				border: 'none',
-				// 是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）
-				stripe: true,
 				// 表格的尺寸
 				size: 'small',
 				// 设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）
@@ -47,10 +45,6 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					trigger: 'cell',
 					// 高亮勾选行
 					highlight: true,
-					// 开启复选框范围选择功能（启用后通过鼠标在复选框的列内滑动选中或取消指定行）
-					range: true,
-					// 开启复选框指定行选择功能（启用后通过鼠标点击和 shift 键选取指定范围的行）
-					isShiftKey: true,
 					// 严格模式，当数据为空或全部禁用时，列头的复选框为禁用状态
 					strict: true,
 				},
@@ -83,8 +77,6 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 			},
 			grid: {
 				border: 'none',
-				// 是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）
-				stripe: true,
 				// 表格的尺寸
 				size: 'small',
 				// 设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）
@@ -104,10 +96,6 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					trigger: 'cell',
 					// 高亮勾选行
 					highlight: true,
-					// 开启复选框范围选择功能（启用后通过鼠标在复选框的列内滑动选中或取消指定行）
-					range: true,
-					// 开启复选框指定行选择功能（启用后通过鼠标点击和 shift 键选取指定范围的行）
-					isShiftKey: true,
 					// 严格模式，当数据为空或全部禁用时，列头的复选框为禁用状态
 					strict: true,
 				},

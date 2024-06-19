@@ -422,7 +422,6 @@ export function useSchemas() {
 											},
 										},
 									},
-
 									{
 										type: 'group',
 										display: 'accordion',
@@ -590,6 +589,40 @@ export function useSchemas() {
 					defaultValue: true,
 					setter: 'BoolSetter',
 				},
+
+				{
+					type: 'field',
+					name: 'border',
+					title: '边框',
+					defaultValue: 'none',
+					setter: {
+						componentName: 'SelectSetter',
+						props: {
+							options: [
+								{
+									label: '默认',
+									value: 'default',
+								},
+								{
+									label: '完整边框',
+									value: 'full',
+								},
+								{
+									label: '外边框',
+									value: 'outer',
+								},
+								{
+									label: '内边框',
+									value: 'inner',
+								},
+								{
+									label: '无边框',
+									value: 'none',
+								},
+							],
+						},
+					},
+				},
 				{
 					type: 'field',
 					name: 'size',
@@ -619,7 +652,7 @@ export function useSchemas() {
 					type: 'field',
 					name: 'align',
 					title: '对齐方式',
-					defaultValue: 'left',
+					defaultValue: 'center',
 					setter: {
 						componentName: 'RadioGroupSetter',
 						props: {
@@ -649,6 +682,71 @@ export function useSchemas() {
 					},
 					defaultValue: true,
 					setter: 'BoolSetter',
+				},
+			],
+		});
+
+		schemas.value.push({
+			type: 'group',
+			display: 'accordion',
+			name: 'editConfig',
+			title: '编辑模式',
+			items: [
+				{
+					type: 'field',
+					name: 'editTrigger',
+					title: {
+						label: '触发方式',
+						tip: '开启编辑的时候编辑状态的触发方式，手动触发方式，只能用于 mode=row',
+					},
+					defaultValue: 'dblclick',
+					setValue(target: any, value: any) {
+						if (value === 'manual') {
+							target.getProps().setPropValue('editMode', 'row');
+						}
+					},
+					setter: {
+						componentName: 'RadioGroupSetter',
+						props: {
+							options: [
+								{
+									label: '双击触发',
+									value: 'dblclick',
+								},
+								{
+									label: '手动触发',
+									value: 'manual',
+								},
+								{
+									label: '点击触发',
+									value: 'click',
+								},
+							],
+						},
+					},
+				},
+				{
+					type: 'field',
+					name: 'editMode',
+					title: {
+						label: '编辑模式',
+					},
+					defaultValue: 'row',
+					setter: {
+						componentName: 'RadioGroupSetter',
+						props: {
+							options: [
+								{
+									label: '行编辑',
+									value: 'row',
+								},
+								{
+									label: '单元格编辑',
+									value: 'cell',
+								},
+							],
+						},
+					},
 				},
 			],
 		});
