@@ -6,7 +6,12 @@
 		transfer
 	>
 		<template #default>
-			<Input :status="status" v-model:value="inputValue" @focus="focus"></Input>
+			<Input
+				class="mt-2px"
+				:status="status"
+				v-model:value="inputValue"
+				@focus="focus"
+			></Input>
 		</template>
 		<template #dropdown>
 			<vxe-grid
@@ -49,6 +54,7 @@ const props = defineProps({
 const getGridConfigs = reactive<VxeGridProps>(
 	omit(props.configs, 'proxyConfig')
 );
+getGridConfigs.border = 'default';
 
 const status = ref<'' | 'error' | 'warning'>();
 

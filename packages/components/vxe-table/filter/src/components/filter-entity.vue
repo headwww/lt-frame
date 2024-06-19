@@ -52,6 +52,7 @@ const filterRawData: Ref<Array<any>> = ref([]);
 const getGridConfigs = reactive<VxeGridProps>(
 	omit(props.configs, 'proxyConfig')
 );
+getGridConfigs.border = 'default';
 
 const records = ref<any[]>([]);
 
