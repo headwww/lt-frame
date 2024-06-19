@@ -168,6 +168,6 @@ LtHttp.post<PageResponse<any>>({
 	],
 }).then((data) => {
 	pager.value.total = data.rowCount;
-	pager.value.pageSize = 2;
+	pager.value.pageSize = 4;
 });
 </script>

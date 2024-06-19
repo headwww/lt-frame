@@ -148,13 +148,6 @@ watch(
 	}
 );
 
-watch(
-	() => props.pager,
-	() => {
-		page.value = { ...props.pager };
-	}
-);
-
 const eventBusKey = computed(() => {
 	const keys = Object.keys(props.eventBus);
 	return keys;
