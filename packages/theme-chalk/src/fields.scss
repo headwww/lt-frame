@@ -142,6 +142,11 @@
 		cursor: pointer;
 	}
 
+	.lt-setter-object-row-content {
+		width: 310px;
+		height: 100%;
+	}
+
 	.lt-setter-object-row-body {
 		display: flex;
 		margin-left: var(--s-1);
@@ -283,6 +288,14 @@
 	}
 }
 
+.lt-designer-title-span {
+	text-decoration: underline dashed #9da3ae;
+	text-decoration-color: #9da3ae;
+	cursor: help;
+
+	--un-line-opacity: 1;
+}
+
 .lt-table-designer {
 	.ant-modal {
 		max-width: 100%;
@@ -312,6 +325,11 @@
 		justify-content: space-between;
 		padding-left: 18px;
 		padding-right: 18px;
+
+		&__text {
+			font-size: 15px;
+			font-weight: 500;
+		}
 	}
 
 	&__workbench-body {
@@ -400,5 +418,21 @@
 
 	.ant-spin-container {
 		height: 100%;
+	}
+
+	&__spin {
+		height: 100%;
+	}
+
+	&__container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	&__toolBar {
+		width: 100%;
+		display: flex;
+		padding: 10px;
 	}
 }

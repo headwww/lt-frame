@@ -3,7 +3,7 @@
 		:defaultValue="defaultValue"
 		:mode="mode"
 		:options="options"
-		class="w-full"
+		class="lt-select-setter"
 		v-model:value="selectValue"
 		@change="(v) => emit('change', v)"
 	></Select>

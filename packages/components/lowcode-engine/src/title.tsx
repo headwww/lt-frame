@@ -18,7 +18,7 @@ export default defineComponent({
 				}
 				const { tip } = title;
 				if (tip) {
-					return 'underline underline-dashed underline-coolgray cursor-help';
+					return 'lt-designer-title-span';
 				}
 			}
 			return '';

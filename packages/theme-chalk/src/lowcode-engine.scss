@@ -1,0 +1,45 @@
+.lt-json-setter {
+	display: flex;
+
+	&__editor {
+		height: 400px;
+		flex: 1 1 0%;
+	}
+
+	&__template {
+		margin-left: 12px;
+		width: 380px;
+		height: 400px;
+		overflow: auto;
+	}
+}
+
+.lt-input-number-setter {
+	width: 100%;
+}
+
+.lt-select-setter {
+	width: 100%;
+}
+
+.lt-text-setter {
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.lt-array-draggable {
+	max-height: 230px;
+	overflow: auto;
+
+	&__bg {
+		background-color: #f1f2f3;
+		border-radius: 6px;
+	}
+}
+
+.lt-array-add {
+	display: block;
+	width: 100%;
+}

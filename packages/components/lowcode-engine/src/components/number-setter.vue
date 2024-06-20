@@ -1,6 +1,6 @@
 <template>
 	<InputNumber
-		class="w-full"
+		class="lt-input-number-setter"
 		v-model:value="inputNumber"
 		:placeholder="placeholder"
 		:defaultValue="defaultValue"

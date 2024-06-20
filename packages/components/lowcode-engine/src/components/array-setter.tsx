@@ -172,10 +172,10 @@ export const ListSetter = defineComponent({
 
 			const content =
 				state.items.length > 0 ? (
-					<div ref={draggable} class={['max-h-230px', 'overflow-auto']}>
+					<div ref={draggable} class="lt-array-draggable">
 						<LtDraggable
-							dragClass={'bg-#f1f2f3'}
-							ghostClass={'bg-#f1f2f3'}
+							dragClass={'lt-array-draggable__bg'}
+							ghostClass={'lt-array-draggable__bg'}
 							animation={150}
 							v-model={state.items}
 						>
@@ -192,7 +192,9 @@ export const ListSetter = defineComponent({
 					<Alert
 						message={'暂时还没有添加内容'}
 						type="info"
-						class={'m-8px'}
+						style={{
+							margin: ' 8px',
+						}}
 						showIcon
 					></Alert>
 				);
@@ -203,7 +205,7 @@ export const ListSetter = defineComponent({
 						<div class="lt-setter-list-columns">{columns}</div>
 					) : null}
 					{content}
-					<div class={'block w-full'}>
+					<div class={'lt-array-add'}>
 						<Button onClick={() => onAdd()} type={'link'}>
 							添加一项 +
 						</Button>
@@ -243,7 +245,8 @@ export const ArrayItem = defineComponent({
 							draggable
 							size="small"
 							type="text"
-							class="handle cursor-move"
+							style={{ cursor: 'move' }}
+							class="handle"
 							icon={h(HolderOutlined)}
 						/>
 					</div>

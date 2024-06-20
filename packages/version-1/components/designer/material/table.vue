@@ -1,12 +1,16 @@
 <template>
-	<div class="lt-material-table">
-		<Spin wrapperClassName="h-full" :spinning="spinning2" tip="加载配置...">
-			<div ref="container" class="flex flex-col h-full">
-				<div ref="toolBar" class="w-full flex p-10px">
-					<div class="flex-1">
+	<div :class="ns.b()">
+		<Spin
+			:wrapperClassName="ns.e('spin')"
+			:spinning="spinning2"
+			tip="加载配置..."
+		>
+			<div ref="container" :class="ns.e('container')">
+				<div ref="toolBar" :class="ns.e('toolBar')">
+					<div style="flex: 1 1 0%">
 						<Button
 							v-for="(button, index) in toolButtons"
-							class="mr-6px"
+							style="margin-right: 6px"
 							:key="index"
 							:type="button.type"
 							@click="onButtonsClick(button)"
@@ -25,7 +29,12 @@
 				<div :style="tableStyle">
 					<slot name="table"> </slot>
 				</div>
-				<div ref="pagerBar" :class="isPage ? 'h-70px' : 'h-6px'">
+				<div
+					ref="pagerBar"
+					:style="{
+						height: isPage ? '70px' : '6px',
+					}"
+				>
 					<vxe-pager
 						v-if="isPage"
 						v-bind="page"
@@ -48,10 +57,10 @@
 			<Spin :spinning="spinning" size="large" tip="加载编辑器">
 				<Designer @cancel="onCancel" @save="onSave">
 					<template #designer-pane>
-						<div class="flex m-12px">
-							<div class="flex-1">
+						<div style="display: flex; margin: 12px">
+							<div style="flex: 1 1 0%">
 								<Button
-									class="ml-6px"
+									style="margin-right: 6px"
 									v-for="(button, index) in toolButtons"
 									:key="index"
 									:type="button.type"
@@ -63,7 +72,7 @@
 						<vxe-grid
 							v-if="!spinning"
 							ref="xGrid"
-							class="p-5px"
+							style="padding: 5px"
 							v-bind="options"
 						></vxe-grid>
 					</template>
@@ -88,12 +97,14 @@ import { cloneDeep, isFunction, isUndefined, omit } from 'lodash-es';
 import { SettingOutlined } from '@ant-design/icons-vue';
 import { VxePagerDefines, VxePagerProps } from 'vxe-table';
 import { useResizeObserver } from '@vueuse/core';
+import { useNamespace } from '@lt-frame/hooks';
 import { tableProps } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
 import { useSchemas } from '../use-schemas';
 import { findBsConfigTables, saveBsConfigTablesByString } from './api';
 
+const ns = useNamespace('material-table');
 const props = defineProps(tableProps);
 
 const emit = defineEmits([

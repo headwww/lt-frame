@@ -31,7 +31,7 @@ export default defineComponent({
 		const ns = useNamespace('collapse-container');
 		const _prefixCls = computed(() => props.prefixCls || ns.b());
 		return () => (
-			<div class={[`${unref(_prefixCls)}__header px-2 py-5`, attrs.class]}>
+			<div class={[`${unref(_prefixCls)}__header`, attrs.class]}>
 				<LtTitle helpMessage={props.helpMessage} normal>
 					{slots.title?.() || props.title}
 				</LtTitle>

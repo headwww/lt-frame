@@ -15,8 +15,6 @@ VXETable.menus.add('$MenusAdd', {
 
 VXETable.menus.add('$MenusAddChild', {
 	menuMethod(params) {
-		console.log('======');
-
 		const { row } = params;
 		row.children.push({});
 	},

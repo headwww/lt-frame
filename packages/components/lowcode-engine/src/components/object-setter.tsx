@@ -123,7 +123,7 @@ export const RowSetter = defineComponent({
 								></Button>
 							),
 							content: () => (
-								<div class="w-310px h-full">
+								<div class="lt-setter-object-row-content">
 									<FormSetter
 										key={field.id}
 										field={field}

@@ -1,13 +1,13 @@
 <template>
 	<vxe-pulldown
-		popup-class-name="shadow-2xl"
-		className="w-full h-350px"
+		popup-class-name="lt-edit-entity-popup-class-name"
+		className="lt-edit-entity-class-name"
 		ref="pulldownRef"
 		transfer
 	>
 		<template #default>
 			<Input
-				class="mt-2px"
+				style="margin-top: 2px"
 				:status="status"
 				v-model:value="inputValue"
 				@focus="focus"

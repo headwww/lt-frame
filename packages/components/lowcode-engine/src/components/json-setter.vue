@@ -12,7 +12,7 @@
 			:z-index="2000"
 			@ok="onOk"
 		>
-			<div class="flex">
+			<div :class="ns.b()">
 				<LtJsonEditor
 					ref="jsonEditor"
 					:options="{
@@ -22,10 +22,10 @@
 						onError,
 					}"
 					v-model="json"
-					class="h-400px flex-1"
+					:class="ns.e('editor')"
 				>
 				</LtJsonEditor>
-				<div class="ml12px w380px h-400px overflow-auto">
+				<div :class="ns.e('template')">
 					<template v-for="(item, index) in document" :key="index">
 						<TypographyTitle v-if="item.type === 'title'" :level="5">{{
 							item.content
@@ -54,9 +54,11 @@ import {
 } from 'ant-design-vue';
 import { Fn } from '@lt-frame/utils';
 import { isArray, isFunction } from 'lodash-es';
+import { useNamespace } from '@lt-frame/hooks';
 import { LtJsonEditor } from '../../../json-editor';
 import { SettingsPaneContext, settingsPaneContext } from '../context-key';
 
+const ns = useNamespace('json-setter');
 const { popoverLock } = inject(settingsPaneContext) as SettingsPaneContext;
 
 const props = defineProps({

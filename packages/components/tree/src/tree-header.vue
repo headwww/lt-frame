@@ -1,14 +1,11 @@
 <template>
-	<div :class="ns.b()" class="flex mb-1 px-2 py-1.5 items-center">
+	<div :class="ns.b()">
 		<slot name="headerTitle" v-if="slots.headerTitle"></slot>
 
 		<LtTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
 			{{ title }}
 		</LtTitle>
-		<div
-			class="flex items-center flex-1 cursor-pointer justify-self-stretch w-full"
-			v-if="search || toolbar"
-		>
+		<div :class="ns.e('search')" v-if="search || toolbar">
 			<div :class="getInputSearchCls" v-if="search">
 				<InputSearch
 					:placeholder="'搜索'"
@@ -95,10 +92,9 @@ const slots = useSlots();
 const getInputSearchCls = computed(() => {
 	const titleExists = slots.headerTitle || props.title;
 	return [
-		'mr-1',
-		'w-full',
+		'lt-cls',
 		{
-			'ml-5': titleExists,
+			'lt-ml': titleExists,
 		},
 	];
 });

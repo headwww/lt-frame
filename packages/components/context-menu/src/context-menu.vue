@@ -42,10 +42,10 @@ const ItemContent: FunctionalComponent<ItemContentProps> = (props) => {
 	return (
 		<span
 			style="display: inline-block; width: 100%; "
-			class="px"
+			class="lt-px"
 			onClick={props.handler.bind(null, item)}
 		>
-			{props.showIcon && item.icon && <LtIcon class="mr" icon={item.icon} />}
+			{props.showIcon && item.icon && <LtIcon class="lt-mr" icon={item.icon} />}
 			<span>{item.label}</span>
 		</span>
 	);

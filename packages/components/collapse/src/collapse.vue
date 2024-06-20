@@ -68,7 +68,7 @@ export default defineComponent({
 					class={[props.headerClass]}
 				/>
 
-				<div class="p-2">
+				<div class={ns.e('content')}>
 					<LtTransition enable={props.canExpand}>
 						{props.loading ? (
 							<Skeleton active={props.loading} />

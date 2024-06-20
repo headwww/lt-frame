@@ -1,6 +1,6 @@
 <template>
 	<Tooltip :title="value">
-		<span class="w-full overflow-hidden whitespace-nowrap text-ellipsis">
+		<span class="lt-text-setter">
 			{{ value }}
 		</span>
 	</Tooltip>
