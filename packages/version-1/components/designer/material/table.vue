@@ -91,9 +91,9 @@
 
 <script lang="ts" setup>
 import { Button, Modal, Spin } from 'ant-design-vue';
-import { computed, h, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
-import { cloneDeep, isFunction, isUndefined, omit } from 'lodash-es';
+import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
 import { SettingOutlined } from '@ant-design/icons-vue';
 import { VxePagerDefines, VxePagerProps } from 'vxe-table';
 import { useResizeObserver } from '@vueuse/core';
@@ -109,6 +109,7 @@ const props = defineProps(tableProps);
 
 const emit = defineEmits([
 	'update:config',
+	'update:listeners',
 	'update:pager',
 	'setup',
 	'pageChange',
@@ -129,7 +130,7 @@ useResizeObserver(container, (entries: any) => {
 	const { height } = entry.contentRect;
 	if (isPage.value) {
 		tableStyle.value = {
-			height: `${height - 120}px`,
+			height: `${height - 125}px`,
 		};
 	} else {
 		tableStyle.value = {
@@ -145,7 +146,8 @@ const tempSettingValue = ref<TableFields>({
 
 const rawToolButtons = ref();
 
-const { options, toolButtons, buildTableOption } = useSetterAdapter(props);
+const { options, gridEvents, toolButtons, buildTableOption } =
+	useSetterAdapter(props);
 
 const { schemas, buildSchemas } = useSchemas();
 
@@ -153,6 +155,8 @@ const { schemas, buildSchemas } = useSchemas();
 const page = ref<VxePagerProps>(props.pager || {});
 
 const isPage = computed(() => !isUndefined(props.pager));
+
+const isSetup = ref(false);
 
 watch(
 	() => page.value,
@@ -197,8 +201,10 @@ watch(
 			spinning.value = true;
 			findBsConfigTables(props.tUid)
 				.then((data) => {
-					tempSettingValue.value = JSON.parse(data[0].tInfo);
-					rawToolButtons.value = toolButtons.value;
+					if (isArray(data) && data.length > 0) {
+						tempSettingValue.value = JSON.parse(data[0].tInfo);
+						rawToolButtons.value = toolButtons.value;
+					}
 				})
 				.catch(() => {})
 				.finally(() => {
@@ -212,13 +218,10 @@ onMounted(() => {
 	spinning2.value = true;
 	findBsConfigTables(props.tUid)
 		.then((data) => {
-			tempSettingValue.value = JSON.parse(data[0].tInfo);
-			options.value.autoResize = true;
-			options.value.height = 'auto';
-			nextTick(() => {
-				emit('update:config', cloneDeep(omit(options.value, 'data')));
-				emit('setup');
-			});
+			if (isArray(data) && data.length > 0) {
+				tempSettingValue.value = JSON.parse(data[0].tInfo);
+				isSetup.value = true;
+			}
 		})
 		.catch(() => {})
 		.finally(() => {
@@ -230,6 +233,14 @@ watch(
 	() => tempSettingValue.value,
 	() => {
 		buildTableOption(tempSettingValue.value);
+		if (isSetup.value) {
+			isSetup.value = false;
+			options.value.autoResize = true;
+			options.value.height = 'auto';
+			emit('update:config', cloneDeep(omit(options.value, 'data')));
+			emit('update:listeners', cloneDeep(gridEvents.value));
+			emit('setup');
+		}
 	},
 	{
 		deep: true,
@@ -246,6 +257,7 @@ function onSave() {
 		options.value.autoResize = true;
 		options.value.height = 'auto';
 		emit('update:config', cloneDeep(omit(options.value, 'data')));
+		emit('update:listeners', cloneDeep(gridEvents.value));
 		emit('setup');
 	});
 }

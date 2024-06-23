@@ -32,16 +32,17 @@
 					tUid="19990290192"
 					entity="lt.fw.core.model.biz.Employee"
 					v-model:config="gridOptions"
+					v-model:listeners="gridEvents"
 					v-model:pager="pager"
-					:eventBus="{
-						操作事件1: () => {},
-					}"
+					:eventBus="eventBus"
+					:datasource="datasource"
 				>
 					<template #table>
 						<vxe-grid
 							class="lt-table-scrollbar"
 							ref="xGrid"
 							v-bind="gridOptions"
+							v-on="gridEvents"
 						></vxe-grid>
 					</template>
 				</LtConfigTable>
@@ -63,8 +64,13 @@ import {
 import { Condition } from '@lt-frame/utils';
 import { LtConfigTable, LtHttp, PageResponse } from '@lt-frame/version-1';
 import { Tooltip } from 'ant-design-vue';
-import { onMounted, ref, watch } from 'vue';
-import { VxeGridInstance, VxeGridProps, VxePagerProps } from 'vxe-table';
+import { onMounted, reactive, ref, watch } from 'vue';
+import {
+	VxeGridInstance,
+	VxeGridListeners,
+	VxeGridProps,
+	VxePagerProps,
+} from 'vxe-table';
 
 const treeLoading = ref(false);
 
@@ -74,8 +80,37 @@ const selectedKeys = ref<string[]>([]);
 
 const xGrid = ref<VxeGridInstance>();
 
-const gridOptions = ref<VxeGridProps>({});
+const gridEvents = reactive<VxeGridListeners>({
+	cellMenu({ row }) {
+		const $grid = xGrid.value;
+		if ($grid) {
+			$grid.setCurrentRow(row);
+		}
+	},
+});
 
+const a = ref(true);
+const datasource = {
+	数据i: (param: any) => {
+		console.log(param);
+		return a.value;
+	},
+};
+
+const eventBus = {
+	test: (param: any) => {
+		console.log(param);
+	},
+};
+const gridOptions = ref<VxeGridProps>({
+	menuConfig: {
+		body: {
+			options: [[]],
+		},
+	},
+});
+
+xGrid.value?.setColumnFixed;
 onMounted(() => {
 	findCorps();
 });

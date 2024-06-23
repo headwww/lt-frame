@@ -289,6 +289,10 @@
 }
 
 .lt-designer-title-span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 70px;
 	text-decoration: underline dashed #9da3ae;
 	text-decoration-color: #9da3ae;
 	cursor: help;
@@ -433,6 +437,6 @@
 	&__toolBar {
 		width: 100%;
 		display: flex;
-		padding: 10px;
+		padding: 6px;
 	}
 }

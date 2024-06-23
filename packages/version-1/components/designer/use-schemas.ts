@@ -1,5 +1,5 @@
 import { IPublicTypeFieldConfig, ISettingField } from '@lt-frame/components';
-import { isArray } from 'lodash-es';
+import { isArray, isUndefined, uniqueId } from 'lodash-es';
 import { ref } from 'vue';
 
 export function useSchemas() {
@@ -86,6 +86,7 @@ export function useSchemas() {
 	};
 
 	function buildSchemas(entity?: string, options?: any[], datasource?: any[]) {
+		// 数据列
 		schemas.value.push({
 			name: 'columns',
 			display: 'accordion',
@@ -473,10 +474,12 @@ export function useSchemas() {
 				},
 			},
 		});
+
+		// 操作栏按钮配置
 		schemas.value.push({
 			name: 'toolButtons',
 			display: 'accordion',
-			title: '操作按钮配置',
+			title: '操作栏按钮配置',
 			setter: {
 				componentName: 'ArraySetter',
 				props: {
@@ -545,6 +548,123 @@ export function useSchemas() {
 				},
 			},
 		});
+
+		// 操作列按钮配置
+		schemas.value.push({
+			type: 'group',
+			name: 'operationColumn',
+			display: 'accordion',
+			title: '操作列按钮配置',
+			items: [
+				{
+					name: 'isOperationColumn',
+					title: '是否开启列',
+					setter: 'BoolSetter',
+				},
+				{
+					name: 'editButton',
+					title: '编辑按钮',
+					setter: 'BoolSetter',
+				},
+				{
+					name: 'viewButton',
+					title: '查看按钮',
+					setter: 'BoolSetter',
+				},
+				{
+					name: 'viewBindClick',
+					title: {
+						label: '按钮事件',
+						tip: '查看按钮事件',
+					},
+					setter: {
+						componentName: 'SelectSetter',
+						props: {
+							options,
+						},
+					},
+				},
+			],
+		});
+
+		// 右键菜单配置
+		schemas.value.push({
+			type: 'field',
+			name: 'menuConfig',
+			display: 'accordion',
+			title: '右键菜单配置',
+			setter: {
+				componentName: 'ArraySetter',
+				props: {
+					itemSetter: {
+						componentName: 'ObjectSetter',
+						props: {
+							config: {
+								items: [
+									{
+										name: 'code',
+										title: '唯一ID',
+										isRequired: true,
+										setter: {
+											componentName: 'StringSetter',
+											props: {
+												placeholder: '唯一必填',
+											},
+										},
+									},
+									{
+										name: 'name',
+										title: '菜单名',
+										isRequired: true,
+										defaultValue: '操作',
+										setValue: (target: ISettingField) => {
+											const path = target.path.slice(0, -1);
+											if (
+												isUndefined(
+													target
+														.getProps()
+														.getPropValue(path.concat('code').join('.'))
+												)
+											) {
+												target
+													.getProps()
+													.setPropValue(
+														path.concat('code').join('.'),
+														uniqueId('menu_item_')
+													);
+											}
+										},
+										setter: 'StringSetter',
+									},
+									{
+										name: 'bindClick',
+										title: '绑定事件',
+										setter: {
+											componentName: 'SelectSetter',
+											props: {
+												options,
+											},
+										},
+									},
+									{
+										name: 'isDisabled',
+										title: '是否禁用',
+										setter: {
+											componentName: 'VariableSetter',
+											props: {
+												datasource,
+											},
+										},
+									},
+								] as IPublicTypeFieldConfig[],
+							},
+						},
+					},
+				},
+			},
+		});
+
+		// 高级配置
 		schemas.value.push({
 			type: 'group',
 			name: 'senior',
@@ -573,6 +693,8 @@ export function useSchemas() {
 				},
 			],
 		});
+
+		// 全局样式
 		schemas.value.push({
 			type: 'group',
 			name: 'globalStyle',
@@ -686,6 +808,7 @@ export function useSchemas() {
 			],
 		});
 
+		// 编辑模式
 		schemas.value.push({
 			type: 'group',
 			display: 'accordion',

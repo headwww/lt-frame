@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue';
-import { VxeColumnProps, VxeGridProps } from 'vxe-table';
+import { VxeColumnProps, VxeGridListeners, VxeGridProps } from 'vxe-table';
 import { isArray, isBoolean, isUndefined, omit, set } from 'lodash-es';
 import { LtDatasource, LtTablePlugins } from '@lt-frame/components';
 import { deepMerge } from '@lt-frame/utils';
@@ -11,9 +11,8 @@ import { TableProps } from './material/table';
  *
  */
 export function useSetterAdapter(props: TableProps) {
-	const { datasource, config } = props;
+	const { datasource, config, eventBus } = props;
 	const isTree = computed(() => !isUndefined(props.config?.treeConfig));
-
 	const options = ref<VxeGridProps>(
 		deepMerge(
 			{
@@ -25,10 +24,14 @@ export function useSetterAdapter(props: TableProps) {
 					{ $id: 4, $parentId: 1 },
 					{ $id: 5, $parentId: 1 },
 				],
-			},
+			} as VxeGridProps,
 			omit(config, 'data')
 		)
 	);
+
+	const gridEvents = ref<VxeGridListeners>({
+		...props.listeners,
+	});
 
 	const toolButtons = ref<ToolButtons[]>([]);
 
@@ -186,6 +189,11 @@ export function useSetterAdapter(props: TableProps) {
 			editMode,
 			editTrigger,
 			toolButtons: buttons,
+			menuConfig,
+			isOperationColumn,
+			editButton,
+			viewButton,
+			viewBindClick,
 		} = value;
 
 		const rules: { [key: string]: any } = {};
@@ -240,6 +248,86 @@ export function useSetterAdapter(props: TableProps) {
 			});
 		}
 
+		if (isOperationColumn) {
+			cols.push({
+				title: '操作',
+				align: 'center',
+				cellRender: {
+					name: LtTablePlugins.CellOperate,
+					props: {
+						viewVisible: viewButton,
+						editVisible: editButton,
+					},
+					events: {
+						onViewClick: (params) => {
+							if (viewBindClick) {
+								eventBus[viewBindClick](params);
+							}
+						},
+					},
+				},
+			});
+		}
+
+		// 右键菜单
+		if (menuConfig && menuConfig.length > 0) {
+			const menus = menuConfig.map((menu) => ({
+				code: menu.code,
+				name: menu.name,
+			}));
+
+			if (options.value.menuConfig) {
+				if (options.value.menuConfig.body) {
+					if (
+						options.value.menuConfig.body.options &&
+						options.value.menuConfig.body.options.length > 0
+					) {
+						options.value.menuConfig.body.options = [[]];
+						options.value.menuConfig.body.options.push(menus);
+
+						options.value.menuConfig.visibleMethod = (params: any) => {
+							menuConfig.forEach((menu) => {
+								const { options } = params;
+								options.forEach((list: any[]) => {
+									list.forEach((item: any) => {
+										if (item.code === menu.code && menu.isDisabled) {
+											const { type, key } = menu.isDisabled;
+											if (type === 'customDatasource' && key) {
+												item.disabled = datasource[key](params);
+											}
+										}
+									});
+								});
+							});
+
+							return true;
+						};
+						menuConfig.forEach((item) => {
+							gridEvents.value.menuClick = (params: any) => {
+								const { menu } = params;
+								if (menu.code === item.code) {
+									eventBus[item.bindClick](params);
+								}
+							};
+						});
+					}
+				}
+			} else {
+				// eslint-disable-next-line no-console
+				console.warn(
+					`
+					父组件表格的v-bind配置属性需要初始化
+					menuConfig: {
+						body: {
+							options: [[]],
+						},
+					},
+					辅助dom产生菜单容器!
+					`
+				);
+			}
+		}
+
 		options.value.editConfig = {
 			mode: editMode && (editMode as any),
 			trigger: editTrigger && (editTrigger as any),
@@ -289,5 +377,6 @@ export function useSetterAdapter(props: TableProps) {
 		buildTableOption,
 		options,
 		toolButtons,
+		gridEvents,
 	};
 }

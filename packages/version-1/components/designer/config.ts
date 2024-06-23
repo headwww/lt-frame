@@ -10,6 +10,14 @@ export interface DatasourceContrast {
 	key?: string;
 }
 
+export interface MenuOptions {
+	code?: string;
+	name?: string;
+	// 绑定的点击事件
+	bindClick: string;
+	// 是否禁用
+	isDisabled?: DatasourceContrast;
+}
 export interface Column {
 	field?: Recordable;
 	title?: string;
@@ -68,4 +76,13 @@ export interface TableFields {
 	// 列配置
 	columnConfig?: VxeTablePropTypes.ColumnConfig;
 	toolButtons?: ToolButtons[];
+
+	// 右键菜单
+	menuConfig?: MenuOptions[];
+
+	// 操作列配置
+	isOperationColumn?: boolean;
+	editButton?: boolean;
+	viewButton?: boolean;
+	viewBindClick?: string;
 }
