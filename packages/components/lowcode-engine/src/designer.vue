@@ -2,7 +2,9 @@
 	<div :class="ns.e('title')">
 		<span :class="ns.e('title__text')">表格配置</span>
 		<div>
-			<Button type="primary" @click="() => emit('save')">保存</Button>
+			<Button :loading="loading" type="primary" @click="() => emit('save')"
+				>保存</Button
+			>
 			<Button style="margin-left: 12px" @click="() => emit('cancel')"
 				>取消</Button
 			>
@@ -29,4 +31,8 @@ import { Button } from 'ant-design-vue';
 const ns = useNamespace('table-designer');
 
 const emit = defineEmits(['cancel', 'save']);
+
+defineProps({
+	loading: { type: Boolean, defalut: false },
+});
 </script>

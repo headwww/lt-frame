@@ -26,16 +26,17 @@
 					<LtButton @click="findCorps" class="w-full mt-35">刷新</LtButton>
 				</template>
 			</LtPane>
-			<LtPane size="82" class="p12">
+			<LtPane size="82" class="flex flex-col justify-start">
+				<LtDivider title="职员信息" />
 				<LtDivider title="职员信息" />
 				<LtConfigTable
 					tUid="19990290192"
 					entity="lt.fw.core.model.biz.Employee"
 					v-model:config="gridOptions"
 					v-model:listeners="gridEvents"
-					v-model:pager="pager"
 					:eventBus="eventBus"
 					:datasource="datasource"
+					v-model:pager="pager"
 				>
 					<template #table>
 						<vxe-grid
@@ -210,3 +211,12 @@ LtHttp.post<PageResponse<any>>({
 	pager.value.pageSize = 4;
 });
 </script>
+
+<style>
+.s {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: start;
+}
+</style>

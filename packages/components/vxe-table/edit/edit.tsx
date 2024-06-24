@@ -4,6 +4,7 @@ import EditInputNumber from './src/edit-input-number.vue';
 import EditDatePicker from './src/edit-date-picker.vue';
 import EditSelect from './src/edit-select.vue';
 import EditEntity from './src/edit-entity.vue';
+import EditBool from './src/edit-bool.vue';
 
 VXETable.renderer.add('$lt-edit-input', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
@@ -61,6 +62,14 @@ VXETable.renderer.add('$lt-edit-entity', {
 				{...events}
 				params={params}
 			></EditEntity>
+		);
+	},
+});
+
+VXETable.renderer.add('$lt-edit-bool', {
+	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
+		return (
+			<EditBool {...props} {...attrs} {...events} params={params}></EditBool>
 		);
 	},
 });

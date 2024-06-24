@@ -32,7 +32,7 @@
 				<div
 					ref="pagerBar"
 					:style="{
-						height: isPage ? '70px' : '6px',
+						height: isPage ? '48px' : '3px',
 					}"
 				>
 					<vxe-pager
@@ -55,7 +55,7 @@
 			wrap-class-name="lt-table-designer"
 		>
 			<Spin :spinning="spinning" size="large" tip="加载编辑器">
-				<Designer @cancel="onCancel" @save="onSave">
+				<Designer :loading="loading" @cancel="onCancel" @save="onSave">
 					<template #designer-pane>
 						<div style="display: flex; margin: 12px">
 							<div style="flex: 1 1 0%">
@@ -120,6 +120,8 @@ const open = ref(false);
 const spinning = ref(false);
 const spinning2 = ref(false);
 
+const loading = ref(false);
+
 const container = ref<HTMLDivElement>();
 const toolBar = ref<HTMLDivElement>();
 const pagerBar = ref<HTMLDivElement>();
@@ -130,11 +132,11 @@ useResizeObserver(container, (entries: any) => {
 	const { height } = entry.contentRect;
 	if (isPage.value) {
 		tableStyle.value = {
-			height: `${height - 125}px`,
+			height: `${height - 44 - 48}px`,
 		};
 	} else {
 		tableStyle.value = {
-			height: `${height - 56}px`,
+			height: `${height - 44 - 3}px`,
 		};
 	}
 });
@@ -252,14 +254,19 @@ function onConfig() {
 }
 
 function onSave() {
-	saveBsConfigTablesByString(tempSettingValue.value).then(() => {
-		open.value = false;
-		options.value.autoResize = true;
-		options.value.height = 'auto';
-		emit('update:config', cloneDeep(omit(options.value, 'data')));
-		emit('update:listeners', cloneDeep(gridEvents.value));
-		emit('setup');
-	});
+	loading.value = true;
+	saveBsConfigTablesByString(tempSettingValue.value)
+		.then(() => {
+			open.value = false;
+			options.value.autoResize = true;
+			options.value.height = 'auto';
+			emit('update:config', cloneDeep(omit(options.value, 'data')));
+			emit('update:listeners', cloneDeep(gridEvents.value));
+			emit('setup');
+		})
+		.finally(() => {
+			loading.value = false;
+		});
 }
 
 function handleDisabled(bindDisabled: DatasourceContrast) {

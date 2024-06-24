@@ -20,6 +20,9 @@ export interface MenuOptions {
 }
 export interface Column {
 	field?: Recordable;
+	// 当字段类型为java.lang.Boolean时候需要设置的用来格式化的文本，默认是，是否
+	boolTrue: string;
+	boolFalse: string;
 	title?: string;
 	type?: string;
 	parentType?: string;
@@ -35,7 +38,6 @@ export interface Column {
 		pattern?: string;
 		message?: string;
 	}>;
-
 	entityPath?: string;
 	entityColumn?: Column[];
 	datasourceContrast?: DatasourceContrast;

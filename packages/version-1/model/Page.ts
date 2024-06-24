@@ -1,6 +1,6 @@
 export interface Pager {
-	pageNo: number;
-	pageSize: number;
+	pageNo?: number;
+	pageSize?: number;
 	rowCountEnabled?: boolean;
 }
 

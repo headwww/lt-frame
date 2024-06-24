@@ -118,6 +118,11 @@ export function useSetterAdapter(props: TableProps) {
 							},
 						};
 					}
+					if (field.fieldType === 'java.lang.Boolean') {
+						edit = {
+							name: LtTablePlugins.EditBool,
+						};
+					}
 				}
 				if (field.fieldTypeFlag === '2') {
 					let options: any[] = [];
@@ -157,6 +162,16 @@ export function useSetterAdapter(props: TableProps) {
 				}
 				if (field.fieldType === 'java.util.Date') {
 					formatter = [LtTablePlugins.FormatterTime, item.dataFormatter];
+				}
+				if (field.fieldType === 'java.lang.Boolean') {
+					formatter = ({ cellValue }: any) =>
+						cellValue
+							? item.boolTrue
+								? item.boolTrue
+								: '是'
+							: item.boolFalse
+								? item.boolFalse
+								: '否';
 				}
 			}
 			if (field.fieldTypeFlag === '2') {

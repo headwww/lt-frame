@@ -191,6 +191,7 @@ export function useSchemas() {
 										name: 'isEdit',
 										setter: 'BoolSetter',
 									},
+
 									{
 										title: {
 											label: '开启时分秒',
@@ -251,6 +252,7 @@ export function useSchemas() {
 											},
 										},
 									},
+
 									{
 										name: 'numberFormatter',
 										title: '小数位',
@@ -422,6 +424,42 @@ export function useSchemas() {
 												],
 											},
 										},
+									},
+									{
+										type: 'group',
+										display: 'accordion',
+										title: {
+											label: '布尔格式化配置',
+											tip: '当数据类型为java.lang.Boolean时，设置true和false两个值的显示文本',
+										},
+										condition: (target: ISettingField) => {
+											const fieldType = target
+												.getProps()
+												.getPropValue(
+													target.path.concat('field.fieldType').join('.')
+												);
+											return fieldType === 'java.lang.Boolean';
+										},
+										items: [
+											{
+												name: 'boolTrue',
+												title: {
+													label: 'true',
+													tip: '值为true时显示的文本，默认是`是`',
+												},
+												defaultValue: '是',
+												setter: 'StringSetter',
+											},
+											{
+												name: 'boolFalse',
+												title: {
+													label: 'false',
+													tip: '值为false时显示的文本，默认是`否`',
+												},
+												defaultValue: '否',
+												setter: 'StringSetter',
+											},
+										],
 									},
 									{
 										type: 'group',
