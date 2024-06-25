@@ -51,9 +51,9 @@ defineOptions({
 
 const xGrid = ref<VxeGridInstance>();
 
-const { buildTableId } = useTableId();
+const { tableId } = useTableId();
 
-console.log(buildTableId());
+console.log(tableId());
 
 const eventBus = {
 	insert: async () => {
