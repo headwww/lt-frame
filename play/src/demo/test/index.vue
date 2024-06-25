@@ -29,7 +29,6 @@
 
 <script lang="ts" setup>
 import { LtPageLayout } from '@lt-frame/components';
-import { useTableId } from '@lt-frame/hooks';
 import { Condition } from '@lt-frame/utils';
 import {
 	LtConfigTable,
@@ -50,10 +49,6 @@ defineOptions({
 });
 
 const xGrid = ref<VxeGridInstance>();
-
-const { tableId } = useTableId();
-
-console.log(tableId());
 
 const eventBus = {
 	insert: async () => {

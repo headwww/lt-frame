@@ -6,4 +6,3 @@ export * from './use-event-listener';
 export * from './use-scroll-to';
 export * from './use-window-size';
 export * from './use-content-height';
-export * from './use-tid';
