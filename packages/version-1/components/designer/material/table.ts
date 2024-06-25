@@ -28,5 +28,9 @@ export const tableProps = {
 	pager: {
 		type: Object as PropType<VxePagerProps>,
 	},
+	fileds: {
+		type: Array as PropType<Array<string>>,
+		default: () => [],
+	},
 };
 export type TableProps = ExtractPropTypes<typeof tableProps>;

@@ -110,6 +110,7 @@ const props = defineProps(tableProps);
 const emit = defineEmits([
 	'update:config',
 	'update:listeners',
+	'update:fields',
 	'update:pager',
 	'setup',
 	'pageChange',
@@ -239,9 +240,16 @@ watch(
 			isSetup.value = false;
 			options.value.autoResize = true;
 			options.value.height = 'auto';
+			const fields: string[] = [];
+			options.value.columns?.forEach((item) => {
+				if (item.field) {
+					fields.push(item.field);
+				}
+			});
+			emit('update:fields', fields);
 			emit('update:config', cloneDeep(omit(options.value, 'data')));
 			emit('update:listeners', cloneDeep(gridEvents.value));
-			emit('setup');
+			emit('setup', fields);
 		}
 	},
 	{
@@ -260,9 +268,16 @@ function onSave() {
 			open.value = false;
 			options.value.autoResize = true;
 			options.value.height = 'auto';
+			const fields: string[] = [];
+			options.value.columns?.forEach((item) => {
+				if (item.field) {
+					fields.push(item.field);
+				}
+			});
+			emit('update:fields', fields);
 			emit('update:config', cloneDeep(omit(options.value, 'data')));
 			emit('update:listeners', cloneDeep(gridEvents.value));
-			emit('setup');
+			emit('setup', fields);
 		})
 		.finally(() => {
 			loading.value = false;

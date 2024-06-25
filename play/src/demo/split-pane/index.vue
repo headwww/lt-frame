@@ -18,7 +18,7 @@
 			style="height: 400px; margin-top: 12px"
 		>
 			<LtPane min-size="20" max-size="70">
-				<span>1</span>
+				<span>11</span>
 			</LtPane>
 			<LtPane>
 				<span>2</span>

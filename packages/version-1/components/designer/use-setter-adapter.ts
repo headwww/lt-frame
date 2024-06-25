@@ -25,7 +25,7 @@ export function useSetterAdapter(props: TableProps) {
 					{ $id: 5, $parentId: 1 },
 				],
 			} as VxeGridProps,
-			omit(config, 'data')
+			omit(config, 'data', 'loading')
 		)
 	);
 
