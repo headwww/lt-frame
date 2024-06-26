@@ -27,7 +27,7 @@ class DatasourceStore {
 }
 
 interface DatasourceOptions {
-	createDatasource: () => any;
+	createDatasource: (params?: any) => any;
 }
 
 interface GlobalDatasource {
