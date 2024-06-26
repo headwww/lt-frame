@@ -92,8 +92,9 @@ const gridEvents = reactive<VxeGridListeners>({
 
 const a = ref(true);
 const datasource = {
-	数据i: (param: any) => {
-		console.log(param);
+	数据i: (row: any) => {
+		console.log(row);
+
 		return a.value;
 	},
 };
@@ -101,6 +102,7 @@ const datasource = {
 const eventBus = {
 	test: (param: any) => {
 		console.log(param);
+		a.value = false;
 	},
 };
 const gridOptions = ref<VxeGridProps>({

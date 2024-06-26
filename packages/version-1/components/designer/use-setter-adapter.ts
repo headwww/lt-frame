@@ -1,8 +1,15 @@
 import { computed, ref } from 'vue';
 import { VxeColumnProps, VxeGridListeners, VxeGridProps } from 'vxe-table';
-import { isArray, isBoolean, isUndefined, omit, set } from 'lodash-es';
+import {
+	isArray,
+	isBoolean,
+	isFunction,
+	isUndefined,
+	omit,
+	set,
+} from 'lodash-es';
 import { LtDatasource, LtTablePlugins } from '@lt-frame/components';
-import { deepMerge } from '@lt-frame/utils';
+import { Fn, deepMerge } from '@lt-frame/utils';
 import { Column, TableFields, ToolButtons } from './config';
 import { TableProps } from './material/table';
 
@@ -218,6 +225,8 @@ export function useSetterAdapter(props: TableProps) {
 			editButton,
 			viewButton,
 			viewBindClick,
+			viewDisabled,
+			editDisabled,
 		} = value;
 
 		const rules: { [key: string]: any } = {};
@@ -273,14 +282,41 @@ export function useSetterAdapter(props: TableProps) {
 		}
 
 		if (isOperationColumn) {
+			let viewFn: boolean | Fn = false;
+			if (
+				viewDisabled?.type === 'customDatasource' &&
+				viewDisabled.key &&
+				datasource
+			) {
+				if (isFunction(datasource[viewDisabled.key])) {
+					viewFn = (row: any) => datasource[viewDisabled.key!!](row);
+				} else {
+					viewFn = datasource[viewDisabled.key];
+				}
+			}
+			let editFn: boolean | Fn = false;
+			if (
+				editDisabled?.type === 'customDatasource' &&
+				editDisabled.key &&
+				datasource
+			) {
+				if (isFunction(datasource[editDisabled.key])) {
+					editFn = (row: any) => datasource[editDisabled.key!!](row);
+				} else {
+					editFn = datasource[editDisabled.key];
+				}
+			}
 			cols.push({
 				title: '操作',
 				align: 'center',
+				width: 300,
 				cellRender: {
 					name: LtTablePlugins.CellOperate,
 					props: {
 						viewVisible: viewButton,
+						viewDisabled: viewFn,
 						editVisible: editButton,
+						editDisabled: editFn,
 					},
 					events: {
 						onViewClick: (params) => {
@@ -317,7 +353,11 @@ export function useSetterAdapter(props: TableProps) {
 										if (item.code === menu.code && menu.isDisabled) {
 											const { type, key } = menu.isDisabled;
 											if (type === 'customDatasource' && key) {
-												item.disabled = datasource[key](params);
+												if (isFunction(datasource[key])) {
+													item.disabled = datasource[key](params);
+												} else {
+													item.disabled = datasource[key];
+												}
 											}
 										}
 									});

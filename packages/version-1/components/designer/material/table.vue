@@ -241,7 +241,7 @@ watch(
 			options.value.autoResize = true;
 			options.value.height = 'auto';
 			const fields: string[] = [];
-			options.value.columns?.forEach((item) => {
+			options.value.columns?.forEach((item: any) => {
 				if (item.field) {
 					fields.push(item.field);
 				}
@@ -269,7 +269,7 @@ function onSave() {
 			options.value.autoResize = true;
 			options.value.height = 'auto';
 			const fields: string[] = [];
-			options.value.columns?.forEach((item) => {
+			options.value.columns?.forEach((item: any) => {
 				if (item.field) {
 					fields.push(item.field);
 				}
@@ -289,7 +289,10 @@ function handleDisabled(bindDisabled: DatasourceContrast) {
 		const { datasource } = props;
 		const { type, key } = bindDisabled;
 		if (type === 'customDatasource' && key) {
-			return datasource[key]();
+			if (isFunction(datasource[key])) {
+				return datasource[key]();
+			}
+			return datasource[key];
 		}
 	}
 	return false;

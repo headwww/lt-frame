@@ -605,6 +605,19 @@ export function useSchemas() {
 					setter: 'BoolSetter',
 				},
 				{
+					name: 'editDisabled',
+					title: {
+						label: '编辑禁用',
+						tip: '编辑按钮是否禁用',
+					},
+					setter: {
+						componentName: 'VariableSetter',
+						props: {
+							datasource,
+						},
+					},
+				},
+				{
 					name: 'viewButton',
 					title: '查看按钮',
 					setter: 'BoolSetter',
@@ -619,6 +632,19 @@ export function useSchemas() {
 						componentName: 'SelectSetter',
 						props: {
 							options,
+						},
+					},
+				},
+				{
+					name: 'viewDisabled',
+					title: {
+						label: '是否禁用',
+						tip: '查看按钮是否禁用',
+					},
+					setter: {
+						componentName: 'VariableSetter',
+						props: {
+							datasource,
 						},
 					},
 				},

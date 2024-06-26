@@ -1,5 +1,4 @@
 import { VxeTablePropTypes, VxeColumnPropTypes } from 'vxe-table';
-import { Recordable } from '@lt-frame/utils';
 import { ButtonType } from 'ant-design-vue/lib/button';
 
 // 数据源对照关系
@@ -18,8 +17,21 @@ export interface MenuOptions {
 	// 是否禁用
 	isDisabled?: DatasourceContrast;
 }
+
 export interface Column {
-	field?: Recordable;
+	field?: {
+		fieldCommnet?: string;
+		fieldName?: string;
+		fieldType?: string;
+		fieldTypeFlag?: string;
+		id?: string;
+		isLeaf?: boolean;
+		pId?: string;
+		parentType?: string;
+		title?: string;
+		value: string;
+		enumInfo?: any[];
+	};
 	// 当字段类型为java.lang.Boolean时候需要设置的用来格式化的文本，默认是，是否
 	boolTrue: string;
 	boolFalse: string;
@@ -85,6 +97,10 @@ export interface TableFields {
 	// 操作列配置
 	isOperationColumn?: boolean;
 	editButton?: boolean;
+	// 控制编辑按钮的状态的数据源
+	editDisabled?: DatasourceContrast;
 	viewButton?: boolean;
 	viewBindClick?: string;
+	// 控制查看按钮的状态的数据源
+	viewDisabled?: DatasourceContrast;
 }
