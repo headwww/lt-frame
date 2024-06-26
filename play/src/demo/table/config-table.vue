@@ -61,6 +61,7 @@ import {
 	LtTree,
 	LtButton,
 	TreeItem,
+	LtDatasource,
 } from '@lt-frame/components';
 import { Condition } from '@lt-frame/utils';
 import { LtConfigTable, LtHttp, PageResponse } from '@lt-frame/version-1';
@@ -73,6 +74,27 @@ import {
 	VxePagerProps,
 } from 'vxe-table';
 
+LtDatasource.add('findUser', {
+	createDatasource(params: string[]) {
+		return new Promise((resolve, reject) => {
+			LtHttp.post({
+				url: 'api/securityModelService/findUsers',
+				data: [
+					{
+						targetClass: 'lt.fw.core.model.biz.User',
+						queryPath: [...params],
+					},
+				],
+			})
+				.then((data) => {
+					resolve(data);
+				})
+				.catch(() => {
+					reject();
+				});
+		});
+	},
+});
 const treeLoading = ref(false);
 
 const treeData = ref<TreeItem[]>([]);

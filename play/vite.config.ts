@@ -31,6 +31,7 @@ export default defineConfig({
 				// target: 'http://49.74.206.150:8081/',
 				target: 'http://ltscm.tpddns.cn:8081/',
 				// target: 'http://192.168.1.6:8080/',
+				// target: 'http://192.168.1.117:8080/',
 				// target: 'http://192.168.1.188:8080/',
 				// target: 'http://ltscm.3322.org:8081/',
 				// target: 'http://192.168.1.241:9090/',

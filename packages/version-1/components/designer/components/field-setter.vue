@@ -67,7 +67,9 @@ const onLoadData = (treeNode: any) =>
 					id,
 					value: id,
 					pId: treeNode.dataRef.id,
-					title: `${item.fieldName}  (${item.fieldCommnet})`,
+					title: `${item.notNull === 1 ? '*' : ''}${item.fieldName}  (${
+						item.fieldCommnet
+					})`,
 					fieldType: item.fieldType,
 					parentType: treeNode.fieldType,
 					fieldCommnet: item.fieldCommnet,
@@ -88,6 +90,7 @@ interface Field {
 	fieldCommnet: string;
 	fieldName: string;
 	fieldType: string;
+	notNull: number;
 	fieldTypeFlag: string;
 	parentType?: string;
 	enumInfo?: Array<{
@@ -127,7 +130,9 @@ if (props.setterPath) {
 					id: item.fieldName,
 					pId: 0,
 					value: item.fieldName,
-					title: `${item.fieldName}  (${item.fieldCommnet})`,
+					title: `${item.notNull === 1 ? '*' : ''}${item.fieldName}  (${
+						item.fieldCommnet
+					})`,
 					isLeaf: item.fieldTypeFlag !== '1',
 					fieldType: item.fieldType,
 					fieldCommnet: item.fieldCommnet,
@@ -153,7 +158,9 @@ if (props.setterPath) {
 				id: item.fieldName,
 				pId: 0,
 				value: item.fieldName,
-				title: `${item.fieldName}  (${item.fieldCommnet})`,
+				title: `${item.notNull === 1 ? '*' : ''}${item.fieldName}  (${
+					item.fieldCommnet
+				})`,
 				isLeaf: item.fieldTypeFlag !== '1',
 				fieldType: item.fieldType,
 				fieldCommnet: item.fieldCommnet,

@@ -72,12 +72,11 @@ export function useSetterAdapter(props: TableProps) {
 					if (datasourceContrast.type === 'builtInDatasource') {
 						// 内置数据源
 						const fields: string[] = [];
-						options.value.columns?.forEach((item) => {
+						columns.forEach((item) => {
 							if (item.field) {
 								fields.push(item.field);
 							}
 						});
-
 						edit = {
 							name: LtTablePlugins.EditEntity,
 							props: {
@@ -309,6 +308,7 @@ export function useSetterAdapter(props: TableProps) {
 			cols.push({
 				title: '操作',
 				align: 'center',
+				fixed: 'right',
 				width: 300,
 				cellRender: {
 					name: LtTablePlugins.CellOperate,
