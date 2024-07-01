@@ -309,7 +309,7 @@ export function useSetterAdapter(props: TableProps) {
 				title: '操作',
 				align: 'center',
 				fixed: 'right',
-				width: 300,
+				width: 160,
 				cellRender: {
 					name: LtTablePlugins.CellOperate,
 					props: {
