@@ -226,6 +226,7 @@ export function useSetterAdapter(props: TableProps) {
 			viewBindClick,
 			viewDisabled,
 			editDisabled,
+			checkStrictly,
 		} = value;
 
 		const rules: { [key: string]: any } = {};
@@ -414,11 +415,13 @@ export function useSetterAdapter(props: TableProps) {
 			options.value.checkboxConfig = {
 				isShiftKey: false,
 				range: false,
+				checkStrictly,
 			};
 		} else {
 			options.value.checkboxConfig = {
 				isShiftKey: true,
 				range: true,
+				checkStrictly,
 			};
 		}
 		if (buttons) {

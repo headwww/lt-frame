@@ -77,6 +77,7 @@ export interface TableFields {
 	seq?: boolean;
 	radio?: boolean;
 	checkbox?: boolean;
+	checkStrictly?: boolean;
 
 	// 全局配置
 	stripe?: boolean;

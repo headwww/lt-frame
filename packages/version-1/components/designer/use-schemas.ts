@@ -755,6 +755,16 @@ export function useSchemas() {
 					defaultValue: true,
 					setter: 'BoolSetter',
 				},
+				{
+					type: 'field',
+					name: 'checkStrictly',
+					title: {
+						tip: '多选模式下，是否严格的遵循父子不互相关联的做法',
+						label: '关联模式',
+					},
+					defaultValue: true,
+					setter: 'BoolSetter',
+				},
 			],
 		});
 
