@@ -1,6 +1,10 @@
 <template>
 	<LtPageLayout title="vxe-table">
-		<vxe-grid class="lt-table-scrollbar" v-bind="gridOptions"></vxe-grid>
+		<vxe-grid
+			ref="x"
+			class="lt-table-scrollbar"
+			v-bind="gridOptions"
+		></vxe-grid>
 	</LtPageLayout>
 </template>
 
@@ -8,11 +12,10 @@
 import { LtPageLayout } from '@lt-frame/components';
 import { parse } from '@lt-frame/utils';
 import { LtHttp } from '@lt-frame/version-1';
-import { onMounted, reactive } from 'vue';
-import { VxeGridProps } from 'vxe-table';
-import dayjs from 'dayjs';
-import { isNumber } from 'lodash-es';
-import XEUtils from 'xe-utils';
+import { onMounted, reactive, ref } from 'vue';
+import { VxeGridInstance, VxeGridProps } from 'vxe-table';
+
+const x = ref<VxeGridInstance>();
 
 const gridOptions = reactive<VxeGridProps>({
 	editConfig: { trigger: 'dblclick' },
@@ -26,13 +29,7 @@ const gridOptions = reactive<VxeGridProps>({
 			editRender: {
 				name: '$lt-edit-time-picker',
 			},
-			formatter: ({ cellValue }) => {
-				if (isNumber(cellValue)) {
-					dayjs(cellValue).format('HH:mm:ss');
-					return XEUtils.toDateString(cellValue, 'HH:mm:ss');
-				}
-				return cellValue;
-			},
+			formatter: '$lt-formatter-enum-hms',
 		},
 	],
 	proxyConfig: {
@@ -62,27 +59,28 @@ const findRoles = () =>
 	});
 
 onMounted(() => {
-	LtHttp.post({
-		url: 'api/orderClassesService/saveOrderClassess',
-		data: [
-			[
-				{
-					name: '1212',
-					corp: {
-						id: '668865186018361344',
-						version: 2,
+	false &&
+		LtHttp.post({
+			url: 'api/orderClassesService/saveOrderClassess',
+			data: [
+				[
+					{
+						name: '1212',
+						corp: {
+							id: '668865186018361344',
+							version: 2,
+						},
+						starTime: 1720051202000,
 					},
-					starTime: 1720051202000,
-				},
+				],
+				[],
 			],
-			[],
-		],
-	})
-		.then((data) => {
-			console.log(data);
 		})
-		.catch(() => {
-			console.log('====');
-		});
+			.then((data) => {
+				console.log(data);
+			})
+			.catch(() => {
+				console.log('====');
+			});
 });
 </script>

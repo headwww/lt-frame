@@ -1,18 +1,12 @@
 <template>
-	<TimePicker
-		@change="handle"
-		@ok="handle"
-		@focus="focus"
-		:status="status"
-		:value="getValue"
-	>
+	<TimePicker @ok="handle" @focus="focus" :status="status" v-model:value="time">
 	</TimePicker>
 </template>
 
 <script lang="ts" setup>
 import { TimePicker } from 'ant-design-vue';
 import { get, isNumber, set } from 'lodash-es';
-import { computed, PropType, ref } from 'vue';
+import { PropType, ref } from 'vue';
 import { VxeGlobalRendererHandles } from 'vxe-table';
 import dayjs from 'dayjs';
 import { isNullOrUnDef } from '@lt-frame/utils';
@@ -23,30 +17,27 @@ const props = defineProps({
 
 const status = ref<'' | 'error' | 'warning'>();
 
-const getValue = computed(() => {
-	const { params } = props;
-	if (params) {
-		const { row, column } = params;
-		const data = get(row, column.field);
-		if (isNullOrUnDef(data)) {
-			return undefined;
-		}
-		if (isNumber(data)) {
-			return dayjs(data);
-		}
-		return dayjs(data, 'HH:mm:ss');
+const time = ref();
+const { params } = props;
+if (params) {
+	const { row, column } = params;
+	const data = get(row, column.field);
+	if (isNullOrUnDef(data)) {
+		time.value = undefined;
 	}
-	return '';
-});
+	if (isNumber(data)) {
+		time.value = dayjs(data);
+	}
+}
 
-const handle = async (value: any) => {
+const handle = async () => {
 	const { params } = props;
 	if (params) {
 		const { $table, row, column } = params;
-		if (isNullOrUnDef(value)) {
+		if (isNullOrUnDef(time.value)) {
 			set(row, column.field, null);
 		} else {
-			set(row, column.field, Date.parse(value.toString()));
+			set(row, column.field, Date.parse(time.value.toString()));
 		}
 		await $table.updateStatus(params);
 		$table

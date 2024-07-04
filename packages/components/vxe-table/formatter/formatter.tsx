@@ -31,8 +31,7 @@ VXETable.formats.add('$lt-formatter-time', {
 VXETable.formats.add('$lt-formatter-enum-hms', {
 	cellFormatMethod({ cellValue }) {
 		if (isNumber(cellValue)) {
-			dayjs(cellValue).format('HH:mm:ss');
-			return XEUtils.toDateString(cellValue, 'HH:mm:ss');
+			return dayjs(cellValue).format('HH:mm:ss');
 		}
 		return cellValue;
 	},

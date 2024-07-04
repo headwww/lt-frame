@@ -1,10 +1,9 @@
 <template>
 	<a-date-picker
-		@change="handle"
 		@ok="handle"
 		@focus="focus"
 		:status="status"
-		:value="getValue"
+		v-model:value="time"
 		style="width: 100%"
 	>
 	</a-date-picker>
@@ -12,9 +11,9 @@
 
 <script lang="ts" setup>
 import type { VxeGlobalRendererHandles } from 'vxe-table';
-import { computed, ref, type PropType } from 'vue';
+import { ref, type PropType } from 'vue';
 import { DatePicker as ADatePicker } from 'ant-design-vue';
-import { get, set } from 'lodash-es';
+import { get, isNumber, set } from 'lodash-es';
 import dayjs from 'dayjs';
 import { isNullOrUnDef } from '@lt-frame/utils';
 
@@ -24,27 +23,27 @@ const props = defineProps({
 
 const status = ref<'' | 'error' | 'warning'>();
 
-const getValue = computed(() => {
-	const { params } = props;
-	if (params) {
-		const { row, column } = params;
-		const data = get(row, column.field);
-		if (isNullOrUnDef(data)) {
-			return undefined;
-		}
-		return dayjs(get(row, column.field));
+const time = ref();
+const { params } = props;
+if (params) {
+	const { row, column } = params;
+	const data = get(row, column.field);
+	if (isNullOrUnDef(data)) {
+		time.value = undefined;
 	}
-	return '';
-});
+	if (isNumber(data)) {
+		time.value = dayjs(data);
+	}
+}
 
-const handle = async (value: any) => {
+const handle = async () => {
 	const { params } = props;
 	if (params) {
 		const { $table, row, column } = params;
-		if (isNullOrUnDef(value)) {
+		if (isNullOrUnDef(time.value)) {
 			set(row, column.field, null);
 		} else {
-			set(row, column.field, Date.parse(value.toString()));
+			set(row, column.field, Date.parse(time.value.toString()));
 		}
 		await $table.updateStatus(params);
 		$table

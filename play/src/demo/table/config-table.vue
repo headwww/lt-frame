@@ -122,9 +122,8 @@ const datasource = {
 };
 
 const eventBus = {
-	test: (param: any) => {
-		console.log(param);
-		a.value = false;
+	test: () => {
+		xGrid.value?.insert({});
 	},
 };
 const gridOptions = ref<VxeGridProps>({
