@@ -191,7 +191,6 @@ export function useSchemas() {
 										name: 'isEdit',
 										setter: 'BoolSetter',
 									},
-
 									{
 										title: {
 											label: '开启时分秒',
@@ -199,6 +198,34 @@ export function useSchemas() {
 										},
 										defaultValue: true,
 										name: 'showTime',
+										condition: (target: ISettingField) => {
+											const parentType = target
+												.getProps()
+												.getPropValue(
+													target.path
+														.slice(0, -1)
+														.concat('parentType')
+														.join('.')
+												);
+											const type = target
+												.getProps()
+												.getPropValue(
+													target.path.slice(0, -1).concat('type').join('.')
+												);
+											if (!parentType && type === 'java.util.Date') {
+												return true;
+											}
+
+											return false;
+										},
+										setter: 'BoolSetter',
+									},
+									{
+										title: {
+											label: '特殊日期格式',
+											tip: '只保留时分秒',
+										},
+										name: 'isTime',
 										condition: (target: ISettingField) => {
 											const parentType = target
 												.getProps()
@@ -790,7 +817,7 @@ export function useSchemas() {
 					type: 'field',
 					name: 'border',
 					title: '边框',
-					defaultValue: 'none',
+					defaultValue: 'full',
 					setter: {
 						componentName: 'SelectSetter',
 						props: {

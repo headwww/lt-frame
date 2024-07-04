@@ -138,6 +138,47 @@ const gridOptions = reactive<VxeGridProps>({
 			},
 		},
 		{
+			field: 'username',
+			title: '用户名',
+			width: '200',
+			editRender: {
+				name: '$lt-edit-input',
+				props: {
+					allowClear: true,
+				},
+			},
+			filters: [
+				{
+					data: {
+						// 选中的筛选方式
+						currentMode: FilterMode.TEXT,
+						// 数字筛选配置
+						textFilterData: {
+							// 两个条件之间的逻辑操作
+							logicalOperators: LogicalOperators.AND,
+							// 第一个查询条件
+							firstQueryCondition: ComparisonOperator.INCLUDE,
+							// 第一个查询文本
+							firstQueryText: '',
+							// 第二个查询条件
+							secondQueryCondition: ComparisonOperator.EMPTY,
+							// 第二个查询文本
+							secondQueryText: '',
+						},
+						contentFilterConfig: {
+							checkedKeys: ['$_SELECT_ALL'],
+						},
+					},
+				},
+			],
+			filterRender: {
+				name: '$lt-filter',
+				props: {
+					filterModes: [FilterMode.TEXT, FilterMode.CONTENT],
+				},
+			},
+		},
+		{
 			field: 'version',
 			title: '版本',
 			width: '200',

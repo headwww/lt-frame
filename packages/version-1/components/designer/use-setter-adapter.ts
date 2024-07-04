@@ -43,7 +43,7 @@ export function useSetterAdapter(props: TableProps) {
 	const toolButtons = ref<ToolButtons[]>([]);
 
 	function setEditRender(item: Column) {
-		const { field, datasourceContrast } = item;
+		const { field, datasourceContrast, isTime } = item;
 		let edit: { [key: string]: any } = {};
 		if (field) {
 			if (item.parentType) {
@@ -126,12 +126,18 @@ export function useSetterAdapter(props: TableProps) {
 						};
 					}
 					if (field.fieldType === 'java.util.Date') {
-						edit = {
-							name: LtTablePlugins.EditDatePicker,
-							props: {
-								showTime: isUndefined(item.showTime) ? false : item.showTime,
-							},
-						};
+						if (isTime) {
+							edit = {
+								name: LtTablePlugins.EditTimePicker,
+							};
+						} else {
+							edit = {
+								name: LtTablePlugins.EditDatePicker,
+								props: {
+									showTime: isUndefined(item.showTime) ? false : item.showTime,
+								},
+							};
+						}
 					}
 					if (field.fieldType === 'java.lang.Boolean') {
 						edit = {
@@ -161,7 +167,7 @@ export function useSetterAdapter(props: TableProps) {
 	}
 
 	function setFormatter(item: Column) {
-		const { field } = item;
+		const { field, isTime } = item;
 		let formatter;
 		if (field) {
 			if (field.fieldTypeFlag === '0') {
@@ -176,7 +182,11 @@ export function useSetterAdapter(props: TableProps) {
 					];
 				}
 				if (field.fieldType === 'java.util.Date') {
-					formatter = [LtTablePlugins.FormatterTime, item.dataFormatter];
+					if (isTime) {
+						formatter = [LtTablePlugins.FormatterTimeHMS];
+					} else {
+						formatter = [LtTablePlugins.FormatterTime, item.dataFormatter];
+					}
 				}
 				if (field.fieldType === 'java.lang.Boolean') {
 					formatter = ({ cellValue }: any) =>
@@ -398,7 +408,7 @@ export function useSetterAdapter(props: TableProps) {
 			trigger: editTrigger && (editTrigger as any),
 		};
 
-		options.value.border = isUndefined(border) ? 'none' : (border as any);
+		options.value.border = isUndefined(border) ? 'full' : (border as any);
 		options.value.columns = [...cols];
 		options.value.stripe = isBoolean(stripe) ? stripe : false;
 		options.value.size = isUndefined(size) ? '' : (size as any);

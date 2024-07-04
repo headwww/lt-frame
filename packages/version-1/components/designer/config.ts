@@ -55,6 +55,8 @@ export interface Column {
 	datasourceContrast?: DatasourceContrast;
 	dataFormatter?: string;
 	numberFormatter?: number;
+	// 是否是时分秒
+	isTime: boolean;
 }
 
 export interface ToolButtons {

@@ -2,6 +2,7 @@ import { VXETable } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import dayjs from 'dayjs';
 import { isArray } from '@lt-frame/utils';
+import { isNumber } from 'lodash-es';
 
 // 保留几位小数、默认两位，和加单位
 VXETable.formats.add('$lt-formatter-to-fixed-unit', {
@@ -21,6 +22,17 @@ VXETable.formats.add('$lt-formatter-time', {
 	cellFormatMethod({ cellValue }, format = 'YYYY-MM-DD HH:mm:ss') {
 		if (cellValue) {
 			return dayjs(cellValue).format(format);
+		}
+		return cellValue;
+	},
+});
+
+// 格式化time 时分秒
+VXETable.formats.add('$lt-formatter-enum-hms', {
+	cellFormatMethod({ cellValue }) {
+		if (isNumber(cellValue)) {
+			dayjs(cellValue).format('HH:mm:ss');
+			return XEUtils.toDateString(cellValue, 'HH:mm:ss');
 		}
 		return cellValue;
 	},

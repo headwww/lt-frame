@@ -142,6 +142,8 @@ export const LtTablePlugins = {
 	FormatterToFixedUnit: '$lt-formatter-to-fixed-unit',
 	// 格式化日期默认是yyyy-MM-dd HH:mm:ss
 	FormatterTime: '$lt-formatter-time',
+	// 格式化时分秒
+	FormatterTimeHMS: '$lt-formatter-enum-hms',
 	// 格式化枚举
 	FormatterEnum: '$lt-formatter-enum',
 	// 格式化枚举Array<{key:string,value:string|number|boole}>
@@ -160,6 +162,8 @@ export const LtTablePlugins = {
 	EditInputNumber: '$lt-edit-input-number',
 	// 编辑渲染 date-picker
 	EditDatePicker: '$lt-edit-date-picker',
+	// 编辑渲染 time-picker
+	EditTimePicker: '$lt-edit-time-picker',
 	// 编辑渲染 select
 	EditSelect: '$lt-edit-select',
 	// 编辑渲染 entity

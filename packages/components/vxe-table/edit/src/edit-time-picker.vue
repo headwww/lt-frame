@@ -1,20 +1,19 @@
 <template>
-	<a-date-picker
+	<TimePicker
 		@change="handle"
 		@ok="handle"
 		@focus="focus"
 		:status="status"
 		:value="getValue"
-		style="width: 100%"
 	>
-	</a-date-picker>
+	</TimePicker>
 </template>
 
 <script lang="ts" setup>
-import type { VxeGlobalRendererHandles } from 'vxe-table';
-import { computed, ref, type PropType } from 'vue';
-import { DatePicker as ADatePicker } from 'ant-design-vue';
-import { get, set } from 'lodash-es';
+import { TimePicker } from 'ant-design-vue';
+import { get, isNumber, set } from 'lodash-es';
+import { computed, PropType, ref } from 'vue';
+import { VxeGlobalRendererHandles } from 'vxe-table';
 import dayjs from 'dayjs';
 import { isNullOrUnDef } from '@lt-frame/utils';
 
@@ -32,7 +31,10 @@ const getValue = computed(() => {
 		if (isNullOrUnDef(data)) {
 			return undefined;
 		}
-		return dayjs(get(row, column.field));
+		if (isNumber(data)) {
+			return dayjs(data);
+		}
+		return dayjs(data, 'HH:mm:ss');
 	}
 	return '';
 });
