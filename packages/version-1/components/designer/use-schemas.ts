@@ -193,6 +193,14 @@ export function useSchemas() {
 									},
 									{
 										title: {
+											label: '开启筛选',
+										},
+										defaultValue: true,
+										name: 'isFilter',
+										setter: 'BoolSetter',
+									},
+									{
+										title: {
 											label: '开启时分秒',
 											tip: '编辑和筛选的时间选择器是否支持时分秒选择',
 										},
@@ -212,7 +220,16 @@ export function useSchemas() {
 												.getPropValue(
 													target.path.slice(0, -1).concat('type').join('.')
 												);
-											if (!parentType && type === 'java.util.Date') {
+											const isFilter = target
+												.getProps()
+												.getPropValue(
+													target.path.slice(0, -1).concat('isFilter').join('.')
+												);
+
+											if (
+												(!parentType && type === 'java.util.Date') ||
+												isFilter
+											) {
 												return true;
 											}
 
@@ -501,9 +518,12 @@ export function useSchemas() {
 											const isEdit = target
 												.getProps()
 												.getPropValue(target.path.concat('isEdit').join('.'));
+											const isFilter = target
+												.getProps()
+												.getPropValue(target.path.concat('isFilter').join('.'));
 
 											if (parentType) {
-												return true && isEdit;
+												return isFilter || isEdit;
 											}
 
 											return false;

@@ -63,6 +63,7 @@ const gridEvents: VxeGridListeners<any> = {
 };
 
 getGridConfigs.height = 190;
+getGridConfigs.border = 'full';
 
 watch(inputValue, (newVal) => {
 	if (newVal === '') {

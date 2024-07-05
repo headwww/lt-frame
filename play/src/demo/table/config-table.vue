@@ -31,7 +31,7 @@
 				<LtDivider title="职员信息" />
 				<LtConfigTable
 					tUid="19990290192"
-					entity="lt.fw.core.model.biz.Employee"
+					entity="lt.app.productbasic.model.OrderClassesLine"
 					v-model:config="gridOptions"
 					v-model:listeners="gridEvents"
 					:eventBus="eventBus"
@@ -75,6 +75,27 @@ import {
 } from 'vxe-table';
 
 LtDatasource.add('findUser', {
+	createDatasource(params: string[]) {
+		return new Promise((resolve, reject) => {
+			LtHttp.post({
+				url: 'api/deptServiceImpl/findDepts',
+				data: [
+					{
+						targetClass: 'lt.fw.core.model.biz.Dept',
+						queryPath: [...params],
+					},
+				],
+			})
+				.then((data) => {
+					resolve(data);
+				})
+				.catch(() => {
+					reject();
+				});
+		});
+	},
+});
+LtDatasource.add('findUsaer', {
 	createDatasource(params: string[]) {
 		return new Promise((resolve, reject) => {
 			LtHttp.post({

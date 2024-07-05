@@ -57,6 +57,8 @@ export interface Column {
 	numberFormatter?: number;
 	// 是否是时分秒
 	isTime: boolean;
+	// 是否开启筛选
+	isFilter: boolean;
 }
 
 export interface ToolButtons {

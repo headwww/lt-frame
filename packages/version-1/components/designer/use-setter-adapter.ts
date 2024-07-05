@@ -8,7 +8,14 @@ import {
 	omit,
 	set,
 } from 'lodash-es';
-import { LtDatasource, LtTablePlugins } from '@lt-frame/components';
+import {
+	ComparisonOperator,
+	FilterMode,
+	LogicalOperators,
+	LtDatasource,
+	LtTablePlugins,
+	TemporalOperator,
+} from '@lt-frame/components';
 import { Fn, deepMerge } from '@lt-frame/utils';
 import { Column, TableFields, ToolButtons } from './config';
 import { TableProps } from './material/table';
@@ -214,6 +221,139 @@ export function useSetterAdapter(props: TableProps) {
 		return formatter;
 	}
 
+	function setFilter(item: Column) {
+		const { isFilter, field, showTime, datasourceContrast } = item;
+
+		if (isFilter && field) {
+			const filterModes: string[] = [];
+			const filterComProps: { [key: string]: any } = {};
+			if (field.fieldType === 'java.lang.String') {
+				filterModes.push(FilterMode.TEXT);
+			}
+			if (
+				field.fieldType === 'java.lang.Integer' ||
+				field.fieldType === 'java.lang.Long' ||
+				field.fieldType === 'java.math.BigDecimal'
+			) {
+				filterModes.push(FilterMode.NUMBER);
+			}
+			if (field.fieldType === 'java.util.Date') {
+				filterModes.push(FilterMode.DATE);
+				filterComProps.datePickerProps = {
+					showTime,
+				};
+			}
+			if (field.parentType) {
+				if (datasourceContrast) {
+					filterModes.unshift(FilterMode.ENTITY);
+					const columns: VxeColumnProps[] = [];
+					item.entityColumn?.forEach((item) => {
+						let formatter;
+						if (item) {
+							formatter = setFormatter(item);
+							columns.push({
+								title: item.title,
+								width: item.width,
+								field: item.field && item.field.value,
+								formatter: formatter && formatter,
+							});
+						}
+					});
+
+					columns.push({
+						type: 'seq',
+						title: '#',
+						width: 40,
+						fixed: 'left',
+						align: 'center',
+					});
+					columns.push({
+						type: 'checkbox',
+						width: 50,
+						fixed: 'left',
+						align: 'center',
+					});
+					filterComProps.configs = {
+						columns,
+					};
+					if (datasourceContrast.type === 'builtInDatasource') {
+						// 内置数据源
+						const fields: string[] = [];
+						columns.forEach((item) => {
+							if (item.field) {
+								fields.push(item.field);
+							}
+						});
+						filterComProps.ajax = () =>
+							datasourceContrast.key &&
+							LtDatasource.get(datasourceContrast.key).createDatasource(fields);
+					} else if (datasourceContrast?.type === 'customDatasource') {
+						filterComProps.ajax = () =>
+							datasourceContrast.key &&
+							datasource &&
+							datasource[datasourceContrast.key];
+					}
+				}
+			}
+			filterModes.push(FilterMode.CONTENT);
+			return {
+				filters: [
+					{
+						data: {
+							// 选中的筛选方式
+							currentMode: filterModes.length > 0 ? filterModes[0] : '',
+							// 数字筛选配置
+							textFilterData: {
+								// 两个条件之间的逻辑操作
+								logicalOperators: LogicalOperators.AND,
+								// 第一个查询条件
+								firstQueryCondition: ComparisonOperator.INCLUDE,
+								// 第一个查询文本
+								firstQueryText: '',
+								// 第二个查询条件
+								secondQueryCondition: ComparisonOperator.EMPTY,
+								// 第二个查询文本
+								secondQueryText: '',
+							},
+							// 数字筛选配置
+							numberFilterData: {
+								// 两个条件之间的逻辑操作
+								logicalOperators: LogicalOperators.AND,
+								// 第一个查询条件
+								firstQueryCondition: ComparisonOperator.INCLUDE,
+								// 第一个查询文本
+								firstQueryText: '',
+								// 第二个查询条件
+								secondQueryCondition: ComparisonOperator.EMPTY,
+								// 第二个查询文本
+								secondQueryText: '',
+							},
+							// 日期筛选配置
+							dateFilterData: {
+								logicalOperators: LogicalOperators.AND,
+								firstQueryCondition: TemporalOperator.EQUALS,
+								firstQueryText: '',
+								secondQueryCondition: TemporalOperator.EMPTY,
+								secondQueryText: '',
+							},
+							contentFilterConfig: {
+								checkedKeys: ['$_SELECT_ALL'],
+							},
+						},
+					},
+				],
+				filterRender: {
+					name: LtTablePlugins.FilterAdvanced,
+					props: {
+						filterModes,
+						...filterComProps,
+					},
+				},
+			};
+		}
+
+		return {};
+	}
 	function buildTableOption(value: TableFields) {
 		options.value.columns = [];
 		const {
@@ -246,9 +386,11 @@ export function useSetterAdapter(props: TableProps) {
 			cols = columns.map((item, index) => {
 				let editRender = {};
 				let formatter;
+				let filter = {};
 				if (item) {
 					editRender = setEditRender(item);
 					formatter = setFormatter(item);
+					filter = setFilter(item);
 					if (item.field) {
 						set(rules, item.field.value, item.json);
 					}
@@ -260,6 +402,7 @@ export function useSetterAdapter(props: TableProps) {
 						editRender,
 						formatter: formatter && formatter,
 						treeNode: isTree.value && index === 0,
+						...filter,
 					} as VxeColumnProps;
 				}
 				return {};
