@@ -95,7 +95,7 @@ import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
 import { SettingOutlined } from '@ant-design/icons-vue';
-import { VxePagerDefines, VxePagerProps } from 'vxe-table';
+import { VxePagerProps } from 'vxe-table';
 import { useResizeObserver } from '@vueuse/core';
 import { useNamespace } from '@lt-frame/hooks';
 import { tableProps } from './table';
@@ -112,8 +112,8 @@ const emit = defineEmits([
 	'update:listeners',
 	'update:fields',
 	'update:pager',
-	'setup',
 	'pageChange',
+	'setup',
 ]);
 
 const open = ref(false);
@@ -304,7 +304,7 @@ function onCancel() {
 	open.value = false;
 }
 
-function handlePageChange(params: VxePagerDefines.PageChangeEventParams) {
+function handlePageChange(params: any) {
 	emit('pageChange', params);
 }
 </script>

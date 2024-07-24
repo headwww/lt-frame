@@ -22,9 +22,15 @@
 						{{ variableListMap[item].name }}
 					</li>
 				</ul>
-				<div>
-					<Tree v-model:selectedKeys="selectedKeys" :tree-data="treeData">
-					</Tree>
+				<div style="width: 100%; padding-left: 8px; padding-right: 8px">
+					<LtTree
+						search
+						:height="340"
+						v-model:selectedKeys="selectedKeys"
+						:tree-data="treeData"
+						:blockNode="false"
+					>
+					</LtTree>
 				</div>
 			</div>
 			<template #footer>
@@ -47,11 +53,12 @@
 <script lang="ts" setup>
 import {
 	LtDatasource,
+	LtTree,
 	SettingsPaneContext,
 	settingsPaneContext,
 } from '@lt-frame/components';
 import { Recordable } from '@lt-frame/utils';
-import { Modal, Button, Tree, TreeProps, notification } from 'ant-design-vue';
+import { Modal, Button, TreeProps, notification } from 'ant-design-vue';
 import { PropType, computed, inject, ref, watch } from 'vue';
 import { DatasourceContrast } from '../config';
 

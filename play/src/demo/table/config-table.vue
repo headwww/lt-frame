@@ -95,27 +95,32 @@ LtDatasource.add('findUser', {
 		});
 	},
 });
-LtDatasource.add('findUsaer', {
-	createDatasource(params: string[]) {
-		return new Promise((resolve, reject) => {
-			LtHttp.post({
-				url: 'api/securityModelService/findUsers',
-				data: [
-					{
-						targetClass: 'lt.fw.core.model.biz.User',
-						queryPath: [...params],
-					},
-				],
-			})
-				.then((data) => {
-					resolve(data);
+
+for (let i = 0; i < 100; i++) {
+	console.log('====1');
+
+	LtDatasource.add(`findU5saer${i}`, {
+		createDatasource(params: string[]) {
+			return new Promise((resolve, reject) => {
+				LtHttp.post({
+					url: 'api/securityModelService/findUsers',
+					data: [
+						{
+							targetClass: 'lt.fw.core.model.biz.User',
+							queryPath: [...params],
+						},
+					],
 				})
-				.catch(() => {
-					reject();
-				});
-		});
-	},
-});
+					.then((data) => {
+						resolve(data);
+					})
+					.catch(() => {
+						reject();
+					});
+			});
+		},
+	});
+}
 const treeLoading = ref(false);
 
 const treeData = ref<TreeItem[]>([]);
