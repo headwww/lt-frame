@@ -1,0 +1,104 @@
+.lt-ce-input {
+	.lt-ce-item {
+		display: flex;
+
+		.lt-ce-condition {
+			display: flex;
+			width: 100px;
+			position: relative;
+			flex-shrink: 0;
+
+			& > .ant-select {
+				position: absolute;
+				top: 50%;
+				left: -5px;
+				width: 80px;
+				margin-top: -16px;
+				z-index: 2;
+			}
+
+			&::before {
+				content: '';
+				position: absolute;
+				width: 1px;
+				left: 30px;
+				background-color: #e9e9e9;
+				top: 1px;
+				bottom: 1px;
+				margin-top: 14px;
+				margin-bottom: 16px;
+			}
+		}
+
+		.lt-ce-options {
+			display: flex;
+			flex-direction: column;
+
+			.lt-ce-option {
+				position: relative;
+				display: flex;
+				align-items: center;
+
+				& + .lt-ce-option {
+					margin-top: 16px;
+				}
+
+				&::before {
+					content: '';
+					position: absolute;
+					width: 105px;
+					height: 1px;
+					background-color: #e9e9e9;
+					left: -70px;
+					top: 50%;
+				}
+			}
+
+			.lt-ce-option.is-group {
+				border: 1px dashed #ccd3db;
+				padding: 14px;
+
+				&::before {
+					margin-top: -17px;
+				}
+
+				.lt-ce-delete-group {
+					position: absolute;
+					right: -12px;
+					top: -12px;
+					z-index: 2;
+					margin-left: 10px;
+					color: #9ca3b0;
+				}
+			}
+
+			.lt-ce-delete {
+				margin-left: 10px;
+				color: #9ca3b0;
+				font-size: 13px;
+			}
+		}
+	}
+
+	.lt-ce-bts {
+		margin-top: 10px;
+		margin-left: 30px;
+
+		.ant-btn {
+			font-size: 12px;
+			color: #7c8597;
+			font-weight: 600;
+
+			> span + .anticon,
+			> .anticon + span {
+				margin-inline-start: 2px;
+			}
+		}
+	}
+}
+
+.lt-ce-delete {
+	margin-left: 10px;
+	color: #9ca3b0;
+	font-size: 13px;
+}

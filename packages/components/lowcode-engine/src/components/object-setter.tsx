@@ -123,12 +123,19 @@ export const RowSetter = defineComponent({
 								></Button>
 							),
 							content: () => (
-								<div class="lt-setter-object-row-content">
-									<FormSetter
-										key={field.id}
-										field={field}
-										config={config}
-									></FormSetter>
+								<div
+									style={{
+										overflow: 'hidden',
+										height: '100vh',
+									}}
+								>
+									<div class="lt-setter-object-row-content">
+										<FormSetter
+											key={field.id}
+											field={field}
+											config={config}
+										></FormSetter>
+									</div>
 								</div>
 							),
 						}}

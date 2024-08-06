@@ -24,3 +24,4 @@ export * from './draggable';
 export * from './lowcode-engine';
 export * from './collapse';
 export * from './json-editor';
+export * from './rule-engine';

@@ -32,5 +32,6 @@ export const tableProps = {
 		type: Array as PropType<Array<string>>,
 		default: () => [],
 	},
+	sql: String,
 };
 export type TableProps = ExtractPropTypes<typeof tableProps>;

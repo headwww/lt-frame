@@ -77,11 +77,11 @@ const onLoadData = (treeNode: any) =>
 					fieldName: id,
 					fieldTypeFlag: item.fieldTypeFlag,
 					isLeaf: item.fieldTypeFlag !== '1',
+					topClassPath: treeNode.topClassPath,
 				};
 			});
 
 			treeData.value = treeData.value?.concat(tree);
-
 			resolve(true);
 		});
 	});
@@ -167,6 +167,7 @@ if (props.setterPath) {
 				fieldName: item.fieldName,
 				fieldTypeFlag: item.fieldTypeFlag,
 				enumInfo: item.enumInfo,
+				topClassPath: item.fieldType,
 			})),
 		];
 	});

@@ -50,7 +50,7 @@ export function useSetterAdapter(props: TableProps) {
 	const toolButtons = ref<ToolButtons[]>([]);
 
 	function setEditRender(item: Column) {
-		const { field, datasourceContrast, isTime } = item;
+		const { field, datasourceContrast, isTime, conditionExpr } = item;
 		let edit: { [key: string]: any } = {};
 		if (field) {
 			if (item.parentType) {
@@ -93,7 +93,8 @@ export function useSetterAdapter(props: TableProps) {
 								ajax: () =>
 									datasourceContrast.key &&
 									LtDatasource.get(datasourceContrast.key).createDatasource(
-										fields
+										fields,
+										conditionExpr
 									),
 							},
 						};
@@ -222,7 +223,8 @@ export function useSetterAdapter(props: TableProps) {
 	}
 
 	function setFilter(item: Column) {
-		const { isFilter, field, showTime, datasourceContrast } = item;
+		const { isFilter, field, showTime, datasourceContrast, conditionExpr } =
+			item;
 
 		if (isFilter && field) {
 			const filterModes: string[] = [];
@@ -286,7 +288,10 @@ export function useSetterAdapter(props: TableProps) {
 						});
 						filterComProps.ajax = () =>
 							datasourceContrast.key &&
-							LtDatasource.get(datasourceContrast.key).createDatasource(fields);
+							LtDatasource.get(datasourceContrast.key).createDatasource(
+								fields,
+								conditionExpr
+							);
 					} else if (datasourceContrast?.type === 'customDatasource') {
 						filterComProps.ajax = () =>
 							datasourceContrast.key &&
@@ -354,6 +359,7 @@ export function useSetterAdapter(props: TableProps) {
 
 		return {};
 	}
+
 	function buildTableOption(value: TableFields) {
 		options.value.columns = [];
 		const {

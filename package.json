@@ -26,6 +26,7 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@ant-design/icons-vue": "^7.0.1",
+		"@codemirror/lang-sql": "^6.7.0",
 		"@commitlint/cli": "^18.4.4",
 		"@commitlint/config-conventional": "^18.4.4",
 		"@esbuild-kit/cjs-loader": "^2.4.4",
@@ -50,6 +51,7 @@
 		"ant-design-vue": "^4.1.1",
 		"axios": "^1.6.5",
 		"chalk": "^5.3.0",
+		"codemirror": "^6.0.1",
 		"consola": "^3.2.3",
 		"crypto-js": "^4.2.0",
 		"dayjs": "^1.11.10",
@@ -85,6 +87,7 @@
 		"unocss": "^0.59.4",
 		"unplugin-vue-macros": "^2.7.10",
 		"vue": "^3.4.15",
+		"vue-codemirror": "^6.1.1",
 		"vue-router": "^4.2.5",
 		"vxe-table": "^4.5.21",
 		"vxe-table-plugin-antd": "^4.0.0",

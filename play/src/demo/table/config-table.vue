@@ -1,5 +1,6 @@
 <template>
 	<LtPageLayout>
+		<Codemirror :style="{ height: '0px' }" :extensions="[]"> </Codemirror>
 		<LtSplitpanes class="default-theme">
 			<LtPane size="18" min-size="18" max-size="36" class="p12">
 				<template #default="{ height }">
@@ -28,7 +29,6 @@
 			</LtPane>
 			<LtPane size="82" class="flex flex-col justify-start">
 				<LtDivider title="职员信息" />
-				<LtDivider title="职员信息" />
 				<LtConfigTable
 					tUid="19990290192"
 					entity="lt.app.productbasic.model.OrderClassesLine"
@@ -37,6 +37,7 @@
 					:eventBus="eventBus"
 					:datasource="datasource"
 					v-model:pager="pager"
+					v-model:sql="sql"
 				>
 					<template #table>
 						<vxe-grid
@@ -53,6 +54,7 @@
 </template>
 
 <script setup lang="ts">
+import { Codemirror } from 'vue-codemirror';
 import {
 	LtPageLayout,
 	LtSplitpanes,
@@ -74,17 +76,18 @@ import {
 	VxePagerProps,
 } from 'vxe-table';
 
+const sql = ref();
+
 LtDatasource.add('findUser', {
-	createDatasource(params: string[]) {
+	createDatasource(params: string[], expr?: string) {
+		const c = new Condition();
+		c.setTargetClass('lt.fw.core.model.biz.Dept');
+		c.addQueryPath(...params);
+		c.expr(expr!!);
 		return new Promise((resolve, reject) => {
 			LtHttp.post({
 				url: 'api/deptServiceImpl/findDepts',
-				data: [
-					{
-						targetClass: 'lt.fw.core.model.biz.Dept',
-						queryPath: [...params],
-					},
-				],
+				data: [c],
 			})
 				.then((data) => {
 					resolve(data);
@@ -94,11 +97,12 @@ LtDatasource.add('findUser', {
 				});
 		});
 	},
+
+	uniqueClasspath: 'lt.app.productbasic.model.OrderClasses',
 });
 
 for (let i = 0; i < 100; i++) {
 	console.log('====1');
-
 	LtDatasource.add(`findU5saer${i}`, {
 		createDatasource(params: string[]) {
 			return new Promise((resolve, reject) => {
@@ -121,6 +125,9 @@ for (let i = 0; i < 100; i++) {
 		},
 	});
 }
+
+console.log(LtDatasource.getStore());
+
 const treeLoading = ref(false);
 
 const treeData = ref<TreeItem[]>([]);
@@ -234,6 +241,7 @@ function finEmployee(treeItem?: TreeItem) {
  * @returns
  */
 function find2<T>(condition: Condition) {
+	condition.expr(sql.value);
 	condition.setTargetClass('lt.fw.core.model.biz.Employee');
 	return LtHttp.post<Array<T>>({
 		url: 'api/employeeServiceImpl/findEmployees',

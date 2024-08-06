@@ -128,6 +128,12 @@
 	}
 }
 
+.lt-setter-object-row-content {
+	width: 310px;
+	height: 100%;
+	overflow-y: auto;
+}
+
 .lt-setter-object-row {
 	display: flex;
 	align-items: center;
@@ -140,11 +146,6 @@
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
-	}
-
-	.lt-setter-object-row-content {
-		width: 310px;
-		height: 100%;
 	}
 
 	.lt-setter-object-row-body {

@@ -1,4 +1,8 @@
-import { IPublicTypeFieldConfig, ISettingField } from '@lt-frame/components';
+import {
+	IPublicTypeFieldConfig,
+	ISettingField,
+	LtDatasource,
+} from '@lt-frame/components';
 import { isArray, isUndefined, uniqueId } from 'lodash-es';
 import { ref } from 'vue';
 
@@ -132,25 +136,64 @@ export function useSchemas() {
 													path.concat('title').join('.'),
 													value.fieldCommnet
 												);
+
+											// 如果是实体类型则设置entityPath属性否则空置
+											if (
+												'java.'.includes(value.topClassPath) ||
+												value.fieldTypeFlag === '2'
+											) {
+												target
+													.getProps()
+													.setPropValue(
+														path.concat('entityPath').join('.'),
+														undefined
+													);
+												target
+													.getProps()
+													.setPropValue(
+														path.concat('datasourceContrast').join('.'),
+														undefined
+													);
+											} else {
+												target
+													.getProps()
+													.setPropValue(
+														path.concat('entityPath').join('.'),
+														value.topClassPath
+													);
+
+												// 根据顶级实体设置默认的实体配置的数据源
+												const keys = Object.keys(LtDatasource.getStore());
+												keys.forEach((item) => {
+													if (
+														!isUndefined(value.topClassPath) &&
+														!isUndefined(
+															LtDatasource.get(item).uniqueClasspath
+														) &&
+														value.topClassPath ===
+															LtDatasource.get(item).uniqueClasspath
+													) {
+														target
+															.getProps()
+															.setPropValue(
+																path.concat('datasourceContrast').join('.'),
+																{
+																	type: 'builtInDatasource',
+																	key: item,
+																}
+															);
+													}
+												});
+											}
+
 											// 根据数据字段的类型对其他的设置器的数据进行修改
-											target
-												.getProps()
-												.setPropValue(
-													path.concat('entityPath').join('.'),
-													undefined
-												);
 											target
 												.getProps()
 												.setPropValue(
 													path.concat('entityColumn').join('.'),
 													undefined
 												);
-											target
-												.getProps()
-												.setPropValue(
-													path.concat('datasourceContrast').join('.'),
-													undefined
-												);
+
 											target
 												.getProps()
 												.setPropValue(
@@ -547,6 +590,16 @@ export function useSchemas() {
 													props: {
 														datasource,
 													},
+												},
+											},
+											{
+												name: 'conditionExpr',
+												title: {
+													label: '过滤条件',
+													tip: 'HQL语法脚本（仅支持WHERE）',
+												},
+												setter: {
+													componentName: 'SQLSetter',
 												},
 											},
 											childrenColumn,

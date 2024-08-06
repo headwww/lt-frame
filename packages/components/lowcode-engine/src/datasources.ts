@@ -27,7 +27,18 @@ class DatasourceStore {
 }
 
 interface DatasourceOptions {
-	createDatasource: (params?: any) => any;
+	/**
+	 * 数据源
+	 *
+	 * @param params 需要查询的参数
+	 * @param expr 查询条件hql
+	 * @returns
+	 */
+	createDatasource: (params?: any, expr?: string) => any;
+	/**
+	 * 顶级实体，用于设置默认的实体配置的数据源
+	 */
+	uniqueClasspath?: string;
 }
 
 interface GlobalDatasource {

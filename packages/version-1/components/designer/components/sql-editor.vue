@@ -1,66 +1,70 @@
 <template>
-	<div style="background-color: white; padding: 20px">
-		<Codemirror
-			v-model="code"
-			disabled
-			:style="{ height: '80px' }"
-			:extensions="[sql()]"
-		>
-		</Codemirror>
+	<div style="height: 100%">
+		<div style="height: 450px; overflow: scroll scroll; padding: 8px">
+			<ConditionEditor
+				@delete="onDelete"
+				@add="onAdd"
+				v-model:conditionExpr="conditionExpr"
+			>
+				<template #item="item">
+					<TreeSelect
+						:value="get(item, 'params.field.id')"
+						:key="item.id"
+						:treeData="treeData"
+						:load-data="onLoadData"
+						:tree-line="true && { showLeafIcon: false }"
+						tree-data-simple-mode
+						style="width: 208px"
+						:dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+						treeNodeLabelProp="value"
+						@dropdownVisibleChange="dropdownVisibleChange"
+						@select="
+							(v: any) => {
+								onParamsSelect(item, v);
+							}
+						"
+					></TreeSelect>
+					<Select
+						v-if="get(item, 'params.field')"
+						:value="get(item, 'params.operator')"
+						@select="
+							(v: any) => {
+								onOperatorSelect(item, v);
+							}
+						"
+						:options="getLogicalSymbols(item.params.field)"
+						style="margin-left: 15px; width: 100px"
+					></Select>
+					<component
+						v-if="get(item, 'params.field')"
+						style="margin-left: 15px; width: 280px"
+						v-bind="{ ...getComponent(item)?.bind }"
+						:is="getComponent(item)?.com"
+					></component>
+					<Checkbox
+						v-if="get(item, 'params.field')"
+						:checked="get(item, 'params.not')"
+						@update:checked="
+							(v: any) => {
+								onCheck(item, v);
+							}
+						"
+						style="margin-left: 15px; width: 60px"
+						>取反</Checkbox
+					>
+				</template>
+			</ConditionEditor>
+		</div>
 
-		<ConditionEditor
-			@delete="onDelete"
-			@add="onAdd"
-			v-model:conditionExpr="conditionExpr"
-		>
-			<template #item="item">
-				<TreeSelect
-					:value="get(item, 'params.field.id')"
-					:key="item.id"
-					:treeData="treeData"
-					:load-data="onLoadData"
-					:tree-line="true && { showLeafIcon: false }"
-					tree-data-simple-mode
-					style="width: 208px"
-					:dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-					treeNodeLabelProp="value"
-					@dropdownVisibleChange="dropdownVisibleChange"
-					@select="
-						(v: any) => {
-							onParamsSelect(item, v);
-						}
-					"
-				></TreeSelect>
-				<Select
-					v-if="get(item, 'params.field')"
-					:value="get(item, 'params.operator')"
-					@select="
-						(v: any) => {
-							onOperatorSelect(item, v);
-						}
-					"
-					:options="getLogicalSymbols(item.params.field)"
-					style="margin-left: 15px; width: 100px"
-				></Select>
-				<component
-					v-if="get(item, 'params.field')"
-					style="margin-left: 15px; width: 280px"
-					v-bind="{ ...getComponent(item)?.bind }"
-					:is="getComponent(item)?.com"
-				></component>
-				<Checkbox
-					v-if="get(item, 'params.field')"
-					:checked="get(item, 'params.not')"
-					@update:checked="
-						(v: any) => {
-							onCheck(item, v);
-						}
-					"
-					style="margin-left: 15px"
-					>取反</Checkbox
-				>
-			</template>
-		</ConditionEditor>
+		<div style="height: 100%">
+			<Codemirror
+				v-model="code"
+				disabled
+				:style="{ height: '100%' }"
+				:extensions="[sql()]"
+			>
+			</Codemirror>
+		</div>
 	</div>
 </template>
 
@@ -79,28 +83,26 @@ import {
 } from 'ant-design-vue';
 import { sql } from '@codemirror/lang-sql';
 import { get, omit, uniqueId } from 'lodash-es';
-import { ComponentOptions, ref, watch } from 'vue';
+import { ComponentOptions, onMounted, PropType, ref, watch } from 'vue';
 import { mapTree } from 'xe-utils';
 import { Codemirror } from 'vue-codemirror';
-import dayjs from 'dayjs';
 import InputGroup from './input-group.vue';
 import InputNumberGroup from './input-number-group.vue';
 import DatePickerMode from './date-picker-mode.vue';
 import DatePickerModeGroup from './date-picker-mode-group.vue';
+import { generateHqlWhereClause } from './util';
 
-const conditionExpr = ref<ConditionExpr[]>([
-	{
-		id: '1',
-		type: 'group',
-		children: [
-			{
-				id: '1-1',
-				parentId: '1',
-				type: 'single',
-			},
-		],
+const props = defineProps({
+	value: {
+		type: Array as PropType<Array<ConditionExpr>>,
+		default: () => [],
 	},
-]);
+	entity: String,
+});
+
+const emit = defineEmits(['update:value']);
+
+const conditionExpr = ref<ConditionExpr[]>(props.value);
 
 function onDelete(params: ConditionExpr) {
 	removeItemById(conditionExpr.value, params.id);
@@ -268,6 +270,7 @@ function getComponent(item: ConditionExpr): {
 				width: '444px',
 			},
 			value: item?.params?.value,
+			type: item?.expr?.type,
 			'onUpdate:value': (value: any) => {
 				const arr = mapTree(conditionExpr.value, (i) => {
 					if (item.id === i.id) {
@@ -276,6 +279,20 @@ function getComponent(item: ConditionExpr): {
 							params: {
 								...i.params,
 								value,
+							},
+						};
+					}
+					return i;
+				});
+				conditionExpr.value = arr;
+			},
+			'onUpdate:type': (value: any) => {
+				const arr = mapTree(conditionExpr.value, (i) => {
+					if (item.id === i.id) {
+						return {
+							...i,
+							expr: {
+								type: value,
 							},
 						};
 					}
@@ -396,7 +413,7 @@ const onLoadData = (treeNode: any) =>
 
 function dropdownVisibleChange() {
 	treeData.value = [];
-	postLoad('lt.app.productresource.model.Equipment').then((data: any) => {
+	postLoad(props.entity!!).then((data: any) => {
 		treeData.value = [
 			...data.map((item: any) => ({
 				id: item.fieldName,
@@ -469,157 +486,31 @@ function getLogicalSymbols(params: any): SelectProps['options'] {
 }
 
 const code = ref();
+let isUpdate = true;
+watch(
+	() => props.value,
+	() => {
+		isUpdate = false;
+		conditionExpr.value = props.value;
+		code.value = generateHqlWhereClause(conditionExpr.value[0]);
+	}
+);
 
 watch(
 	() => conditionExpr.value,
 	() => {
-		code.value = generateHqlWhereClause(conditionExpr.value[0]);
+		if (isUpdate) {
+			emit('update:value', conditionExpr.value);
+			code.value = generateHqlWhereClause(conditionExpr.value[0]);
+		}
+		isUpdate = true;
 	},
 	{
 		deep: true,
 	}
 );
 
-function generateHqlWhereClause(node: ConditionExpr): string {
-	if (node.type === 'single') {
-		return processSingleNode(node);
-	}
-	if (node.type === 'group' && node.children) {
-		const conditionType = node.conditionType || 'AND';
-		const clauses = node.children.map((child) => generateHqlWhereClause(child));
-		return `${clauses.join(` ${conditionType} `)}`;
-	}
-	return '';
-}
-
-function processSingleNode(node: ConditionExpr): string {
-	if (!node.params) return '';
-
-	const { field, operator, value, not } = node.params;
-	let clause: string = '';
-
-	const v =
-		get(node, 'params.field.fieldType') === 'java.lang.Boolean' ||
-		get(node, 'params.field.fieldType') === 'java.lang.Integer' ||
-		get(node, 'params.field.fieldType') === 'java.lang.Long' ||
-		get(node, 'params.field.fieldType') === 'java.math.BigDecimal'
-			? value
-			: `'${value}'`;
-
-	switch (operator) {
-		case '等于':
-			clause =
-				value === null
-					? `this.${field.value} IS NULL`
-					: `this.${field.value} = ${v}`;
-			break;
-		case '小于':
-			clause = `this.${field.value} < ${v}`;
-			break;
-		case '小于等于':
-			clause = `this.${field.value} <= ${v}`;
-			break;
-		case '大于':
-			clause = `this.${field.value} > ${v}`;
-			break;
-		case '大于等于':
-			clause = `this.${field.value} >= ${v}`;
-			break;
-		case '起止':
-			if (
-				get(node, 'params.field.fieldType') === 'java.lang.Boolean' ||
-				get(node, 'params.field.fieldType') === 'java.lang.Integer' ||
-				get(node, 'params.field.fieldType') === 'java.lang.Long' ||
-				get(node, 'params.field.fieldType') === 'java.math.BigDecimal'
-			) {
-				clause = `(this.${field.value} BETWEEN ${get(value, '0')} AND ${get(
-					value,
-					'1'
-				)})`;
-			} else {
-				clause = `(this.${field.value} BETWEEN '${get(value, '0')}' AND '${get(
-					value,
-					'1'
-				)}')`;
-			}
-
-			break;
-		case '开头匹配':
-			clause = `this.${field.value} LIKE '${value}%'`;
-			break;
-		case '末尾匹配':
-			clause = `this.${field.value} LIKE '%${value}'`;
-			break;
-		case '包含':
-			clause = `this.${field.value} LIKE '%${value}%'`;
-			break;
-		case '预设':
-			switch (value) {
-				case '当天':
-					clause = `this.${field.value} = CURRENT_DATE`;
-					break;
-				case '本周':
-					clause = `YEARWEEK(this.${field.value}, 1) = YEARWEEK(CURRENT_DATE, 1)`;
-					break;
-				case '本月':
-					clause = `YEAR(this.${field.value}) = YEAR(CURRENT_DATE) AND MONTH(this.${field.value}) = MONTH(CURRENT_DATE)`;
-					break;
-				case '近两天':
-				case '近三天':
-				case '一周内':
-				case '一月内':
-					const presetDate = getPresetDate(value);
-					clause = `this.${field.value} >= '${presetDate}'`;
-					break;
-				default:
-					throw new Error(`Unknown preset value: ${value}`);
-			}
-			break;
-		case '为空':
-			clause = `this.${field.value} IS NULL`;
-			break;
-		default:
-			clause = `this.${field.value} ${operator} ${v}`;
-			break;
-	}
-
-	if (not) {
-		clause = `NOT (${clause})`;
-	}
-
-	return clause;
-}
-
-function getPresetDate(value: string): Date {
-	const today = dayjs();
-	let date: dayjs.Dayjs;
-
-	switch (value) {
-		case '当天':
-			date = today;
-			break;
-		case '近两天':
-			date = today.subtract(1, 'day');
-			break;
-		case '近三天':
-			date = today.subtract(2, 'day');
-			break;
-		case '本周':
-			date = today.startOf('week');
-			break;
-		case '一周内':
-			date = today.subtract(6, 'day');
-			break;
-		case '本月':
-			date = today.startOf('month');
-			break;
-		case '一月内':
-			date = today.subtract(30, 'day');
-			break;
-		default:
-			throw new Error(`Unknown preset value: ${value}`);
-	}
-
-	return date.toDate();
-}
+onMounted(() => {
+	code.value = generateHqlWhereClause(conditionExpr.value[0]);
+});
 </script>

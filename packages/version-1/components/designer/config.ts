@@ -31,6 +31,8 @@ export interface Column {
 		title?: string;
 		value: string;
 		enumInfo?: any[];
+		// 最顶级的父类实体路径
+		topClassPath?: string;
 	};
 	// 当字段类型为java.lang.Boolean时候需要设置的用来格式化的文本，默认是，是否
 	boolTrue: string;
@@ -53,6 +55,8 @@ export interface Column {
 	entityPath?: string;
 	entityColumn?: Column[];
 	datasourceContrast?: DatasourceContrast;
+	// condition的查询条件设置，hql语法
+	conditionExpr?: string;
 	dataFormatter?: string;
 	numberFormatter?: number;
 	// 是否是时分秒

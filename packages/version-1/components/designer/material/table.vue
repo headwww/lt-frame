@@ -21,6 +21,13 @@
 					<div>
 						<Button
 							shape="circle"
+							:icon="h(SearchOutlined)"
+							style="margin-right: 6px"
+							@click="onSearch"
+							:type="!sql || sql === '' ? 'default' : 'primary'"
+						></Button>
+						<Button
+							shape="circle"
 							:icon="h(SettingOutlined)"
 							@click="onConfig"
 						></Button>
@@ -46,6 +53,12 @@
 			</div>
 		</Spin>
 
+		<SearchModal
+			:entity="entity"
+			:tUid="tUid"
+			v-model:sql="sql"
+			v-model:open="openSearch"
+		></SearchModal>
 		<Modal
 			:open="open"
 			width="100%"
@@ -94,7 +107,7 @@ import { Button, Modal, Spin } from 'ant-design-vue';
 import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
-import { SettingOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, SettingOutlined } from '@ant-design/icons-vue';
 import { VxePagerProps } from 'vxe-table';
 import { useResizeObserver } from '@vueuse/core';
 import { useNamespace } from '@lt-frame/hooks';
@@ -103,6 +116,7 @@ import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
 import { useSchemas } from '../use-schemas';
 import { findBsConfigTables, saveBsConfigTablesByString } from './api';
+import SearchModal from '../components/SearchModal.vue';
 
 const ns = useNamespace('material-table');
 const props = defineProps(tableProps);
@@ -112,11 +126,23 @@ const emit = defineEmits([
 	'update:listeners',
 	'update:fields',
 	'update:pager',
+	'update:sql',
 	'pageChange',
+	'sqlChange',
 	'setup',
 ]);
 
 const open = ref(false);
+const openSearch = ref(false);
+const sql = ref();
+
+watch(
+	() => sql.value,
+	() => {
+		emit('sqlChange', sql.value);
+		emit('update:sql', sql.value);
+	}
+);
 
 const spinning = ref(false);
 const spinning2 = ref(false);
@@ -127,6 +153,10 @@ const container = ref<HTMLDivElement>();
 const toolBar = ref<HTMLDivElement>();
 const pagerBar = ref<HTMLDivElement>();
 const tableStyle = ref();
+
+function onSearch() {
+	openSearch.value = true;
+}
 
 useResizeObserver(container, (entries: any) => {
 	const entry = entries[0];
