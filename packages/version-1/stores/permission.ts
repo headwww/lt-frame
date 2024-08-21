@@ -47,7 +47,20 @@ export const usePermissionStore = defineStore({
 				// arr.filter 返回 true 表示该元素通过测试
 				return !ignoreRoute;
 			};
+
+			// 验证用户权限，判断是否忽略这个路由配置，true忽略，false不忽略
+			const routeIsImportFilter = (route: LtRouteRecordRaw) => {
+				const { meta } = route;
+				const { isImport } = meta || {};
+				const im = isImport?.();
+
+				return im === undefined ? true : im;
+			};
+
 			let routes: LtRouteRecordRaw[] = cloneDeep(asyncRoutes);
+
+			routes = filter(routes, routeIsImportFilter);
+			routes = routes.filter(routeIsImportFilter);
 
 			// 将路由转换成菜单
 			const menuList = transformRouteToMenu(routes);

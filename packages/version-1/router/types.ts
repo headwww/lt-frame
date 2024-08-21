@@ -42,6 +42,8 @@ export interface RouteMeta extends Record<string | number | symbol, unknown> {
 	hideTab?: boolean;
 	// 标签页上显示的外部网页地址
 	frameSrc?: string;
+	// 是否导入这个路由配置，true忽略，false不忽略
+	isImport?: () => boolean;
 	//  动态路由可打开Tab页数
 	// dynamicLevel?: number;
 	// 是否是外部链接

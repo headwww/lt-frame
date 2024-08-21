@@ -1,9 +1,6 @@
 <template>
-	<svg
-		:class="[ns.b(), $attrs.class, spin && ns.b('spin')]"
-		aria-hidden="true"
-		:style="getStyle"
-	>
+	<svg :class="[ns.b(), $attrs.class, spin && ns.b('spin')]" :style="getStyle">
+		<!-- aria-hidden="true" -->
 		<use :xlink:href="symbolId" :fill="color" />
 	</svg>
 </template>

@@ -67,7 +67,7 @@ function visible() {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 ::v-deep(.scroller) {
 	width: 100%;
 }
