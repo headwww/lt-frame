@@ -43,10 +43,19 @@
 			<template v-if="getFilterModes.includes(FilterMode.ENTITY)">
 				<FilterEntity
 					v-show="currentMode == FilterMode.ENTITY"
+					v-if="!isPager"
 					:configs="configs"
-					:ajax="ajax"
+					:ajax="ajax as any"
 					ref="refFilterEntity"
 				/>
+				<FilterEntityPager
+					v-else
+					v-show="currentMode == FilterMode.ENTITY"
+					:configs="configs"
+					:ajax="ajax as any"
+					ref="refFilterEntity"
+				>
+				</FilterEntityPager>
 			</template>
 		</div>
 
@@ -80,6 +89,7 @@ import FilterNumber from './components/filter-number.vue';
 import FilterContent from './components/filter-content.vue';
 import FilterDate from './components/filter-date.vue';
 import FilterEntity from './components/filter-entity.vue';
+import FilterEntityPager from './components/filter-entity-pager.vue';
 
 export default defineComponent({
 	props: advanceFilterProps,
@@ -91,6 +101,7 @@ export default defineComponent({
 		FilterContent,
 		FilterDate,
 		FilterEntity,
+		FilterEntityPager,
 	},
 	setup(props) {
 		const refFilterText = ref();

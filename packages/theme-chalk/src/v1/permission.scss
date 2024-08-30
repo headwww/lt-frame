@@ -1,0 +1,18 @@
+.tree-transparent {
+	background: transparent !important;
+}
+
+.acg-box {
+	&-header {
+		display: flex;
+		align-items: center;
+		height: 40px;
+		width: 100%;
+		background-color: #f5f6f7;
+
+		.title {
+			font-weight: 600;
+			font-size: 14px;
+		}
+	}
+}

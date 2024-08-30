@@ -50,7 +50,8 @@ export function useSetterAdapter(props: TableProps) {
 	const toolButtons = ref<ToolButtons[]>([]);
 
 	function setEditRender(item: Column) {
-		const { field, datasourceContrast, isTime, conditionExpr } = item;
+		const { field, datasourceContrast, isTime, conditionExpr, isPager } = item;
+
 		let edit: { [key: string]: any } = {};
 		if (field) {
 			if (item.parentType) {
@@ -85,23 +86,40 @@ export function useSetterAdapter(props: TableProps) {
 							}
 						});
 						edit = {
-							name: LtTablePlugins.EditEntity,
+							name: isPager
+								? LtTablePlugins.EditEntityPager
+								: LtTablePlugins.EditEntity,
 							props: {
 								configs: {
 									columns,
 								},
-								ajax: () =>
-									datasourceContrast.key &&
-									LtDatasource.get(datasourceContrast.key).createDatasource(
-										fields,
-										conditionExpr
-									),
+								ajax: isPager
+									? (page: any, value: any) =>
+											datasourceContrast.key &&
+											LtDatasource.get(datasourceContrast.key).createDatasource(
+												fields,
+												{
+													expr: conditionExpr,
+													pager: { ...page },
+													value,
+												}
+											)
+									: () =>
+											datasourceContrast.key &&
+											LtDatasource.get(datasourceContrast.key).createDatasource(
+												fields,
+												{
+													expr: conditionExpr,
+												}
+											),
 							},
 						};
 					} else if (datasourceContrast?.type === 'customDatasource') {
 						// 自定义数据源
 						edit = {
-							name: LtTablePlugins.EditEntity,
+							name: isPager
+								? LtTablePlugins.EditEntityPager
+								: LtTablePlugins.EditEntity,
 							props: {
 								configs: {
 									columns,
@@ -171,6 +189,7 @@ export function useSetterAdapter(props: TableProps) {
 			}
 		}
 		edit.enabled = item.isEdit;
+
 		return edit;
 	}
 
@@ -223,12 +242,19 @@ export function useSetterAdapter(props: TableProps) {
 	}
 
 	function setFilter(item: Column) {
-		const { isFilter, field, showTime, datasourceContrast, conditionExpr } =
-			item;
+		const {
+			isFilter,
+			field,
+			showTime,
+			datasourceContrast,
+			conditionExpr,
+			isPager,
+		} = item;
 
 		if (isFilter && field) {
 			const filterModes: string[] = [];
 			const filterComProps: { [key: string]: any } = {};
+			filterComProps.isPager = isPager;
 			if (field.fieldType === 'java.lang.String') {
 				filterModes.push(FilterMode.TEXT);
 			}
@@ -286,12 +312,26 @@ export function useSetterAdapter(props: TableProps) {
 								fields.push(item.field);
 							}
 						});
-						filterComProps.ajax = () =>
-							datasourceContrast.key &&
-							LtDatasource.get(datasourceContrast.key).createDatasource(
-								fields,
-								conditionExpr
-							);
+
+						filterComProps.ajax = isPager
+							? (page: any, value: any) =>
+									datasourceContrast.key &&
+									LtDatasource.get(datasourceContrast.key).createDatasource(
+										fields,
+										{
+											expr: conditionExpr,
+											pager: { ...page },
+											value,
+										}
+									)
+							: () =>
+									datasourceContrast.key &&
+									LtDatasource.get(datasourceContrast.key).createDatasource(
+										fields,
+										{
+											expr: conditionExpr,
+										}
+									);
 					} else if (datasourceContrast?.type === 'customDatasource') {
 						filterComProps.ajax = () =>
 							datasourceContrast.key &&
@@ -404,6 +444,7 @@ export function useSetterAdapter(props: TableProps) {
 						field: item.field && item.field.value,
 						title: item.title,
 						width: item.width,
+						sortable: item.sortable,
 						fixed: item.fixed,
 						editRender,
 						formatter: formatter && formatter,

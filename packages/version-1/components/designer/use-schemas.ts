@@ -3,7 +3,7 @@ import {
 	ISettingField,
 	LtDatasource,
 } from '@lt-frame/components';
-import { isArray, isUndefined, uniqueId } from 'lodash-es';
+import { isArray, isUndefined } from 'lodash-es';
 import { ref } from 'vue';
 
 export function useSchemas() {
@@ -109,6 +109,23 @@ export function useSchemas() {
 										title: '标题',
 										defaultValue: '标题',
 										setter: 'StringSetter',
+										setValue: (target: ISettingField) => {
+											const path = target.path.slice(0, -1);
+											if (
+												isUndefined(
+													target
+														.getProps()
+														.getPropValue(path.concat('code').join('.'))
+												)
+											) {
+												target
+													.getProps()
+													.setPropValue(
+														path.concat('code').join('.'),
+														Date.now()
+													);
+											}
+										},
 									},
 									{
 										name: 'field',
@@ -240,6 +257,13 @@ export function useSchemas() {
 										},
 										defaultValue: true,
 										name: 'isFilter',
+										setter: 'BoolSetter',
+									},
+									{
+										title: {
+											label: '开启排序',
+										},
+										name: 'sortable',
 										setter: 'BoolSetter',
 									},
 									{
@@ -513,6 +537,43 @@ export function useSchemas() {
 										},
 									},
 									{
+										title: {
+											label: '是否分页',
+										},
+										name: 'isPager',
+										setter: 'BoolSetter',
+										condition: (target: ISettingField) => {
+											const parentType = target.getProps().getPropValue(
+												target.path
+													.slice(0, -1)
+													.concat('parentType')
+
+													.join('.')
+											);
+
+											const isEdit = target
+												.getProps()
+												.getPropValue(
+													target.path.slice(0, -1).concat('isEdit').join('.')
+												);
+											const isFilter = target
+												.getProps()
+												.getPropValue(
+													target.path
+														.slice(0, -1)
+														.concat('isFilter')
+														.slice(0, -1)
+														.join('.')
+												);
+
+											if (parentType) {
+												return isFilter || isEdit;
+											}
+
+											return false;
+										},
+									},
+									{
 										type: 'group',
 										display: 'accordion',
 										title: {
@@ -633,6 +694,23 @@ export function useSchemas() {
 										defaultValue: '操作',
 										setter: {
 											componentName: 'StringSetter',
+										},
+										setValue: (target: ISettingField) => {
+											const path = target.path.slice(0, -1);
+											if (
+												isUndefined(
+													target
+														.getProps()
+														.getPropValue(path.concat('code').join('.'))
+												)
+											) {
+												target
+													.getProps()
+													.setPropValue(
+														path.concat('code').join('.'),
+														Date.now()
+													);
+											}
 										},
 									},
 									{
@@ -766,17 +844,6 @@ export function useSchemas() {
 							config: {
 								items: [
 									{
-										name: 'code',
-										title: '唯一ID',
-										isRequired: true,
-										setter: {
-											componentName: 'StringSetter',
-											props: {
-												placeholder: '唯一必填',
-											},
-										},
-									},
-									{
 										name: 'name',
 										title: '菜单名',
 										isRequired: true,
@@ -794,7 +861,7 @@ export function useSchemas() {
 													.getProps()
 													.setPropValue(
 														path.concat('code').join('.'),
-														uniqueId('menu_item_')
+														Date.now()
 													);
 											}
 										},
@@ -803,6 +870,7 @@ export function useSchemas() {
 									{
 										name: 'bindClick',
 										title: '绑定事件',
+										isRequired: true,
 										setter: {
 											componentName: 'SelectSetter',
 											props: {

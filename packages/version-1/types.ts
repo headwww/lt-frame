@@ -22,3 +22,38 @@ export interface MenuSetting {
 export interface ProjectConfig {
 	menuSetting: MenuSetting;
 }
+
+export interface FeatureConfig {
+	// 类型，应用组/应用/链接
+	type?: 'group' | 'feature' | 'link';
+	// id
+	fid?: number | string;
+	// 父类id
+	parentId?: number | string;
+	// 访问路径
+	path?: string;
+	// 组件
+	component?: string;
+	// 组件名称
+	name?: string;
+	// 图标
+	icon?: string;
+	// 显示标题
+	title?: string;
+	// 第三方链接地址http/https
+	frameSrc?: string;
+	// 是否外部打开第三方链接
+	isExternalLink?: boolean;
+	// 排序
+	orderNo?: number;
+
+	children?: FeatureConfig[];
+}
+
+export interface FeatureRow {
+	component?: string;
+	name?: string;
+	title?: string;
+	introduce?: string;
+	version?: string;
+}

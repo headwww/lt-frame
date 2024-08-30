@@ -24,7 +24,19 @@ export function defineConfig(configs: AppConfig) {
 		cache,
 		router: routerConfig,
 		routes,
+		svgs: mSvgs,
+		componentInfoMap: cMap,
 	} = deepMergeConfigs;
+
+	if (mSvgs) {
+		svgs.push(...mSvgs);
+	}
+
+	if (cMap) {
+		Object.keys(cMap).map((item) => {
+			componentInfoMap[item] = cMap[item];
+		});
+	}
 
 	// 初始化storege
 	defineCache(cache);
@@ -87,6 +99,12 @@ export const LtPinia = createPinia();
 export function getAppConfig(): AppConfig {
 	return deepMergeConfigs;
 }
+
+/** 图标集 */
+export const svgs: string[] = [];
+
+/** 业务代码中的组件信息 */
+export const componentInfoMap: { [key: string]: any } = {};
 
 /**
  * 获取所有的静态路由配置

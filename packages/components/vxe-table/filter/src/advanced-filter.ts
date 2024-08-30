@@ -111,8 +111,13 @@ export const advanceFilterProps = {
 	configs: Object as PropType<VxeGridProps>,
 	// 实体筛选需要的请求
 	ajax: {
-		type: Function as PropType<Fn<VxeGridInstance, Promise<any>>>,
+		type: Function as PropType<
+			| Fn<VxeGridInstance, Promise<any>>
+			| ((page: any, value?: string) => Promise<any>)
+		>,
 	},
+	// 实体筛选是否是分页的方式
+	isPager: Boolean,
 	// 日期筛选是否开启时间
 	datePickerProps: Object as PropType<DatePickerProps>,
 };

@@ -30,7 +30,7 @@
 			<LtPane size="82" class="flex flex-col justify-start">
 				<LtDivider title="职员信息" />
 				<LtConfigTable
-					tUid="19990290192"
+					tUid="Test_main"
 					entity="lt.app.productbasic.model.OrderClassesLine"
 					v-model:config="gridOptions"
 					v-model:listeners="gridEvents"
@@ -79,11 +79,13 @@ import {
 const sql = ref();
 
 LtDatasource.add('findUser', {
-	createDatasource(params: string[], expr?: string) {
+	createDatasource(params: string[], expr?: any) {
+		console.log(expr);
+
 		const c = new Condition();
 		c.setTargetClass('lt.fw.core.model.biz.Dept');
 		c.addQueryPath(...params);
-		c.expr(expr!!);
+		// c.expr(expr!!);
 		return new Promise((resolve, reject) => {
 			LtHttp.post({
 				url: 'api/deptServiceImpl/findDepts',

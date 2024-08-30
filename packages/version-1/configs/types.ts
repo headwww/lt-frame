@@ -41,4 +41,8 @@ export interface AppConfig {
 	router: Partial<RouterOptions>;
 	// 路由页面配置
 	routes?: RoutesConfig;
+	// 图标集
+	svgs?: string[];
+	// 业务代码中的组件信息
+	componentInfoMap?: { [key: string]: any };
 }

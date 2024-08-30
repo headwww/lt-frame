@@ -14,6 +14,9 @@ export const tableProps = {
 		type: String,
 		required: true,
 	},
+	tLabel: {
+		type: String,
+	},
 	entity: String,
 	config: Object as PropType<VxeGridProps>,
 	listeners: Object as PropType<VxeGridListeners>,

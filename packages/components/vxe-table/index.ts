@@ -168,6 +168,7 @@ export const LtTablePlugins = {
 	EditSelect: '$lt-edit-select',
 	// 编辑渲染 entity
 	EditEntity: '$lt-edit-entity',
+	EditEntityPager: '$lt-edit-entity-pager',
 	// 编辑渲染 bool
 	EditBool: '$lt-edit-bool',
 };

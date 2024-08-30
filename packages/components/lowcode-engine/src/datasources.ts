@@ -31,10 +31,22 @@ interface DatasourceOptions {
 	 * 数据源
 	 *
 	 * @param params 需要查询的参数
-	 * @param expr 查询条件hql
 	 * @returns
 	 */
-	createDatasource: (params?: any, expr?: string) => any;
+	createDatasource: (
+		params?: any,
+		extr?: {
+			//  查询条件hql
+			expr?: string;
+			// 分页
+			pager?: {
+				pageNo?: number;
+				pageSize?: number;
+				rowCountEnabled?: boolean;
+			};
+			value?: any;
+		}
+	) => any;
 	/**
 	 * 顶级实体，用于设置默认的实体配置的数据源
 	 */

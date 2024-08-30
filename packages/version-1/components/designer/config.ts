@@ -10,7 +10,9 @@ export interface DatasourceContrast {
 }
 
 export interface MenuOptions {
+	// 唯一id
 	code?: string;
+
 	name?: string;
 	// 绑定的点击事件
 	bindClick: string;
@@ -38,6 +40,7 @@ export interface Column {
 	boolTrue: string;
 	boolFalse: string;
 	title?: string;
+	code?: string;
 	type?: string;
 	parentType?: string;
 	width?: number | string;
@@ -63,9 +66,14 @@ export interface Column {
 	isTime: boolean;
 	// 是否开启筛选
 	isFilter: boolean;
+	// 是否是分页
+	isPager: boolean;
 }
 
 export interface ToolButtons {
+	// 唯一id
+	code?: string;
+
 	title: string;
 	type: ButtonType;
 	// 是否禁用的数据源的key
@@ -79,6 +87,8 @@ export interface ToolButtons {
  */
 export interface TableFields {
 	tUid?: string;
+	tLabel?: string;
+	parentMenu?: String;
 	// 列的配置
 	columns?: Array<Column>;
 	// 高级

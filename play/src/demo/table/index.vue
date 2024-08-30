@@ -19,7 +19,7 @@ import {
 } from '@lt-frame/components';
 import { useMessage } from '@lt-frame/hooks';
 import { parse } from '@lt-frame/utils';
-import { LtHttp } from '@lt-frame/version-1';
+import { LtHttp, Pager } from '@lt-frame/version-1';
 import dayjs from 'dayjs';
 import { reactive, ref } from 'vue';
 import { VxeGlobalRendererHandles, VxeGridProps } from 'vxe-table';
@@ -312,7 +312,7 @@ const gridOptions = reactive<VxeGridProps>({
 		{
 			field: 'corp.name',
 			title: '公司名称',
-			width: '800',
+			width: '200',
 			filters: [
 				{
 					data: {
@@ -358,6 +358,94 @@ const gridOptions = reactive<VxeGridProps>({
 						],
 					},
 					ajax: () => findCorps(),
+				},
+			},
+		},
+		{
+			field: 'corp.name',
+			title: '公司名称',
+			width: '400',
+			fixed: 'left',
+			filters: [
+				{
+					data: {
+						currentMode: FilterMode.ENTITY,
+					},
+				},
+			],
+			filterRender: {
+				name: '$lt-filter',
+				props: {
+					isPager: true,
+					filterModes: [FilterMode.ENTITY],
+					configs: {
+						columns: [
+							{ type: 'checkbox', width: 40 },
+
+							{
+								field: 'name',
+								title: '编码',
+							},
+							{
+								field: 'code',
+								title: '编码',
+							},
+						],
+					},
+					ajax: (page: Pager) =>
+						new Promise<any[]>((resolve, reject) => {
+							LtHttp.post({
+								url: 'api/goodsService/findGoodsByPage',
+								data: [
+									page,
+									{
+										targetClass: 'lt.app.common.model.FactoryGoods',
+									},
+								],
+							})
+								.then((data) => {
+									resolve(parse(data));
+								})
+								.catch(() => {
+									reject();
+								}).finally;
+						}),
+				},
+			},
+			editRender: {
+				name: LtTablePlugins.EditEntityPager,
+				props: {
+					configs: {
+						enableSeq: true,
+						columns: [
+							{
+								field: 'name',
+								title: '编码',
+							},
+							{
+								field: 'code',
+								title: '编码',
+							},
+						],
+					},
+					ajax: (page: Pager) =>
+						new Promise<any[]>((resolve, reject) => {
+							LtHttp.post({
+								url: 'api/goodsService/findGoodsByPage',
+								data: [
+									page,
+									{
+										targetClass: 'lt.app.common.model.FactoryGoods',
+									},
+								],
+							})
+								.then((data) => {
+									resolve(parse(data));
+								})
+								.catch(() => {
+									reject();
+								}).finally;
+						}),
 				},
 			},
 		},

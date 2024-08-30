@@ -80,7 +80,6 @@
 									>{{ button.title }}
 								</Button>
 							</div>
-							<div tools></div>
 						</div>
 						<vxe-grid
 							v-if="!spinning"
@@ -175,6 +174,8 @@ useResizeObserver(container, (entries: any) => {
 // 临时的配置数据
 const tempSettingValue = ref<TableFields>({
 	tUid: props.tUid,
+	tLabel: props.tLabel ? props.tLabel : props.tUid,
+	parentMenu: props.tUid?.split('_')[0],
 });
 
 const rawToolButtons = ref();
@@ -235,7 +236,10 @@ watch(
 			findBsConfigTables(props.tUid)
 				.then((data) => {
 					if (isArray(data) && data.length > 0) {
-						tempSettingValue.value = JSON.parse(data[0].tInfo);
+						tempSettingValue.value = {
+							...tempSettingValue.value,
+							...JSON.parse(data[0].tInfo),
+						};
 						rawToolButtons.value = toolButtons.value;
 					}
 				})
@@ -252,7 +256,10 @@ onMounted(() => {
 	findBsConfigTables(props.tUid)
 		.then((data) => {
 			if (isArray(data) && data.length > 0) {
-				tempSettingValue.value = JSON.parse(data[0].tInfo);
+				tempSettingValue.value = {
+					...tempSettingValue.value,
+					...JSON.parse(data[0].tInfo),
+				};
 				isSetup.value = true;
 			}
 		})
@@ -330,7 +337,11 @@ function handleDisabled(bindDisabled: DatasourceContrast) {
 
 function onCancel() {
 	toolButtons.value = rawToolButtons.value;
-	tempSettingValue.value = { tUid: props.tUid };
+	tempSettingValue.value = {
+		tUid: props.tUid,
+		tLabel: props.tLabel ? props.tLabel : props.tUid,
+		parentMenu: props.tUid?.split('_')[0],
+	};
 	open.value = false;
 }
 

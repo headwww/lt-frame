@@ -1,4 +1,9 @@
-import { LAYOUT, LtRouteRecordRaw } from '@lt-frame/version-1';
+import {
+	FEATURECONFIG,
+	LAYOUT,
+	LtRouteRecordRaw,
+	PERMISSION,
+} from '@lt-frame/version-1';
 
 const comps: LtRouteRecordRaw = {
 	path: '/component',
@@ -11,6 +16,24 @@ const comps: LtRouteRecordRaw = {
 		title: '组件',
 	},
 	children: [
+		{
+			path: 'PERMISSION',
+			name: 'PERMISSION',
+
+			component: PERMISSION,
+			meta: {
+				title: 'PERMISSION',
+			},
+		},
+		{
+			path: 'feature',
+			name: 'feature',
+
+			component: FEATURECONFIG,
+			meta: {
+				title: 'feature',
+			},
+		},
 		{
 			path: 'test',
 			name: 'Test',
