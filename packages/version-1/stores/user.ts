@@ -1,10 +1,8 @@
 import { Persistent } from '@lt-frame/utils';
 import { defineStore } from 'pinia';
-import { RouteRecordRaw } from 'vue-router';
 import { useMessage } from '@lt-frame/hooks';
 import { h } from 'vue';
 import { LtHttp, LtRouter, getAppConfig } from '../configs';
-import { usePermissionStore } from './permission';
 import { Client } from './model/client';
 
 export interface UserState {
@@ -50,27 +48,29 @@ export const useUserStore = defineStore({
 		},
 		async afterLoginAction() {
 			// 动态添加路由
-			const permissionStore = usePermissionStore();
-			if (!permissionStore.isDynamicAddedRoute) {
-				const { routes: routesConfig } = getAppConfig();
-				if (routesConfig) {
-					const { dynamicRoutes, PAGE_NOT_FOUND_ROUTE } = routesConfig;
-					if (dynamicRoutes) {
-						const routes =
-							await permissionStore.buildRoutesAction(dynamicRoutes);
-						routes.forEach((route) => {
-							LtRouter.addRoute(route as unknown as RouteRecordRaw);
-						});
-						if (PAGE_NOT_FOUND_ROUTE) {
-							LtRouter.addRoute(
-								PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw
-							);
-						}
+			// const permissionStore = usePermissionStore();
+			// if (!permissionStore.isDynamicAddedRoute) {
+			// const { routes: routesConfig } = getAppConfig();
+			// if (routesConfig) {
+			// const { dynamicRoutes, PAGE_NOT_FOUND_ROUTE } = routesConfig;
+			// if (dynamicRoutes) {
+			// PAGE_NOT_FOUND_ROUTE;
+			// const routes =
+			// 	await permissionStore.buildRoutesAction(dynamicRoutes);
 
-						permissionStore.setDynamicAddedRoute(true);
-					}
-				}
-			}
+			// routes.forEach((route) => {
+			// 	LtRouter.addRoute(route as unknown as RouteRecordRaw);
+			// });
+			// if (PAGE_NOT_FOUND_ROUTE) {
+			// 	LtRouter.addRoute(
+			// 		PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw
+			// 	);
+			// }
+
+			// permissionStore.setDynamicAddedRoute(true);
+			// }
+			// }
+			// }
 			await LtRouter.replace(getAppConfig().routes?.homePage!!);
 		},
 		async logout() {

@@ -1,0 +1,84 @@
+.cut-scenes-loade {
+	width: 120px; /* 已经调整的宽度 */
+	height: 14px;
+	box-shadow: 0 2px 0 #13296a;
+	position: relative;
+	left: 50%;
+	top: 49%;
+	clip-path: inset(-100px 0 -10px);
+}
+
+.cut-scenes-loade::before {
+	content: '';
+	position: absolute;
+	inset: auto calc(50% - 30px) 0;
+	height: 100px;
+
+	--g1: no-repeat linear-gradient(#4382ff 0 0);
+	--g2: no-repeat linear-gradient(#00d6b9 0 0);
+	--g3: no-repeat linear-gradient(#ffc000 0 0);
+	--g4: no-repeat radial-gradient(circle, #e0e0e0 0 50%, transparent 51%);
+
+	background: var(--g1), var(--g2), var(--g3), var(--g4);
+	background-size:
+		28px 26px,
+		28px 26px,
+		28px 26px,
+		28px 28px;
+	animation:
+		l7-1 2.2s infinite ease-in-out,
+		l7-2 2.2s infinite ease-in-out;
+}
+
+@keyframes l7-1 {
+	0%,
+	100% {
+		background-position:
+			0 -100px,
+			100% -100px;
+	}
+
+	17.5% {
+		background-position:
+			0 100%,
+			100% -100px,
+			0 -100px,
+			100% -100px;
+	}
+
+	35% {
+		background-position:
+			0 100%,
+			100% 100%,
+			0 -100px,
+			100% -100px;
+	}
+
+	52.5% {
+		background-position:
+			0 100%,
+			100% 100%,
+			0 calc(100% - 29px),
+			100% -100px;
+	}
+
+	70%,
+	98% {
+		background-position:
+			0 100%,
+			100% 100%,
+			0 calc(100% - 29px),
+			100% calc(100% - 29px);
+	}
+}
+
+@keyframes l7-2 {
+	0%,
+	70% {
+		transform: translate(0);
+	}
+
+	100% {
+		transform: translate(200%);
+	}
+}

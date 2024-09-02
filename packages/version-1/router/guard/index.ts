@@ -13,7 +13,6 @@ import {
 	useUserStore,
 	useTabStore,
 } from '../../stores';
-import { createKeepLogin } from './keepLogin';
 
 export function setupRouterGuard(router: Router) {
 	createPageGuard(router);
@@ -21,7 +20,6 @@ export function setupRouterGuard(router: Router) {
 	createHttpGuard(router);
 	createScrollGuard(router);
 	createMessageGuard(router);
-	createKeepLogin(router);
 	createPermissionGuard(router);
 	createStateGuard(router);
 }
@@ -198,13 +196,14 @@ export function createPermissionGuard(router: Router) {
 			return;
 		}
 
-		// 添加动态路由
+		// 添加动态路由,代码中配置的动态路由
 		if (routesConfig) {
-			const { dynamicRoutes, PAGE_NOT_FOUND_ROUTE } = routesConfig;
-			const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
-			routes.forEach((route) => {
-				router.addRoute(route as unknown as RouteRecordRaw);
-			});
+			// const { dynamicRoutes, PAGE_NOT_FOUND_ROUTE } = routesConfig;
+			// const routes = await permissionStore.buildRoutesAction(dynamicRoutes);
+			// routes.forEach((route) => {
+			// 	router.addRoute(route as unknown as RouteRecordRaw);
+			// });
+			const { PAGE_NOT_FOUND_ROUTE } = routesConfig;
 			if (PAGE_NOT_FOUND_ROUTE) {
 				router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
 			}

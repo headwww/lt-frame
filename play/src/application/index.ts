@@ -32,6 +32,13 @@ defineConfig({
 		appLocalCacheKey: 'LT-DEMO',
 		hasEncrypt: !import.meta.env.DEV,
 	},
+	componentInfoMap: [
+		{
+			component: () => import('../demo/tree/index.vue'),
+			name: 'TestManager',
+			title: '测试',
+		},
+	],
 });
 
 export function initProjectConfig() {
