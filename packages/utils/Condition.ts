@@ -1,3 +1,9 @@
+type UserParam = {
+	name: string;
+	value: any;
+	type?: string;
+};
+
 export class Condition {
 	private targetClass?: string;
 
@@ -10,6 +16,8 @@ export class Condition {
 	private queryPath?: string[];
 
 	private orderBy?: string;
+
+	private userParams?: UserParam[];
 
 	constructor(targetClass?: string) {
 		this.targetClass = targetClass;
@@ -62,6 +70,14 @@ export class Condition {
 	orderByDesc(property: string): Condition {
 		if (this.orderBy == null) this.orderBy = `this.${property} desc`;
 		else this.orderBy += `,this.${property} desc`;
+		return this;
+	}
+
+	addUserParam(name: string, value: any, type?: string): Condition {
+		if (this.userParams == null) {
+			this.userParams = [];
+		}
+		this.userParams.push({ name, value, type });
 		return this;
 	}
 }

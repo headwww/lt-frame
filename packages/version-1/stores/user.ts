@@ -35,11 +35,15 @@ export const useUserStore = defineStore({
 						LtHttp.get<Client>(
 							{ url: 'api/appContextService/getClient' },
 							{ errorMessageMode: 'modal' }
-						).then((resp) => {
-							resolve(resp);
-							this.setClient(resp);
-							this.afterLoginAction();
-						});
+						)
+							.then((resp) => {
+								resolve(resp);
+								this.setClient(resp);
+								this.afterLoginAction();
+							})
+							.catch((error) => {
+								reject(error);
+							});
 					})
 					.catch((error) => {
 						reject(error);

@@ -60,9 +60,17 @@ const props = defineProps({
 		type: Array as PropType<string[]>,
 		default: () => [],
 	},
+	uncheckedKeys: {
+		type: Array as PropType<string[]>,
+		default: () => [],
+	},
 });
 
-const emit = defineEmits(['update:checkedKeys']);
+const emit = defineEmits([
+	'update:checkedKeys',
+	'unCheckedKeys',
+	'update:uncheckedKeys',
+]);
 
 const indeterminate = ref(false);
 
@@ -100,6 +108,11 @@ watch(
 			indeterminate.value = true;
 			checkAll.value = false;
 		}
+		const unCheckedKeys = props.data
+			.filter((item) => !checkedList.value.includes(item.value))
+			.map((item) => item.value);
+		emit('update:uncheckedKeys', unCheckedKeys);
+		emit('unCheckedKeys', unCheckedKeys);
 	},
 	{
 		immediate: true,

@@ -104,7 +104,7 @@ export default defineComponent({
 
 		function onCreate() {
 			groupData.value = {
-				fid: Date.now(),
+				fid: Date.now().toString(),
 			};
 			gorupOpen.value = true;
 		}

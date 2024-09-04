@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
 import { Layout, Modal, SkeletonButton } from 'ant-design-vue';
-import { useNamespace } from '@lt-frame/hooks';
+import { useMessage, useNamespace } from '@lt-frame/hooks';
 import { AxiosError } from 'axios';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { RouteRecordRaw, useRouter } from 'vue-router';
@@ -46,6 +46,8 @@ const { routes } = getAppConfig();
 const router = useRouter();
 
 const initMenu = ref(false);
+
+const { createMessage } = useMessage();
 
 onMounted(() => {
 	getUserMenuList();
@@ -118,6 +120,7 @@ function login() {
 			{ errorMessageMode: 'none' }
 		)
 			.then(() => {
+				createMessage.success('连接成功');
 				getUserMenuList();
 			})
 			.catch((e: AxiosError) => {

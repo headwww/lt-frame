@@ -30,7 +30,8 @@
 			<LtPane size="82" class="flex flex-col justify-start">
 				<LtDivider title="职员信息" />
 				<LtConfigTable
-					tUid="Test_main"
+					tUid="TestManager_sub"
+					t-label="子表"
 					entity="lt.app.productbasic.model.OrderClassesLine"
 					v-model:config="gridOptions"
 					v-model:listeners="gridEvents"

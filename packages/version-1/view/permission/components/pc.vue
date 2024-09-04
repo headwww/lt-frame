@@ -58,6 +58,7 @@
 		</div>
 
 		<div
+			ref="el"
 			style="
 				width: 100%;
 				flex: 1;
@@ -71,12 +72,19 @@
 				padding-top: 12px;
 				padding-bottom: 1px;
 				background-color: #fff;
+				overflow: hidden;
 				box-shadow: 0 0 1px 1px #e0e6f8;
 			"
 		>
-			<slot name="right"></slot>
+			<slot name="right" :height="height"></slot>
 		</div>
 	</div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useElementSize } from '@vueuse/core';
+import { ref } from 'vue';
+
+const el = ref();
+const { height } = useElementSize(el);
+</script>

@@ -111,16 +111,44 @@
 								</Tree>
 							</div>
 						</template>
-						<template #right>
+						<template #right="{ height }">
 							<LtDivider title="功能权限">
 								<template #extra>
-									<Button style="margin-right: 12px" type="primary"
+									<Button
+										:disabled="!(configTables.length > 0)"
+										style="margin-right: 12px"
+										type="primary"
+										@click="onSavePermission"
+										:loading="savePermission"
 										>保存</Button
 									>
 								</template>
 							</LtDivider>
-							<AccessControlGroup title="个人信息"></AccessControlGroup>
+							<Tabs v-if="configTables.length > 0" style="padding-right: 12px">
+								<TabPane
+									v-for="table in configTables"
+									:key="table.key"
+									:tab="table.title"
+									style="overflow: auto"
+									:style="{
+										height: `${height - 85}px`,
+									}"
+								>
+									<AccessControlGroup
+										style="margin-bottom: 12px"
+										v-for="item in table.items"
+										:key="item.title"
+										:title="item.title"
+										:data="item.data"
+										v-model:checked-keys="item.checks"
+										v-model:unchecked-keys="item.unchecked"
+									>
+									</AccessControlGroup>
+								</TabPane>
+							</Tabs>
+
 							<div
+								v-else
 								style="
 									height: 100%;
 									width: 100%;
@@ -153,7 +181,12 @@
 											功能性菜单分配权限，系统级菜单仅超级管理员可以访问
 										</p>
 									</TimelineItem>
-									<TimelineItem color="gray">设置字段和按钮权限</TimelineItem>
+									<TimelineItem color="gray"
+										>设置字段和按钮权限
+										<p style="color: #8f959e">
+											第三方链接页面无需设置以上权限
+										</p></TimelineItem
+									>
 								</Timeline>
 							</div>
 						</template>
@@ -182,6 +215,8 @@ import {
 	Timeline,
 	TimelineItem,
 	TypographyTitle,
+	Tabs,
+	TabPane,
 } from 'ant-design-vue';
 import {
 	SearchOutlined,
@@ -189,10 +224,11 @@ import {
 	CheckOutlined,
 	CaretDownOutlined,
 } from '@ant-design/icons-vue';
-import { h, onMounted, ref, watch } from 'vue';
+import { computed, h, onMounted, ref, toRaw, watch } from 'vue';
 import { Condition, serialize } from '@lt-frame/utils';
-import { eachTree, toArrayTree } from 'xe-utils';
+import { eachTree, findTree, toArrayTree } from 'xe-utils';
 import { useMessage } from '@lt-frame/hooks';
+import axios from 'axios';
 import { LtHttp } from '../../configs';
 import PC from './components/pc.vue';
 import { FeatureConfig } from '../../types';
@@ -212,9 +248,38 @@ const expandedKeys = ref<string[]>([]);
 
 const menuSelectedKeys = ref<string[]>([]);
 
-const menuCheckKeys = ref<string[]>([]);
+const menuCheckKeys = ref<any[]>([]);
 
 const searchValue = ref<string>('');
+
+const configTables = ref<any>([]);
+
+const savePermission = ref<boolean>(false);
+
+function onSavePermission() {
+	const arr: any[] = [];
+	configTables.value.forEach((table: any) => {
+		arr.push(
+			...table.items.map((item: any) => ({
+				...getCurrentState.value,
+				unchecked: toRaw(item.unchecked),
+				type: item.type,
+				tUid: item.tUid,
+			}))
+		);
+	});
+	savePermission.value = true;
+	LtHttp.post({
+		url: 'api/bsTablePermissionService/saveBsConfigPermissionByMap',
+		data: serialize([arr]),
+	})
+		.then(() => {
+			createMessage.success('保存成功');
+		})
+		.finally(() => {
+			savePermission.value = false;
+		});
+}
 
 watch(searchValue, () => {
 	expandedKeys.value.length = 0;
@@ -246,6 +311,120 @@ onMounted(() => {
 	findModuleMenus();
 });
 
+/**
+ * 查询全部的按钮，查询有权限的按钮两个请求合并触发
+ */
+function findTablePermission() {
+	const condition = new Condition();
+	condition.setTargetClass('test.app.model.BsConfigTable');
+	condition.prop('parentMenu', getCurrentState.value.parentMenu);
+	axios
+		.all([
+			LtHttp.post({
+				url: 'api/bsConfigServiceImpl/findBsConfigTables',
+				data: [condition],
+			}),
+			LtHttp.post({
+				url: 'api/bsTablePermissionService/getUserTablePermissionListByRole',
+				data: [getCurrentState.value.parentMenu, getCurrentState.value.roleId],
+			}),
+		])
+		.then(
+			axios.spread((resp1, resp2) => {
+				const fn = (item: any) => ({
+					key: item.id,
+					...JSON.parse(item.tInfo),
+				});
+				const permissions = resp2.map(fn);
+				const arr = resp1.map(fn).map((item: any) => {
+					const obj: any = { title: item.tLabel, key: item.key, items: [] };
+					const permission = permissions.find(
+						(permission: any) => permission.key === item.key
+					);
+					if (item.columns) {
+						obj.items.push({
+							title: '字段',
+							tUid: item.tUid,
+							data: [
+								...item.columns.map((col: any) => ({
+									label: col.title,
+									value: col.code,
+								})),
+							],
+							type: 'COL',
+							checks: permission.columns
+								? [...permission.columns.map((col: any) => col.code)]
+								: [],
+							unchecked: [],
+						});
+					}
+					if (item.toolButtons) {
+						obj.items.push({
+							title: '操作栏按钮',
+							tUid: item.tUid,
+							data: [
+								...item.toolButtons.map((button: any) => ({
+									label: button.title,
+									value: button.code,
+								})),
+							],
+							type: 'ACTION',
+							checks: permission.toolButtons
+								? [...permission.toolButtons.map((button: any) => button.code)]
+								: [],
+							unchecked: [],
+						});
+					}
+					if (item.menuConfig) {
+						obj.items.push({
+							title: '右键菜单',
+							tUid: item.tUid,
+							type: 'RIGHTACTION',
+							data: [
+								...item.menuConfig.map((menu: any) => ({
+									label: menu.name,
+									value: menu.code,
+								})),
+							],
+							checks: permission.menuConfig
+								? [...permission.menuConfig.map((menu: any) => menu.code)]
+								: [],
+							unchecked: [],
+						});
+					}
+					return obj;
+				});
+				configTables.value = arr;
+			})
+		);
+}
+
+// 选中的角色和菜单
+const getCurrentState = computed(() => {
+	const roleId =
+		selectedKeys.value.length > 0 ? selectedKeys.value[0] : undefined;
+
+	const parentMenu =
+		menuSelectedKeys.value.length > 0
+			? findTree(
+					menuData.value ? menuData.value : [],
+					(item: any) => item.key === menuSelectedKeys.value[0]
+				).item.name
+			: undefined;
+
+	return {
+		roleId,
+		parentMenu,
+	};
+});
+
+watch(getCurrentState, () => {
+	configTables.value.length = 0;
+	if (getCurrentState.value.roleId && getCurrentState.value.parentMenu) {
+		findTablePermission();
+	}
+});
+
 const saveMenuLoading = ref(false);
 function onSaveMenu() {
 	saveMenuLoading.value = true;
@@ -265,6 +444,7 @@ function onSaveMenu() {
 		});
 }
 
+// 查询有权限的菜单id
 function findBsMenuPermissions() {
 	menuCheckKeys.value.length = 0;
 	const condition = new Condition();
@@ -280,6 +460,9 @@ function findBsMenuPermissions() {
 	});
 }
 
+/**
+ * 查询角色列表
+ */
 function findTreeData() {
 	treeLoading.value = true;
 	treeData.value = [];
@@ -307,6 +490,9 @@ function findTreeData() {
 		});
 }
 
+/**
+ * 查询已经配置的菜单列表
+ */
 function findModuleMenus() {
 	if (menuData.value) {
 		menuData.value.length = 0;
@@ -322,6 +508,7 @@ function findModuleMenus() {
 			key: item.fid,
 			isLeaf: item.type !== 'group',
 			parentId: item.parentId,
+			name: item.name,
 		}));
 
 		const arr: any[] = toArrayTree(tree, {

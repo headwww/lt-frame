@@ -122,7 +122,7 @@ export function useSchemas() {
 													.getProps()
 													.setPropValue(
 														path.concat('code').join('.'),
-														Date.now()
+														Date.now().toString()
 													);
 											}
 										},
@@ -708,7 +708,7 @@ export function useSchemas() {
 													.getProps()
 													.setPropValue(
 														path.concat('code').join('.'),
-														Date.now()
+														Date.now().toString()
 													);
 											}
 										},
@@ -861,7 +861,7 @@ export function useSchemas() {
 													.getProps()
 													.setPropValue(
 														path.concat('code').join('.'),
-														Date.now()
+														Date.now().toString()
 													);
 											}
 										},

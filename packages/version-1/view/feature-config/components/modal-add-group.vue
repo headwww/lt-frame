@@ -200,7 +200,7 @@ export default defineComponent({
 
 		function onCreate(index: number | string) {
 			formData.value = {
-				fid: Date.now(),
+				fid: Date.now().toString(),
 				parentId: formState.value.fid,
 			};
 			if (index === 'group') {

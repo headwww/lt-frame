@@ -2,7 +2,7 @@ import { RouterOptions } from 'vue-router';
 import { CacheConfig, CreateAxiosOptions } from '@lt-frame/utils';
 import { LtRouteRecordRaw } from '../router/types';
 
-interface RoutesConfig {
+export interface RoutesConfig {
 	// 首页的路径
 	homePage?: string;
 	// 追加的静态路由配置

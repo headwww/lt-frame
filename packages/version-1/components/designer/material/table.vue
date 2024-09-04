@@ -235,6 +235,8 @@ watch(
 			spinning.value = true;
 			findBsConfigTables(props.tUid)
 				.then((data) => {
+					console.log('=====');
+
 					if (isArray(data) && data.length > 0) {
 						tempSettingValue.value = {
 							...tempSettingValue.value,
@@ -255,6 +257,8 @@ onMounted(() => {
 	spinning2.value = true;
 	findBsConfigTables(props.tUid)
 		.then((data) => {
+			console.log('==111===');
+
 			if (isArray(data) && data.length > 0) {
 				tempSettingValue.value = {
 					...tempSettingValue.value,

@@ -25,5 +25,35 @@
 		.ant-dropdown-trigger {
 			height: 44px;
 		}
+
+		.ant-input {
+			background-color: transparent;
+		}
+
+		.ant-input-affix-wrapper {
+			background-color: #f2f3f5;
+			border-color: #f2f3f5;
+		}
+
+		.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+			background-color: #fff;
+			border-color: rgb(51 112 255);
+			border-inline-end-width: 1px;
+			z-index: 1;
+		}
+
+		.ant-input-affix-wrapper-focused,
+		.ant-input-affix-wrapper:focus {
+			z-index: 1;
+		}
+
+		.ant-input-affix-wrapper:focus,
+		.ant-input-affix-wrapper-focused {
+			background-color: #fff;
+			border-color: rgb(51 112 255);
+			box-shadow: 0 0 0 2px rgb(5 145 255 / 10%);
+			border-inline-end-width: 1px;
+			outline: 0;
+		}
 	}
 }
