@@ -79,17 +79,42 @@ import {
 
 const sql = ref();
 
-LtDatasource.add('findUser', {
-	createDatasource(params: string[], expr?: any) {
-		console.log(expr);
+// LtDatasource.add('findUser', {
+// 	createDatasource(fields: string[], params: any) {
+// 		console.log(params);
 
+// 		const c = new Condition();
+// 		c.setTargetClass('lt.fw.core.model.biz.Dept');
+// 		c.addQueryPath(...fields);
+// 		// c.expr(expr!!);
+// 		return new Promise((resolve, reject) => {
+// 			LtHttp.post({
+// 				url: 'api/deptServiceImpl/findDepts',
+// 				data: [c],
+// 			})
+// 				.then((data) => {
+// 					resolve(data);
+// 				})
+// 				.catch(() => {
+// 					reject();
+// 				});
+// 		});
+// 	},
+
+// 	uniqueClasspath: 'lt.app.productbasic.model.OrderClasses',
+// 	type: 'default',
+// });
+
+LtDatasource.add('findUser', {
+	createDatasource(fields: string[], params: any) {
 		const c = new Condition();
-		c.setTargetClass('lt.fw.core.model.biz.Dept');
-		c.addQueryPath(...params);
-		// c.expr(expr!!);
+		c.setTargetClass('lt.app.productbasic.model.OrderClasses');
+		c.addQueryPath(...fields);
+		c.addUserParam('keywords', params.value);
+		c.addUserParam('keywords_properties', fields);
 		return new Promise((resolve, reject) => {
 			LtHttp.post({
-				url: 'api/deptServiceImpl/findDepts',
+				url: 'api/orderClassesService/findOrderClassessByPage',
 				data: [c],
 			})
 				.then((data) => {
@@ -102,6 +127,7 @@ LtDatasource.add('findUser', {
 	},
 
 	uniqueClasspath: 'lt.app.productbasic.model.OrderClasses',
+	type: 'page',
 });
 
 for (let i = 0; i < 100; i++) {

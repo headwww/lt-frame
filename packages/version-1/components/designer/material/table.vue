@@ -15,7 +15,8 @@
 							:type="button.type"
 							@click="onButtonsClick(button)"
 							:disabled="handleDisabled(button.bindDisabled)"
-							>{{ button.title }}
+						>
+							{{ button.title }}
 						</Button>
 					</div>
 					<div>
@@ -27,6 +28,7 @@
 							:type="!sql || sql === '' ? 'default' : 'primary'"
 						></Button>
 						<Button
+							v-if="userStore.getClient?.user?.id === '1'"
 							shape="circle"
 							:icon="h(SettingOutlined)"
 							@click="onConfig"
@@ -114,10 +116,18 @@ import { tableProps } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
 import { useSchemas } from '../use-schemas';
-import { findBsConfigTables, saveBsConfigTablesByString } from './api';
+import {
+	findBsConfigTables,
+	getUserTablePermissionListByTable,
+	saveBsConfigTablesByString,
+} from './api';
 import SearchModal from '../components/SearchModal.vue';
+import { useUserStore } from '../../../stores';
+
+const userStore = useUserStore();
 
 const ns = useNamespace('material-table');
+
 const props = defineProps(tableProps);
 
 const emit = defineEmits([
@@ -235,8 +245,6 @@ watch(
 			spinning.value = true;
 			findBsConfigTables(props.tUid)
 				.then((data) => {
-					console.log('=====');
-
 					if (isArray(data) && data.length > 0) {
 						tempSettingValue.value = {
 							...tempSettingValue.value,
@@ -254,24 +262,30 @@ watch(
 );
 
 onMounted(() => {
-	spinning2.value = true;
-	findBsConfigTables(props.tUid)
-		.then((data) => {
-			console.log('==111===');
-
-			if (isArray(data) && data.length > 0) {
-				tempSettingValue.value = {
-					...tempSettingValue.value,
-					...JSON.parse(data[0].tInfo),
-				};
-				isSetup.value = true;
-			}
-		})
-		.catch(() => {})
-		.finally(() => {
-			spinning2.value = false;
-		});
+	getPermission();
 });
+
+/**
+ * 查询有权限的按钮，字段，右键菜单
+ */
+function getPermission() {
+	spinning2.value = true;
+	if (props.tUid) {
+		getUserTablePermissionListByTable(props.tUid)
+			.then((data) => {
+				if (isArray(data) && data.length > 0) {
+					tempSettingValue.value = {
+						...tempSettingValue.value,
+						...JSON.parse(data[0].tInfo),
+					};
+					isSetup.value = true;
+				}
+			})
+			.finally(() => {
+				spinning2.value = false;
+			});
+	}
+}
 
 watch(
 	() => tempSettingValue.value,
@@ -307,18 +321,7 @@ function onSave() {
 	saveBsConfigTablesByString(tempSettingValue.value)
 		.then(() => {
 			open.value = false;
-			options.value.autoResize = true;
-			options.value.height = 'auto';
-			const fields: string[] = [];
-			options.value.columns?.forEach((item: any) => {
-				if (item.field) {
-					fields.push(item.field);
-				}
-			});
-			emit('update:fields', fields);
-			emit('update:config', cloneDeep(omit(options.value, 'data')));
-			emit('update:listeners', cloneDeep(gridEvents.value));
-			emit('setup', fields);
+			getPermission();
 		})
 		.finally(() => {
 			loading.value = false;

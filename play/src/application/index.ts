@@ -34,7 +34,7 @@ defineConfig({
 	},
 	componentInfoMap: [
 		{
-			component: () => import('../demo/tree/index.vue'),
+			component: () => import('../demo/table/config-table.vue'),
 			name: 'TestManager',
 			title: '测试',
 		},

@@ -46,6 +46,8 @@ export interface FeatureConfig {
 	isExternalLink?: boolean;
 	// 排序
 	orderNo?: number;
+	// 非新创建的是服务端返回的
+	notNewly?: boolean;
 
 	children?: FeatureConfig[];
 }

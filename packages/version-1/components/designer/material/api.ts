@@ -17,3 +17,10 @@ export function saveBsConfigTablesByString(data: any) {
 		data: [data],
 	});
 }
+
+export function getUserTablePermissionListByTable(tUid: string) {
+	return LtHttp.post({
+		url: 'api/bsTablePermissionService/getUserTablePermissionListByTable',
+		data: [tUid?.split('_')[0], tUid],
+	});
+}

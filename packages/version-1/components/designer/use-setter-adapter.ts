@@ -16,7 +16,12 @@ import {
 	LtTablePlugins,
 	TemporalOperator,
 } from '@lt-frame/components';
-import { Fn, deepMerge } from '@lt-frame/utils';
+import {
+	Fn,
+	deepMerge,
+	isNullOrUnDef,
+	removeNullProperties,
+} from '@lt-frame/utils';
 import { Column, TableFields, ToolButtons } from './config';
 import { TableProps } from './material/table';
 
@@ -26,7 +31,9 @@ import { TableProps } from './material/table';
  */
 export function useSetterAdapter(props: TableProps) {
 	const { datasource, config, eventBus } = props;
+
 	const isTree = computed(() => !isUndefined(props.config?.treeConfig));
+
 	const options = ref<VxeGridProps>(
 		deepMerge(
 			{
@@ -48,6 +55,247 @@ export function useSetterAdapter(props: TableProps) {
 	});
 
 	const toolButtons = ref<ToolButtons[]>([]);
+
+	function buildTableOption(value: TableFields) {
+		// 移除所有的null的属性
+		value = removeNullProperties(value);
+		options.value.columns = [];
+		const {
+			columns,
+			seq,
+			radio,
+			checkbox,
+			stripe,
+			size,
+			align,
+			border,
+			showOverflow,
+			editMode,
+			editTrigger,
+			toolButtons: buttons,
+			menuConfig,
+			isOperationColumn,
+			editButton,
+			viewButton,
+			viewBindClick,
+			viewDisabled,
+			editDisabled,
+			checkStrictly,
+		} = value;
+
+		const rules: { [key: string]: any } = {};
+
+		let cols: VxeColumnProps[] = [];
+		if (columns) {
+			cols = columns.map((item, index) => {
+				let editRender = {};
+				let formatter;
+				let filter = {};
+				if (item) {
+					editRender = setEditRender(item);
+					formatter = setFormatter(item);
+					filter = setFilter(item);
+					if (item.field) {
+						set(rules, item.field.value, item.json);
+					}
+					return {
+						field: item.field && item.field.value,
+						title: item.title,
+						width: item.width,
+						sortable: item.sortable,
+						fixed: item.fixed,
+						editRender,
+						formatter: formatter && formatter,
+						treeNode: isTree.value && index === 0,
+						...filter,
+					} as VxeColumnProps;
+				}
+				return {};
+			});
+		}
+		if (seq) {
+			cols.push({
+				type: 'seq',
+				fixed: 'left',
+				width: 50,
+				align: 'center',
+				title: '#',
+			});
+		}
+		if (checkbox) {
+			cols.push({
+				type: 'checkbox',
+				fixed: 'left',
+				width: 50,
+				align: 'center',
+			});
+		}
+		if (radio) {
+			cols.push({
+				type: 'radio',
+				fixed: 'left',
+				width: 50,
+				align: 'center',
+			});
+		}
+
+		if (isOperationColumn) {
+			let viewFn: boolean | Fn = false;
+			if (
+				viewDisabled?.type === 'customDatasource' &&
+				viewDisabled.key &&
+				datasource
+			) {
+				if (isFunction(datasource[viewDisabled.key])) {
+					viewFn = (row: any) => datasource[viewDisabled.key!!](row);
+				} else {
+					viewFn = datasource[viewDisabled.key];
+				}
+			}
+			let editFn: boolean | Fn = false;
+			if (
+				editDisabled?.type === 'customDatasource' &&
+				editDisabled.key &&
+				datasource
+			) {
+				if (isFunction(datasource[editDisabled.key])) {
+					editFn = (row: any) => datasource[editDisabled.key!!](row);
+				} else {
+					editFn = datasource[editDisabled.key];
+				}
+			}
+			cols.push({
+				title: '操作',
+				align: 'center',
+				fixed: 'right',
+				width: 160,
+				cellRender: {
+					name: LtTablePlugins.CellOperate,
+					props: {
+						viewVisible: viewButton,
+						viewDisabled: viewFn,
+						editVisible: editButton,
+						editDisabled: editFn,
+					},
+					events: {
+						onViewClick: (params) => {
+							if (viewBindClick) {
+								eventBus[viewBindClick](params);
+							}
+						},
+					},
+				},
+			});
+		}
+
+		// 右键菜单
+		if (menuConfig && menuConfig.length > 0) {
+			const menus = menuConfig.map((menu) => ({
+				code: menu.code,
+				name: menu.name,
+			}));
+
+			if (options.value.menuConfig) {
+				if (options.value.menuConfig.body) {
+					if (
+						options.value.menuConfig.body.options &&
+						options.value.menuConfig.body.options.length > 0
+					) {
+						options.value.menuConfig.body.options = [[]];
+						options.value.menuConfig.body.options.push(menus);
+
+						options.value.menuConfig.visibleMethod = (params: any) => {
+							menuConfig.forEach((menu) => {
+								const { options } = params;
+								options.forEach((list: any[]) => {
+									list.forEach((item: any) => {
+										if (item.code === menu.code && menu.isDisabled) {
+											const { type, key } = menu.isDisabled;
+											if (type === 'customDatasource' && key) {
+												if (isFunction(datasource[key])) {
+													item.disabled = datasource[key](params);
+												} else {
+													item.disabled = datasource[key];
+												}
+											}
+										}
+									});
+								});
+							});
+
+							return true;
+						};
+						menuConfig.forEach((item) => {
+							gridEvents.value.menuClick = (params: any) => {
+								const { menu } = params;
+								if (menu.code === item.code) {
+									eventBus[item.bindClick](params);
+								}
+							};
+						});
+					}
+				}
+			} else {
+				// eslint-disable-next-line no-console
+				console.warn(
+					`
+					父组件表格的v-bind配置属性需要初始化
+					menuConfig: {
+						body: {
+							options: [[]],
+						},
+					},
+					辅助dom产生菜单容器!
+					`
+				);
+			}
+		}
+
+		options.value.editConfig = {
+			mode: editMode && (editMode as any),
+			trigger: editTrigger && (editTrigger as any),
+		};
+
+		options.value.border = isUndefined(border) ? 'full' : (border as any);
+		options.value.columns = [...cols];
+		options.value.stripe = isBoolean(stripe) ? stripe : false;
+		options.value.size = isUndefined(size) ? '' : (size as any);
+		options.value.align = isUndefined(align) ? '' : (align as any);
+		options.value.showOverflow = isUndefined(showOverflow)
+			? null
+			: showOverflow;
+		options.value.editRules = rules && { ...rules };
+		options.value.autoResize = true;
+		options.value.height = 'auto';
+
+		if (isTree.value) {
+			options.value.stripe = false;
+			options.value.checkboxConfig = {
+				isShiftKey: false,
+				range: false,
+				checkStrictly,
+			};
+		} else {
+			options.value.checkboxConfig = {
+				isShiftKey: true,
+				range: true,
+				checkStrictly,
+			};
+		}
+		if (buttons) {
+			toolButtons.value = [];
+			buttons.forEach((item) => {
+				if (item) {
+					toolButtons.value.push({
+						title: item.title && item.title,
+						type: isNullOrUnDef(item.type) ? undefined : item.type,
+						bindClick: item.bindClick && item.bindClick,
+						bindDisabled: item.bindDisabled && item.bindDisabled,
+					});
+				}
+			});
+		}
+	}
 
 	function setEditRender(item: Column) {
 		const { field, datasourceContrast, isTime, conditionExpr, isPager } = item;
@@ -398,246 +646,6 @@ export function useSetterAdapter(props: TableProps) {
 		}
 
 		return {};
-	}
-
-	function buildTableOption(value: TableFields) {
-		options.value.columns = [];
-		const {
-			columns,
-			seq,
-			radio,
-			checkbox,
-			stripe,
-			size,
-			align,
-			border,
-			showOverflow,
-			editMode,
-			editTrigger,
-			toolButtons: buttons,
-			menuConfig,
-			isOperationColumn,
-			editButton,
-			viewButton,
-			viewBindClick,
-			viewDisabled,
-			editDisabled,
-			checkStrictly,
-		} = value;
-
-		const rules: { [key: string]: any } = {};
-
-		let cols: VxeColumnProps[] = [];
-		if (columns) {
-			cols = columns.map((item, index) => {
-				let editRender = {};
-				let formatter;
-				let filter = {};
-				if (item) {
-					editRender = setEditRender(item);
-					formatter = setFormatter(item);
-					filter = setFilter(item);
-					if (item.field) {
-						set(rules, item.field.value, item.json);
-					}
-					return {
-						field: item.field && item.field.value,
-						title: item.title,
-						width: item.width,
-						sortable: item.sortable,
-						fixed: item.fixed,
-						editRender,
-						formatter: formatter && formatter,
-						treeNode: isTree.value && index === 0,
-						...filter,
-					} as VxeColumnProps;
-				}
-				return {};
-			});
-		}
-		if (seq) {
-			cols.push({
-				type: 'seq',
-				fixed: 'left',
-				width: 50,
-				align: 'center',
-				title: '#',
-			});
-		}
-		if (checkbox) {
-			cols.push({
-				type: 'checkbox',
-				fixed: 'left',
-				width: 50,
-				align: 'center',
-			});
-		}
-		if (radio) {
-			cols.push({
-				type: 'radio',
-				fixed: 'left',
-				width: 50,
-				align: 'center',
-			});
-		}
-
-		if (isOperationColumn) {
-			let viewFn: boolean | Fn = false;
-			if (
-				viewDisabled?.type === 'customDatasource' &&
-				viewDisabled.key &&
-				datasource
-			) {
-				if (isFunction(datasource[viewDisabled.key])) {
-					viewFn = (row: any) => datasource[viewDisabled.key!!](row);
-				} else {
-					viewFn = datasource[viewDisabled.key];
-				}
-			}
-			let editFn: boolean | Fn = false;
-			if (
-				editDisabled?.type === 'customDatasource' &&
-				editDisabled.key &&
-				datasource
-			) {
-				if (isFunction(datasource[editDisabled.key])) {
-					editFn = (row: any) => datasource[editDisabled.key!!](row);
-				} else {
-					editFn = datasource[editDisabled.key];
-				}
-			}
-			cols.push({
-				title: '操作',
-				align: 'center',
-				fixed: 'right',
-				width: 160,
-				cellRender: {
-					name: LtTablePlugins.CellOperate,
-					props: {
-						viewVisible: viewButton,
-						viewDisabled: viewFn,
-						editVisible: editButton,
-						editDisabled: editFn,
-					},
-					events: {
-						onViewClick: (params) => {
-							if (viewBindClick) {
-								eventBus[viewBindClick](params);
-							}
-						},
-					},
-				},
-			});
-		}
-
-		// 右键菜单
-		if (menuConfig && menuConfig.length > 0) {
-			const menus = menuConfig.map((menu) => ({
-				code: menu.code,
-				name: menu.name,
-			}));
-
-			if (options.value.menuConfig) {
-				if (options.value.menuConfig.body) {
-					if (
-						options.value.menuConfig.body.options &&
-						options.value.menuConfig.body.options.length > 0
-					) {
-						options.value.menuConfig.body.options = [[]];
-						options.value.menuConfig.body.options.push(menus);
-
-						options.value.menuConfig.visibleMethod = (params: any) => {
-							menuConfig.forEach((menu) => {
-								const { options } = params;
-								options.forEach((list: any[]) => {
-									list.forEach((item: any) => {
-										if (item.code === menu.code && menu.isDisabled) {
-											const { type, key } = menu.isDisabled;
-											if (type === 'customDatasource' && key) {
-												if (isFunction(datasource[key])) {
-													item.disabled = datasource[key](params);
-												} else {
-													item.disabled = datasource[key];
-												}
-											}
-										}
-									});
-								});
-							});
-
-							return true;
-						};
-						menuConfig.forEach((item) => {
-							gridEvents.value.menuClick = (params: any) => {
-								const { menu } = params;
-								if (menu.code === item.code) {
-									eventBus[item.bindClick](params);
-								}
-							};
-						});
-					}
-				}
-			} else {
-				// eslint-disable-next-line no-console
-				console.warn(
-					`
-					父组件表格的v-bind配置属性需要初始化
-					menuConfig: {
-						body: {
-							options: [[]],
-						},
-					},
-					辅助dom产生菜单容器!
-					`
-				);
-			}
-		}
-
-		options.value.editConfig = {
-			mode: editMode && (editMode as any),
-			trigger: editTrigger && (editTrigger as any),
-		};
-
-		options.value.border = isUndefined(border) ? 'full' : (border as any);
-		options.value.columns = [...cols];
-		options.value.stripe = isBoolean(stripe) ? stripe : false;
-		options.value.size = isUndefined(size) ? '' : (size as any);
-		options.value.align = isUndefined(align) ? '' : (align as any);
-		options.value.showOverflow = isUndefined(showOverflow)
-			? null
-			: showOverflow;
-		options.value.editRules = rules && { ...rules };
-		options.value.autoResize = true;
-		options.value.height = 'auto';
-
-		if (isTree.value) {
-			options.value.stripe = false;
-			options.value.checkboxConfig = {
-				isShiftKey: false,
-				range: false,
-				checkStrictly,
-			};
-		} else {
-			options.value.checkboxConfig = {
-				isShiftKey: true,
-				range: true,
-				checkStrictly,
-			};
-		}
-		if (buttons) {
-			toolButtons.value = [];
-
-			buttons.forEach((item) => {
-				if (item) {
-					toolButtons.value.push({
-						title: item.title && item.title,
-						type: item.type && item.type,
-						bindClick: item.bindClick && item.bindClick,
-						bindDisabled: item.bindDisabled && item.bindDisabled,
-					});
-				}
-			});
-		}
 	}
 
 	return {

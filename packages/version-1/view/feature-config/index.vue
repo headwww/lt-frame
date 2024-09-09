@@ -14,14 +14,14 @@
 			/>
 			<div class="fcm-title">
 				<div class="fcm-title-span">导航栏默认配置</div>
-				<AButton v-if="!edit" @click="onEdit" :icon="h(EditOutlined)"
-					>编辑导航</AButton
-				>
+				<AButton v-if="!edit" @click="onEdit" :icon="h(EditOutlined)">
+					编辑导航
+				</AButton>
 				<Space v-else>
 					<AButton @click="onCancel">取消</AButton>
-					<AButton :loading="saveLoading" type="primary" @click="onSave"
-						>保存</AButton
-					>
+					<AButton :loading="saveLoading" type="primary" @click="onSave">
+						保存
+					</AButton>
 				</Space>
 			</div>
 
@@ -57,7 +57,7 @@ import { Alert, Button as AButton, Space, Menu as AMenu } from 'ant-design-vue';
 import { LtDivider, LtPageLayout } from '@lt-frame/components';
 import { h, ref, watch, onMounted, defineComponent } from 'vue';
 import { EditOutlined, FolderOpenOutlined } from '@ant-design/icons-vue';
-import { eachTree, toArrayTree, toTreeArray } from 'xe-utils';
+import { eachTree, findTree, toArrayTree, toTreeArray } from 'xe-utils';
 import { cloneDeep, omit } from 'lodash-es';
 import { Condition, serialize } from '@lt-frame/utils';
 import { useMessage } from '@lt-frame/hooks';
@@ -117,8 +117,44 @@ export default defineComponent({
 		}
 
 		function onRemove(params: FeatureConfig) {
-			const index = list.value.findIndex((item) => params.fid === item.fid);
-			list.value.splice(index!!, 1);
+			const find = findTree([params], (item) => item.notNewly === true);
+			if (find) {
+				createErrorModal({
+					title: '提示',
+					content:
+						'该菜单组内已有功能分配过权限，请谨慎删除，删除后仅能撤回菜单，已配置的权限无法找回！！！',
+					okText: '删除',
+					okButtonProps: {
+						danger: true,
+					},
+					okCancel: true,
+					onOk: () => {
+						const arr = [cloneDeep(params)];
+						const treeArray = toTreeArray(arr);
+						const ids: any[] = [];
+						treeArray.forEach((item) => {
+							if (item.notNewly) {
+								ids.push(item.fid!!);
+							}
+						});
+						LtHttp.post(
+							{
+								url: 'api/bsMenuPermissionService/deleteMenuPermissions',
+								data: [ids],
+							},
+							{ isParameters: true }
+						).finally(() => {
+							const index = list.value.findIndex(
+								(item) => params.fid === item.fid
+							);
+							list.value.splice(index!!, 1);
+						});
+					},
+				});
+			} else {
+				const index = list.value.findIndex((item) => params.fid === item.fid);
+				list.value.splice(index!!, 1);
+			}
 		}
 
 		function onAddGroup(data: FeatureConfig) {
@@ -133,7 +169,7 @@ export default defineComponent({
 		}
 
 		function onCancel() {
-			list.value = cloneDeep(rawData.value);
+			list.value = [...cloneDeep(rawData.value)];
 			edit.value = false;
 		}
 
@@ -167,25 +203,29 @@ export default defineComponent({
 				url: 'api/bsMenuStoreServiceImpl/findModuleMenus',
 				data: [condition],
 			}).then((data) => {
-				const arr = toArrayTree(data, {
-					strict: true,
-					parentKey: 'parentId',
-					key: 'fid',
-					children: 'children',
-				});
+				const arr = toArrayTree(
+					// notNewly 非新创建的是服务端返回的
+					data.map((item) => ({ ...item, notNewly: true })),
+					{
+						strict: true,
+						parentKey: 'parentId',
+						key: 'fid',
+						children: 'children',
+					}
+				);
 				list.value = [...arr];
-				rawData.value = [...arr];
+				rawData.value = [...cloneDeep(arr)];
 			});
 		}
 
-		const { createMessage } = useMessage();
+		const { createMessage, createErrorModal } = useMessage();
 
 		const saveLoading = ref(false);
 
 		function onSave() {
 			saveLoading.value = true;
 			const arr = toTreeArray(list.value).map((item: any) => ({
-				...omit(item, 'children'),
+				...omit(item, 'children', 'notNewly'),
 			}));
 			LtHttp.post(
 				{
@@ -203,6 +243,7 @@ export default defineComponent({
 					saveLoading.value = false;
 				});
 		}
+
 		return {
 			edit,
 			list,

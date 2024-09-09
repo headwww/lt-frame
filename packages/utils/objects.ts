@@ -186,3 +186,27 @@ function deleteObjectProperty<T>(obj: T, keyPath: string) {
 	// 开始遍历并删除属性
 	traverseAndDelete(obj, path);
 }
+
+/**
+ * 剔除对象中值为 null 的属性
+ * @param obj
+ * @returns
+ */
+export function removeNullProperties<T>(obj: T): T {
+	// 检查 obj 是否为对象
+	if (typeof obj !== 'object' || obj === null) return obj;
+
+	// 创建一个新对象以存储非空属性
+	const newObj: any = Array.isArray(obj) ? [] : {};
+
+	Object.keys(obj).forEach((key) => {
+		const value = (obj as any)[key];
+
+		// 如果值不是 null，则递归处理
+		if (value !== null) {
+			newObj[key] = removeNullProperties(value); // 递归处理嵌套对象
+		}
+	});
+
+	return newObj as T;
+}

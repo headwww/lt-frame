@@ -73,13 +73,15 @@ import { Form as AForm, FormItem, Input as AInput } from 'ant-design-vue';
 import { Rule } from 'ant-design-vue/es/form';
 import { LtDivider, LtModal } from '@lt-frame/components';
 import { computed, PropType, ref, watch, h, defineComponent } from 'vue';
-import { isUndefined } from 'lodash-es';
+import { cloneDeep, isUndefined } from 'lodash-es';
 import {
 	AppstoreOutlined,
 	FolderOpenOutlined,
 	LinkOutlined,
 } from '@ant-design/icons-vue';
-import { svgs } from '../../../configs';
+import { findTree, toTreeArray } from 'xe-utils';
+import { useMessage } from '@lt-frame/hooks';
+import { LtHttp, svgs } from '../../../configs';
 import FeatureMenu from './feature-menu.vue';
 import { FeatureConfig } from '../../../types';
 import ModalAddFeature from './modal-add-feature.vue';
@@ -227,11 +229,49 @@ export default defineComponent({
 			}
 		}
 
+		const { createErrorModal } = useMessage();
+
 		function onRemove(params: FeatureConfig) {
-			const index = formState.value.children?.findIndex(
-				(item) => params.fid === item.fid
-			);
-			formState.value.children?.splice(index!!, 1);
+			const find = findTree([params], (item) => item.notNewly === true);
+			if (find) {
+				createErrorModal({
+					title: '提示',
+					content:
+						'该菜单组内已有功能分配过权限，请谨慎删除，删除后仅能撤回菜单，已配置的权限无法找回！！！',
+					okText: '删除',
+					okButtonProps: {
+						danger: true,
+					},
+					okCancel: true,
+					onOk: () => {
+						const arr = [cloneDeep(params)];
+						const treeArray = toTreeArray(arr);
+						const ids: any[] = [];
+						treeArray.forEach((item) => {
+							if (item.notNewly) {
+								ids.push(item.fid!!);
+							}
+						});
+						LtHttp.post(
+							{
+								url: 'api/bsMenuPermissionService/deleteMenuPermissions',
+								data: [ids],
+							},
+							{ isParameters: true }
+						).finally(() => {
+							const index = formState.value.children?.findIndex(
+								(item) => params.fid === item.fid
+							);
+							formState.value.children?.splice(index!!, 1);
+						});
+					},
+				});
+			} else {
+				const index = formState.value.children?.findIndex(
+					(item) => params.fid === item.fid
+				);
+				formState.value.children?.splice(index!!, 1);
+			}
 		}
 
 		function onAdd(data: FeatureConfig) {

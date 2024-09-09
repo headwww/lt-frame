@@ -75,7 +75,7 @@ export interface ToolButtons {
 	code?: string;
 
 	title: string;
-	type: ButtonType;
+	type?: ButtonType;
 	// 是否禁用的数据源的key
 	bindDisabled: DatasourceContrast;
 	// 绑定的点击事件

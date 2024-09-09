@@ -51,6 +51,10 @@ interface DatasourceOptions {
 	 * 顶级实体，用于设置默认的实体配置的数据源
 	 */
 	uniqueClasspath?: string;
+	/**
+	 * 数据源类型
+	 */
+	type?: 'default' | 'page';
 }
 
 interface GlobalDatasource {
