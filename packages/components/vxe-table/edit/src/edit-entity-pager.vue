@@ -6,42 +6,44 @@
 		transfer
 	>
 		<template #default>
-			<InputSearch
+			<Input
 				:status="status"
 				v-model:value="inputValue"
 				@focus="focus"
-				@search="onSearch"
+				@input="onInput"
 			>
-			</InputSearch>
+			</Input>
 		</template>
 		<template #dropdown>
-			<vxe-grid
-				class="lt-table-scrollbar"
-				height="350"
-				v-bind="getGridConfigs"
-				v-on="gridEvents"
-			></vxe-grid>
-			<vxe-pager
-				v-model:current-page="page.currentPage"
-				v-model:page-size="page.pageSize"
-				:total="page.total"
-				:layouts="[
-					'PrevJump',
-					'PrevPage',
-					'Jump',
-					'PageCount',
-					'NextPage',
-					'NextJump',
-					'Sizes',
-				]"
-				:pageSizes="[10, 20, 50, 100, 300, 500, 1000]"
-			/>
+			<div style="width: 500px">
+				<vxe-grid
+					class="lt-table-scrollbar"
+					height="350"
+					v-bind="getGridConfigs"
+					v-on="gridEvents"
+				></vxe-grid>
+				<vxe-pager
+					v-model:current-page="page.currentPage"
+					v-model:page-size="page.pageSize"
+					:total="page.total"
+					:layouts="[
+						'PrevJump',
+						'PrevPage',
+						'Jump',
+						'PageCount',
+						'NextPage',
+						'NextJump',
+						'Sizes',
+					]"
+					:pageSizes="[10, 20, 50, 100, 300, 500, 1000]"
+				/>
+			</div>
 		</template>
 	</vxe-pulldown>
 </template>
 
 <script lang="ts" setup>
-import { InputSearch } from 'ant-design-vue';
+import { Input } from 'ant-design-vue';
 import { PropType, Ref, computed, reactive, ref, unref, watch } from 'vue';
 import type {
 	VxeGlobalRendererHandles,
@@ -49,7 +51,7 @@ import type {
 	VxeGridProps,
 	VxePulldownInstance,
 } from 'vxe-table';
-import { get, join, omit, set, split } from 'lodash-es';
+import { debounce, get, join, omit, set, split } from 'lodash-es';
 import Fuse from 'Fuse.js';
 
 const props = defineProps({
@@ -82,6 +84,12 @@ const page = reactive({
 	pageSize: 100,
 	total: 0,
 });
+
+const onInput = debounce(() => {
+	page.currentPage = 1;
+	page.total = 0;
+	focus();
+}, 800);
 
 watch(
 	() => [page.currentPage, page.pageSize],
@@ -147,12 +155,6 @@ function focus() {
 
 	const $pulldown = pulldownRef.value;
 	$pulldown?.showPanel();
-}
-
-function onSearch() {
-	page.currentPage = 1;
-	page.total = 0;
-	focus();
 }
 
 const gridEvents: VxeGridListeners<any> = {

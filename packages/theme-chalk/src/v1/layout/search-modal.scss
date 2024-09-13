@@ -1,0 +1,136 @@
+.lt-header-search-modal .ant-modal-content {
+	padding: 0 !important;
+
+	.ant-modal-header {
+		padding: 26px 26px 0;
+	}
+
+	.lt-scrollbar {
+		padding: 0 26px;
+	}
+}
+
+.lt-header-search-modal-tab {
+	margin-top: 8px;
+	color: #646a73;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.lt-header-search-modal-footer {
+	border-radius: 0 0 6px 6px;
+	background: #f2f3f5;
+	box-sizing: border-box;
+	padding: 0 12px;
+	width: 100%;
+	color: #646a73;
+	height: 40px;
+	display: flex;
+	align-items: center;
+}
+
+.lt-header-search-modal-content {
+	padding: 0 12px 0 0;
+	box-sizing: border-box;
+	align-items: center;
+	cursor: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	width: 100%;
+
+	&-item {
+		height: 56px;
+		width: 100%;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		border-radius: 6px;
+		box-sizing: border-box;
+
+		&:hover {
+			background-color: rgb(242 243 245);
+		}
+
+		.lt-pcn-cci-icon {
+			margin-left: 12px;
+			align-items: center;
+			border-radius: 8px;
+			display: flex;
+			height: 40px;
+			justify-content: center;
+			width: 40px;
+			background: #f8f9fa;
+		}
+
+		.lt-pcn-cci-title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			align-items: center;
+			color: #1f2329;
+			display: flex;
+			flex-direction: row;
+			font-size: 14px;
+			font-weight: 500;
+			gap: 4px;
+			line-height: 22px;
+			padding: 0;
+			width: 100%;
+		}
+
+		.lt-pcn-label {
+			color: #646a73;
+			font-size: 12px;
+			font-weight: 400;
+			line-height: 20px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+		}
+	}
+}
+
+.lt-his-header {
+	display: flex;
+	justify-content: space-between;
+	color: #8f959e;
+	font-size: 14px;
+	font-weight: 400;
+	align-items: center;
+	height: 22px;
+	line-height: 22px;
+	font-style: normal;
+}
+
+.lt-header-search-modal-history {
+	width: 100%;
+
+	.lt-his-content {
+		align-items: flex-start;
+		display: flex;
+		margin-top: 12px;
+		margin-bottom: 12px;
+		flex-flow: row wrap;
+
+		&-item {
+			background: rgb(242 243 245);
+			border-radius: 43px;
+			cursor: pointer;
+			font-size: 14px;
+			height: 30px;
+			line-height: 22px;
+			box-sizing: border-box;
+			overflow: hidden;
+			padding: 4px 16px;
+			color: #616266;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
+			&:hover {
+				background-color: #e0e1e2;
+			}
+		}
+	}
+}

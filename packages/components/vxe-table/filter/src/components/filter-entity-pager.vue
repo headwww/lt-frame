@@ -2,12 +2,12 @@
 	<div
 		style="padding: 8px; font-size: 15px; display: flex; flex-direction: column"
 	>
-		<InputSearch
+		<Input
 			v-model:value="inputValue"
 			placeholder="模糊查询，请输入查询条件"
-			@search="onSearch"
+			@input="onInput"
 		>
-		</InputSearch>
+		</Input>
 		<vxe-grid
 			class="lt-table-scrollbar"
 			v-bind="getGridConfigs"
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { InputSearch } from 'ant-design-vue';
+import { Input } from 'ant-design-vue';
 import {
 	PropType,
 	Ref,
@@ -44,7 +44,7 @@ import {
 	unref,
 	watch,
 } from 'vue';
-import { omit } from 'lodash-es';
+import { debounce, omit } from 'lodash-es';
 import Fuse from 'Fuse.js';
 import { VxeGridListeners, VxeGridProps } from 'vxe-table';
 import { EntityFilterData } from '../advanced-filter';
@@ -139,11 +139,11 @@ watch(
 	}
 );
 
-function onSearch() {
+const onInput = debounce(() => {
 	page.currentPage = 1;
 	page.total = 0;
 	getData();
-}
+}, 800);
 
 onMounted(() => {
 	getData();

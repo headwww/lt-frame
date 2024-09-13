@@ -1,7 +1,10 @@
 import {
+	LtHttp,
 	LtPinia,
 	LtRouter,
+	LtSuperSearch,
 	ProjectConfig,
+	SearchResult,
 	defineConfig,
 	setupErrorHandle,
 	setupRouterGuard,
@@ -12,7 +15,7 @@ import { createWebHashHistory } from 'vue-router';
 import VXETable from 'vxe-table';
 import VXETablePluginAntd from 'vxe-table-plugin-antd';
 
-import { Persistent, deepMerge } from '@lt-frame/utils';
+import { Condition, Persistent, deepMerge } from '@lt-frame/utils';
 import { LtTableConfig } from '@lt-frame/components';
 import { asyncRoutes } from '../router';
 
@@ -67,3 +70,97 @@ export function onCreate(app: App) {
 	setupRouterGuard(LtRouter);
 	setupErrorHandle(app);
 }
+
+LtSuperSearch.add('菜单', {
+	createSearchMethod(params: any) {
+		return new Promise((resolve) => {
+			params;
+			const arr: SearchResult[] = [];
+			LtRouter.getRoutes().forEach((item) => {
+				if ((item.meta.title as string).includes(params)) {
+					arr.push({
+						title: item.meta.title as string,
+						icon: item.meta?.icon as string,
+						name: item.name as string,
+					});
+				}
+			});
+			resolve(arr);
+		});
+	},
+});
+
+LtSuperSearch.add('工作中心', {
+	createSearchMethod(params: any) {
+		const condition = new Condition();
+		condition.expr(
+			`this.name like '%${params}%' or this.code like '%${params}%'`
+		);
+		condition.setTargetClass('lt.app.common.model.WorkCenter');
+		return new Promise((resolve, reject) => {
+			LtHttp.post<Array<any>>(
+				{
+					url: 'api/workCenterServiceImpl/findWorkCenters',
+					data: [condition],
+				},
+				{
+					errorMessageMode: 'none',
+				}
+			)
+				.then((data: any) => {
+					resolve(
+						data?.map((item: any) => ({
+							title: item.name,
+							label: item.code,
+							icon: 'svg-icon:jiaose',
+							name: 'PERMISSION',
+							params: JSON.stringify({
+								id: item.id,
+							}),
+						}))
+					);
+				})
+				.catch(() => {
+					reject();
+				});
+		});
+	},
+});
+
+LtSuperSearch.add('仓库', {
+	createSearchMethod(params: any) {
+		const condition = new Condition();
+		condition.expr(
+			`this.name like '%${params}%' or this.code like '%${params}%'`
+		);
+		condition.setTargetClass('lt.app.common.model.Store');
+		return new Promise((resolve, reject) => {
+			LtHttp.post<Array<any>>(
+				{
+					url: 'api/storeService/findStores',
+					data: [condition],
+				},
+				{
+					errorMessageMode: 'none',
+				}
+			)
+				.then((data: any) => {
+					resolve(
+						data?.map((item: any) => ({
+							title: item.name,
+							label: item.code,
+							icon: 'svg-icon:jiaoseguanli',
+							name: 'feature',
+							color: '#2766f9',
+							params: JSON.stringify({
+								id: item.id,
+							}),
+						}))
+					);
+				})
+				.catch(() => {
+					reject();
+				});
+		});
+	},
+});

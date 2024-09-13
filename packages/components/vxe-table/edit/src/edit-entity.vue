@@ -14,12 +14,14 @@
 			></Input>
 		</template>
 		<template #dropdown>
-			<vxe-grid
-				class="lt-table-scrollbar"
-				height="350"
-				v-bind="getGridConfigs"
-				v-on="gridEvents"
-			></vxe-grid>
+			<div style="width: 500px">
+				<vxe-grid
+					class="lt-table-scrollbar"
+					height="350"
+					v-bind="getGridConfigs"
+					v-on="gridEvents"
+				></vxe-grid>
+			</div>
 		</template>
 	</vxe-pulldown>
 </template>

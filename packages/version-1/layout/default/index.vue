@@ -1,7 +1,11 @@
 <template>
 	<Layout :class="ns.b()">
 		<LayoutHeader />
-		<div class="cut-scenes-loade" v-if="!initMenu"></div>
+		<div
+			style="position: relative; left: 50%; top: 49%"
+			class="cut-scenes-loade"
+			v-if="!initMenu"
+		></div>
 		<Layout :class="ns.e('sider-content')">
 			<div v-if="!initMenu" :class="ns.e('sider-spin')">
 				<SkeletonButton
@@ -91,9 +95,11 @@ function getUserMenuList() {
 				}
 				permissionStore.setDynamicAddedRoute(true);
 				const currentRoute = router.currentRoute.value;
-				router.replace({ path: currentRoute.fullPath }).finally(() => {
-					initMenu.value = true;
-				});
+				router
+					.replace({ path: currentRoute.fullPath, query: currentRoute.query })
+					.finally(() => {
+						initMenu.value = true;
+					});
 				startPing();
 			}
 		})

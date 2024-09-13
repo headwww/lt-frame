@@ -81,7 +81,8 @@ const useTabStore: any = defineStore({
 			// 现有页面，不要重复添加选项卡
 			const tabHasExits = this.tabList.some((tab, index) => {
 				updateIndex = index;
-				return (tab.fullPath || tab.path) === (fullPath || path);
+				return tab.path === path;
+				// return (tab.fullPath || tab.path) === (fullPath || path);
 			});
 			// 如果选项卡已存在，执行更新操作
 			if (tabHasExits) {

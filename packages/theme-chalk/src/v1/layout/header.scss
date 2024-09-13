@@ -42,6 +42,15 @@
 			z-index: 1;
 		}
 
+		.vxe-pulldown.is--visivle.is--active {
+			.ant-input-affix-wrapper {
+				background-color: #fff;
+				border-color: rgb(51 112 255);
+				border-inline-end-width: 1px;
+				z-index: 1;
+			}
+		}
+
 		.ant-input-affix-wrapper-focused,
 		.ant-input-affix-wrapper:focus {
 			z-index: 1;

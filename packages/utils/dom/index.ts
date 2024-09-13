@@ -206,3 +206,33 @@ export function scrollToView(elem: any) {
 		}
 	}
 }
+
+/**
+ * 滚动动画
+ * @param element
+ * @param targetScrollTop
+ * @param duration
+ */
+export const smoothScroll = (
+	element: any,
+	targetScrollTop: any,
+	duration: any
+) => {
+	const startScrollTop = element.scrollTop;
+	const distance = targetScrollTop - startScrollTop;
+	const startTime = performance.now();
+
+	const animateScroll = (currentTime: any) => {
+		const elapsedTime = currentTime - startTime;
+		const progress = Math.min(elapsedTime / duration, 1);
+		const easeInOut = (t: any) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t); // ease-in-out function
+
+		element.scrollTop = startScrollTop + distance * easeInOut(progress);
+
+		if (progress < 1) {
+			requestAnimationFrame(animateScroll);
+		}
+	};
+
+	requestAnimationFrame(animateScroll);
+};

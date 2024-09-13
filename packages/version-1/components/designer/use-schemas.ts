@@ -179,6 +179,12 @@ export function useSchemas() {
 														value.topClassPath
 													);
 
+												const isPager = target
+													.getProps()
+													.getPropValue(path.concat('isPager').join('.'))
+													? 'page'
+													: 'default';
+
 												// 根据顶级实体设置默认的实体配置的数据源
 												const keys = Object.keys(LtDatasource.getStore());
 												keys.forEach((item) => {
@@ -188,7 +194,8 @@ export function useSchemas() {
 															LtDatasource.get(item).uniqueClasspath
 														) &&
 														value.topClassPath ===
-															LtDatasource.get(item).uniqueClasspath
+															LtDatasource.get(item).uniqueClasspath &&
+														isPager === LtDatasource.get(item).type
 													) {
 														target
 															.getProps()
@@ -543,19 +550,21 @@ export function useSchemas() {
 										name: 'isPager',
 										setter: 'BoolSetter',
 										condition: (target: ISettingField) => {
-											const parentType = target.getProps().getPropValue(
-												target.path
-													.slice(0, -1)
-													.concat('parentType')
-
-													.join('.')
-											);
+											const parentType = target
+												.getProps()
+												.getPropValue(
+													target.path
+														.slice(0, -1)
+														.concat('parentType')
+														.join('.')
+												);
 
 											const isEdit = target
 												.getProps()
 												.getPropValue(
 													target.path.slice(0, -1).concat('isEdit').join('.')
 												);
+
 											const isFilter = target
 												.getProps()
 												.getPropValue(

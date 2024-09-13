@@ -110,12 +110,16 @@ LtDatasource.add('findUser', {
 		const c = new Condition();
 		c.setTargetClass('lt.app.productbasic.model.OrderClasses');
 		c.addQueryPath(...fields);
-		c.addUserParam('keywords', params.value);
-		c.addUserParam('keywords_properties', fields);
+		const query = fields
+			.map((field) => `this.${field} LIKE '%${params.value}%'`)
+			.join(' OR ');
+		if (params.value) {
+			c.expr(query);
+		}
 		return new Promise((resolve, reject) => {
 			LtHttp.post({
 				url: 'api/orderClassesService/findOrderClassessByPage',
-				data: [c],
+				data: [params.pager, c],
 			})
 				.then((data) => {
 					resolve(data);
@@ -130,33 +134,28 @@ LtDatasource.add('findUser', {
 	type: 'page',
 });
 
-for (let i = 0; i < 100; i++) {
-	console.log('====1');
-	LtDatasource.add(`findU5saer${i}`, {
-		createDatasource(params: string[]) {
-			return new Promise((resolve, reject) => {
-				LtHttp.post({
-					url: 'api/securityModelService/findUsers',
-					data: [
-						{
-							targetClass: 'lt.fw.core.model.biz.User',
-							queryPath: [...params],
-						},
-					],
+LtDatasource.add('findTest', {
+	createDatasource(fields: string[]) {
+		const c = new Condition();
+		c.setTargetClass('lt.app.productbasic.model.OrderClasses');
+		c.addQueryPath(...fields);
+		return new Promise((resolve, reject) => {
+			LtHttp.post({
+				url: 'api/orderClassesService/findOrderClassess',
+				data: [c],
+			})
+				.then((data) => {
+					resolve(data);
 				})
-					.then((data) => {
-						resolve(data);
-					})
-					.catch(() => {
-						reject();
-					});
-			});
-		},
-	});
-}
+				.catch(() => {
+					reject();
+				});
+		});
+	},
 
-console.log(LtDatasource.getStore());
-
+	uniqueClasspath: 'lt.app.productbasic.model.OrderClasses',
+	type: 'default',
+});
 const treeLoading = ref(false);
 
 const treeData = ref<TreeItem[]>([]);

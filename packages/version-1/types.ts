@@ -59,3 +59,21 @@ export interface FeatureRow {
 	introduce?: string;
 	version?: string;
 }
+
+/**
+ * 搜索栏查询到的结果
+ */
+export interface SearchResult {
+	// 标题
+	title?: string;
+	// 副标题
+	label?: string;
+	// 图标
+	icon?: string;
+	// 选中跳转的页面的name
+	name?: string;
+	// 传递的值
+	params?: string;
+	// 区分颜色
+	color?: string;
+}
