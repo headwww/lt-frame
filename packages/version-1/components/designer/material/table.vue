@@ -58,8 +58,9 @@
 		<SearchModal
 			:entity="entity"
 			:tUid="tUid"
-			v-model:sql="sql"
 			v-model:open="openSearch"
+			@ok="onSqlOk"
+			@cancel="onSqlCancel"
 		></SearchModal>
 		<Modal
 			:open="open"
@@ -143,15 +144,19 @@ const emit = defineEmits([
 
 const open = ref(false);
 const openSearch = ref(false);
+
 const sql = ref();
 
-watch(
-	() => sql.value,
-	() => {
-		emit('sqlChange', sql.value);
-		emit('update:sql', sql.value);
-	}
-);
+function onSqlOk(params: any) {
+	sql.value = params;
+	emit('update:sql', sql.value);
+	emit('sqlChange', sql.value);
+}
+
+function onSqlCancel() {
+	sql.value = undefined;
+	emit('sqlChange', sql.value);
+}
 
 const spinning = ref(false);
 const spinning2 = ref(false);

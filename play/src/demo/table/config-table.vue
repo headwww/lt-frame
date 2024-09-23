@@ -39,6 +39,8 @@
 					:datasource="datasource"
 					v-model:pager="pager"
 					v-model:sql="sql"
+					@sql-change="onSql"
+					@pageChange="onSql"
 				>
 					<template #table>
 						<vxe-grid
@@ -79,6 +81,9 @@ import {
 
 const sql = ref();
 
+function onSql() {
+	console.log(sql.value);
+}
 // LtDatasource.add('findUser', {
 // 	createDatasource(fields: string[], params: any) {
 // 		console.log(params);
@@ -105,8 +110,10 @@ const sql = ref();
 // 	type: 'default',
 // });
 
-LtDatasource.add('findUser', {
+LtDatasource.add('查询班次（分页）', {
 	createDatasource(fields: string[], params: any) {
+		console.log(params, fields);
+
 		const c = new Condition();
 		c.setTargetClass('lt.app.productbasic.model.OrderClasses');
 		c.addQueryPath(...fields);
@@ -134,8 +141,10 @@ LtDatasource.add('findUser', {
 	type: 'page',
 });
 
-LtDatasource.add('findTest', {
-	createDatasource(fields: string[]) {
+LtDatasource.add('查询班次', {
+	createDatasource(fields: string[], params: any) {
+		console.log(params);
+
 		const c = new Condition();
 		c.setTargetClass('lt.app.productbasic.model.OrderClasses');
 		c.addQueryPath(...fields);

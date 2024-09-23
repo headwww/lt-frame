@@ -56,7 +56,8 @@ const props = defineProps({
 const getGridConfigs = reactive<VxeGridProps>(
 	omit(props.configs, 'proxyConfig')
 );
-getGridConfigs.border = 'default';
+getGridConfigs.border = 'full';
+getGridConfigs.stripe = true;
 
 const status = ref<'' | 'error' | 'warning'>();
 
@@ -76,7 +77,10 @@ watch(inputValue, (newVal) => {
 
 const fuse = computed(() => {
 	// 模糊查询的查找字段
-	const keys = getGridConfigs.columns?.map((item: any) => item.field);
+	const keys = getGridConfigs.columns
+		?.map((item: any) => item.field)
+		.filter((item: any) => item !== undefined);
+
 	return new Fuse(filterRawData.value, {
 		keys: keys as any,
 		threshold: 0.3,

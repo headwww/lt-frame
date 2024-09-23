@@ -148,7 +148,7 @@ const props = defineProps({
 	sql: String,
 });
 
-const emit = defineEmits(['update:open', 'update:sql']);
+const emit = defineEmits(['update:open', 'ok', 'cancel']);
 
 const openSearch = ref(props.open);
 
@@ -346,14 +346,14 @@ function onOk() {
 			code = getItem.value.script ? getItem.value.script : '';
 		}
 	}
-	emit('update:sql', code);
+	emit('ok', code);
 	openSearch.value = false;
 }
 
 function onCancel(v: any) {
 	if (v.target.innerText === '移 除') {
 		selectKey.value = undefined;
-		emit('update:sql', undefined);
+		emit('cancel');
 	}
 }
 </script>

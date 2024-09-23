@@ -12,7 +12,7 @@ import {
 } from 'vue';
 import { Recordable } from '@lt-frame/utils';
 import { createField } from './fields';
-import { LtSetterRender } from './render';
+import { LtLowCodeRender } from './render';
 import { SettingTopEntry } from './types/setting-top-entry';
 import { ISettingField } from './types/setting-field';
 import { IPublicTypeFieldConfig } from './types/field-config';
@@ -99,7 +99,7 @@ export const SettingFieldView = defineComponent({
 
 		return () => {
 			const { setterType, initialValue, setterProps } = setterInfo.value;
-			const comp = setterType ? LtSetterRender.renderer.get(setterType) : null;
+			const comp = setterType ? LtLowCodeRender.renderer.get(setterType) : null;
 
 			if (!visible.value) {
 				return null;

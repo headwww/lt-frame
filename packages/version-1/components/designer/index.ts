@@ -1,4 +1,4 @@
-import { LtSetterRender } from '@lt-frame/components';
+import { LtLowCodeRender } from '@lt-frame/components';
 import { Recordable } from '@lt-frame/utils';
 import { h } from 'vue';
 import FieldSetter from './components/field-setter.vue';
@@ -6,19 +6,19 @@ import VariableSetter from './components/variable-setter.vue';
 import SQLSetter from './components/sql-setter.vue';
 import LtTable from './material/table.vue';
 
-LtSetterRender.renderer.add('FieldSetter', {
+LtLowCodeRender.renderer.add('FieldSetter', {
 	createSetterContent(props: Recordable) {
 		return h(FieldSetter, { ...props });
 	},
 });
 
-LtSetterRender.renderer.add('VariableSetter', {
+LtLowCodeRender.renderer.add('VariableSetter', {
 	createSetterContent(props: Recordable) {
 		return h(VariableSetter, { ...props });
 	},
 });
 
-LtSetterRender.renderer.add('SQLSetter', {
+LtLowCodeRender.renderer.add('SQLSetter', {
 	createSetterContent(props: Recordable) {
 		return h(SQLSetter, { ...props });
 	},
