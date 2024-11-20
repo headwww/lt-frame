@@ -55,10 +55,9 @@
 				</template>
 			</ConditionEditor>
 		</div>
-
 		<div style="height: 100%">
 			<Codemirror
-				v-model="code"
+				v-model="mirrorCode"
 				disabled
 				:style="{ height: '100%' }"
 				:extensions="[sql()]"
@@ -86,6 +85,8 @@ import { get, omit, uniqueId } from 'lodash-es';
 import { ComponentOptions, onMounted, PropType, ref, watch } from 'vue';
 import { mapTree } from 'xe-utils';
 import { Codemirror } from 'vue-codemirror';
+import dayjs from 'dayjs';
+
 import InputGroup from './input-group.vue';
 import InputNumberGroup from './input-number-group.vue';
 import DatePickerMode from './date-picker-mode.vue';
@@ -271,14 +272,49 @@ function getComponent(item: ConditionExpr): {
 			},
 			value: item?.params?.value,
 			type: item?.expr?.type,
+
+			// 值改变时
 			'onUpdate:value': (value: any) => {
+				let typevalue = item?.expr?.type; // 日期类型
+				let opvalue = item?.params?.operator; // 操作符 等于大于，预设，起止，为空等
+				if (!typevalue) {
+					typevalue = 'DateTime';
+				}
+				if (!opvalue) {
+					opvalue = '等于';
+				}
+
+				let datevalue = value;
+				if (opvalue === '预设') {
+					datevalue = value;
+				} else if (opvalue === '起止') {
+					datevalue = [
+						`${dayjs(value[0]).format('YYYY-MM-DD HH:mm:ss')}`,
+						`${dayjs(value[1]).format('YYYY-MM-DD HH:mm:ss')}`,
+					];
+				} else {
+					datevalue = dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+				}
+
+				if (typevalue === 'Date' || typevalue === 'date') {
+					// 等于某天要指定0点至23点
+					if (opvalue === '等于') {
+						datevalue = `${dayjs(value).format('YYYY-MM-DD')}`;
+					} else if (opvalue === '小于' || opvalue === '大于等于') {
+						datevalue = `${dayjs(value).format('YYYY-MM-DD')} 00:00:00`;
+					} else if (opvalue === '大于' || opvalue === '小于等于') {
+						datevalue = `${dayjs(value).format('YYYY-MM-DD')} 23:59:59`;
+					}
+				}
+
 				const arr = mapTree(conditionExpr.value, (i) => {
 					if (item.id === i.id) {
 						return {
 							...i,
 							params: {
 								...i.params,
-								value,
+								value: datevalue,
+								argType: 'placeHolder',
 							},
 						};
 					}
@@ -286,6 +322,8 @@ function getComponent(item: ConditionExpr): {
 				});
 				conditionExpr.value = arr;
 			},
+
+			// 日期类型改变时
 			'onUpdate:type': (value: any) => {
 				const arr = mapTree(conditionExpr.value, (i) => {
 					if (item.id === i.id) {
@@ -485,14 +523,14 @@ function getLogicalSymbols(params: any): SelectProps['options'] {
 	}
 }
 
-const code = ref();
+const mirrorCode = ref();
 let isUpdate = true;
 watch(
 	() => props.value,
 	() => {
 		isUpdate = false;
 		conditionExpr.value = props.value;
-		code.value = generateHqlWhereClause(conditionExpr.value[0]);
+		mirrorCode.value = generateHqlWhereClause(conditionExpr.value[0])?.clause;
 	}
 );
 
@@ -501,7 +539,7 @@ watch(
 	() => {
 		if (isUpdate) {
 			emit('update:value', conditionExpr.value);
-			code.value = generateHqlWhereClause(conditionExpr.value[0]);
+			mirrorCode.value = generateHqlWhereClause(conditionExpr.value[0])?.clause;
 		}
 		isUpdate = true;
 	},
@@ -511,6 +549,6 @@ watch(
 );
 
 onMounted(() => {
-	code.value = generateHqlWhereClause(conditionExpr.value[0]);
+	mirrorCode.value = generateHqlWhereClause(conditionExpr.value[0])?.clause;
 });
 </script>

@@ -4,10 +4,10 @@
 			<SelectOption value="date-time">DateTime</SelectOption>
 			<SelectOption value="date">Date</SelectOption>
 			<SelectOption value="time">Time</SelectOption>
-			<SelectOption value="week">周</SelectOption>
+			<!-- <SelectOption value="week">周</SelectOption>
 			<SelectOption value="month">月</SelectOption>
 			<SelectOption value="quarter">季度</SelectOption>
-			<SelectOption value="year">年</SelectOption>
+			<SelectOption value="year">年</SelectOption> -->
 		</Select>
 		<DatePicker
 			v-model:value="v1"
