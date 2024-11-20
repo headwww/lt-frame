@@ -303,12 +303,6 @@ importers:
         specifier: ^3.4.15
         version: 3.4.15(typescript@5.3.3)
 
-  packages/directives:
-    dependencies:
-      vue:
-        specifier: ^3.4.15
-        version: 3.4.15(typescript@5.3.3)
-
   packages/hooks: {}
 
   packages/lt-frame:
