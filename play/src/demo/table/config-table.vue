@@ -38,9 +38,8 @@
 					:eventBus="eventBus"
 					:datasource="datasource"
 					v-model:pager="pager"
-					v-model:sql="sql"
-					@sql-change="onSql"
 					@pageChange="onSql"
+					v-model:queryParams="queryParams"
 				>
 					<template #table>
 						<vxe-grid
@@ -69,7 +68,12 @@ import {
 	LtDatasource,
 } from '@lt-frame/components';
 import { Condition } from '@lt-frame/utils';
-import { LtConfigTable, LtHttp, PageResponse } from '@lt-frame/version-1';
+import {
+	LtConfigTable,
+	LtHttp,
+	PageResponse,
+	TableQueryParams,
+} from '@lt-frame/version-1';
 import { Tooltip } from 'ant-design-vue';
 import { onMounted, reactive, ref, watch } from 'vue';
 import {
@@ -79,11 +83,24 @@ import {
 	VxePagerProps,
 } from 'vxe-table';
 
-const sql = ref();
+const queryParams = ref<TableQueryParams>();
 
-function onSql() {
-	console.log(sql.value);
-}
+watch(
+	() => queryParams.value,
+	(value) => {
+		console.log(value);
+		console.log(value?.expression);
+	}
+);
+
+watch(
+	() => pager.value,
+	(value) => {
+		console.log(value);
+	}
+);
+
+function onSql() {}
 // LtDatasource.add('findUser', {
 // 	createDatasource(fields: string[], params: any) {
 // 		console.log(params);
@@ -278,7 +295,10 @@ function finEmployee(treeItem?: TreeItem) {
  * @returns
  */
 function find2<T>(condition: Condition) {
-	condition.expr(sql.value);
+	condition.expr(
+		queryParams.value?.expression!,
+		...(queryParams.value?.params || [])
+	);
 	condition.setTargetClass('lt.fw.core.model.biz.Employee');
 	return LtHttp.post<Array<T>>({
 		url: 'api/employeeServiceImpl/findEmployees',

@@ -24,14 +24,18 @@
 							shape="circle"
 							:icon="h(SearchOutlined)"
 							style="margin-right: 6px"
-							@click="onSearch"
-							:type="!sql || sql === '' ? 'default' : 'primary'"
+							@click="openSearch = true"
+							:type="
+								!queryParams?.expression || queryParams?.expression === ''
+									? 'default'
+									: 'primary'
+							"
 						></Button>
 						<Button
 							v-if="userStore.getClient?.user?.id === '1'"
 							shape="circle"
 							:icon="h(SettingOutlined)"
-							@click="onConfig"
+							@click="open = true"
 						></Button>
 					</div>
 				</div>
@@ -46,9 +50,9 @@
 				>
 					<vxe-pager
 						v-if="isPage"
-						v-bind="page"
-						v-model:current-page="page.currentPage"
-						v-model:page-size="page.pageSize"
+						v-model:current-page="innerPagerCurrentPage"
+						v-model:page-size="innerPagerSize"
+						v-model:total="innerPagerTotal"
 						@page-change="handlePageChange"
 					/>
 				</div>
@@ -59,8 +63,8 @@
 			:entity="entity"
 			:tUid="tUid"
 			v-model:open="openSearch"
-			@ok="onSqlOk"
-			@cancel="onSqlCancel"
+			@ok="onQueryOk"
+			@cancel="onQueryCancel"
 		></SearchModal>
 		<Modal
 			:open="open"
@@ -110,10 +114,9 @@ import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
 import { SearchOutlined, SettingOutlined } from '@ant-design/icons-vue';
-import { VxePagerProps } from 'vxe-table';
 import { useResizeObserver } from '@vueuse/core';
 import { useNamespace } from '@lt-frame/hooks';
-import { tableProps } from './table';
+import { tableProps, TableQueryParams } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
 import { useSchemas } from '../use-schemas';
@@ -136,26 +139,33 @@ const emit = defineEmits([
 	'update:listeners',
 	'update:fields',
 	'update:pager',
-	'update:sql',
+	'update:queryParams',
 	'pageChange',
-	'sqlChange',
+	'queryChange',
 	'setup',
 ]);
 
 const open = ref(false);
 const openSearch = ref(false);
 
-const sql = ref();
+const queryValue = ref<TableQueryParams>();
 
-function onSqlOk(params: any) {
-	sql.value = params;
-	emit('update:sql', sql.value);
-	emit('sqlChange', sql.value);
+const innerQueryParams = computed({
+	get: () => props.queryParams,
+	set: (value) => {
+		emit('update:queryParams', value);
+	},
+});
+
+function onQueryOk(params: TableQueryParams) {
+	innerQueryParams.value = params;
+	emit('queryChange', innerQueryParams.value);
 }
 
-function onSqlCancel() {
-	sql.value = undefined;
-	emit('sqlChange', sql.value);
+// 取消搜索
+function onQueryCancel() {
+	queryValue.value = undefined;
+	emit('queryChange', queryValue.value);
 }
 
 const spinning = ref(false);
@@ -167,10 +177,6 @@ const container = ref<HTMLDivElement>();
 const toolBar = ref<HTMLDivElement>();
 const pagerBar = ref<HTMLDivElement>();
 const tableStyle = ref();
-
-function onSearch() {
-	openSearch.value = true;
-}
 
 useResizeObserver(container, (entries: any) => {
 	const entry = entries[0];
@@ -200,19 +206,36 @@ const { options, gridEvents, toolButtons, buildTableOption } =
 
 const { schemas, buildSchemas } = useSchemas();
 
-// 处理pager
-const page = ref<VxePagerProps>(props.pager || {});
-
-const isPage = computed(() => !isUndefined(props.pager));
-
+// table是否初始化完成
 const isSetup = ref(false);
 
-watch(
-	() => page.value,
-	() => {
-		emit('update:pager', page.value);
-	}
-);
+const innerPagerTotal = computed({
+	get: () => props.pager?.total,
+	set: (value) => {
+		emit('update:pager', { ...props.pager, total: value });
+	},
+});
+
+const innerPagerSize = computed({
+	get: () => props.pager?.pageSize,
+	set: (value) => {
+		emit('update:pager', { ...props.pager, pageSize: value });
+	},
+});
+
+const innerPagerCurrentPage = computed({
+	get: () => props.pager?.currentPage,
+	set: (value) => {
+		emit('update:pager', { ...props.pager, currentPage: value });
+	},
+});
+
+// 是否开启分页 判断是否设置了props.pager
+const isPage = computed(() => !isUndefined(props.pager));
+
+function handlePageChange(params: any) {
+	emit('pageChange', params);
+}
 
 const eventBusKey = computed(() => {
 	const keys = Object.keys(props.eventBus);
@@ -317,10 +340,6 @@ watch(
 	}
 );
 
-function onConfig() {
-	open.value = true;
-}
-
 function onSave() {
 	loading.value = true;
 	saveBsConfigTablesByString(tempSettingValue.value)
@@ -355,9 +374,5 @@ function onCancel() {
 		parentMenu: props.tUid?.split('_')[0],
 	};
 	open.value = false;
-}
-
-function handlePageChange(params: any) {
-	emit('pageChange', params);
 }
 </script>

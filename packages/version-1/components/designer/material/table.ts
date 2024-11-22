@@ -35,6 +35,13 @@ export const tableProps = {
 		type: Array as PropType<Array<string>>,
 		default: () => [],
 	},
-	sql: String,
+	queryParams: {
+		type: Object as PropType<TableQueryParams>,
+	},
+};
+
+export type TableQueryParams = {
+	expression?: string;
+	params?: Array<number | undefined>;
 };
 export type TableProps = ExtractPropTypes<typeof tableProps>;

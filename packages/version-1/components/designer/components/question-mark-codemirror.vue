@@ -1,25 +1,48 @@
+<template>
+	<Codemirror
+		v-model="editorContent"
+		:extensions="extensions"
+		:style="{ height: '100%' }"
+	/>
+</template>
 <script setup lang="ts">
 // 导入所需组件和工具函数
 import { Codemirror } from 'vue-codemirror';
-import { ref, h, createApp, watch, onMounted, nextTick } from 'vue';
+import { ref, h, createApp, watch, onMounted, nextTick, PropType } from 'vue';
 import { EditorView } from 'codemirror';
 import { highlightSpecialChars } from '@codemirror/view';
+import { sql as SQL } from '@codemirror/lang-sql';
 import QuestionMarkSetter from './question-mark-setter.vue';
 
+const props = defineProps({
+	content: String,
+	extraParams: Array as PropType<Array<number | undefined>>,
+});
+
 // 编辑器内容,初始值为两个问号
-const editorContent = ref('?');
+const editorContent = ref(props.content);
 
 // 存储问号id和对应的时间戳映射关系
 const questionMarkTimeMap = ref<Record<string, number | undefined>>({});
 
 // 存储所有问号对应的时间戳数组,按顺序排列
-const timeStampArray = ref<Array<number | undefined>>([1732178819877]);
+const timeStampArray = ref<Array<number | undefined>>(props.extraParams || []);
 
-// 模拟请求设置值
-setTimeout(() => {
-	timeStampArray.value = [1732178819877, 1732179761145];
-	editorContent.value = '??';
-}, 2000);
+// 定义emit
+const emit = defineEmits(['update:value']);
+
+// 监听编辑器内容和时间戳数组变化
+watch(
+	[editorContent, timeStampArray],
+	([content, timeArray]) => {
+		// 组合成对象传递给父组件
+		emit('update:value', {
+			script: content,
+			extraParams: timeArray,
+		});
+	},
+	{ deep: true }
+);
 
 // 监听问号时间映射变化,同步更新时间戳数组
 watch(
@@ -122,13 +145,6 @@ const extensions = [
 	}),
 	// 启用编辑器自动换行
 	EditorView.lineWrapping,
+	SQL(),
 ];
 </script>
-
-<template>
-	<Codemirror
-		v-model="editorContent"
-		:extensions="extensions"
-		:style="{ height: '400px' }"
-	/>
-</template>

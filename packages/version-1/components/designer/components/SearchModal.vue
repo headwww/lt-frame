@@ -10,6 +10,9 @@
 		}"
 		cancel-text="移除"
 		ok-text="查询"
+		:ok-button-props="{
+			disabled: !currentSelectItem,
+		}"
 		@ok="onOk"
 		@cancel="onCancel"
 	>
@@ -35,7 +38,7 @@
 						<div
 							class="lt-sce-title"
 							:class="{
-								'is-active': item.id === selectKey,
+								'is-active': item.id === selectId,
 							}"
 							@click="onSelect(item)"
 						>
@@ -58,7 +61,7 @@
 								<Input
 									placeholder="请输入标题"
 									style="margin-left: 8px; margin-right: 8px"
-									v-if="item.id === selectKey"
+									v-if="item.id === selectId"
 									:value="item.title"
 									@update:value="updateTitle"
 								></Input>
@@ -79,68 +82,34 @@
 			<div class="lt-sce-r" style="border-left: 0 none; overflow: hidden">
 				<div class="lt-sce-header" style="justify-content: flex-end">
 					<Button
-						v-if="getItem && getItem.type === 'script'"
-						@click="onArgs"
-						type="primary"
-						:size="'small'"
-						style="font-size: 12px; margin-left: 10px"
-					>
-						参数
-					</Button>
-					<Button
-						v-if="getItem"
+						v-if="currentSelectItem"
 						@click="onSave"
 						type="primary"
 						:size="'small'"
-						:disabled="!getItem.statue || getItem.statue === 0"
+						:disabled="
+							!currentSelectItem.statue || currentSelectItem.statue === 0
+						"
 						style="font-size: 12px; margin-left: 10px"
 						:loading="saveLoading"
 						>保存</Button
 					>
 				</div>
-				<div v-if="getItem && getItem.type === 'script'" style="height: 100%">
-					<div style="height: 350px; overflow: scroll scroll; padding: 8px">
-						<Codemirror
-							v-if="getItem && getItem.type === 'script'"
-							:style="{ height: '340px' }"
-							:extensions="[SQL()]"
-							:model-value="getItem.script"
-							@update:model-value="updateScript"
-						>
-						</Codemirror>
-					</div>
-					<div
-						v-if="getItem && getItem.type === 'script'"
-						style="height: 100%; overflow: scroll scroll"
-					>
-						<vxe-table
-							border
-							size="mini"
-							:show-header-overflow="true"
-							height="100"
-							:edit-config="{ mode: 'row', trigger: 'click' }"
-							:data="argsData"
-						>
-							<vxe-column type="seq" width="60"></vxe-column>
-							<vxe-column
-								field="argValue"
-								title="值"
-								min-width="100"
-								:edit-render="{ name: 'VxeInput' }"
-							></vxe-column>
-							<vxe-column
-								field="argType"
-								title="类型"
-								width="200"
-								:edit-render="argtypeEditRender"
-							></vxe-column>
-						</vxe-table>
-					</div>
+				<div
+					v-if="currentSelectItem && currentSelectItem.type === 'script'"
+					style="height: 100%"
+				>
+					<QuestionMarkCodemirror
+						:key="currentSelectItem.id"
+						:content="currentSelectItem.script"
+						:extra-params="currentSelectItem.extraParams"
+						@update:value="updateQuestionMarkValue"
+					/>
 				</div>
 				<SqlEditor
-					v-if="getItem && getItem.type === 'rule'"
+					v-if="currentSelectItem && currentSelectItem.type === 'rule'"
 					:entity="entity"
-					:value="JSON.parse(getItem.rule!!)"
+					:key="currentSelectItem.id"
+					:value="JSON.parse(currentSelectItem.rule!!)"
 					@update:value="updateRule"
 				></SqlEditor>
 			</div>
@@ -163,19 +132,15 @@ import {
 	Input,
 	Button,
 } from 'ant-design-vue';
-import { computed, reactive, ref, watch } from 'vue';
-import { Codemirror } from 'vue-codemirror';
-import { sql as SQL } from '@codemirror/lang-sql';
+import { computed, ref, watch } from 'vue';
 import { cloneDeep, get, uniqueId } from 'lodash-es';
-import { Condition } from '@lt-frame/utils';
-import { VxeColumnPropTypes } from 'vxe-table';
+import { Condition, isString } from '@lt-frame/utils';
 import { useMessage } from '@lt-frame/hooks';
-import { isString } from 'xe-utils';
 import { LtHttp } from '../../../configs';
-
 import SqlEditor from './sql-editor.vue';
-import { generateHqlWhereClause } from './util';
 import { SearchCondition } from './search-modal';
+import QuestionMarkCodemirror from './question-mark-codemirror.vue';
+import { generateHqlWhereClause } from './util';
 
 defineOptions({
 	inheritAttrs: false,
@@ -188,56 +153,47 @@ const props = defineProps({
 	sql: String,
 });
 
+// 查询条件列表
+const searchConditions = ref<SearchCondition[]>([]);
+
+// 当前选中的查询条件id
+const selectId = ref();
+
 const emit = defineEmits(['update:open', 'ok', 'cancel']);
 
-const openSearch = ref(props.open);
+const openSearch = computed({
+	get: () => props.open,
+	set: (value) => emit('update:open', value),
+});
 
-watch(
-	() => props.open,
-	() => {
-		openSearch.value = props.open;
-	}
-);
+// 打开时，查询服务端保存的查询条件
+watch(openSearch, () => {
+	openSearch.value && postConfig();
+});
 
-watch(
-	() => openSearch.value,
-	() => {
-		if (openSearch.value) {
-			postConfig();
-		}
-		emit('update:open', openSearch.value);
-	}
-);
-
-const selectKey = ref();
-
-function onSelect(item: SearchCondition) {
-	selectKey.value = item.id;
-}
-
-const getItem = computed((): SearchCondition => {
+// 当前选中的查询条件
+const currentSelectItem = computed((): SearchCondition => {
 	const item = searchConditions.value.find(
-		(item) => item.id === selectKey.value
+		(item) => item.id === selectId.value
 	);
 	return item as SearchCondition;
 });
 
-// 2024-11-19 wyh 暂时查询按钮不控制变灰
-// 下面代码原来在okButtonProps中
-// :okButtonProps="{
-// 			disabled: okButtonDisabled,
-// 		}"
-// const okButtonDisabled = computed(() => {
-// 	if (getItem.value) {
-// 		return  getItem.value.statue === 1 || getItem.value.statue === 2;
-// 	}
-// 	return true;
-// });
-const searchConditions = ref<SearchCondition[]>([]);
+/**
+ * 选择查询条件
+ * @param item
+ */
+function onSelect(item: SearchCondition) {
+	selectId.value = item.id;
+}
 
-// 下拉选择两种类型的查询
+/**
+ * 新增查询条件
+ * @param e
+ */
 const handleMenuClick: MenuProps['onClick'] = (e) => {
 	const id = uniqueId('$add');
+	// 新增规则引擎查询条件
 	if (e.key === '1') {
 		searchConditions.value.push({
 			tUid: props.tUid,
@@ -260,6 +216,7 @@ const handleMenuClick: MenuProps['onClick'] = (e) => {
 			]),
 		});
 	}
+	// 新增脚本查询条件
 	if (e.key === '2') {
 		searchConditions.value.push({
 			tUid: props.tUid,
@@ -269,12 +226,16 @@ const handleMenuClick: MenuProps['onClick'] = (e) => {
 			title: '查询脚本',
 		});
 	}
-	selectKey.value = id;
+	selectId.value = id;
 };
 
+/**
+ * 更新查询条件标题
+ * @param v
+ */
 function updateTitle(v: any) {
 	const arr = searchConditions.value.map((item) => {
-		if (item.id === selectKey.value) {
+		if (item.id === selectId.value) {
 			const statue = item.statue === 1 ? 1 : 2;
 			return {
 				...item,
@@ -287,13 +248,17 @@ function updateTitle(v: any) {
 	searchConditions.value = arr;
 }
 
-function updateRule(v: any) {
+/**
+ * 更新规则引擎查询条件
+ * @param data
+ */
+function updateRule(data: any) {
 	const arr = searchConditions.value.map((item) => {
 		const statue = item.statue === 1 ? 1 : 2;
-		if (item.id === selectKey.value) {
+		if (item.id === selectId.value) {
 			return {
 				...item,
-				rule: JSON.stringify(v),
+				rule: JSON.stringify(data),
 				statue,
 			};
 		}
@@ -302,13 +267,18 @@ function updateRule(v: any) {
 	searchConditions.value = arr;
 }
 
-function updateScript(v: any) {
+/**
+ * sql编辑器的值
+ * @param data
+ */
+function updateQuestionMarkValue(data: { script: string; extraParams: any[] }) {
 	const arr = searchConditions.value.map((item) => {
 		const statue = item.statue === 1 ? 1 : 2;
-		if (item.id === selectKey.value) {
+		if (item.id === selectId.value) {
 			return {
 				...item,
-				script: v,
+				script: data.script,
+				extraParams: data.extraParams,
 				statue,
 			};
 		}
@@ -340,7 +310,7 @@ function onDelete(params: SearchCondition) {
 	}
 }
 
-// 查询库里保存的查询条件
+// 获取保存的查询条件
 function postConfig() {
 	const condition = new Condition();
 	condition.prop('tUid', props.tUid);
@@ -355,12 +325,16 @@ function postConfig() {
 
 const saveLoading = ref(false);
 function onSave() {
-	saveLoading.value = true;
-	const data = cloneDeep(getItem.value);
-	if (getItem.value.id?.toString().includes('$add')) {
+	const data = cloneDeep(currentSelectItem.value);
+	if (data.type === 'script' && data.extraParams?.includes(undefined)) {
+		createMessage.warning('请为所有问号设置参数');
+		return;
+	}
+	if (currentSelectItem.value.id?.toString().includes('$add')) {
 		delete data.id;
 		delete data.statue;
 	}
+	saveLoading.value = true;
 	LtHttp.post(
 		{
 			url: 'api/bsConfigServiceImpl/saveBsConfigQuerys',
@@ -370,14 +344,14 @@ function onSave() {
 	)
 		.then((data) => {
 			const arr = searchConditions.value.map((item) => {
-				if (item.id === selectKey.value) {
+				if (item.id === selectId.value) {
 					return {
 						...get(data, '0.0'),
 					};
 				}
 				return item;
 			});
-			selectKey.value = get(data, '0.0.id');
+			selectId.value = get(data, '0.0.id');
 			searchConditions.value = arr;
 		})
 		.finally(() => {
@@ -385,174 +359,59 @@ function onSave() {
 		});
 }
 
-// #region 全脚本条件对应的参数处理
-// 脚本语句的参数数据源
-interface sqlArgDataItem {
-	id: number;
-	argValue: string;
-	argType: string;
-}
-
-const argsData = ref<sqlArgDataItem[]>([]);
-
-const argtypeEditRender = reactive<VxeColumnPropTypes.EditRender>({
-	name: 'VxeSelect',
-	options: [
-		{ label: '常规类型', value: 'default' },
-		{ label: '日期', value: 'Date' },
-	],
-});
-
-// 点击参数按钮，要根据sql语句显示必须填入的参数列表
-function onArgs() {
-	if (getItem.value) {
-		// sqlargOptions.value.data = data;
-		// 根据 getItem.value.script内容中的sql语句的问号个数，提取参数列表
-		// 提取参数列表
-		const sql = getItem.value.script ? getItem.value.script : '';
-		const reg = /\?/g;
-		const arr = sql.match(reg);
-
-		if (arr) {
-			argsData.value.length = 0;
-			argsData.value = [];
-			arr.forEach((item, index) => {
-				argsData.value.push({
-					id: index + 1,
-					argValue: '',
-					argType: 'default',
-				});
-			});
-		} else {
-			argsData.value.length = 0;
-			argsData.value = [];
-		}
-	}
-}
-
-function checkSqlArgs() {
-	let isOk = 0;
-	// 如果sql语句中问号个数与参数不相符，报错
-	if (getItem.value) {
-		// sqlargOptions.value.data = data;
-		// 根据 getItem.value.script内容中的sql语句的问号个数，提取参数列表
-		// 提取参数列表
-		const sql = getItem.value.script ? getItem.value.script : '';
-		const reg = /\?/g;
-		const arr = sql.match(reg);
-		if (arr && argsData.value.length !== arr.length) {
-			isOk = 1;
-			return isOk;
-		}
-	}
-	// 检查参数列表中的参数是否为空
-	argsData.value.forEach((item) => {
-		if (item.argValue === '') {
-			isOk = 2;
-		}
-	});
-
-	// 检查如果参数类型为日期，填入的值是否为日期类型
-	argsData.value.forEach((item) => {
-		if (item.argType === 'Date') {
-			const datestr = new Date(item.argValue).getTime();
-			if (!datestr) {
-				isOk = 3;
-			}
-
-			// if (isNaN(datestr)) {
-			// 	isOk = 3;
-			// }
-		}
-	});
-	return isOk;
-}
-
-// #endregion
-
 const { createMessage } = useMessage();
-
-type argType =
-	| {
-			type: string;
-			value: string;
-	  }
-	| string;
 function onOk() {
-	let code = '';
-	let clauseArgs = {};
-	let args: argType[] = [];
-
-	const condition = new Condition();
-	if (getItem.value) {
-		if (getItem.value.type === 'rule') {
-			// const node = JSON.parse(getItem.value.rule!!)[0];
-			clauseArgs = generateHqlWhereClause(JSON.parse(getItem.value.rule!!)[0]);
-			code = get(clauseArgs, 'clause') ?? '';
-			args = get(clauseArgs, 'args') ?? [];
-			const argStrList: argType[] = [];
-			if (!args || args.length === 0) {
-				condition.expr(code);
-			} else {
-				args.forEach((item) => {
+	let params: { expression?: string; params?: any[] } = {};
+	if (currentSelectItem.value) {
+		if (currentSelectItem.value.type === 'rule') {
+			const { clause, args } = generateHqlWhereClause(
+				JSON.parse(currentSelectItem.value.rule!!)[0]
+			);
+			if (args && args.length) {
+				const argsList = args.map((item: any) => {
 					if (isString(item)) {
-						argStrList.push(item);
-					} else {
-						if (item.type === 'Date') {
-							const datestr = new Date(item.value).getTime();
-							argStrList.push({
-								type: 'Date',
-								value: `${datestr}`,
-							});
-						}
+						return item;
+					}
+					if (item.type === 'Date') {
+						return {
+							type: 'Date',
+							value: new Date(item.value).getTime(),
+						};
 					}
 				});
-
-				condition.expr(code, ...argStrList);
+				params = {
+					expression: clause,
+					params: argsList,
+				};
 			}
 		} else {
-			// 脚本查询时，要判断是否有问号，以及参数是否为空
-			const ret = checkSqlArgs();
-			if (ret === 1) {
-				createMessage.warning('问号个数与参数不相符');
+			const { script, extraParams } = currentSelectItem.value;
+			if (!script || script.trim() === '') {
+				createMessage.warning('请输入查询脚本');
 				return;
 			}
-			if (ret === 2) {
-				createMessage.warning('参数不能为空');
+			// 判断参数中是否存在undefined
+			if (extraParams?.some((param) => param === undefined)) {
+				createMessage.warning('问号对应的参数不能为空');
 				return;
 			}
-			if (ret === 3) {
-				createMessage.warning('参数必须为日期格式');
-				return;
-			}
-
-			code = getItem.value.script ? getItem.value.script : '';
-			if (!argsData.value || argsData.value.length === 0) {
-				condition.expr(code);
-			} else {
-				const argStrList: any[] = [];
-				argsData.value.forEach((item) => {
-					if (item?.argType === 'Date') {
-						const datestr = new Date(item.argValue).getTime();
-						(argStrList as { type: string; value: string }[]).push({
-							type: 'Date',
-							value: `${datestr}`,
-						});
-					} else {
-						(argStrList as {}[]).push(item.argValue);
-					}
-				});
-				condition.expr(code, ...argStrList);
-			}
+			params = {
+				expression: script,
+				params: extraParams?.map((item) => ({
+					type: 'Date',
+					value: item,
+				})),
+			};
 		}
 	}
-	emit('ok', condition);
+
+	emit('ok', params);
 	openSearch.value = false;
 }
 
 function onCancel(v: any) {
 	if (v.target.innerText === '移 除') {
-		selectKey.value = undefined;
+		selectId.value = undefined;
 		emit('cancel');
 	}
 }
