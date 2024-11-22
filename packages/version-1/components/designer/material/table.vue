@@ -140,7 +140,7 @@ const emit = defineEmits([
 	'update:fields',
 	'update:pager',
 	'update:queryParams',
-	'pageChange',
+	'pagerChange',
 	'queryChange',
 	'setup',
 ]);
@@ -234,7 +234,7 @@ const innerPagerCurrentPage = computed({
 const isPage = computed(() => !isUndefined(props.pager));
 
 function handlePageChange(params: any) {
-	emit('pageChange', params);
+	emit('pagerChange', params);
 }
 
 const eventBusKey = computed(() => {
