@@ -27,6 +27,7 @@
 	"devDependencies": {
 		"@ant-design/icons-vue": "^7.0.1",
 		"@codemirror/lang-sql": "^6.7.0",
+		"@codemirror/state": "^6.4.1",
 		"@codemirror/view": "^6.34.3",
 		"@commitlint/cli": "^18.4.4",
 		"@commitlint/config-conventional": "^18.4.4",

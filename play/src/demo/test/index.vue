@@ -2,7 +2,6 @@
 // 导入所需组件和工具函数
 import { Codemirror } from 'vue-codemirror';
 import { ref, h, createApp, watch, onMounted, nextTick } from 'vue';
-import { EditorView } from 'codemirror';
 import { highlightSpecialChars } from '@codemirror/view';
 import QuestionMarkSetter from './question-mark-setter.vue';
 
@@ -120,8 +119,6 @@ const extensions = [
 			return container;
 		},
 	}),
-	// 启用编辑器自动换行
-	EditorView.lineWrapping,
 ];
 </script>
 
