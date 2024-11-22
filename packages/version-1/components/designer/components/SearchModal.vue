@@ -319,7 +319,12 @@ function postConfig() {
 		url: 'api/bsConfigServiceImpl/findBsQuerys',
 		data: [condition],
 	}).then((data) => {
-		searchConditions.value = data;
+		searchConditions.value = data.map((item: SearchCondition) => ({
+			...item,
+			extraParams: isString(item.extraParams)
+				? JSON.parse(item.extraParams)
+				: item.extraParams,
+		}));
 	});
 }
 
@@ -347,6 +352,9 @@ function onSave() {
 				if (item.id === selectId.value) {
 					return {
 						...get(data, '0.0'),
+						extraParams: isString(item.extraParams)
+							? JSON.parse(item.extraParams)
+							: item.extraParams,
 					};
 				}
 				return item;

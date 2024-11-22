@@ -190,6 +190,13 @@ const selectedKeys = ref<string[]>([]);
 
 const xGrid = ref<VxeGridInstance>();
 
+watch(
+	() => xGrid.value?.getTableData(),
+	(value) => {
+		console.log('=====', value);
+	}
+);
+
 const gridEvents = reactive<VxeGridListeners>({
 	cellMenu({ row }) {
 		const $grid = xGrid.value;
