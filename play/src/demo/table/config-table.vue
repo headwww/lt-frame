@@ -39,6 +39,16 @@
 					:datasource="datasource"
 					v-model:pager="pager"
 					@pageChange="onSql"
+					@sqlChange="
+						(sql) => {
+							console.log('sqlChange', sql);
+						}
+					"
+					@queryChange="
+						(queryParams) => {
+							console.log('queryChange', queryParams);
+						}
+					"
 					v-model:queryParams="queryParams"
 				>
 					<template #table>

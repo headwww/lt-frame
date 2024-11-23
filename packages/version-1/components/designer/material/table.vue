@@ -25,11 +25,7 @@
 							:icon="h(SearchOutlined)"
 							style="margin-right: 6px"
 							@click="openSearch = true"
-							:type="
-								!queryParams?.expression || queryParams?.expression === ''
-									? 'default'
-									: 'primary'
-							"
+							:type="!hasQuery ? 'default' : 'primary'"
 						></Button>
 						<Button
 							v-if="userStore.getClient?.user?.id === '1'"
@@ -127,6 +123,7 @@ import {
 } from './api';
 import SearchModal from '../components/SearchModal.vue';
 import { useUserStore } from '../../../stores';
+import { queryParamsParserSql } from './utils';
 
 const userStore = useUserStore();
 
@@ -140,15 +137,21 @@ const emit = defineEmits([
 	'update:fields',
 	'update:pager',
 	'update:queryParams',
-	'pagerChange',
+	'pageChange',
 	'queryChange',
 	'setup',
+	/**
+	 * @deprecated 后期需要优化掉，使用queryParams替代
+	 */
+	'update:sql',
+	/**
+	 * @deprecated 后期需要优化掉，使用queryParams替代
+	 */
+	'sqlChange',
 ]);
 
 const open = ref(false);
 const openSearch = ref(false);
-
-const queryValue = ref<TableQueryParams>();
 
 const innerQueryParams = computed({
 	get: () => props.queryParams,
@@ -156,21 +159,44 @@ const innerQueryParams = computed({
 		emit('update:queryParams', value);
 	},
 });
+// TODO: 后期需要优化掉，使用queryParams替代
+const innerSql = computed({
+	get: () => props.sql,
+	set: (value) => {
+		emit('update:sql', value);
+	},
+});
 
 function onQueryOk(params: TableQueryParams) {
-	innerQueryParams.value = params;
-	emit('queryChange', innerQueryParams.value);
+	emit('update:queryParams', params);
+	emit('queryChange', params);
+	// TODO: queryParams转换为sql 后期需要优化掉，使用queryParams替代
+	const sql = queryParamsParserSql(params);
+	emit('update:sql', sql);
+	emit('sqlChange', sql);
 }
 
 // 取消搜索
 function onQueryCancel() {
-	queryValue.value = undefined;
-	emit('queryChange', queryValue.value);
+	emit('update:queryParams', undefined);
+	emit('queryChange', undefined);
+	// TODO: queryParams转换为sql 后期需要优化掉，使用queryParams替代
+	emit('update:sql', undefined);
+	emit('sqlChange', undefined);
 }
+
+/**
+ * @deprecated 后期需要优化掉，只需要判断queryParams即可
+ */
+const hasQuery = computed(
+	() =>
+		(innerQueryParams.value?.expression &&
+			innerQueryParams.value.expression !== '') ||
+		(innerSql.value && innerSql.value !== '')
+);
 
 const spinning = ref(false);
 const spinning2 = ref(false);
-
 const loading = ref(false);
 
 const container = ref<HTMLDivElement>();
@@ -234,7 +260,7 @@ const innerPagerCurrentPage = computed({
 const isPage = computed(() => !isUndefined(props.pager));
 
 function handlePageChange(params: any) {
-	emit('pagerChange', params);
+	emit('pageChange', params);
 }
 
 const eventBusKey = computed(() => {

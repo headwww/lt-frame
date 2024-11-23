@@ -38,10 +38,19 @@ export const tableProps = {
 	queryParams: {
 		type: Object as PropType<TableQueryParams>,
 	},
+	/**
+	 * @deprecated 废弃 后期需要优化掉，使用queryParams替代
+	 */
+	sql: {
+		type: String,
+	},
 };
 
 export type TableQueryParams = {
 	expression?: string;
-	params?: Array<number | undefined>;
+	params?: Array<{
+		type: string;
+		value: number | undefined;
+	}>;
 };
 export type TableProps = ExtractPropTypes<typeof tableProps>;
