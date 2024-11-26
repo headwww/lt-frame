@@ -47,10 +47,18 @@ export const tableProps = {
 };
 
 export type TableQueryParams = {
+	// 表达式
 	expression?: string;
+	/**
+	 * 参数 目前仅仅考虑日期类型，其他的类型的值直接写在expression中 ，
+	 * [{type: 'date', value: 1732352905561}] params数量和expression中的?占位符数量一致
+	 */
 	params?: Array<{
+		// 参数类型
 		type: string;
+		// 参数值
 		value: number | undefined;
 	}>;
 };
+
 export type TableProps = ExtractPropTypes<typeof tableProps>;
