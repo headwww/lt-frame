@@ -7,3 +7,4 @@ export * from './error';
 export * from './components';
 export * from './model';
 export * from './searchStore';
+export * from './transducer';

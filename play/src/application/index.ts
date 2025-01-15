@@ -1,5 +1,6 @@
 import {
 	LtHttp,
+	LtLinkTransducer,
 	LtPinia,
 	LtRouter,
 	LtSuperSearch,
@@ -15,7 +16,7 @@ import { createWebHashHistory } from 'vue-router';
 import VXETable from 'vxe-table';
 import VXETablePluginAntd from 'vxe-table-plugin-antd';
 
-import { Condition, Persistent, deepMerge } from '@lt-frame/utils';
+import { Condition, Persistent, deepMerge, getCookie } from '@lt-frame/utils';
 import { LtTableConfig } from '@lt-frame/components';
 import { asyncRoutes } from '../router';
 
@@ -88,6 +89,11 @@ LtSuperSearch.add('菜单', {
 			resolve(arr);
 		});
 	},
+});
+
+LtLinkTransducer.register('添加session', (link: string) => {
+	const jsessionId = getCookie('JSESSIONID');
+	return link.replace(/jsessionid=[^?&]+/, `jsessionid=${jsessionId}`);
 });
 
 LtSuperSearch.add('工作中心', {

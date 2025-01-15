@@ -39,6 +39,7 @@ import Trigger from './components/trigger.vue';
 import SubMenuItem from './components/sub-menu-item.vue';
 import { useGo, useMenuSetting } from '../../../hooks';
 import { getAllParentPath } from '../../../router/helper/menuHelper';
+import { LtLinkTransducer } from '../../../transducer';
 
 const { getCollapsed, getOpenKeys, setOpenKeys } = useMenuSetting();
 
@@ -59,7 +60,17 @@ async function handleMenuClick(menu: MenuInfo) {
 	const url = menu.key as string;
 	// 跳转到外部地址
 	if (isUrl(url)) {
-		openWindow(url);
+		const transUrl = LtLinkTransducer.getTransducerNames().reduce(
+			(result, name) => {
+				const fn = LtLinkTransducer.getTransducers().get(name);
+				if (!fn) {
+					return result;
+				}
+				return fn(result);
+			},
+			url
+		);
+		openWindow(transUrl);
 		return;
 	}
 	go(url);

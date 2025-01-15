@@ -1,3 +1,4 @@
 /dist/*
 /public/*
 packages/theme-chalk/dist/**
+.history/*

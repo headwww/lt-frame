@@ -22,3 +22,14 @@ export function openWindow(
 	noreferrer && feature.push('noreferrer=yes');
 	window.open(url, target, feature.join(','));
 }
+
+export function getCookie(name: any) {
+	const cookies = document.cookie.split(';');
+	for (const cookie of cookies) {
+		const [cookieName, cookieValue] = cookie.split('=').map((c) => c.trim());
+		if (cookieName === name) {
+			return decodeURIComponent(cookieValue);
+		}
+	}
+	return '';
+}
