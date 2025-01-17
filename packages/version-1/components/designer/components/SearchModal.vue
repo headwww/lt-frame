@@ -375,7 +375,7 @@ function onOk() {
 			const { clause, args } = generateHqlWhereClause(
 				JSON.parse(currentSelectItem.value.rule!!)[0]
 			);
-			if (args && args.length) {
+			if (args) {
 				const argsList = args.map((item: any) => {
 					if (isString(item)) {
 						return item;

@@ -91,10 +91,12 @@ LtSuperSearch.add('菜单', {
 	},
 });
 
-LtLinkTransducer.register('添加session', (link: string) => {
-	const jsessionId = getCookie('JSESSIONID');
-	return link.replace(/jsessionid=[^?&]+/, `jsessionid=${jsessionId}`);
-});
+LtLinkTransducer;
+getCookie;
+// LtLinkTransducer.register('添加session', (link: string) => {
+// 	const jsessionId = getCookie('JSESSIONID');
+// 	return link.replace(/jsessionid=[^?&]+/, `jsessionid=${jsessionId}`);
+// });
 
 LtSuperSearch.add('工作中心', {
 	createSearchMethod(params: any) {

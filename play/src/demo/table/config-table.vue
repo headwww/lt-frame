@@ -46,7 +46,7 @@
 					"
 					@queryChange="
 						(queryParams) => {
-							console.log('queryChange', queryParams);
+							console.log('queryChange', queryParams.expression);
 						}
 					"
 					v-model:queryParams="queryParams"
