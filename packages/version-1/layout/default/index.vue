@@ -131,10 +131,15 @@ function login() {
 			})
 			.catch((e: AxiosError) => {
 				// 登录失败
-				Modal.info({
+				Modal.confirm({
 					title: `登录异常，请刷新重试`,
 					content: `错误代码：${e.response?.status}，请联系管理员！`,
 					okText: '刷新',
+					cancelText: '回到登录页',
+					cancelButtonProps: { type: 'primary', danger: true },
+					onCancel() {
+						userStore.confirmLoginOut();
+					},
 					onOk() {
 						login();
 					},
