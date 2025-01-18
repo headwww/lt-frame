@@ -85,7 +85,7 @@ const comps: LtRouteRecordRaw = {
 			children: [
 				{
 					path: 'config',
-					name: 'TableConfig',
+					name: 'TableConfig12',
 					component: () => import('../../demo/table/config-table.vue'),
 					meta: {
 						title: '配置表格',

@@ -41,13 +41,12 @@ export const validatorSpecialChars = async (_rule: Rule, value: string) => {
 
 export function generateRoutes(
 	features: FeatureConfig[],
-	parentName = '',
 	parentPath = '',
 
 	level = 0
 ) {
 	return features.map((item) => {
-		const name = parentName + item.path;
+		const { name } = item;
 		const path = parentPath + (parentPath ? '/' : '') + item.path; // 组合父路径和当前路径
 
 		const route = {
@@ -82,7 +81,7 @@ export function generateRoutes(
 			route.component = LAYOUT;
 		}
 		if (item.children && item.children.length > 0) {
-			route.children = generateRoutes(item.children, name, path, level + 1);
+			route.children = generateRoutes(item.children, path, level + 1);
 
 			// 如果是 group 类型，设置 redirect 到完整的第一个子节点路径
 			if (item.type === 'group') {

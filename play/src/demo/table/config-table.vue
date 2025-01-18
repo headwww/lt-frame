@@ -93,6 +93,10 @@ import {
 	VxePagerProps,
 } from 'vxe-table';
 
+defineOptions({
+	name: 'EquipmentKeepRecordManager',
+});
+
 const queryParams = ref<TableQueryParams>();
 
 watch(

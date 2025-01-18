@@ -42,6 +42,11 @@ defineConfig({
 			name: 'TestManager',
 			title: '测试',
 		},
+		{
+			component: () => import('../demo/table/config-table.vue'),
+			name: 'EquipmentKeepRecordManager',
+			title: '设备保养维护',
+		},
 	],
 });
 

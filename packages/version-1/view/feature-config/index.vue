@@ -207,12 +207,13 @@ export default defineComponent({
 					// notNewly 非新创建的是服务端返回的
 					data.map((item) => ({ ...item, notNewly: true })),
 					{
-						strict: true,
+						strict: false,
 						parentKey: 'parentId',
 						key: 'fid',
 						children: 'children',
 					}
-				);
+				).sort((a, b) => (a.orderNo || 0) - (b.orderNo || 0));
+
 				list.value = [...arr];
 				rawData.value = [...cloneDeep(arr)];
 			});
@@ -227,6 +228,7 @@ export default defineComponent({
 			const arr = toTreeArray(list.value).map((item: any) => ({
 				...omit(item, 'children', 'notNewly'),
 			}));
+
 			LtHttp.post(
 				{
 					url: 'api/bsMenuStoreServiceImpl/saveModuleMenus',
@@ -235,9 +237,10 @@ export default defineComponent({
 				{ isParameters: true }
 			)
 				.then(() => {
+					window.location.reload(); // 直接刷新浏览器
 					edit.value = false;
 					createMessage.success('保存成功');
-					findModuleMenus();
+					// findModuleMenus();
 				})
 				.finally(() => {
 					saveLoading.value = false;

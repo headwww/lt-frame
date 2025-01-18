@@ -77,7 +77,7 @@ function getUserMenuList() {
 				parentKey: 'parentId',
 				key: 'fid',
 				children: 'children',
-			});
+			}).sort((a, b) => (a.orderNo || 0) - (b.orderNo || 0));
 			eachTree(arr, (item, index) => {
 				item.orderNo = index;
 			});

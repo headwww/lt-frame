@@ -509,6 +509,7 @@ function findModuleMenus() {
 			isLeaf: item.type !== 'group',
 			parentId: item.parentId,
 			name: item.name,
+			orderNo: item.orderNo,
 		}));
 
 		const arr: any[] = toArrayTree(tree, {
@@ -516,7 +517,7 @@ function findModuleMenus() {
 			parentKey: 'parentId',
 			key: 'key',
 			children: 'children',
-		});
+		}).sort((a, b) => (a.orderNo || 0) - (b.orderNo || 0));
 		menuData.value = [...arr];
 	});
 }
