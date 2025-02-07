@@ -1,11 +1,3 @@
-/*
- * @Author: shuwen 1243889238@qq.com
- * @Date: 2024-03-06 09:29:53
- * @LastEditors: shuwen 1243889238@qq.com
- * @LastEditTime: 2025-01-17 17:13:51
- * @FilePath: /lt-frame/play/vite.config.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
@@ -40,8 +32,8 @@ export default defineConfig({
 				// target: 'http://ltscm.tpddns.cn:8081/',
 				// target: 'http://192.168.1.241:9090/',
 				// target: 'http://192.168.1.241:9090/',
-				// target: 'http://192.168.1.117:8080/',
-				target: 'http://192.168.1.118:8080/',
+				target: 'http://192.168.1.153:8080/',
+				// target: 'http://192.168.1.118:8080/',
 				// target: 'http://ltscm.3322.org:8081/',
 				// target: 'http://192.168.1.241:9090/',
 				changeOrigin: true,

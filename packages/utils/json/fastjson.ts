@@ -43,7 +43,7 @@ export function parse(root: any): any {
 				refValue = parent;
 			} else {
 				// refValue = resolveRef(value); 改用下面更简便的方法
-				const paths = (value as string).split(/[.[\]]+/);
+				const paths = (value as string).split(/[.[\]]+/).filter(Boolean);
 				paths.shift(); // 从数组中移除第一个元素：$
 				refValue = paths.reduce((value, key) => value[key], newRoot);
 			}

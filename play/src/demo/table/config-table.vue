@@ -1,5 +1,6 @@
 <template>
 	<LtPageLayout>
+		<LtButton @click="onTest">测试</LtButton>
 		<Codemirror :style="{ height: '0px' }" :extensions="[]"> </Codemirror>
 		<LtSplitpanes class="default-theme">
 			<LtPane size="18" min-size="18" max-size="36" class="p12">
@@ -62,11 +63,43 @@
 				</LtConfigTable>
 			</LtPane>
 		</LtSplitpanes>
+
+		<Drawer v-model:open="open" width="60%">
+			<div class="flex flex-items-center mb-10">
+				<span class="font-500 font-size-20px mr-10">
+					{{ 'row' }}
+				</span>
+				<Tag color="purple">{{ 'tag' }}</Tag>
+			</div>
+			<span class="font-size-14px font-400 color-blueGray">{{ 'conent' }}</span>
+			<div>
+				<LtConfigTable
+					:tUid="'ProductPlanManager_line'"
+					entity="lt.app.product.model.ProductPlanLine"
+					v-model:fields="lineFields"
+					v-model:config="lineOptions"
+					v-model:pager="linePager"
+					tLabel="子工序生产计划单行"
+				>
+					<template #table>
+						<vxe-grid
+							ref="lineGrid"
+							v-bind="lineOptions"
+							class="lt-table-scrollbar"
+							setCurrentRow
+							scrollToRow
+						>
+						</vxe-grid>
+					</template>
+				</LtConfigTable>
+			</div>
+		</Drawer>
 	</LtPageLayout>
 </template>
 
 <script setup lang="ts">
 import { Codemirror } from 'vue-codemirror';
+import { Drawer, Tag, Tooltip } from 'ant-design-vue';
 import {
 	LtPageLayout,
 	LtSplitpanes,
@@ -84,7 +117,6 @@ import {
 	PageResponse,
 	TableQueryParams,
 } from '@lt-frame/version-1';
-import { Tooltip } from 'ant-design-vue';
 import { onMounted, reactive, ref, watch } from 'vue';
 import {
 	VxeGridInstance,
@@ -92,6 +124,7 @@ import {
 	VxeGridProps,
 	VxePagerProps,
 } from 'vxe-table';
+import { useTable } from '.';
 
 defineOptions({
 	name: 'EquipmentKeepRecordManager',
@@ -240,6 +273,7 @@ const gridOptions = ref<VxeGridProps>({
 			options: [[]],
 		},
 	},
+	height: 400,
 });
 
 xGrid.value?.setColumnFixed;
@@ -345,6 +379,139 @@ LtHttp.post<PageResponse<any>>({
 	pager.value.total = data.rowCount;
 	pager.value.pageSize = 4;
 });
+
+const {
+	options: lineOptions,
+	fields: lineFields,
+	grid: lineGrid,
+	pager: linePager,
+} = useTable('line', { height: 550 });
+
+const open = ref(false);
+
+function onTest() {
+	open.value = true;
+	LtHttp.post<PageResponse<any>>({
+		url: 'api/productPlanService/findLinesByPage',
+		data: [
+			{
+				pageNo: 0,
+				pageSize: 100,
+				rowCountEnabled: true,
+			},
+			{
+				targetClass: 'lt.app.product.model.ProductPlanLine',
+				propertyParams: {
+					'parent.id': '1051807672069787648',
+				},
+				queryPath: [
+					'executeStatus',
+					'goods.code',
+					'mainQuantity',
+					'goods.fullName',
+					'goods.drawNumber',
+					'workCenter.name',
+					'goods.otherCode',
+					'goods.executiveStandard',
+					'goods.remarks',
+					'startDate',
+					'endDate',
+					'needDate',
+					'process.name',
+					'position.name',
+					'equipment.code',
+					'releaseDate',
+					'bom.code',
+					'isLock',
+					'pushedQuantity',
+				],
+			},
+		],
+	})
+		.then((data) => {
+			lineOptions.value.data = data.result;
+			linePager.value.total = data.rowCount;
+			console.log(data);
+		})
+		.finally(() => {
+			lineOptions.value.loading = false;
+		});
+}
+
+LtHttp.post<PageResponse<any>>({
+	url: 'api/bomService/findTryBoms',
+	data: [
+		{
+			bomType: {
+				id: '592388920071689113',
+				$$proxy$$: '',
+			},
+			checkDate: 1721593164263,
+			checker: {
+				name: '系统管理员',
+				id: '1',
+				version: 0,
+				$$proxy$$: '',
+			},
+			code: 'BOM20240722000084',
+			corp: {
+				name: '通富超威公司',
+				id: '541619370099484157',
+				version: 1,
+				$$proxy$$: '',
+			},
+			craftWork: {
+				name: 'TMP:0,H',
+				id: '667827211105001267',
+				version: 1,
+				$$proxy$$: '',
+			},
+			createDate: 1721593164263,
+			created: 1721593175295,
+			createdBy: '系统管理员',
+			dept: {
+				id: '1510655227',
+				$$proxy$$: '',
+			},
+			factory: {
+				id: '541619370099484158',
+				$$proxy$$: '',
+			},
+			finishedRate: 1,
+			goods: {
+				name: 'T81721013310002200',
+				id: '653318447211483136',
+				version: 354,
+				$$proxy$$: '',
+			},
+			id: '999893448712527873',
+			isDefault: false,
+			isInvalid: false,
+			maker: {
+				name: '系统管理员',
+				id: '1',
+				version: 0,
+				$$proxy$$: '',
+			},
+			priority: 1,
+			property: 'SCBOM',
+			status: 'AUDITED',
+			updated: 1736290901927,
+			updatedBy: '系统管理员',
+			version: 288,
+			versionCode: 'T81721013310002200;H81A21013310014900;000000',
+			versionDate: '2024-07-22',
+			_X_ROW_KEY: 'row_976',
+			$_checked: true,
+		},
+	],
+})
+	.then((data) => {
+		console.log(data);
+	})
+	.finally(() => {
+		lineOptions.value.loading = false;
+	});
 </script>
 
 <style>
