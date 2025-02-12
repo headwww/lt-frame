@@ -54,7 +54,7 @@ export const defaultConfig: AppConfig = {
 			children: [
 				{
 					path: '/:path(.*)*',
-					name: 'PageNotFound',
+					name: 'PageNotFoundChild',
 					component: () => import('../view/error/index.vue'),
 					meta: {
 						title: 'ErrorPage',
