@@ -1,6 +1,5 @@
 <template>
 	<LtPageLayout>
-		<LtButton @click="onTest">测试</LtButton>
 		<Codemirror :style="{ height: '0px' }" :extensions="[]"> </Codemirror>
 		<LtSplitpanes class="default-theme">
 			<LtPane size="18" min-size="18" max-size="36" class="p12">
@@ -61,6 +60,7 @@
 						></vxe-grid>
 					</template>
 				</LtConfigTable>
+				111111
 			</LtPane>
 		</LtSplitpanes>
 
@@ -273,7 +273,6 @@ const gridOptions = ref<VxeGridProps>({
 			options: [[]],
 		},
 	},
-	height: 400,
 });
 
 xGrid.value?.setColumnFixed;
@@ -389,6 +388,7 @@ const {
 
 const open = ref(false);
 
+onTest;
 function onTest() {
 	open.value = true;
 	LtHttp.post<PageResponse<any>>({

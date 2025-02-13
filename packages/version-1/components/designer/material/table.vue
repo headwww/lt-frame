@@ -5,8 +5,8 @@
 			:spinning="spinning2"
 			tip="加载配置..."
 		>
-			<div ref="container" :class="ns.e('container')">
-				<div ref="toolBar" :class="ns.e('toolBar')">
+			<div :class="ns.e('container')">
+				<div :class="ns.e('toolBar')">
 					<div style="flex: 1 1 0%">
 						<Button
 							v-for="(button, index) in toolButtons"
@@ -35,17 +35,16 @@
 						></Button>
 					</div>
 				</div>
-				<div :style="tableStyle">
+				<div style="height: 100%">
 					<slot name="table"> </slot>
 				</div>
 				<div
-					ref="pagerBar"
 					:style="{
-						height: isPage ? '48px' : '3px',
+						height: isPager ? '48px' : '3px',
 					}"
 				>
 					<vxe-pager
-						v-if="isPage"
+						v-if="isPager"
 						v-model:current-page="innerPagerCurrentPage"
 						v-model:page-size="innerPagerSize"
 						v-model:total="innerPagerTotal"
@@ -110,7 +109,6 @@ import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
 import { SearchOutlined, SettingOutlined } from '@ant-design/icons-vue';
-import { useResizeObserver } from '@vueuse/core';
 import { useNamespace } from '@lt-frame/hooks';
 import { tableProps, TableQueryParams } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
@@ -199,25 +197,6 @@ const spinning = ref(false);
 const spinning2 = ref(false);
 const loading = ref(false);
 
-const container = ref<HTMLDivElement>();
-const toolBar = ref<HTMLDivElement>();
-const pagerBar = ref<HTMLDivElement>();
-const tableStyle = ref();
-
-useResizeObserver(container, (entries: any) => {
-	const entry = entries[0];
-	const { height } = entry.contentRect;
-	if (isPage.value) {
-		tableStyle.value = {
-			height: `${height - 44 - 48}px`,
-		};
-	} else {
-		tableStyle.value = {
-			height: `${height - 44 - 3}px`,
-		};
-	}
-});
-
 // 临时的配置数据
 const tempSettingValue = ref<TableFields>({
 	tUid: props.tUid,
@@ -257,7 +236,7 @@ const innerPagerCurrentPage = computed({
 });
 
 // 是否开启分页 判断是否设置了props.pager
-const isPage = computed(() => !isUndefined(props.pager));
+const isPager = computed(() => !isUndefined(props.pager));
 
 function handlePageChange(params: any) {
 	emit('pageChange', params);
