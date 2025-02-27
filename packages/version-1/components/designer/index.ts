@@ -26,3 +26,4 @@ LtLowCodeRender.renderer.add('SQLSetter', {
 
 export const LtConfigTable = LtTable;
 export type { TableQueryParams } from './material/table';
+export { showAttachment } from './components/modal-attachment';

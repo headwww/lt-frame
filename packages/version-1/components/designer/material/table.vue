@@ -22,6 +22,12 @@
 					<div>
 						<Button
 							shape="circle"
+							:icon="h(PaperClipOutlined)"
+							style="margin-right: 6px"
+							@click="onAttachClick"
+						></Button>
+						<Button
+							shape="circle"
 							:icon="h(SearchOutlined)"
 							style="margin-right: 6px"
 							@click="openSearch = true"
@@ -105,10 +111,14 @@
 
 <script lang="ts" setup>
 import { Button, Modal, Spin } from 'ant-design-vue';
-import { computed, h, onMounted, ref, watch } from 'vue';
+import { computed, h, onMounted, ref, toRaw, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
-import { SearchOutlined, SettingOutlined } from '@ant-design/icons-vue';
+import {
+	PaperClipOutlined,
+	SearchOutlined,
+	SettingOutlined,
+} from '@ant-design/icons-vue';
 import { useNamespace } from '@lt-frame/hooks';
 import { tableProps, TableQueryParams } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
@@ -138,6 +148,7 @@ const emit = defineEmits([
 	'pageChange',
 	'queryChange',
 	'setup',
+	'attach',
 	/**
 	 * @deprecated 后期需要优化掉，使用queryParams替代
 	 */
@@ -147,6 +158,10 @@ const emit = defineEmits([
 	 */
 	'sqlChange',
 ]);
+
+function onAttachClick() {
+	emit('attach', toRaw(props));
+}
 
 const open = ref(false);
 const openSearch = ref(false);

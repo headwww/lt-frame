@@ -39,6 +39,7 @@
 					:datasource="datasource"
 					v-model:pager="pager"
 					@pageChange="onSql"
+					@attach="onAttach"
 					@sqlChange="
 						(sql) => {
 							console.log('sqlChange', sql);
@@ -115,6 +116,7 @@ import {
 	LtConfigTable,
 	LtHttp,
 	PageResponse,
+	showAttachment,
 	TableQueryParams,
 } from '@lt-frame/version-1';
 import { onMounted, reactive, ref, watch } from 'vue';
@@ -146,6 +148,17 @@ watch(
 		console.log(value);
 	}
 );
+
+function onAttach(props: any) {
+	console.log(props);
+	showAttachment({
+		...props,
+		tableRef: xGrid.value,
+		tableConfig: {
+			entity: 'lt.fw.core.model.biz.Employee',
+		},
+	});
+}
 
 function onSql() {}
 // LtDatasource.add('findUser', {
@@ -305,7 +318,7 @@ function findCorps() {
 function find1<T>(condition: Condition) {
 	condition.setTargetClass('lt.fw.core.model.biz.Corp');
 	return LtHttp.post<Array<T>>({
-		url: 'api/corpServiceImpl/findCorps',
+		url: 'api/corpService/findCorps',
 		data: [condition],
 	});
 }
@@ -355,7 +368,7 @@ function find2<T>(condition: Condition) {
 	);
 	condition.setTargetClass('lt.fw.core.model.biz.Employee');
 	return LtHttp.post<Array<T>>({
-		url: 'api/employeeServiceImpl/findEmployees',
+		url: 'api/employeeService/findEmployees',
 		data: [condition],
 	});
 }

@@ -1,4 +1,4 @@
-import { clone } from 'lodash-es';
+import { clone, cloneDeep } from 'lodash-es';
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { useMessage } from '@lt-frame/hooks';
 import {
@@ -15,6 +15,7 @@ import {
 } from '@lt-frame/utils';
 import { checkStatus } from './checkStatus';
 import { useErrorLogStore } from '../stores';
+import { cleanEmptyValues } from './utils';
 
 const { createMessage, createErrorModal } = useMessage();
 
@@ -56,7 +57,19 @@ const transform: AxiosTransform = {
 		return parse(res.data);
 	},
 
-	beforeRequestHook: (config) => config,
+	beforeRequestHook: (config, options) => {
+		// 清除数据，则把data中的空值去掉
+		if (!options.noClearData) {
+			try {
+				config.data = cleanEmptyValues(cloneDeep(config.data));
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.error(`http.ts: 清除数据失败: ${error}`);
+				return config;
+			}
+		}
+		return config;
+	},
 
 	requestInterceptors: (config) => config,
 
