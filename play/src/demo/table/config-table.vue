@@ -28,40 +28,80 @@
 				</template>
 			</LtPane>
 			<LtPane size="82" class="flex flex-col justify-start">
-				<LtDivider title="职员信息" />
-				<LtConfigTable
-					tUid="TestManager_sub"
-					t-label="子表"
-					entity="lt.app.productbasic.model.OrderClassesLine"
-					v-model:config="gridOptions"
-					v-model:listeners="gridEvents"
-					:eventBus="eventBus"
-					:datasource="datasource"
-					v-model:pager="pager"
-					@pageChange="onSql"
-					@attach="onAttach"
-					@sqlChange="
-						(sql) => {
-							console.log('sqlChange', sql);
-						}
-					"
-					@queryChange="
-						(queryParams) => {
-							console.log('queryChange', queryParams.expression);
-						}
-					"
-					v-model:queryParams="queryParams"
-				>
-					<template #table>
-						<vxe-grid
-							class="lt-table-scrollbar"
-							ref="xGrid"
-							v-bind="gridOptions"
-							v-on="gridEvents"
-						></vxe-grid>
-					</template>
-				</LtConfigTable>
-				111111
+				<LtSplitpanes horizontal>
+					<LtPane size="70">
+						<LtDivider title="职员信息" />
+						<LtConfigTable
+							:tableInstance="xGrid"
+							tUid="TestManager_sub"
+							t-label="子表"
+							entity="lt.app.productbasic.model.OrderClassesLine"
+							v-model:config="gridOptions"
+							v-model:listeners="gridEvents"
+							:eventBus="eventBus"
+							:datasource="datasource"
+							v-model:pager="pager"
+							@pageChange="onSql"
+							@attach="onAttach"
+							@sqlChange="
+								(sql) => {
+									console.log('sqlChange', sql);
+								}
+							"
+							@queryChange="
+								(queryParams) => {
+									console.log('queryChange', queryParams.expression);
+								}
+							"
+							v-model:queryParams="queryParams"
+						>
+							<template #table>
+								<vxe-grid
+									class="lt-table-scrollbar"
+									ref="xGrid"
+									v-bind="gridOptions"
+									v-on="gridEvents"
+								></vxe-grid>
+							</template>
+						</LtConfigTable>
+					</LtPane>
+					<LtPane size="30">
+						<LtDivider title="职员信息" />
+						<LtConfigTable
+							:tableInstance="xGrid"
+							tUid="TestManager_sub"
+							t-label="子表"
+							entity="lt.app.productbasic.model.OrderClassesLine"
+							v-model:config="gridOptions"
+							v-model:listeners="gridEvents"
+							:eventBus="eventBus"
+							:datasource="datasource"
+							v-model:pager="pager"
+							@pageChange="onSql"
+							@attach="onAttach"
+							@sqlChange="
+								(sql) => {
+									console.log('sqlChange', sql);
+								}
+							"
+							@queryChange="
+								(queryParams) => {
+									console.log('queryChange', queryParams.expression);
+								}
+							"
+							v-model:queryParams="queryParams"
+						>
+							<template #table>
+								<vxe-grid
+									class="lt-table-scrollbar"
+									ref="xGrid"
+									v-bind="gridOptions"
+									v-on="gridEvents"
+								></vxe-grid>
+							</template>
+						</LtConfigTable>
+					</LtPane>
+				</LtSplitpanes>
 			</LtPane>
 		</LtSplitpanes>
 
@@ -286,6 +326,8 @@ const gridOptions = ref<VxeGridProps>({
 			options: [[]],
 		},
 	},
+	importConfig: {},
+	exportConfig: {},
 });
 
 xGrid.value?.setColumnFixed;

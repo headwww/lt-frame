@@ -7,10 +7,9 @@
 		>
 			<div :class="ns.e('container')">
 				<div :class="ns.e('toolBar')">
-					<div style="flex: 1 1 0%">
+					<div style="display: flex; flex: 1 1 0%; gap: 6px">
 						<Button
 							v-for="(button, index) in toolButtons"
-							style="margin-right: 6px"
 							:key="index"
 							:type="button.type"
 							@click="onButtonsClick(button)"
@@ -19,43 +18,49 @@
 							{{ button.title }}
 						</Button>
 					</div>
-					<div>
-						<Button
-							shape="circle"
-							:icon="h(PaperClipOutlined)"
-							style="margin-right: 6px"
-							@click="onAttachClick"
-						></Button>
-						<Button
-							shape="circle"
-							:icon="h(SearchOutlined)"
-							style="margin-right: 6px"
-							@click="openSearch = true"
-							:type="!hasQuery ? 'default' : 'primary'"
-						></Button>
-						<Button
-							v-if="userStore.getClient?.user?.id === '1'"
-							shape="circle"
-							:icon="h(SettingOutlined)"
-							@click="open = true"
-						></Button>
+					<div style="display: flex; gap: 6px">
+						<template v-for="(button, index) in settingButtons" :key="index">
+							<Tooltip>
+								<template #title>
+									<span>{{ button.tip }}</span>
+								</template>
+								<Button
+									v-if="button.show"
+									shape="circle"
+									:icon="h(button.icon)"
+									:type="button.type as any"
+									@click="button.action()"
+								></Button>
+							</Tooltip>
+						</template>
 					</div>
 				</div>
-				<div style="height: 100%">
-					<slot name="table"> </slot>
-				</div>
-				<div
-					:style="{
-						height: isPager ? '48px' : '3px',
-					}"
-				>
-					<vxe-pager
-						v-if="isPager"
-						v-model:current-page="innerPagerCurrentPage"
-						v-model:page-size="innerPagerSize"
-						v-model:total="innerPagerTotal"
-						@page-change="handlePageChange"
-					/>
+				<div style="position: relative; height: 100%">
+					<div
+						:style="{
+							position: 'absolute',
+							inset: `0 0 ${isPager ? '48px' : '3px'}`,
+						}"
+					>
+						<slot name="table"> </slot>
+					</div>
+					<div
+						:style="{
+							position: 'absolute',
+							bottom: '0',
+							left: '0',
+							right: '0',
+							height: isPager ? '48px' : '3px',
+						}"
+					>
+						<vxe-pager
+							v-if="isPager"
+							v-model:current-page="innerPagerCurrentPage"
+							v-model:page-size="innerPagerSize"
+							v-model:total="innerPagerTotal"
+							@page-change="handlePageChange"
+						/>
+					</div>
 				</div>
 			</div>
 		</Spin>
@@ -110,14 +115,16 @@
 </template>
 
 <script lang="ts" setup>
-import { Button, Modal, Spin } from 'ant-design-vue';
-import { computed, h, onMounted, ref, toRaw, watch } from 'vue';
+import { Button, Modal, Spin, Tooltip } from 'ant-design-vue';
+import { computed, h, onMounted, ref, watch } from 'vue';
 import { Designer, SettingsPane } from '@lt-frame/components';
 import { cloneDeep, isArray, isFunction, isUndefined, omit } from 'lodash-es';
 import {
+	DownloadOutlined,
 	PaperClipOutlined,
 	SearchOutlined,
 	SettingOutlined,
+	UploadOutlined,
 } from '@ant-design/icons-vue';
 import { useNamespace } from '@lt-frame/hooks';
 import { tableProps, TableQueryParams } from './table';
@@ -132,6 +139,7 @@ import {
 import SearchModal from '../components/SearchModal.vue';
 import { useUserStore } from '../../../stores';
 import { queryParamsParserSql } from './utils';
+import { showAttachment } from '../components/modal-attachment';
 
 const userStore = useUserStore();
 
@@ -148,7 +156,6 @@ const emit = defineEmits([
 	'pageChange',
 	'queryChange',
 	'setup',
-	'attach',
 	/**
 	 * @deprecated 后期需要优化掉，使用queryParams替代
 	 */
@@ -159,12 +166,54 @@ const emit = defineEmits([
 	'sqlChange',
 ]);
 
-function onAttachClick() {
-	emit('attach', toRaw(props));
-}
-
 const open = ref(false);
 const openSearch = ref(false);
+
+const settingButtons = computed(() => [
+	{
+		icon: UploadOutlined,
+		action: () => {
+			props.tableInstance?.openExport({ types: ['xlsx'] });
+		},
+		tip: '导出',
+		show: true,
+	},
+	{
+		icon: DownloadOutlined,
+		action: () => {
+			props.tableInstance?.openImport({ types: ['xlsx'] });
+		},
+		tip: '导入',
+		show: true,
+	},
+	{
+		icon: PaperClipOutlined,
+		action: () => {
+			showAttachment({
+				...props,
+			});
+		},
+		tip: '附件',
+		show: true,
+	},
+	{
+		icon: SearchOutlined,
+		action: () => {
+			openSearch.value = true;
+		},
+		tip: '超级查询',
+		type: !hasQuery.value ? 'default' : 'primary',
+		show: true,
+	},
+	{
+		icon: SettingOutlined,
+		action: () => {
+			open.value = true;
+		},
+		tip: '设置',
+		show: userStore.getClient?.user?.id === '1',
+	},
+]);
 
 const innerQueryParams = computed({
 	get: () => props.queryParams,
@@ -199,7 +248,7 @@ function onQueryCancel() {
 }
 
 /**
- * @deprecated 后期需要优化掉，只需要判断queryParams即可
+ * TODO 后期需要优化掉，只需要判断queryParams即可
  */
 const hasQuery = computed(
 	() =>

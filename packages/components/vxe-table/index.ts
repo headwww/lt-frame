@@ -1,5 +1,7 @@
 import { deepMerge } from '@lt-frame/utils';
 import { VXETable, VXETableConfigOptions } from 'vxe-table';
+import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx';
+import ExcelJS from 'exceljs';
 import ltFunction from './tool-bar/src/lt-function.vue';
 import ltBusiness from './tool-bar/src/lt-business.vue';
 import './cell/cell';
@@ -131,6 +133,9 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 	);
 
 	VXETable.config(opt);
+	VXETable.use(VXETablePluginExportXLSX, {
+		ExcelJS,
+	});
 }
 
 export const LtTablePlugins = {

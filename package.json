@@ -109,6 +109,8 @@
 		"@lt-frame/theme-chalk": "workspace:^",
 		"@lt-frame/utils": "workspace:^",
 		"@lt-frame/version-1": "workspace:^",
-		"vxe-table": "4.5.21"
+		"exceljs": "^4.4.0",
+		"vxe-table": "4.5.21",
+		"vxe-table-plugin-export-xlsx": "^4.0.7"
 	}
 }

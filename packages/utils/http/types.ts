@@ -46,7 +46,7 @@ export interface RequestOptions {
 	retryRequest?: RetryRequest;
 	// 是否是循环引用的返回值，需要解决fastjson的循环引用bug，默认开启
 	fastjson?: boolean;
-	// 是否清除数据, 默认 false,
+	// 清理对象或数组中的空值，但保持数组索引位置 默认 false,
 	noClearData?: boolean;
 }
 

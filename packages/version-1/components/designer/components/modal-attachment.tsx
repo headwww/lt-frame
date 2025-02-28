@@ -9,13 +9,13 @@ export const showAttachment = (options?: any) => {
 		return;
 	}
 
-	const currentRecord = options.tableRef.getCurrentRecord();
+	const currentRecord = options.tableInstance.getCurrentRecord();
 
 	if (!currentRecord) {
 		createMessage.warning('请选择一条记录');
 		return;
 	}
-	if (!options.tableConfig) {
+	if (!options.entity) {
 		createMessage.warning('请设置表配置');
 		return;
 	}
@@ -28,7 +28,7 @@ export const showAttachment = (options?: any) => {
 		closable: true,
 		content: () => (
 			<Attachments
-				entity={options.tableConfig.entity}
+				entity={options.entity}
 				entityid={currentRecord.id}
 			></Attachments>
 		),
