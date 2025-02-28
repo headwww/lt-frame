@@ -316,8 +316,11 @@ const datasource = {
 };
 
 const eventBus = {
-	test: () => {
-		xGrid.value?.insert({});
+	test: (value: any) => {
+		console.log(value, value.row);
+	},
+	atsta: (param: any) => {
+		console.log(param, param.$table?.getCurrentRecord());
 	},
 };
 const gridOptions = ref<VxeGridProps>({

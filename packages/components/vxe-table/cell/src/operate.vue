@@ -124,6 +124,7 @@ function handleButtonsItemClick(event?: string | number) {
 
 function handleViewClick() {
 	const { params } = props;
+	params?.$grid?.setCurrentRow(params.row);
 	emit('viewClick', params);
 }
 

@@ -58,8 +58,21 @@
 							v-model:current-page="innerPagerCurrentPage"
 							v-model:page-size="innerPagerSize"
 							v-model:total="innerPagerTotal"
+							:page-sizes="[
+								10,
+								20,
+								100,
+								200,
+								500,
+								1000,
+								{ label: '全量数据', value: -1 },
+							]"
 							@page-change="handlePageChange"
-						/>
+						>
+							<template #right>
+								<div>1221</div>
+							</template>
+						</vxe-pager>
 					</div>
 				</div>
 			</div>

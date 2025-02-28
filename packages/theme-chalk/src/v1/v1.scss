@@ -6,3 +6,10 @@
 @use './layout/layout.scss';
 @use './feature-config.scss';
 @use './permission.scss';
+// TODO 暂时解决table分页不显示的情况
+.lt-page-layout-content {
+	.splitpanes__pane {
+		display: flex;
+		flex-direction: column;
+	}
+}
