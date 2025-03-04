@@ -11,7 +11,14 @@
 				:status="status"
 				v-model:value="inputValue"
 				@focus="focus"
-			></Input>
+				><template #suffix>
+					<Tooltip title="清空选中的实例">
+						<Button shape="circle" size="small" type="text" @click="clear">
+							<DeleteOutlined style="color: #999" />
+						</Button>
+					</Tooltip>
+				</template>
+			</Input>
 		</template>
 		<template #dropdown>
 			<div style="width: 500px">
@@ -28,8 +35,8 @@
 
 <script lang="ts" setup>
 import { PropType, Ref, computed, reactive, ref, unref, watch } from 'vue';
-import { Input } from 'ant-design-vue';
-import { VxePulldownInstance } from 'vxe-table';
+import { Input, Tooltip, Button } from 'ant-design-vue';
+import { VxePulldownInstance } from 'vxe-pc-ui';
 import type {
 	VxeGlobalRendererHandles,
 	VxeGridInstance,
@@ -39,11 +46,12 @@ import type {
 import { get, join, omit, set, split } from 'lodash-es';
 import Fuse from 'Fuse.js';
 import { Fn } from '@lt-frame/utils';
+import { DeleteOutlined } from '@ant-design/icons-vue';
 
 const pulldownRef = ref<VxePulldownInstance>();
 
 const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
+	params: Object as PropType<VxeGlobalRendererHandles.RenderTableEditParams>,
 	configs: {
 		type: Object as PropType<VxeGridProps>,
 		default: () => ({}),
@@ -64,6 +72,40 @@ const status = ref<'' | 'error' | 'warning'>();
 const filterRawData: Ref<Array<any>> = ref([]);
 
 const inputValue = ref(get(props.params!!.row, props.params!!.column.field));
+
+watch(
+	() => props.params!!.row,
+	() => {
+		inputValue.value = get(props.params!!.row, props.params!!.column.field);
+	},
+	{
+		deep: true,
+	}
+);
+
+const clear = async () => {
+	const { params } = props;
+	if (params) {
+		const splitList = split(params.column.field, '.');
+		if (splitList.length > 1) {
+			const firstKey = splitList[0];
+			inputValue.value = '';
+			set(params.row, firstKey, null);
+
+			await params.$table.updateStatus(params);
+			(params.$table as any)
+				.validCellRules('change', params.row, params.column)
+				.then(() => {
+					status.value = '';
+				})
+				.catch(() => {
+					status.value = 'error';
+				});
+		}
+	}
+	const $pulldown = pulldownRef.value;
+	$pulldown?.hidePanel();
+};
 
 watch(inputValue, (newVal) => {
 	if (newVal === '') {
@@ -91,7 +133,7 @@ const focus = () => {
 	const { params } = props;
 	if (params) {
 		const { $table, row, column } = params;
-		$table
+		($table as any)
 			.validCellRules('change', row, column)
 			.then(() => {
 				status.value = '';
@@ -132,7 +174,7 @@ const gridEvents: VxeGridListeners<any> = {
 				set(params.row, firstKey, row);
 
 				await params.$table.updateStatus(params);
-				params.$table
+				(params.$table as any)
 					.validCellRules('change', params.row, params.column)
 					.then(() => {
 						status.value = '';

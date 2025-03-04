@@ -5,13 +5,10 @@ import {
 	PropType,
 	Ref,
 	RenderFunction,
-	VNode,
 } from 'vue';
-import { ItemInfo } from './itemInfo';
+import { ItemInfo, SlotVNodeType } from './itemInfo';
 import { Align, LtFormItemProps, TitleOverflow } from './form-item';
 import { Rules, ValidateErrorMapParams } from './rules';
-
-export type SlotVNodeType = VNode | string | number;
 
 /**
  * 这些数据主要用于管理表单的状态，包括展开状态、静态表单项和动态表单项等

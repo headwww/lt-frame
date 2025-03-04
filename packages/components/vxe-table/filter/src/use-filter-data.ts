@@ -1,11 +1,11 @@
-import { VXETable, VxeGlobalRendererHandles } from 'vxe-table';
+import { VxeUI, VxeGlobalRendererHandles } from 'vxe-table';
 import { computed, ref } from 'vue';
 import { cloneDeep, get, isArray, isFunction, set, uniqBy } from 'lodash-es';
 import XEUtils from 'xe-utils';
 import { ComparisonOperator, LogicalOperators } from './advanced-filter';
 
 export function useFilterData(
-	params: VxeGlobalRendererHandles.RenderFilterParams
+	params: VxeGlobalRendererHandles.RenderTableFilterParams
 ) {
 	/** 设置筛选模式，默认是文本筛选 */
 	const currentMode = ref(
@@ -117,7 +117,7 @@ export function useFilterData(
 				} else {
 					if (isArray(formatter)) {
 						if (formatter.length > 0) {
-							const fm = VXETable.formats.get(formatter[0]).cellFormatMethod;
+							const fm = VxeUI.formats.get(formatter[0]).tableCellFormatMethod;
 							if (isFunction(fm)) {
 								set(
 									item,
@@ -130,7 +130,7 @@ export function useFilterData(
 							}
 						}
 					} else {
-						const fm = VXETable.formats.get(formatter).cellFormatMethod;
+						const fm = VxeUI.formats.get(formatter).tableCellFormatMethod;
 						if (isFunction(fm)) {
 							set(
 								item,

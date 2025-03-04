@@ -1,10 +1,10 @@
 import XEUtils from 'xe-utils';
-import { SlotVNodeType } from './form';
 import {
 	FormItemContentRenderParams,
 	FormItemResetParams,
 	FormItemTitleRenderParams,
 } from './form-item';
+import { SlotVNodeType } from './itemInfo';
 
 /**
  * 内置的组件渲染

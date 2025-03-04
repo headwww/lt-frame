@@ -1,5 +1,5 @@
 import { deepMerge } from '@lt-frame/utils';
-import { VXETable, VXETableConfigOptions } from 'vxe-table';
+import { VxeUI, VxeGlobalConfig } from 'vxe-table';
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx';
 import ExcelJS from 'exceljs';
 import ltFunction from './tool-bar/src/lt-function.vue';
@@ -23,7 +23,7 @@ export * from './tool-bar/src/tool-function';
 /**
  *  vxe table 插件全局配置
  */
-export function LtTableConfig(config?: VXETableConfigOptions) {
+export function LtTableConfig(config?: VxeGlobalConfig) {
 	const opt = deepMerge(
 		{
 			table: {
@@ -64,7 +64,7 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					// 只对 keep-source 开启有效，是否显示单元格新增与修改状态
 					showStatus: true,
 					// 是否显示必填字段的红色星号
-					showAsterisk: false,
+					showAsterisk: true,
 				},
 				// 行配置信息
 				rowConfig: {
@@ -115,7 +115,7 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					// 只对 keep-source 开启有效，是否显示单元格新增与修改状态
 					showStatus: true,
 					// 是否显示必填字段的红色星号
-					showAsterisk: false,
+					showAsterisk: true,
 				},
 				// 行配置信息
 				rowConfig: {
@@ -128,12 +128,12 @@ export function LtTableConfig(config?: VXETableConfigOptions) {
 					name: '$lt-empty',
 				},
 			},
-		} as VXETableConfigOptions,
+		},
 		config
 	);
 
-	VXETable.config(opt);
-	VXETable.use(VXETablePluginExportXLSX, {
+	VxeUI.setConfig(opt);
+	VxeUI.use(VXETablePluginExportXLSX, {
 		ExcelJS,
 	});
 }

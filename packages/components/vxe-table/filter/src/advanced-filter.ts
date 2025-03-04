@@ -104,7 +104,7 @@ export interface AdvanceFilterData {
 }
 
 export const advanceFilterProps = {
-	params: Object as PropType<VxeGlobalRendererHandles.RenderFilterParams>,
+	params: Object as PropType<VxeGlobalRendererHandles.RenderTableFilterParams>,
 	// 开启的筛选的模式
 	filterModes: Array<FilterMode>,
 	// 实体筛选需要提供的配置

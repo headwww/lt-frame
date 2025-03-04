@@ -12,6 +12,13 @@
 				@focus="focus"
 				@input="onInput"
 			>
+				<template #suffix>
+					<Tooltip title="清空选中的实例">
+						<Button shape="circle" size="small" type="text" @click="clear">
+							<DeleteOutlined style="color: #999" />
+						</Button>
+					</Tooltip>
+				</template>
 			</Input>
 		</template>
 		<template #dropdown>
@@ -43,19 +50,20 @@
 </template>
 
 <script lang="ts" setup>
-import { Input } from 'ant-design-vue';
+import { Input, Tooltip, Button } from 'ant-design-vue';
 import { PropType, Ref, computed, reactive, ref, unref, watch } from 'vue';
 import type {
 	VxeGlobalRendererHandles,
 	VxeGridListeners,
 	VxeGridProps,
-	VxePulldownInstance,
 } from 'vxe-table';
 import { debounce, get, join, omit, set, split } from 'lodash-es';
 import Fuse from 'Fuse.js';
+import { VxePulldownInstance } from 'vxe-pc-ui';
+import { DeleteOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
+	params: Object as PropType<VxeGlobalRendererHandles.RenderTableEditParams>,
 	configs: {
 		type: Object as PropType<VxeGridProps>,
 		default: () => ({}),
@@ -64,6 +72,40 @@ const props = defineProps({
 		type: Function as PropType<(page: any, value?: string) => Promise<any>>,
 	},
 });
+
+const clear = async () => {
+	const { params } = props;
+	if (params) {
+		const splitList = split(params.column.field, '.');
+		if (splitList.length > 1) {
+			const firstKey = splitList[0];
+			inputValue.value = '';
+			set(params.row, firstKey, null);
+
+			await params.$table.updateStatus(params);
+			(params.$table as any)
+				.validCellRules('change', params.row, params.column)
+				.then(() => {
+					status.value = '';
+				})
+				.catch(() => {
+					status.value = 'error';
+				});
+		}
+	}
+	const $pulldown = pulldownRef.value;
+	$pulldown?.hidePanel();
+};
+
+watch(
+	() => props.params!!.row,
+	() => {
+		inputValue.value = get(props.params!!.row, props.params!!.column.field);
+	},
+	{
+		deep: true,
+	}
+);
 
 const getGridConfigs = reactive<VxeGridProps>(
 	omit(props.configs, 'proxyConfig')
@@ -121,7 +163,7 @@ function focus() {
 	const { params } = props;
 	if (params) {
 		const { $table, row, column } = params;
-		$table
+		($table as any)
 			.validCellRules('change', row, column)
 			.then(() => {
 				status.value = '';
@@ -170,7 +212,7 @@ const gridEvents: VxeGridListeners<any> = {
 				set(params.row, firstKey, row);
 
 				await params.$table.updateStatus(params);
-				params.$table
+				(params.$table as any)
 					.validCellRules('change', params.row, params.column)
 					.then(() => {
 						status.value = '';

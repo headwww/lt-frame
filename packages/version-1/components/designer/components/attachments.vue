@@ -271,7 +271,7 @@ const handleFileChange = (event: Event) => {
 					{ fastjson: false }
 				).then((resp) => {
 					if (resp) {
-						console.log('文件上传成功', resp);
+						createMessage.success('上传成功');
 					}
 					uploading.value = false;
 					// 查询附件列表

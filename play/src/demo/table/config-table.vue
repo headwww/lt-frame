@@ -1,6 +1,14 @@
 <template>
 	<LtPageLayout>
-		<Codemirror :style="{ height: '0px' }" :extensions="[]"> </Codemirror>
+		<button
+			@click="
+				() => {
+					console.log(xGrid);
+				}
+			"
+		>
+			测试
+		</button>
 		<LtSplitpanes class="default-theme">
 			<LtPane size="18" min-size="18" max-size="36" class="p12">
 				<template #default="{ height }">
@@ -68,7 +76,6 @@
 					<LtPane size="30">
 						<LtDivider title="职员信息" />
 						<LtConfigTable
-							:tableInstance="xGrid"
 							tUid="TestManager_sub"
 							t-label="子表"
 							entity="lt.app.productbasic.model.OrderClassesLine"
@@ -94,7 +101,6 @@
 							<template #table>
 								<vxe-grid
 									class="lt-table-scrollbar"
-									ref="xGrid"
 									v-bind="gridOptions"
 									v-on="gridEvents"
 								></vxe-grid>
@@ -139,7 +145,6 @@
 </template>
 
 <script setup lang="ts">
-import { Codemirror } from 'vue-codemirror';
 import { Drawer, Tag, Tooltip } from 'ant-design-vue';
 import {
 	LtPageLayout,
@@ -317,6 +322,7 @@ const datasource = {
 
 const eventBus = {
 	test: (value: any) => {
+		xGrid.value?.insert({});
 		console.log(value, value.row);
 	},
 	atsta: (param: any) => {

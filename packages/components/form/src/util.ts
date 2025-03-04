@@ -1,8 +1,7 @@
-import { SlotVNodeType } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import { watch } from 'vue';
 import { LtFormConstructor } from './form';
-import { ItemInfo } from './itemInfo';
+import { ItemInfo, SlotVNodeType } from './itemInfo';
 import { LtRender } from './render';
 
 export interface LtFormItemProvide {

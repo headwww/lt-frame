@@ -18,8 +18,8 @@ import {
 } from 'xe-utils';
 import { Tooltip } from 'ant-design-vue';
 import { LtArrow, LtHelp } from '../../basic';
-import { ItemInfo } from './itemInfo';
-import { LtFormConstructor, FormPrivateMethods, SlotVNodeType } from './form';
+import { ItemInfo, SlotVNodeType } from './itemInfo';
+import { LtFormConstructor, FormPrivateMethods } from './form';
 import { LtRender } from './render';
 import { getSlotVNs, isActivetem } from './util';
 import FormConfigItem from './form-config-item.vue';

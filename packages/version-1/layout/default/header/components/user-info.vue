@@ -91,7 +91,7 @@ import { useNamespace } from '@lt-frame/hooks';
 import { computed, ref, watch } from 'vue';
 import { Avatar } from 'ant-design-vue';
 import { CaretDownOutlined, RightOutlined } from '@ant-design/icons-vue';
-import { VxePulldownInstance } from 'vxe-table';
+import { VxePulldownInstance } from 'vxe-pc-ui';
 import { useUserStore } from '../../../../stores';
 import { useGo } from '../../../../hooks';
 

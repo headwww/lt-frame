@@ -11,6 +11,8 @@ export const showAttachment = (options?: any) => {
 
 	const currentRecord = options.tableInstance.getCurrentRecord();
 
+	console.log(currentRecord);
+
 	if (!currentRecord) {
 		createMessage.warning('请选择一条记录');
 		return;

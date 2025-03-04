@@ -1,11 +1,11 @@
-import { VXETable } from 'vxe-table';
+import { VxeUI } from 'vxe-table';
 import XEUtils from 'xe-utils';
 import dayjs from 'dayjs';
 import { isArray } from '@lt-frame/utils';
 import { isNumber } from 'lodash-es';
 
 // 保留几位小数、默认两位，和加单位
-VXETable.formats.add('$lt-formatter-to-fixed-unit', {
+VxeUI.formats.add('$lt-formatter-to-fixed-unit', {
 	cellFormatMethod({ cellValue }, digits, unit = '') {
 		if (digits) {
 			if (cellValue || cellValue === 0) {
@@ -18,7 +18,7 @@ VXETable.formats.add('$lt-formatter-to-fixed-unit', {
 });
 
 // 格式化日期默认是yyyy-MM-dd HH:mm:ss
-VXETable.formats.add('$lt-formatter-time', {
+VxeUI.formats.add('$lt-formatter-time', {
 	cellFormatMethod({ cellValue }, format = 'YYYY-MM-DD HH:mm:ss') {
 		if (cellValue) {
 			return dayjs(cellValue).format(format);
@@ -28,7 +28,7 @@ VXETable.formats.add('$lt-formatter-time', {
 });
 
 // 格式化time 时分秒
-VXETable.formats.add('$lt-formatter-enum-hms', {
+VxeUI.formats.add('$lt-formatter-enum-hms', {
 	cellFormatMethod({ cellValue }) {
 		if (isNumber(cellValue)) {
 			return dayjs(cellValue).format('HH:mm:ss');
@@ -38,14 +38,14 @@ VXETable.formats.add('$lt-formatter-enum-hms', {
 });
 
 // 格式化枚举
-VXETable.formats.add('$lt-formatter-enum', {
+VxeUI.formats.add('$lt-formatter-enum', {
 	cellFormatMethod({ cellValue }, enumObj = {}) {
 		return enumObj[cellValue];
 	},
 });
 
 // 格式化枚举['$lt-formatter-enum-key-value',[{key:string,value:string},{key:string,value:string}]]
-VXETable.formats.add('$lt-formatter-enum-key-value', {
+VxeUI.formats.add('$lt-formatter-enum-key-value', {
 	cellFormatMethod({ cellValue }, enumArray) {
 		if (enumArray && isArray(enumArray)) {
 			const obj = enumArray.find((item) => {

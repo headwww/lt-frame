@@ -30,7 +30,7 @@ export default defineConfig({
 				// target: 'http://192.168.1.150:8080/',
 				// target: 'http://49.74.206.150:8081/',
 				// target: 'http://ltscm.tpddns.cn:8081/',
-				target: 'http://192.168.1.241:9090/',
+				target: 'http://ltscn.kmdns.net:9092/',
 				// target: 'http://192.168.1.241:9090/',
 				// target: 'http://192.168.1.153:8080/',
 				// target: 'http://192.168.1.118:8080/',

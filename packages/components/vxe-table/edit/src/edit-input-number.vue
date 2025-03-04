@@ -15,7 +15,7 @@ import { get, set } from 'lodash-es';
 import { computed, ref, type PropType } from 'vue';
 
 const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
+	params: Object as PropType<VxeGlobalRendererHandles.RenderTableEditParams>,
 });
 
 const status = ref<'' | 'error' | 'warning'>();
@@ -35,7 +35,7 @@ const handle = async (value: any) => {
 		const { $table, row, column } = params;
 		set(row, column.field, value);
 		await $table.updateStatus(params);
-		$table
+		($table as any)
 			.validCellRules('change', row, column)
 			.then(() => {
 				status.value = '';
@@ -50,7 +50,7 @@ const focus = () => {
 	const { params } = props;
 	if (params) {
 		const { $table, row, column } = params;
-		$table
+		($table as any)
 			.validCellRules('change', row, column)
 			.then(() => {
 				status.value = '';

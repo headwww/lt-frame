@@ -1,4 +1,4 @@
-import { VXETable } from 'vxe-table';
+import { VxeUI } from 'vxe-table';
 import { isFunction, isNullOrUnDef } from '@lt-frame/utils';
 import { get, isArray, join, split } from 'lodash-es';
 import XEUtils from 'xe-utils';
@@ -7,7 +7,7 @@ import { useResetFilter } from './src/use-reset-filter';
 import { FilterMode } from './src/advanced-filter';
 import { compareFilter } from './src/util';
 
-VXETable.renderer.add('$lt-filter', {
+VxeUI.renderer.add('$lt-filter', {
 	showFilterFooter: false,
 	renderFilter({ props = {}, attrs = {}, events = {} }, params) {
 		return (
@@ -53,7 +53,7 @@ VXETable.renderer.add('$lt-filter', {
 			} else {
 				if (isArray(formatter)) {
 					if (formatter.length > 0) {
-						const fm = VXETable.formats.get(formatter[0]).cellFormatMethod;
+						const fm = VxeUI.formats.get(formatter[0]).cellFormatMethod;
 						if (isFunction(fm)) {
 							cellV = fm(
 								{ cellValue: params.cellValue, row: null, column },
@@ -62,7 +62,7 @@ VXETable.renderer.add('$lt-filter', {
 						}
 					}
 				} else {
-					const fm = VXETable.formats.get(formatter).cellFormatMethod;
+					const fm = VxeUI.formats.get(formatter).cellFormatMethod;
 					if (isFunction(fm)) {
 						cellV = fm({ cellValue: params.cellValue, row: null, column });
 					}

@@ -33,7 +33,7 @@
 import { Input as AInput } from 'ant-design-vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { VxePulldownInstance } from 'vxe-table';
+import { VxePulldownInstance } from 'vxe-pc-ui';
 import { useMagicKeys } from '@vueuse/core';
 import { debounce } from 'lodash-es';
 import SearchDropdown from './search-dropdown.vue';

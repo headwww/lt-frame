@@ -9,7 +9,7 @@ import { computed, type PropType } from 'vue';
 import { get, set } from 'lodash-es';
 
 const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
+	params: Object as PropType<VxeGlobalRendererHandles.RenderTableEditParams>,
 });
 
 const getValue = computed(() => {

@@ -19,7 +19,7 @@
 						</Button>
 					</div>
 					<div style="display: flex; gap: 6px">
-						<template v-for="(button, index) in settingButtons" :key="index">
+						<template v-for="button in settingButtons" :key="button.id">
 							<Tooltip>
 								<template #title>
 									<span>{{ button.tip }}</span>
@@ -69,9 +69,6 @@
 							]"
 							@page-change="handlePageChange"
 						>
-							<template #right>
-								<div>1221</div>
-							</template>
 						</vxe-pager>
 					</div>
 				</div>
@@ -139,7 +136,7 @@ import {
 	SettingOutlined,
 	UploadOutlined,
 } from '@ant-design/icons-vue';
-import { useNamespace } from '@lt-frame/hooks';
+import { useNamespace, useMessage } from '@lt-frame/hooks';
 import { tableProps, TableQueryParams } from './table';
 import { DatasourceContrast, TableFields, ToolButtons } from '../config';
 import { useSetterAdapter } from '../use-setter-adapter';
@@ -182,24 +179,37 @@ const emit = defineEmits([
 const open = ref(false);
 const openSearch = ref(false);
 
+const { createMessage } = useMessage();
+
 const settingButtons = computed(() => [
 	{
+		id: 'export',
 		icon: UploadOutlined,
 		action: () => {
+			if (!props.tableInstance) {
+				createMessage.warning('绑定表格实例后才能导出');
+				return;
+			}
 			props.tableInstance?.openExport({ types: ['xlsx'] });
 		},
 		tip: '导出',
 		show: true,
 	},
 	{
+		id: 'import',
 		icon: DownloadOutlined,
 		action: () => {
+			if (!props.tableInstance) {
+				createMessage.warning('绑定表格实例后才能导入');
+				return;
+			}
 			props.tableInstance?.openImport({ types: ['xlsx'] });
 		},
 		tip: '导入',
 		show: true,
 	},
 	{
+		id: 'attachment',
 		icon: PaperClipOutlined,
 		action: () => {
 			showAttachment({
@@ -210,6 +220,7 @@ const settingButtons = computed(() => [
 		show: true,
 	},
 	{
+		id: 'search',
 		icon: SearchOutlined,
 		action: () => {
 			openSearch.value = true;
@@ -219,6 +230,7 @@ const settingButtons = computed(() => [
 		show: true,
 	},
 	{
+		id: 'setting',
 		icon: SettingOutlined,
 		action: () => {
 			open.value = true;

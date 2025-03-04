@@ -1,4 +1,4 @@
-import { VXETable } from 'vxe-table';
+import { VxeUI } from 'vxe-table';
 import EditInput from './src/edit-input.vue';
 import EditInputNumber from './src/edit-input-number.vue';
 import EditDatePicker from './src/edit-date-picker.vue';
@@ -8,7 +8,7 @@ import EditEntity from './src/edit-entity.vue';
 import EditBool from './src/edit-bool.vue';
 import EditEntityPager from './src/edit-entity-pager.vue';
 
-VXETable.renderer.add('$lt-edit-input', {
+VxeUI.renderer.add('$lt-edit-input', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditInput {...props} {...attrs} {...events} params={params}></EditInput>
@@ -16,7 +16,7 @@ VXETable.renderer.add('$lt-edit-input', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-input-number', {
+VxeUI.renderer.add('$lt-edit-input-number', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditInputNumber
@@ -29,7 +29,7 @@ VXETable.renderer.add('$lt-edit-input-number', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-date-picker', {
+VxeUI.renderer.add('$lt-edit-date-picker', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditDatePicker
@@ -42,7 +42,7 @@ VXETable.renderer.add('$lt-edit-date-picker', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-time-picker', {
+VxeUI.renderer.add('$lt-edit-time-picker', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditTimePicker
@@ -55,7 +55,7 @@ VXETable.renderer.add('$lt-edit-time-picker', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-select', {
+VxeUI.renderer.add('$lt-edit-select', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditSelect
@@ -68,7 +68,7 @@ VXETable.renderer.add('$lt-edit-select', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-entity', {
+VxeUI.renderer.add('$lt-edit-entity', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditEntity
@@ -81,7 +81,7 @@ VXETable.renderer.add('$lt-edit-entity', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-entity-pager', {
+VxeUI.renderer.add('$lt-edit-entity-pager', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditEntityPager
@@ -94,7 +94,7 @@ VXETable.renderer.add('$lt-edit-entity-pager', {
 	},
 });
 
-VXETable.renderer.add('$lt-edit-bool', {
+VxeUI.renderer.add('$lt-edit-bool', {
 	renderEdit({ props = {}, attrs = {}, events = {} }, params) {
 		return (
 			<EditBool {...props} {...attrs} {...events} params={params}></EditBool>

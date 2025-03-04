@@ -1,7 +1,7 @@
 import { PropType } from 'vue';
 import { HelpProps } from '../../basic';
-import { LtFormConstructor, SlotVNodeType } from './form';
-import { ItemInfo } from './itemInfo';
+import { LtFormConstructor } from './form';
+import { ItemInfo, SlotVNodeType } from './itemInfo';
 import { RenderOptions } from './render';
 
 export type Align = 'left' | 'center' | 'right' | '' | null;

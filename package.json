@@ -110,7 +110,8 @@
 		"@lt-frame/utils": "workspace:^",
 		"@lt-frame/version-1": "workspace:^",
 		"exceljs": "^4.4.0",
-		"vxe-table": "4.5.21",
+		"vxe-pc-ui": "4.4.0",
+		"vxe-table": "^4.11.16",
 		"vxe-table-plugin-export-xlsx": "^4.0.7"
 	}
 }

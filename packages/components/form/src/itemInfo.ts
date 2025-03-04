@@ -1,5 +1,5 @@
-import { SlotVNodeType } from 'vxe-table';
 import XEUtils from 'xe-utils';
+import { VNode } from 'vue';
 import { HelpProps } from '../../basic';
 import { RenderOptions } from './render';
 import {
@@ -9,6 +9,8 @@ import {
 	ClassNameParams,
 	FormItemContentRenderParams,
 } from './form-item';
+
+export type SlotVNodeType = VNode | string | number;
 
 export interface ItemInfo {
 	id: string;

@@ -11,6 +11,7 @@ const menuManager: {
 	resolve: () => {},
 };
 
+// eslint-disable-next-line func-names
 export const createContextMenu = function (options: CreateContextOptions) {
 	const { event } = options || {};
 
@@ -70,6 +71,7 @@ export const createContextMenu = function (options: CreateContextOptions) {
 	});
 };
 
+// eslint-disable-next-line func-names
 export const destroyContextMenu = function () {
 	if (menuManager) {
 		menuManager.resolve('');

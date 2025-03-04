@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import { isNullOrUnDef } from '@lt-frame/utils';
 
 const props = defineProps({
-	params: Object as PropType<VxeGlobalRendererHandles.RenderEditParams>,
+	params: Object as PropType<VxeGlobalRendererHandles.RenderTableEditParams>,
 });
 
 const status = ref<'' | 'error' | 'warning'>();
@@ -40,7 +40,7 @@ const handle = async () => {
 			set(row, column.field, Date.parse(time.value.toString()));
 		}
 		await $table.updateStatus(params);
-		$table
+		($table as any)
 			.validCellRules('change', row, column)
 			.then(() => {
 				status.value = '';
@@ -55,7 +55,7 @@ const focus = () => {
 	const { params } = props;
 	if (params) {
 		const { $table, row, column } = params;
-		$table
+		($table as any)
 			.validCellRules('change', row, column)
 			.then(() => {
 				status.value = '';

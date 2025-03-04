@@ -1,7 +1,7 @@
-import { VXETable } from 'vxe-table';
+import { VxeUI } from 'vxe-table';
 import XEUtils from 'xe-utils';
 
-VXETable.menus.add('$MenusAdd', {
+VxeUI.menus.add('$MenusAdd', {
 	menuMethod(params) {
 		const { $table } = params;
 		if ($table) {
@@ -13,7 +13,7 @@ VXETable.menus.add('$MenusAdd', {
 	},
 });
 
-VXETable.menus.add('$MenusAddChild', {
+VxeUI.menus.add('$MenusAddChild', {
 	menuMethod(params) {
 		const { row } = params;
 		row.children.push({});

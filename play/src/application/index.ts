@@ -15,6 +15,7 @@ import { App } from 'vue';
 import { createWebHashHistory } from 'vue-router';
 import VXETable from 'vxe-table';
 import VXETablePluginAntd from 'vxe-table-plugin-antd';
+import VxeUIAll from 'vxe-pc-ui';
 
 import { Condition, Persistent, deepMerge, getCookie } from '@lt-frame/utils';
 import { LtTableConfig } from '@lt-frame/components';
@@ -73,6 +74,7 @@ export function onCreate(app: App) {
 	initProjectConfig();
 	app.use(LtRouter);
 	app.use(VXETable);
+	app.use(VxeUIAll);
 	setupRouterGuard(LtRouter);
 	setupErrorHandle(app);
 }
