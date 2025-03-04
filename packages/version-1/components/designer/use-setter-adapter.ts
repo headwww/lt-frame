@@ -264,7 +264,6 @@ export function useSetterAdapter(props: TableProps) {
 		options.value.showOverflow = isUndefined(showOverflow)
 			? null
 			: showOverflow;
-		console.log(rules);
 
 		options.value.editRules = rules && { ...rules };
 		options.value.autoResize = true;

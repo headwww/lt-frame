@@ -10,9 +10,9 @@
 	"module": "es/index.mjs",
 	"types": "es/index.d.ts",
 	"style": "dist/index.css",
-	"publishConfig": {
-		"registry": "http://192.168.1.168:8001/repository/npm-local/",
-		"access": "public"
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/headwww/lt-frame.git"
 	},
 	"dependencies": {
 		"@ant-design/icons-vue": "^7.0.1",
