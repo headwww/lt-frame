@@ -1,6 +1,5 @@
 import { deepMerge } from '@lt-frame/utils';
 import { VxeUI, VxeGlobalConfig } from 'vxe-table';
-import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx';
 import ExcelJS from 'exceljs';
 import ltFunction from './tool-bar/src/lt-function.vue';
 import ltBusiness from './tool-bar/src/lt-business.vue';
@@ -10,9 +9,12 @@ import './filter/filter';
 import './tool-bar/tool-bar';
 import './empty/empty';
 import './formatter/formatter';
+import VXETablePluginExportXLSX from './import-export/excle';
 
 export const LtFunction = ltFunction;
 export const LtBusiness = ltBusiness;
+
+export const LtExportXLSX = VXETablePluginExportXLSX;
 
 export * from './filter/src/advanced-filter';
 export * from './filter/src/use-filter-data';

@@ -335,7 +335,9 @@ const gridOptions = ref<VxeGridProps>({
 			options: [[]],
 		},
 	},
-	importConfig: {},
+	importConfig: {
+		mode: 'insert',
+	},
 	exportConfig: {},
 });
 
