@@ -105,3 +105,8 @@ function getFullPath(route: LtRouteRecordRaw, parentPath: string): string {
 	}
 	return `${parentPath}/${route.path}`;
 }
+
+let guid = Date.now();
+export function uniqueId(prefix = '') {
+	return `${prefix}${(guid++).toString(36).toLowerCase()}`;
+}

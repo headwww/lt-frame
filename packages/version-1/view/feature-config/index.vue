@@ -65,7 +65,7 @@ import PreviewPc from './components/preview-pc.vue';
 import FeatureMenu from './components/feature-menu.vue';
 import { FeatureConfig } from '../../types';
 import ModalAddGroup from './components/modal-add-group.vue';
-import { generateRoutes } from './components/utils';
+import { generateRoutes, uniqueId } from './components/utils';
 import { transformRouteToMenu } from '../../router/helper/menuHelper';
 import SubMenuItem from '../../layout/default/sider/components/sub-menu-item.vue';
 import { LtHttp } from '../../configs';
@@ -104,7 +104,7 @@ export default defineComponent({
 
 		function onCreate() {
 			groupData.value = {
-				fid: Date.now().toString(),
+				fid: uniqueId('root-'),
 			};
 			gorupOpen.value = true;
 		}

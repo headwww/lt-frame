@@ -87,7 +87,7 @@ import { FeatureConfig } from '../../../types';
 import ModalAddFeature from './modal-add-feature.vue';
 import IconSelector from './icon-selector.vue';
 import ModalAddLink from './modal-add-link.vue';
-import { validatorSpecialChars } from './utils';
+import { uniqueId, validatorSpecialChars } from './utils';
 
 export default defineComponent({
 	name: 'ModalAddGroup',
@@ -202,7 +202,7 @@ export default defineComponent({
 
 		function onCreate(index: number | string) {
 			formData.value = {
-				fid: Date.now().toString(),
+				fid: uniqueId(`${index}-`),
 				parentId: formState.value.fid,
 			};
 			if (index === 'group') {
