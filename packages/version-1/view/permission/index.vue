@@ -269,10 +269,15 @@ function onSavePermission() {
 		);
 	});
 	savePermission.value = true;
-	LtHttp.post({
-		url: 'api/bsTablePermissionService/saveBsConfigPermissionByMap',
-		data: serialize([arr]),
-	})
+	LtHttp.post(
+		{
+			url: 'api/bsTablePermissionService/saveBsConfigPermissionByMap',
+			data: serialize([arr]),
+		},
+		{
+			noClearData: true,
+		}
+	)
 		.then(() => {
 			createMessage.success('保存成功');
 		})
@@ -432,10 +437,15 @@ function onSaveMenu() {
 		menuFid: item,
 		roleId: selectedKeys.value[0],
 	}));
-	LtHttp.post({
-		url: 'api/bsMenuPermissionService/saveBsMenuPermissions',
-		data: serialize([data]),
-	})
+	LtHttp.post(
+		{
+			url: 'api/bsMenuPermissionService/saveBsMenuPermissions',
+			data: serialize([data]),
+		},
+		{
+			noClearData: true,
+		}
+	)
 		.then(() => {
 			createMessage.success('保存成功');
 		})
@@ -450,10 +460,15 @@ function findBsMenuPermissions() {
 	const condition = new Condition();
 	condition.setTargetClass('bs.proconfig.model.BsMenuPermission');
 	condition.prop('roleId', selectedKeys.value[0]);
-	LtHttp.post({
-		url: 'api/bsMenuPermissionService/findBsMenuPermissions',
-		data: [condition],
-	}).then((resp) => {
+	LtHttp.post(
+		{
+			url: 'api/bsMenuPermissionService/findBsMenuPermissions',
+			data: [condition],
+		},
+		{
+			noClearData: true,
+		}
+	).then((resp) => {
 		resp.forEach((item: any) => {
 			menuCheckKeys.value.push(item.menuFid);
 		});
@@ -470,10 +485,15 @@ function findTreeData() {
 	const condition = new Condition();
 	condition.setTargetClass('lt.fw.security.model.Role');
 	condition.expr("this.id !='1'");
-	LtHttp.post({
-		url: 'api/securityModelService/findRoles',
-		data: [condition],
-	})
+	LtHttp.post(
+		{
+			url: 'api/securityModelService/findRoles',
+			data: [condition],
+		},
+		{
+			noClearData: true,
+		}
+	)
 		.then((resp) => {
 			treeData.value = resp.map(
 				(item: any) =>
@@ -499,10 +519,15 @@ function findModuleMenus() {
 	}
 	const condition = new Condition();
 	condition.setTargetClass('bs.configstore.model.BsModuleMenu');
-	LtHttp.post<Array<FeatureConfig>>({
-		url: 'api/bsMenuStoreServiceImpl/findModuleMenus',
-		data: [condition],
-	}).then((data) => {
+	LtHttp.post<Array<FeatureConfig>>(
+		{
+			url: 'api/bsMenuStoreServiceImpl/findModuleMenus',
+			data: [condition],
+		},
+		{
+			noClearData: true,
+		}
+	).then((data) => {
 		const tree = data.map((item) => ({
 			title: item.title,
 			key: item.fid,

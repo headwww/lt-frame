@@ -257,7 +257,7 @@ export default defineComponent({
 								url: 'api/bsMenuPermissionService/deleteMenuPermissions',
 								data: [ids],
 							},
-							{ isParameters: true }
+							{ isParameters: true, noClearData: true }
 						).finally(() => {
 							const index = formState.value.children?.findIndex(
 								(item) => params.fid === item.fid

@@ -442,7 +442,7 @@ function saveBsUserFavorites(data: SearchResult) {
 			url: 'api/bsUserFavoriteService/saveBsUserFavorites',
 			data: [[data]],
 		},
-		{ isParameters: true, errorMessageMode: 'none' }
+		{ isParameters: true, errorMessageMode: 'none', noClearData: true }
 	);
 }
 
@@ -459,7 +459,7 @@ function saveBsUserHistorys() {
 					],
 				],
 			},
-			{ isParameters: true, errorMessageMode: 'none' }
+			{ isParameters: true, errorMessageMode: 'none', noClearData: true }
 		);
 	}
 }

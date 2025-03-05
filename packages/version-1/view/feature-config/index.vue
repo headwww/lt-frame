@@ -142,7 +142,7 @@ export default defineComponent({
 								url: 'api/bsMenuPermissionService/deleteMenuPermissions',
 								data: [ids],
 							},
-							{ isParameters: true }
+							{ isParameters: true, noClearData: true }
 						).finally(() => {
 							const index = list.value.findIndex(
 								(item) => params.fid === item.fid
@@ -199,10 +199,15 @@ export default defineComponent({
 		function findModuleMenus() {
 			const condition = new Condition();
 			condition.setTargetClass('bs.configstore.model.BsModuleMenu');
-			LtHttp.post<Array<FeatureConfig>>({
-				url: 'api/bsMenuStoreServiceImpl/findModuleMenus',
-				data: [condition],
-			}).then((data) => {
+			LtHttp.post<Array<FeatureConfig>>(
+				{
+					url: 'api/bsMenuStoreServiceImpl/findModuleMenus',
+					data: [condition],
+				},
+				{
+					noClearData: true,
+				}
+			).then((data) => {
 				const arr = toArrayTree(
 					// notNewly 非新创建的是服务端返回的
 					data.map((item) => ({ ...item, notNewly: true })),
@@ -228,13 +233,13 @@ export default defineComponent({
 			const arr = toTreeArray(list.value).map((item: any) => ({
 				...omit(item, 'children', 'notNewly'),
 			}));
-
+			arr;
 			LtHttp.post(
 				{
 					url: 'api/bsMenuStoreServiceImpl/saveModuleMenus',
 					data: serialize([arr]),
 				},
-				{ isParameters: true }
+				{ isParameters: true, noClearData: true }
 			)
 				.then(() => {
 					window.location.reload(); // 直接刷新浏览器
