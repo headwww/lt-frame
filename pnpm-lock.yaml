@@ -186,6 +186,9 @@ importers:
       qs:
         specifier: ^6.11.2
         version: 6.11.2
+      rimraf:
+        specifier: 3.0.2
+        version: 3.0.2
       sass:
         specifier: ^1.70.0
         version: 1.70.0
@@ -7105,20 +7108,17 @@ packages:
 
   rimraf@2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@5.0.5:
     resolution: {integrity: sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==}
     engines: {node: '>=14'}
-    hasBin: true
-
-  rimraf@https://registry.npmmirror.com/rimraf/-/rimraf-3.0.2.tgz:
-    resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==, tarball: https://registry.npmmirror.com/rimraf/-/rimraf-3.0.2.tgz}
-    version: 3.0.2
     hasBin: true
 
   rollup-plugin-dts@4.2.3:
@@ -14063,7 +14063,7 @@ snapshots:
     dependencies:
       flatted: 3.3.1
       keyv: https://registry.npmmirror.com/keyv/-/keyv-4.5.4.tgz
-      rimraf: https://registry.npmmirror.com/rimraf/-/rimraf-3.0.2.tgz
+      rimraf: 3.0.2
 
   flatted@3.3.1: {}
 
@@ -16614,10 +16614,6 @@ snapshots:
   rimraf@5.0.5:
     dependencies:
       glob: 10.3.10
-
-  rimraf@https://registry.npmmirror.com/rimraf/-/rimraf-3.0.2.tgz:
-    dependencies:
-      glob: 7.2.3
 
   rollup-plugin-dts@4.2.3(rollup@2.79.1)(typescript@4.9.5):
     dependencies:
