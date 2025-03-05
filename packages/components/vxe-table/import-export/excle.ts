@@ -586,6 +586,7 @@ export const VXETablePluginExportXLSX = {
 	) {
 		// 检查版本
 		if (!/^(4)\./.test(vxetable.version) && !/v4/i.test((vxetable as any).v)) {
+			// eslint-disable-next-line no-console
 			console.error(
 				'[vxe-table-plugin-export-pdf 4.x] Version vxe-table 4.x is required'
 			);
