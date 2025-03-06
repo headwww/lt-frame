@@ -1,11 +1,3 @@
-/*
- * @Author: shuwen 1243889238@qq.com
- * @Date: 2024-03-13 16:55:00
- * @LastEditors: shuwen 1243889238@qq.com
- * @LastEditTime: 2025-03-05 19:11:59
- * @FilePath: /lt-frame/play/main.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import { createApp } from 'vue';
 import App from './App.vue';
 import { onCreate } from './src/application';
@@ -21,3 +13,59 @@ const app = createApp(App);
 
 onCreate(app);
 app.mount('#app');
+
+type NestedObject = { [key: string]: any };
+
+function convertToNestedObject(flatObj: Record<string, any>): NestedObject {
+	const result: NestedObject = {};
+
+	for (const [key, value] of Object.entries(flatObj)) {
+		const parts = key.split('.');
+		let current = result;
+
+		for (let i = 0; i < parts.length; i++) {
+			const part = parts[i];
+
+			if (i === parts.length - 1) {
+				// 最后一个部分直接赋值
+				current[part] = value;
+			} else {
+				// 确保中间路径是对象
+				if (!current[part] || typeof current[part] !== 'object') {
+					current[part] = {};
+				}
+				current = current[part];
+			}
+		}
+	}
+
+	return result;
+}
+
+// 使用示例
+const flatData = {
+	name: '测试属性',
+	'parent.id': 888888,
+	'parent.name': '测试属性2',
+	'parent.obj.name': 18,
+	'parent.obj.ddd': 18,
+	'parent.cc.ddd': 18,
+	aaa: undefined,
+	acs: null,
+	parent1: {
+		ccc: null,
+	},
+	$_checked: null,
+	_X_ROW_KEY: 'row_150',
+};
+
+const nestedData = convertToNestedObject(flatData);
+console.log(nestedData);
+/* 输出：
+{
+  name: "测试属性",
+  parent: { id: 888888 },
+  $_checked: null,
+  _X_ROW_KEY: "row_150"
+}
+*/

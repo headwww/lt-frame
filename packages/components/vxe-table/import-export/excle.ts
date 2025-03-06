@@ -522,13 +522,14 @@ function importXLSX(
 							return record;
 						});
 						$table.createData(records).then((data: any[]) => {
+							const nestedData = data.map(convertToNestedObject);
 							let loadRest: Promise<any>;
 							if (options.mode === 'insert') {
-								loadRest = $table.insertAt(data, -1);
+								loadRest = $table.insertAt(nestedData, -1);
 							} else if (options.mode === 'insertTop') {
-								loadRest = $table.insert(data);
+								loadRest = $table.insert(nestedData);
 							} else {
-								loadRest = $table.reloadData(data);
+								loadRest = $table.reloadData(nestedData);
 							}
 							return loadRest.then(() => {
 								if (_importResolve) {
@@ -554,6 +555,34 @@ function importXLSX(
 		}
 	};
 	fileReader.readAsArrayBuffer(file);
+}
+
+type NestedObject = { [key: string]: any };
+
+function convertToNestedObject(flatObj: Record<string, any>): NestedObject {
+	const result: NestedObject = {};
+
+	for (const [key, value] of Object.entries(flatObj)) {
+		const parts = key.split('.');
+		let current = result;
+
+		for (let i = 0; i < parts.length; i++) {
+			const part = parts[i];
+
+			if (i === parts.length - 1) {
+				// 最后一个部分直接赋值
+				current[part] = value;
+			} else {
+				// 确保中间路径是对象
+				if (!current[part] || typeof current[part] !== 'object') {
+					current[part] = {};
+				}
+				current = current[part];
+			}
+		}
+	}
+
+	return result;
 }
 
 function handleImportEvent(

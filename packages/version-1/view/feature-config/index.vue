@@ -233,7 +233,6 @@ export default defineComponent({
 			const arr = toTreeArray(list.value).map((item: any) => ({
 				...omit(item, 'children', 'notNewly'),
 			}));
-			arr;
 			LtHttp.post(
 				{
 					url: 'api/bsMenuStoreServiceImpl/saveModuleMenus',

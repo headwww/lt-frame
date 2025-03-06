@@ -321,9 +321,8 @@ const datasource = {
 };
 
 const eventBus = {
-	test: (value: any) => {
-		xGrid.value?.insert({});
-		console.log(value, value.row);
+	test: () => {
+		console.log(xGrid.value?.getRecordset());
 	},
 	atsta: (param: any) => {
 		console.log(param, param.$table?.getCurrentRecord());
