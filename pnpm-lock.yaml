@@ -238,8 +238,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0(vxe-table@4.11.16(vue@3.4.15(typescript@5.3.3)))
       xe-utils:
-        specifier: ^3.5.22
-        version: 3.5.22
+        specifier: ^3.7.2
+        version: 3.7.2
 
   internal/build:
     dependencies:
@@ -15351,7 +15351,7 @@ snapshots:
       vue-router: 4.2.5(vue@3.4.21(typescript@5.3.3))
       vxe-table: 4.11.16(vue@3.4.21(typescript@5.3.3))
       vxe-table-plugin-antd: 4.0.0(vxe-table@4.11.16(vue@3.4.21(typescript@5.3.3)))
-      xe-utils: 3.5.22
+      xe-utils: 3.7.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - debug

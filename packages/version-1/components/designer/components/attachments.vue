@@ -167,7 +167,7 @@ function downloadAttachment<T = any>(info: T) {
 			data: info,
 			responseType: 'blob',
 		},
-		{ fastjson: false, isReturnNativeResponse: true }
+		{ fastjson: false, isReturnNativeResponse: true, noClearData: true }
 	);
 }
 
@@ -252,39 +252,33 @@ const handleFileChange = (event: Event) => {
 			formData.append('entityId', recParmsEntityId.value);
 			formData.append('file', selectedFile.value); // 将文件添加到 FormData 中
 
-			try {
-				LtHttp.post(
-					{
-						url: 'api/attachmentService/uploadAttachment',
-						data: formData,
-						onUploadProgress: (progressEvent) => {
-							if (progressEvent && progressEvent.total) {
-								progress.value = Math.round(
-									(progressEvent.loaded * 100) / progressEvent.total
-								);
-								if (progress.value === 100) {
-									uploading.value = false;
-								}
+			LtHttp.post(
+				{
+					url: 'api/attachmentService/uploadAttachment',
+					data: formData,
+					onUploadProgress: (progressEvent) => {
+						if (progressEvent && progressEvent.total) {
+							progress.value = Math.round(
+								(progressEvent.loaded * 100) / progressEvent.total
+							);
+							if (progress.value === 100) {
+								uploading.value = false;
 							}
-						},
+						}
 					},
-					{ fastjson: false }
-				).then((resp) => {
+				},
+				{ fastjson: false, noClearData: true }
+			)
+				.then((resp) => {
 					if (resp) {
 						createMessage.success('上传成功');
 					}
-					uploading.value = false;
 					// 查询附件列表
 					getEntityAttachments();
+				})
+				.finally(() => {
+					uploading.value = false;
 				});
-			} catch (error) {
-				// eslint-disable-next-line no-console
-				console.error('文件上传失败', error);
-				uploading.value = false;
-			} finally {
-				// eslint-disable-next-line no-console
-				console.log('finally', uploading.value);
-			}
 		}
 	}
 };

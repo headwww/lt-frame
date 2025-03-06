@@ -245,7 +245,7 @@ export default defineComponent({
 					okCancel: true,
 					onOk: () => {
 						const arr = [cloneDeep(params)];
-						const treeArray = toTreeArray(arr);
+						const treeArray = toTreeArray(arr, { updated: false });
 						const ids: any[] = [];
 						treeArray.forEach((item) => {
 							if (item.notNewly) {

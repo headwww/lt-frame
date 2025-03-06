@@ -130,7 +130,7 @@ export default defineComponent({
 					okCancel: true,
 					onOk: () => {
 						const arr = [cloneDeep(params)];
-						const treeArray = toTreeArray(arr);
+						const treeArray = toTreeArray(arr, { updated: false });
 						const ids: any[] = [];
 						treeArray.forEach((item) => {
 							if (item.notNewly) {
@@ -230,9 +230,11 @@ export default defineComponent({
 
 		function onSave() {
 			saveLoading.value = true;
-			const arr = toTreeArray(list.value).map((item: any) => ({
-				...omit(item, 'children', 'notNewly'),
-			}));
+			const arr = toTreeArray(list.value, { updated: false }).map(
+				(item: any) => ({
+					...omit(item, 'children', 'notNewly'),
+				})
+			);
 			LtHttp.post(
 				{
 					url: 'api/bsMenuStoreServiceImpl/saveModuleMenus',
