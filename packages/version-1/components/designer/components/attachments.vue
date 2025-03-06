@@ -27,7 +27,7 @@
 						key="attachment-del"
 						type="text"
 						danger
-						@click="onDel(item)"
+						@click="onDel(item.id)"
 						>删除</a-button
 					>
 				</template>
@@ -154,10 +154,13 @@ function getAttachments<T = any>(entityClass: any, entityId: string) {
 }
 
 function deleteAttachment<T = any>(info: T) {
-	return LtHttp.post<T>({
-		url: 'api/attachmentService/deleteAttachment',
-		data: [info],
-	});
+	return LtHttp.post<T>(
+		{
+			url: 'api/attachmentService/deleteAttachment',
+			data: [info],
+		},
+		{ noClearData: true }
+	);
 }
 
 function downloadAttachment<T = any>(info: T) {
@@ -209,8 +212,8 @@ async function onDownload(item: {
 }
 
 // 点击删除
-function onDel(item: { id: any; attachName: any; attachSize: any }) {
-	deleteAttachment(item)
+function onDel(id: any) {
+	deleteAttachment(id)
 		.then(() => {
 			createMessage.success('删除成功');
 			getEntityAttachments();
