@@ -56,6 +56,8 @@ export function LtTableConfig(config?: VxeGlobalConfig) {
 				columnConfig: {
 					// 每一列是否启用列宽调整
 					resizable: true,
+					// 是否启用列拖拽
+					drag: true,
 				},
 				// 可编辑配置项
 				editConfig: {
@@ -77,6 +79,19 @@ export function LtTableConfig(config?: VxeGlobalConfig) {
 				},
 				emptyRender: {
 					name: '$lt-empty',
+				},
+				// 自定义配置
+				customConfig: {
+					// 是否启用列拖拽 弹窗模式
+					mode: 'modal',
+					// 是否启用列拖拽 弹窗模式
+					allowVisible: false,
+					// 是否启用列拖拽 弹窗模式
+					allowFixed: false,
+					// 是否启用列拖拽 弹窗模式
+					allowResizable: false,
+					// 是否启用列拖拽 弹窗模式
+					allowSort: true,
 				},
 			},
 			grid: {
@@ -107,6 +122,20 @@ export function LtTableConfig(config?: VxeGlobalConfig) {
 				columnConfig: {
 					// 每一列是否启用列宽调整
 					resizable: true,
+					// 是否启用列拖拽
+					drag: true,
+				},
+				customConfig: {
+					// 是否启用列拖拽 弹窗模式
+					mode: 'modal',
+					// 是否启用列拖拽 弹窗模式
+					allowVisible: false,
+					// 是否启用列拖拽 弹窗模式
+					allowFixed: false,
+					// 是否启用列拖拽 弹窗模式
+					allowResizable: false,
+					// 是否启用列拖拽 弹窗模式
+					allowSort: true,
 				},
 				// 可编辑配置项
 				editConfig: {

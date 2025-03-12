@@ -370,7 +370,6 @@ export function useSchemas() {
 											},
 										},
 									},
-
 									{
 										name: 'numberFormatter',
 										title: '小数位',
@@ -580,6 +579,39 @@ export function useSchemas() {
 											}
 
 											return false;
+										},
+									},
+									{
+										name: 'footer',
+										title: '表尾设计',
+										setter: {
+											componentName: 'ArraySetter',
+											props: {
+												itemSetter: {
+													componentName: 'ObjectSetter',
+													props: {
+														config: {
+															items: [
+																{
+																	name: 'title',
+																	title: '名称',
+																	isRequired: true,
+																	setter: {
+																		componentName: 'StringSetter',
+																	},
+																},
+																{
+																	name: 'script',
+																	title: '脚本',
+																	setter: {
+																		componentName: 'FunctionSetter',
+																	},
+																},
+															],
+														},
+													},
+												},
+											},
 										},
 									},
 									{

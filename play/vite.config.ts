@@ -13,6 +13,7 @@ export default defineConfig({
 		vueJsx(),
 		eslintPlugin(),
 		stylelitPlugin(),
+		// @ts-ignore
 		UnoCss({
 			configFile: '../uno.config.ts',
 		}),
@@ -31,8 +32,9 @@ export default defineConfig({
 				// target: 'http://49.74.206.150:8081/',
 				// target: 'http://ltscm.tpddns.cn:8081/',
 				// target: 'http://ltscn.kmdns.net:9092/',
-				target: 'http://ltscn.kmdns.net:8085/',
+				// target: 'http://192.168.1.118:9090/',
 				// target: 'http://192.168.1.241:9090/',
+				target: 'http://192.168.1.118:8080/',
 				// target: 'http://192.168.1.153:8080/',
 				// target: 'http://192.168.1.118:8080/',
 				// target: 'http://ltscm.3322.org:8081/',

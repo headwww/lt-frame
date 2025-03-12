@@ -1,14 +1,5 @@
 <template>
 	<LtPageLayout>
-		<button
-			@click="
-				() => {
-					console.log(xGrid);
-				}
-			"
-		>
-			测试
-		</button>
 		<LtSplitpanes class="default-theme">
 			<LtPane size="18" min-size="18" max-size="36" class="p12">
 				<template #default="{ height }">
@@ -36,78 +27,45 @@
 				</template>
 			</LtPane>
 			<LtPane size="82" class="flex flex-col justify-start">
-				<LtSplitpanes horizontal>
-					<LtPane size="70">
-						<LtDivider title="职员信息" />
-						<LtConfigTable
-							:tableInstance="xGrid"
-							tUid="TestManager_sub"
-							t-label="子表"
-							entity="lt.app.productbasic.model.OrderClassesLine"
-							v-model:config="gridOptions"
-							v-model:listeners="gridEvents"
-							:eventBus="eventBus"
-							:datasource="datasource"
-							v-model:pager="pager"
-							@pageChange="onSql"
-							@attach="onAttach"
-							@sqlChange="
-								(sql) => {
-									console.log('sqlChange', sql);
-								}
-							"
-							@queryChange="
-								(queryParams) => {
-									console.log('queryChange', queryParams.expression);
-								}
-							"
-							v-model:queryParams="queryParams"
-						>
-							<template #table>
-								<vxe-grid
-									class="lt-table-scrollbar"
-									ref="xGrid"
-									v-bind="gridOptions"
-									v-on="gridEvents"
-								></vxe-grid>
-							</template>
-						</LtConfigTable>
-					</LtPane>
-					<LtPane size="30">
-						<LtDivider title="职员信息" />
-						<LtConfigTable
-							tUid="TestManager_sub"
-							t-label="子表"
-							entity="lt.app.productbasic.model.OrderClassesLine"
-							v-model:config="gridOptions"
-							v-model:listeners="gridEvents"
-							:eventBus="eventBus"
-							:datasource="datasource"
-							v-model:pager="pager"
-							@pageChange="onSql"
-							@attach="onAttach"
-							@sqlChange="
-								(sql) => {
-									console.log('sqlChange', sql);
-								}
-							"
-							@queryChange="
-								(queryParams) => {
-									console.log('queryChange', queryParams.expression);
-								}
-							"
-							v-model:queryParams="queryParams"
-						>
-							<template #table>
-								<vxe-grid
-									class="lt-table-scrollbar"
-									v-bind="gridOptions"
-									v-on="gridEvents"
-								></vxe-grid>
-							</template>
-						</LtConfigTable>
-					</LtPane>
-				</LtSplitpanes>
+				<LtDivider title="职员信息" />
+				<LtConfigTable
+					:tableInstance="xGrid"
+					tUid="TestManager_sub"
+					t-label="子表"
+					entity="lt.app.productbasic.model.OrderClassesLine"
+					v-model:config="gridOptions"
+					v-model:listeners="gridEvents"
+					:eventBus="eventBus"
+					:datasource="datasource"
+					v-model:pager="pager"
+					@footer-data="
+						(v) => {
+							gridOptions.footerData = v;
+						}
+					"
+					@pageChange="onSql"
+					@attach="onAttach"
+					@sqlChange="
+						(sql) => {
+							console.log('sqlChange', sql);
+						}
+					"
+					@queryChange="
+						(queryParams) => {
+							console.log('queryChange', queryParams.expression);
+						}
+					"
+					v-model:queryParams="queryParams"
+				>
+					<template #table>
+						<vxe-grid
+							class="lt-table-scrollbar"
+							ref="xGrid"
+							v-bind="gridOptions"
+							v-on="gridEvents"
+						></vxe-grid>
+					</template>
+				</LtConfigTable>
 			</LtPane>
 		</LtSplitpanes>
 
@@ -298,7 +256,7 @@ const xGrid = ref<VxeGridInstance>();
 watch(
 	() => xGrid.value?.getTableData(),
 	(value) => {
-		console.log('=====', value);
+		value;
 	}
 );
 
@@ -339,6 +297,17 @@ const gridOptions = ref<VxeGridProps>({
 	},
 	exportConfig: {},
 });
+
+watch(
+	() => gridOptions.value,
+	(value) => {
+		value;
+		// console.log(value);
+	},
+	{
+		deep: true,
+	}
+);
 
 xGrid.value?.setColumnFixed;
 onMounted(() => {

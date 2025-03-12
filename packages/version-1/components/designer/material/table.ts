@@ -1,11 +1,3 @@
-/*
- * @Author: shuwen 1243889238@qq.com
- * @Date: 2024-11-23 00:06:13
- * @LastEditors: shuwen 1243889238@qq.com
- * @LastEditTime: 2025-02-28 14:18:39
- * @FilePath: /lt-frame/packages/version-1/components/designer/material/table.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import { Fn } from '@lt-frame/utils';
 import { ExtractPropTypes, PropType } from 'vue';
 import {

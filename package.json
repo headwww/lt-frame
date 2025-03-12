@@ -105,6 +105,7 @@
 		]
 	},
 	"dependencies": {
+		"@codemirror/lang-javascript": "^6.2.3",
 		"@lt-frame/components": "workspace:^",
 		"@lt-frame/hooks": "workspace:^",
 		"@lt-frame/theme-chalk": "workspace:^",

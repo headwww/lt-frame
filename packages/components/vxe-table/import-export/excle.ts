@@ -45,10 +45,10 @@ function getCellLabel(column: VxeTableDefines.ColumnInfo, cellValue: any) {
 				}
 				break;
 			default:
-				if (cellValue.length < 12 && !isNaN(cellValue)) {
-					return Number(cellValue);
-				}
-				break;
+				// if (cellValue.length < 12 && !isNaN(cellValue)) {
+				// 	return Number(cellValue);
+				// }
+				return cellValue;
 		}
 	}
 	return cellValue;

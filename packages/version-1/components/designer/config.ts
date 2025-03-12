@@ -48,6 +48,12 @@ export interface Column {
 	isEdit?: boolean;
 	showTime?: boolean;
 	sortable?: boolean;
+	// 表尾计算的函数
+	footer?: Array<{
+		title: string;
+		// 计算脚本
+		script: string;
+	}>;
 	json?: Array<{
 		required?: boolean;
 		min?: number;

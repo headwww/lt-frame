@@ -22,6 +22,7 @@ import {
 	isNullOrUnDef,
 	removeNullProperties,
 } from '@lt-frame/utils';
+import * as lodash from 'lodash-es'; // 修改导入语句以获取所有 lodash 函数
 import { Column, TableFields, ToolButtons } from './config';
 import { TableProps } from './material/table';
 
@@ -56,9 +57,11 @@ export function useSetterAdapter(props: TableProps) {
 
 	const toolButtons = ref<ToolButtons[]>([]);
 
+	const tableFields = ref<TableFields>({});
 	function buildTableOption(value: TableFields) {
 		// 移除所有的null的属性
 		value = removeNullProperties(value);
+		tableFields.value = value;
 		options.value.columns = [];
 		const {
 			columns,
@@ -115,6 +118,7 @@ export function useSetterAdapter(props: TableProps) {
 		}
 		if (seq) {
 			cols.push({
+				field: 'seq',
 				type: 'seq',
 				fixed: 'left',
 				width: 50,
@@ -320,6 +324,7 @@ export function useSetterAdapter(props: TableProps) {
 					});
 
 					columns.push({
+						field: 'seq',
 						type: 'seq',
 						title: '#',
 						width: 40,
@@ -538,6 +543,7 @@ export function useSetterAdapter(props: TableProps) {
 					});
 
 					columns.push({
+						field: 'seq',
 						type: 'seq',
 						title: '#',
 						width: 40,
@@ -649,7 +655,79 @@ export function useSetterAdapter(props: TableProps) {
 		return {};
 	}
 
+	// 更新统计数据的函数
+	const updateFootCount = (list: any[] = []) => {
+		options.value.showFooter = true;
+
+		const { columns } = tableFields.value;
+		const createStatObjects = () => {
+			const fields = columns?.map((f) => f.field?.fieldName)!;
+			const methodTypes = new Set<string>();
+
+			// 收集所有可能的统计方法类型
+			columns?.forEach((field) => {
+				field.footer?.forEach((item) => {
+					methodTypes.add(item.title);
+				});
+			});
+
+			// 为每种统计方法创建对应的响应式对象
+			const statObjects: Record<string, any> = {};
+			methodTypes.forEach((type) => {
+				statObjects[type] = {
+					seq: type,
+					// @ts-ignore
+					...Object.fromEntries(fields.map((field) => [field, ''])),
+				};
+			});
+
+			return statObjects;
+		};
+		const statObjects = createStatObjects();
+
+		columns!.forEach((config) => {
+			if (config.footer) {
+				config.footer.forEach((method) => {
+					// 使用 method.title 直接从 statObjects 中获取对应的统计对象
+					const targetObj = statObjects[method.title];
+					if (targetObj) {
+						targetObj[config.field!.fieldName!] = executeScript(
+							method.script,
+							list,
+							config.field!.fieldName!
+						);
+					}
+				});
+			}
+		});
+		options.value.footerData = Object.values(statObjects);
+	};
+
+	// 执行统计脚本的函数
+	const executeScript = (script: string, list: any[], field: string) => {
+		// 提取函数名和函数体
+		const functionName = script.trim().match(/function\s+(\w+)/)?.[1];
+		if (!functionName) {
+			throw new Error('无法解析函数名');
+		}
+
+		// eslint-disable-next-line no-new-func
+		const fn = new Function(
+			'list',
+			'field',
+			'lodash',
+			`
+		${script}
+		return ${functionName}(list, field, lodash);
+	`
+		);
+		return fn(list, field, lodash);
+	};
+
+	executeScript;
+
 	return {
+		updateFootCount,
 		buildTableOption,
 		options,
 		toolButtons,

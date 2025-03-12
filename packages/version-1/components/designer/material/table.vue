@@ -105,10 +105,15 @@
 							</div>
 						</div>
 						<vxe-grid
+							class="lt-table-scrollbar"
 							v-if="!spinning"
 							ref="xGrid"
 							style="padding: 5px"
 							v-bind="options"
+							height="400px"
+							:columnConfig="{
+								drag: false,
+							}"
 						></vxe-grid>
 					</template>
 					<template #setting-pane>
@@ -163,6 +168,7 @@ const emit = defineEmits([
 	'update:fields',
 	'update:pager',
 	'update:queryParams',
+	'footerData',
 	'pageChange',
 	'queryChange',
 	'setup',
@@ -295,7 +301,7 @@ const tempSettingValue = ref<TableFields>({
 
 const rawToolButtons = ref();
 
-const { options, gridEvents, toolButtons, buildTableOption } =
+const { options, gridEvents, toolButtons, buildTableOption, updateFootCount } =
 	useSetterAdapter(props);
 
 const { schemas, buildSchemas } = useSchemas();
@@ -424,7 +430,11 @@ watch(
 				}
 			});
 			emit('update:fields', fields);
-			emit('update:config', cloneDeep(omit(options.value, 'data')));
+			emit(
+				'update:config',
+				cloneDeep(omit(options.value, 'data', 'footerData'))
+			);
+			emit('footerData', options.value.footerData);
 			emit('update:listeners', cloneDeep(gridEvents.value));
 			emit('setup', fields);
 		}
@@ -434,6 +444,16 @@ watch(
 	}
 );
 
+watch(
+	() => props.config?.data,
+	(newVal) => {
+		updateFootCount(newVal);
+		emit('footerData', options.value.footerData);
+	},
+	{
+		deep: true,
+	}
+);
 function onSave() {
 	loading.value = true;
 	saveBsConfigTablesByString(tempSettingValue.value)
@@ -463,6 +483,7 @@ function handleDisabled(bindDisabled: DatasourceContrast) {
 function onCancel() {
 	toolButtons.value = rawToolButtons.value;
 	tempSettingValue.value = {
+		...tempSettingValue.value,
 		tUid: props.tUid,
 		tLabel: props.tLabel ? props.tLabel : props.tUid,
 		parentMenu: props.tUid?.split('_')[0],
